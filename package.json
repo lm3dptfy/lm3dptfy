@@ -1,6 +1,6 @@
 {
   "name": "lm3dptfy",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Let Me 3D Print That For You - STLFlix quote site",
   "main": "server.js",
   "scripts": {
