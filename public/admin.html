@@ -13,7 +13,14 @@
         <!-- Login card -->
         <div id="loginCard" class="admin-card">
           <div class="top-util-bar">
-            <div class="brand-mark">LM3DPTFY.ONLINE</div>
+            <a href="/" class="logo-link">
+              <img
+                src="logo-lm3dptfy-tp.png"
+                alt="LM3DPTFY.online - Let Me 3D Print That For You"
+                class="main-logo"
+              />
+            </a>
+            <div class="brand-mark">ADMIN</div>
           </div>
           <h1 class="admin-header-text">Admin login</h1>
           <p class="admin-subtitle">Sign in to see and manage quote requests.</p>
@@ -35,7 +42,13 @@
         <!-- Dashboard card -->
         <div id="dashboardCard" class="admin-card" style="display:none;">
           <div class="top-util-bar">
-            <div class="brand-mark">LM3DPTFY.ONLINE</div>
+            <a href="/" class="logo-link">
+              <img
+                src="logo-lm3dptfy-tp.png"
+                alt="LM3DPTFY.online - Let Me 3D Print That For You"
+                class="main-logo"
+              />
+            </a>
             <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
           </div>
 
@@ -54,7 +67,6 @@
                   <th>Notes</th>
                   <th>Status</th>
                   <th>Reply</th>
-                  <th>Receipt</th>
                   <th>Archive</th>
                 </tr>
               </thead>
@@ -76,7 +88,6 @@
                   <th>Notes</th>
                   <th>Status</th>
                   <th>Reply</th>
-                  <th>Receipt</th>
                   <th>Archive</th>
                 </tr>
               </thead>
@@ -155,17 +166,6 @@
           </button>
         </td>
         <td>
-          <button
-            class="link-btn receipt-gmail-btn"
-            data-id="${r.id}"
-            data-email="${safeText(r.email)}"
-            data-name="${safeText(r.name || '')}"
-            data-link="${safeText(r.stlLink)}"
-          >
-            Receipt
-          </button>
-        </td>
-        <td>
           <input
             type="checkbox"
             class="archive-checkbox"
@@ -212,7 +212,7 @@
         archivedBody.innerHTML = '';
 
         if (active.length === 0) {
-          activeBody.innerHTML = '<tr><td colspan="9">No active requests.</td></tr>';
+          activeBody.innerHTML = '<tr><td colspan="8">No active requests.</td></tr>';
         } else {
           active.forEach(r => {
             activeBody.appendChild(buildRow(r));
@@ -220,7 +220,7 @@
         }
 
         if (archived.length === 0) {
-          archivedBody.innerHTML = '<tr><td colspan="9">No archived requests.</td></tr>';
+          archivedBody.innerHTML = '<tr><td colspan="8">No archived requests.</td></tr>';
         } else {
           archived.forEach(r => {
             archivedBody.appendChild(buildRow(r));
@@ -374,67 +374,12 @@
         });
     }
 
-    function handleReceiptClick(e) {
-      const btn = e.target.closest('.receipt-gmail-btn');
-      if (!btn) return;
-
-      const id = btn.getAttribute('data-id');
-      const email = btn.getAttribute('data-email');
-      const name = btn.getAttribute('data-name') || '';
-      const link = btn.getAttribute('data-link') || '';
-
-      const subject = 'Receipt for your LM3DPTFY 3D print order';
-      const bodyLines = [
-        name ? `Hi ${name},` : 'Hi,',
-        '',
-        'Thank you for your order! Here is your receipt for your 3D print:',
-        '',
-        link ? `STLFlix link: ${link}` : '',
-        '',
-        'If you need anything else or want another print, just reply to this email.',
-        '',
-        'Thank you,',
-        'LM3DPTFY'
-      ].filter(Boolean);
-
-      const gmailUrl = buildGmailUrl(email, subject, bodyLines);
-      window.open(gmailUrl, '_blank');
-
-      dashboardStatus.textContent = 'Opening Gmail to send receipt…';
-      dashboardStatus.classList.remove('status-success', 'status-error');
-
-      fetch(`/api/requests/${id}/status`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'paid' })
-      })
-        .then(res => res.json().then(data => ({ res, data })))
-        .then(({ res, data }) => {
-          if (!res.ok || !data.ok) {
-            throw new Error(data.error || 'fail');
-          }
-          dashboardStatus.textContent = 'Status set to "Paid".';
-          dashboardStatus.classList.add('status-success');
-          loadRequests();
-        })
-        .catch(() => {
-          dashboardStatus.textContent = 'Error updating status after receipt.';
-          dashboardStatus.classList.add('status-error');
-        });
-    }
-
     activeBody.addEventListener('change', handleStatusChange);
     archivedBody.addEventListener('change', handleStatusChange);
     activeBody.addEventListener('change', handleArchiveToggle);
     archivedBody.addEventListener('change', handleArchiveToggle);
-    activeBody.addEventListener('click', (e) => {
-      handleReplyClick(e);
-      handleReceiptClick(e);
-    });
-    archivedBody.addEventListener('click', (e) => {
-      handleReplyClick(e);
-      handleReceiptClick(e);
-    });
+    activeBody.addEventListener('click', handleReplyClick);
+    archivedBody.addEventListener('click', handleReplyClick);
 
     loadRequests();
   </script>

@@ -12,12 +12,13 @@
       <div class="main-inner request-main-inner">
         <div class="request-card">
           <div class="logo-wrap" style="text-align:left; margin-bottom:12px;">
-            <img
-              src="logo-lm3dptfy-tp.png"
-              alt="LM3DPTFY.online - Let Me 3D Print That For You"
-              class="main-logo"
-              style="max-width:170px;"
-            />
+            <a href="/" class="logo-link">
+              <img
+                src="logo-lm3dptfy-tp.png"
+                alt="LM3DPTFY.online - Let Me 3D Print That For You"
+                class="main-logo"
+              />
+            </a>
           </div>
 
           <h1 class="request-title">Where should I send your quote?</h1>
@@ -119,10 +120,8 @@
           throw new Error('Request failed');
         }
 
-        statusMessage.textContent = 'Got it! I’ll review your model and email you a quote.';
-        statusMessage.classList.add('status-success');
-        form.reset();
-        document.getElementById('stlLinkDisplay').value = stlLink;
+        // On success, go back to homepage so they can submit another link
+        window.location.href = '/';
       } catch (err) {
         statusMessage.textContent = 'Something went wrong. Please try again in a minute.';
         statusMessage.classList.add('status-error');
