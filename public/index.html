@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Let Me 3D Print That For You | lm3dptfy.online</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page-bg">
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="brand">
+        LM3DPTFY<span class="brand-dot">.ONLINE</span>
+      </div>
+      <nav class="top-links">
+        <a href="admin.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="center-wrapper">
+    <div class="center-card">
+      <div class="logo-wrap">
+        <img
+          src="logo-lm3dptfy-tp.png"
+          alt="LM3DPTFY.online - Let Me 3D Print That For You"
+          class="main-logo"
+        />
+      </div>
+
+      <h1 class="hero-title">Share an STLFlix model, I’ll handle the printing.</h1>
+      <p class="hero-subtitle">
+        Paste your <strong>STLFlix</strong> model link below and I’ll email you a custom 3D printing quote.
+      </p>
+
+      <form class="stl-form" action="request.html" method="GET">
+        <label for="stlLink" class="field-label">
+          <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
+            STLFlix model link
+          </a>
+        </label>
+        <input
+          type="url"
+          id="stlLink"
+          name="link"
+          class="field-input big-input"
+          placeholder="https://stlflix.com/..."
+          required
+        />
+        <button type="submit" class="btn-primary big-btn">
+          Get Quote
+        </button>
+      </form>
+
+      <p class="small-note">
+        Need a model? Click “STLFlix model link” above to browse files on STLFlix.
+      </p>
+      <p class="small-note">
+        No account required. I’ll only use your email to send the quote and ask questions if needed.
+      </p>
+    </div>
+  </main>
+</body>
+</html>

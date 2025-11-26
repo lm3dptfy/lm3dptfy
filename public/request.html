@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Request a 3D Print Quote | LM3DPTFY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="page-bg">
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <a href="index.html" class="brand-link">
+        <div class="brand">
+          LM3DPTFY<span class="brand-dot">.ONLINE</span>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <main class="center-wrapper">
+    <div class="center-card">
+      <div class="logo-wrap">
+        <img
+          src="logo-lm3dptfy-tp.png"
+          alt="LM3DPTFY.online - Let Me 3D Print That For You"
+          class="main-logo"
+        />
+      </div>
+
+      <h1 class="hero-title small-title">Tell me where to send your quote</h1>
+      <p class="hero-subtitle">
+        I’ll review your model, estimate material & print time, and email a quote.
+      </p>
+
+      <form id="quoteForm" class="stl-form">
+        <div class="field-group">
+          <label class="field-label">
+            <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
+              STLFlix model link
+            </a>
+          </label>
+          <input
+            type="url"
+            id="stlLinkDisplay"
+            class="field-input"
+            disabled
+          />
+          <input type="hidden" id="stlLinkHidden" name="stlLink" />
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label for="name" class="field-label">Your name</label>
+            <input type="text" id="name" name="name" class="field-input" required />
+          </div>
+
+          <div class="field-group">
+            <label for="email" class="field-label">Email</label>
+            <input type="email" id="email" name="email" class="field-input" required />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="details" class="field-label">
+            Notes about this print (optional)
+          </label>
+          <textarea
+            id="details"
+            name="details"
+            rows="4"
+            class="field-input"
+            placeholder="Size, color preference, deadline, what it will be used for…"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary big-btn">
+          Submit request
+        </button>
+
+        <p id="statusMessage" class="status-message"></p>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const stlLink = params.get('link') || '';
+    document.getElementById('stlLinkDisplay').value = stlLink;
+    document.getElementById('stlLinkHidden').value = stlLink;
+
+    const form = document.getElementById('quoteForm');
+    const statusMessage = document.getElementById('statusMessage');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusMessage.textContent = 'Sending your request...';
+      statusMessage.classList.remove('status-success', 'status-error');
+
+      const payload = {
+        stlLink: document.getElementById('stlLinkHidden').value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        details: document.getElementById('details').value
+      };
+
+      try {
+        const res = await fetch('/api/requests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          throw new Error('Request failed');
+        }
+
+        statusMessage.textContent = 'Got it! I’ll review your model and email you a quote.';
+        statusMessage.classList.add('status-success');
+        form.reset();
+        document.getElementById('stlLinkDisplay').value = stlLink;
+      } catch (err) {
+        statusMessage.textContent = 'Something went wrong. Please try again in a minute.';
+        statusMessage.classList.add('status-error');
+      }
+    });
+  </script>
+</body>
+</html>
