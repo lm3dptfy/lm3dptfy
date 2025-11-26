@@ -6,81 +6,86 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="page-bg">
-  <header class="top-bar">
-    <div class="top-bar-inner">
-      <a href="index.html" class="brand-link">
-        <div class="brand">
-          LM3DPTFY<span class="brand-dot">.ONLINE</span>
-        </div>
-      </a>
-    </div>
-  </header>
+<body>
+  <div class="page-shell">
+    <main class="page-main">
+      <div class="main-inner request-main-inner">
+        <div class="request-card">
+          <div class="logo-wrap" style="text-align:left; margin-bottom:12px;">
+            <img
+              src="logo-lm3dptfy-tp.png"
+              alt="LM3DPTFY.online - Let Me 3D Print That For You"
+              class="main-logo"
+              style="max-width:170px;"
+            />
+          </div>
 
-  <main class="center-wrapper">
-    <div class="center-card">
-      <div class="logo-wrap">
-        <img
-          src="logo-lm3dptfy-tp.png"
-          alt="LM3DPTFY.online - Let Me 3D Print That For You"
-          class="main-logo"
-        />
+          <h1 class="request-title">Where should I send your quote?</h1>
+          <p class="request-subtitle">
+            I’ll review your STLFlix model, estimate material and print time, then email you a quote.
+          </p>
+
+          <form id="quoteForm" class="stl-form">
+            <div class="field-group">
+              <label class="field-label">
+                <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
+                  STLFlix model link
+                </a>
+              </label>
+              <input
+                type="url"
+                id="stlLinkDisplay"
+                class="field-input"
+                disabled
+              />
+              <input type="hidden" id="stlLinkHidden" name="stlLink" />
+            </div>
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="name" class="field-label">Your name</label>
+                <input type="text" id="name" name="name" class="field-input" required />
+              </div>
+
+              <div class="field-group">
+                <label for="email" class="field-label">Email</label>
+                <input type="email" id="email" name="email" class="field-input" required />
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="details" class="field-label">
+                Notes about this print (optional)
+              </label>
+              <textarea
+                id="details"
+                name="details"
+                rows="4"
+                class="field-input"
+                placeholder="Size, color preference, deadline, what it will be used for…"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              Submit request
+            </button>
+
+            <p id="statusMessage" class="status-message"></p>
+          </form>
+
+          <p class="small-note">
+            I usually respond within one business day. If I have questions about wall thickness,
+            print orientation, or supports, I’ll ask before printing.
+          </p>
+        </div>
       </div>
+    </main>
 
-      <h1 class="hero-title small-title">Tell me where to send your quote</h1>
-      <p class="hero-subtitle">
-        I’ll review your model, estimate material & print time, and email a quote.
-      </p>
-
-      <form id="quoteForm" class="stl-form">
-        <div class="field-group">
-          <label class="field-label">
-            <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
-              STLFlix model link
-            </a>
-          </label>
-          <input
-            type="url"
-            id="stlLinkDisplay"
-            class="field-input"
-            disabled
-          />
-          <input type="hidden" id="stlLinkHidden" name="stlLink" />
-        </div>
-
-        <div class="field-row">
-          <div class="field-group">
-            <label for="name" class="field-label">Your name</label>
-            <input type="text" id="name" name="name" class="field-input" required />
-          </div>
-
-          <div class="field-group">
-            <label for="email" class="field-label">Email</label>
-            <input type="email" id="email" name="email" class="field-input" required />
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label for="details" class="field-label">
-            Notes about this print (optional)
-          </label>
-          <textarea
-            id="details"
-            name="details"
-            rows="4"
-            class="field-input"
-            placeholder="Size, color preference, deadline, what it will be used for…"
-          ></textarea>
-        </div>
-
-        <button type="submit" class="btn-primary big-btn">
-          Submit request
-        </button>
-
-        <p id="statusMessage" class="status-message"></p>
-      </form>
-    </div>
-  </main>
+    <footer class="site-footer">
+      Let Me 3D Print That For You · LM3DPTFY.online ·
+      Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+    </footer>
+  </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);

@@ -6,89 +6,103 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="page-bg">
-  <header class="top-bar">
-    <div class="top-bar-inner">
-      <a href="index.html" class="brand-link">
-        <div class="brand">
-          LM3DPTFY<span class="brand-dot">.ONLINE</span>
+<body>
+  <div class="page-shell">
+    <main class="page-main">
+      <div class="main-inner admin-main-inner">
+        <!-- Login card -->
+        <div id="loginCard" class="admin-card">
+          <div class="top-util-bar">
+            <div class="brand-mark">LM3DPTFY.ONLINE</div>
+          </div>
+          <h1 class="admin-header-text">Admin login</h1>
+          <p class="admin-subtitle">Sign in to see and manage quote requests.</p>
+
+          <form id="loginForm" class="stl-form">
+            <div class="field-group">
+              <label for="adminEmail" class="field-label">Admin email</label>
+              <input type="email" id="adminEmail" class="field-input" required />
+            </div>
+            <div class="field-group">
+              <label for="adminPassword" class="field-label">Password</label>
+              <input type="password" id="adminPassword" class="field-input" required />
+            </div>
+            <button type="submit" class="btn-primary">Log in</button>
+            <p id="loginStatus" class="status-message"></p>
+          </form>
         </div>
-      </a>
-      <div class="top-links">
-        <button id="logoutBtn" class="link-btn" style="display:none;">Log out</button>
-      </div>
-    </div>
-  </header>
 
-  <main class="center-wrapper narrow">
-    <!-- Login card -->
-    <div id="loginCard" class="center-card">
-      <div class="logo-wrap">
-        <img
-          src="logo-lm3dptfy-tp.png"
-          alt="LM3DPTFY.online - Let Me 3D Print That For You"
-          class="main-logo"
-        />
-      </div>
+        <!-- Dashboard card -->
+        <div id="dashboardCard" class="admin-card" style="display:none;">
+          <div class="top-util-bar">
+            <div class="brand-mark">LM3DPTFY.ONLINE</div>
+            <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
+          </div>
 
-      <h1 class="hero-title small-title">Admin login</h1>
-      <p class="hero-subtitle">This area is just for you to manage requests.</p>
+          <h1 class="admin-header-text">Quote requests</h1>
+          <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
 
-      <form id="loginForm" class="stl-form">
-        <div class="field-group">
-          <label for="adminEmail" class="field-label">Admin email</label>
-          <input type="email" id="adminEmail" class="field-input" required />
+          <div class="table-wrapper">
+            <h2 class="info-title">Active</h2>
+            <table class="request-table">
+              <thead>
+                <tr>
+                  <th>Created</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>STL link</th>
+                  <th>Notes</th>
+                  <th>Status</th>
+                  <th>Reply</th>
+                  <th>Receipt</th>
+                  <th>Archive</th>
+                </tr>
+              </thead>
+              <tbody id="activeBody">
+                <!-- filled by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-wrapper" style="margin-top:16px;">
+            <h2 class="info-title">Archived</h2>
+            <table class="request-table">
+              <thead>
+                <tr>
+                  <th>Created</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>STL link</th>
+                  <th>Notes</th>
+                  <th>Status</th>
+                  <th>Reply</th>
+                  <th>Receipt</th>
+                  <th>Archive</th>
+                </tr>
+              </thead>
+              <tbody id="archivedBody">
+                <!-- filled by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <p id="dashboardStatus" class="status-message"></p>
         </div>
-        <div class="field-group">
-          <label for="adminPassword" class="field-label">Password</label>
-          <input type="password" id="adminPassword" class="field-input" required />
-        </div>
-        <button type="submit" class="btn-primary big-btn">Log in</button>
-        <p id="loginStatus" class="status-message"></p>
-      </form>
-    </div>
-
-    <!-- Dashboard card -->
-    <div id="dashboardCard" class="center-card" style="display:none;">
-      <div class="logo-wrap">
-        <img
-          src="logo-lm3dptfy-tp.png"
-          alt="LM3DPTFY.online - Let Me 3D Print That For You"
-          class="main-logo"
-        />
       </div>
+    </main>
 
-      <h1 class="hero-title small-title">Quote requests</h1>
-      <p class="hero-subtitle">New requests from lm3dptfy.online</p>
-
-      <div id="requestsContainer" class="table-wrapper">
-        <table class="request-table">
-          <thead>
-            <tr>
-              <th>Created</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>STL link</th>
-              <th>Status</th>
-              <th>Reply</th>
-            </tr>
-          </thead>
-          <tbody id="requestsBody">
-            <!-- Filled by JS -->
-          </tbody>
-        </table>
-      </div>
-
-      <p id="dashboardStatus" class="status-message"></p>
-    </div>
-  </main>
+    <footer class="site-footer">
+      LM3DPTFY Admin · Keep this page private.
+    </footer>
+  </div>
 
   <script>
     const loginForm = document.getElementById('loginForm');
     const loginStatus = document.getElementById('loginStatus');
     const loginCard = document.getElementById('loginCard');
     const dashboardCard = document.getElementById('dashboardCard');
-    const requestsBody = document.getElementById('requestsBody');
+    const activeBody = document.getElementById('activeBody');
+    const archivedBody = document.getElementById('archivedBody');
     const dashboardStatus = document.getElementById('dashboardStatus');
     const logoutBtn = document.getElementById('logoutBtn');
 
@@ -103,6 +117,82 @@
       { value: 'paid', label: 'Paid' },
     ];
 
+    const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
+
+    function buildGmailUrl(toEmail, subject, bodyLines) {
+      let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
+      url += '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER);
+      url += '&to=' + encodeURIComponent(toEmail);
+      url += '&su=' + encodeURIComponent(subject);
+      url += '&body=' + encodeURIComponent(bodyLines.join('\\n'));
+      return url;
+    }
+
+    function safeText(text) {
+      return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    }
+
+    function buildRow(r) {
+      const tr = document.createElement('tr');
+      const safeDetails = safeText(r.details || '');
+
+      tr.innerHTML = `
+        <td>${new Date(r.createdAt).toLocaleString()}</td>
+        <td>${safeText(r.name || '')}</td>
+        <td><a href="mailto:${safeText(r.email)}">${safeText(r.email)}</a></td>
+        <td><a href="${safeText(r.stlLink)}" target="_blank">View STL</a></td>
+        <td>${safeDetails}</td>
+        <td class="status-cell"></td>
+        <td>
+          <button
+            class="link-btn reply-gmail-btn"
+            data-id="${r.id}"
+            data-email="${safeText(r.email)}"
+            data-name="${safeText(r.name || '')}"
+            data-link="${safeText(r.stlLink)}"
+          >
+            Reply
+          </button>
+        </td>
+        <td>
+          <button
+            class="link-btn receipt-gmail-btn"
+            data-id="${r.id}"
+            data-email="${safeText(r.email)}"
+            data-name="${safeText(r.name || '')}"
+            data-link="${safeText(r.stlLink)}"
+          >
+            Receipt
+          </button>
+        </td>
+        <td>
+          <input
+            type="checkbox"
+            class="archive-checkbox"
+            data-id="${r.id}"
+            ${r.archived ? 'checked' : ''}
+          />
+        </td>
+      `;
+
+      const statusCell = tr.querySelector('.status-cell');
+      const select = document.createElement('select');
+      select.className = 'status-select';
+      select.dataset.id = r.id;
+      STATUS_OPTIONS.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value;
+        option.textContent = opt.label;
+        if ((r.status || 'new') === opt.value) {
+          option.selected = true;
+        }
+        select.appendChild(option);
+      });
+      statusCell.appendChild(select);
+
+      return tr;
+    }
+
     async function loadRequests() {
       dashboardStatus.textContent = 'Loading requests...';
       try {
@@ -114,48 +204,29 @@
           return;
         }
         const data = await res.json();
-        requestsBody.innerHTML = '';
-        if (data.length === 0) {
-          requestsBody.innerHTML = '<tr><td colspan="6">No requests yet.</td></tr>';
-        } else {
-          for (const r of data) {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td>${new Date(r.createdAt).toLocaleString()}</td>
-              <td>${r.name || ''}</td>
-              <td><a href="mailto:${r.email}">${r.email}</a></td>
-              <td><a href="${r.stlLink}" target="_blank">View STL</a></td>
-              <td class="status-cell"></td>
-              <td>
-                <button
-                  class="link-btn reply-gmail-btn"
-                  data-id="${r.id}"
-                  data-email="${r.email}"
-                  data-name="${r.name || ''}"
-                  data-link="${r.stlLink}"
-                >
-                  Reply in Gmail
-                </button>
-              </td>
-            `;
-            const statusCell = tr.querySelector('.status-cell');
-            const select = document.createElement('select');
-            select.className = 'status-select';
-            select.dataset.id = r.id;
-            STATUS_OPTIONS.forEach(opt => {
-              const option = document.createElement('option');
-              option.value = opt.value;
-              option.textContent = opt.label;
-              if ((r.status || 'new') === opt.value) {
-                option.selected = true;
-              }
-              select.appendChild(option);
-            });
-            statusCell.appendChild(select);
 
-            requestsBody.appendChild(tr);
-          }
+        const active = data.filter(r => !r.archived);
+        const archived = data.filter(r => r.archived);
+
+        activeBody.innerHTML = '';
+        archivedBody.innerHTML = '';
+
+        if (active.length === 0) {
+          activeBody.innerHTML = '<tr><td colspan="9">No active requests.</td></tr>';
+        } else {
+          active.forEach(r => {
+            activeBody.appendChild(buildRow(r));
+          });
         }
+
+        if (archived.length === 0) {
+          archivedBody.innerHTML = '<tr><td colspan="9">No archived requests.</td></tr>';
+        } else {
+          archived.forEach(r => {
+            archivedBody.appendChild(buildRow(r));
+          });
+        }
+
         dashboardStatus.textContent = '';
       } catch (err) {
         dashboardStatus.textContent = 'Error loading requests.';
@@ -197,8 +268,64 @@
       logoutBtn.style.display = 'none';
     });
 
-    // Reply in Gmail
-    requestsBody.addEventListener('click', async (e) => {
+    function handleStatusChange(e) {
+      const select = e.target.closest('.status-select');
+      if (!select) return;
+      const id = select.dataset.id;
+      const status = select.value;
+
+      dashboardStatus.textContent = 'Updating status...';
+      dashboardStatus.classList.remove('status-success', 'status-error');
+
+      fetch(`/api/requests/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      })
+        .then(res => res.json().then(data => ({ res, data })))
+        .then(({ res, data }) => {
+          if (!res.ok || !data.ok) {
+            throw new Error(data.error || 'fail');
+          }
+          dashboardStatus.textContent = 'Status updated.';
+          dashboardStatus.classList.add('status-success');
+        })
+        .catch(() => {
+          dashboardStatus.textContent = 'Error updating status.';
+          dashboardStatus.classList.add('status-error');
+        });
+    }
+
+    function handleArchiveToggle(e) {
+      const checkbox = e.target.closest('.archive-checkbox');
+      if (!checkbox) return;
+      const id = checkbox.dataset.id;
+      const archived = checkbox.checked;
+
+      dashboardStatus.textContent = archived ? 'Archiving...' : 'Unarchiving...';
+      dashboardStatus.classList.remove('status-success', 'status-error');
+
+      fetch(`/api/requests/${id}/archive`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ archived })
+      })
+        .then(res => res.json().then(data => ({ res, data })))
+        .then(({ res, data }) => {
+          if (!res.ok || !data.ok) {
+            throw new Error(data.error || 'fail');
+          }
+          dashboardStatus.textContent = archived ? 'Moved to archived.' : 'Moved to active.';
+          dashboardStatus.classList.add('status-success');
+          loadRequests();
+        })
+        .catch(() => {
+          dashboardStatus.textContent = 'Error updating archive state.';
+          dashboardStatus.classList.add('status-error');
+        });
+    }
+
+    function handleReplyClick(e) {
       const btn = e.target.closest('.reply-gmail-btn');
       if (!btn) return;
 
@@ -221,62 +348,92 @@
         'LM3DPTFY'
       ].filter(Boolean);
 
-      const gmailUrl =
-        'https://mail.google.com/mail/?view=cm&fs=1' +
-        '&to=' + encodeURIComponent(email) +
-        '&su=' + encodeURIComponent(subject) +
-        '&body=' + encodeURIComponent(bodyLines.join('\\n'));
-
+      const gmailUrl = buildGmailUrl(email, subject, bodyLines);
       window.open(gmailUrl, '_blank');
 
       dashboardStatus.textContent = 'Opening Gmail…';
       dashboardStatus.classList.remove('status-success', 'status-error');
 
-      try {
-        const res = await fetch(`/api/requests/${id}/status`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'responded' })
+      fetch(`/api/requests/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'responded' })
+      })
+        .then(res => res.json().then(data => ({ res, data })))
+        .then(({ res, data }) => {
+          if (!res.ok || !data.ok) {
+            throw new Error(data.error || 'fail');
+          }
+          dashboardStatus.textContent = 'Status set to "Responded".';
+          dashboardStatus.classList.add('status-success');
+          loadRequests();
+        })
+        .catch(() => {
+          dashboardStatus.textContent = 'Error updating status after reply.';
+          dashboardStatus.classList.add('status-error');
         });
-        const data = await res.json();
-        if (!res.ok || !data.ok) {
-          throw new Error(data.error || 'fail');
-        }
-        dashboardStatus.textContent = 'Status set to "Responded".';
-        dashboardStatus.classList.add('status-success');
-        loadRequests();
-      } catch (err) {
-        dashboardStatus.textContent = 'Error updating status after reply.';
-        dashboardStatus.classList.add('status-error');
-      }
-    });
+    }
 
-    // Status change
-    requestsBody.addEventListener('change', async (e) => {
-      const select = e.target.closest('.status-select');
-      if (!select) return;
-      const id = select.dataset.id;
-      const status = select.value;
+    function handleReceiptClick(e) {
+      const btn = e.target.closest('.receipt-gmail-btn');
+      if (!btn) return;
 
-      dashboardStatus.textContent = 'Updating status...';
+      const id = btn.getAttribute('data-id');
+      const email = btn.getAttribute('data-email');
+      const name = btn.getAttribute('data-name') || '';
+      const link = btn.getAttribute('data-link') || '';
+
+      const subject = 'Receipt for your LM3DPTFY 3D print order';
+      const bodyLines = [
+        name ? `Hi ${name},` : 'Hi,',
+        '',
+        'Thank you for your order! Here is your receipt for your 3D print:',
+        '',
+        link ? `STLFlix link: ${link}` : '',
+        '',
+        'If you need anything else or want another print, just reply to this email.',
+        '',
+        'Thank you,',
+        'LM3DPTFY'
+      ].filter(Boolean);
+
+      const gmailUrl = buildGmailUrl(email, subject, bodyLines);
+      window.open(gmailUrl, '_blank');
+
+      dashboardStatus.textContent = 'Opening Gmail to send receipt…';
       dashboardStatus.classList.remove('status-success', 'status-error');
 
-      try {
-        const res = await fetch(`/api/requests/${id}/status`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status })
+      fetch(`/api/requests/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'paid' })
+      })
+        .then(res => res.json().then(data => ({ res, data })))
+        .then(({ res, data }) => {
+          if (!res.ok || !data.ok) {
+            throw new Error(data.error || 'fail');
+          }
+          dashboardStatus.textContent = 'Status set to "Paid".';
+          dashboardStatus.classList.add('status-success');
+          loadRequests();
+        })
+        .catch(() => {
+          dashboardStatus.textContent = 'Error updating status after receipt.';
+          dashboardStatus.classList.add('status-error');
         });
-        const data = await res.json();
-        if (!res.ok || !data.ok) {
-          throw new Error(data.error || 'fail');
-        }
-        dashboardStatus.textContent = 'Status updated.';
-        dashboardStatus.classList.add('status-success');
-      } catch (err) {
-        dashboardStatus.textContent = 'Error updating status.';
-        dashboardStatus.classList.add('status-error');
-      }
+    }
+
+    activeBody.addEventListener('change', handleStatusChange);
+    archivedBody.addEventListener('change', handleStatusChange);
+    activeBody.addEventListener('change', handleArchiveToggle);
+    archivedBody.addEventListener('change', handleArchiveToggle);
+    activeBody.addEventListener('click', (e) => {
+      handleReplyClick(e);
+      handleReceiptClick(e);
+    });
+    archivedBody.addEventListener('click', (e) => {
+      handleReplyClick(e);
+      handleReceiptClick(e);
     });
 
     loadRequests();
