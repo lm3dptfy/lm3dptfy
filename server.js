@@ -10,8 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Admin credentials
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy+admin@gmail.com';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'MJR1125!3dp';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@lm3dptfy.online';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'changeme123';
 
 // Gmail credentials (optional, for new-request notifications)
 const GMAIL_USER = process.env.GMAIL_USER;
@@ -53,8 +53,8 @@ if (GMAIL_USER && GMAIL_PASS) {
   mailer = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'lm3dptfy@gmail.com',
-      pass: 'MJR1125!3dp',
+      user: GMAIL_USER,
+      pass: GMAIL_PASS,
     },
   });
 } else {
@@ -78,6 +78,7 @@ app.post('/api/requests', (req, res) => {
     email,
     details: details || '',
     status: 'new',
+    archived: false,
     createdAt: new Date().toISOString(),
   };
 
@@ -152,7 +153,25 @@ app.post('/api/requests/:id/status', requireAdmin, (req, res) => {
   res.json({ ok: true, status });
 });
 
-// Fallback: SPA-style
+// Archive / unarchive
+app.post('/api/requests/:id/archive', requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const { archived } = req.body;
+
+  if (typeof archived !== 'boolean') {
+    return res.status(400).json({ error: 'archived must be boolean' });
+  }
+
+  const index = requests.findIndex((r) => r.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Request not found' });
+  }
+
+  requests[index].archived = archived;
+  res.json({ ok: true, archived });
+});
+
+// Fallback: serve homepage
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
