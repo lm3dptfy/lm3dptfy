@@ -10,7 +10,7 @@
   <div class="page-shell">
     <main class="page-main">
       <div class="main-inner">
-        <div class="logo-wrap" style="margin-bottom:16px;">
+        <div class="logo-wrap">
           <a href="/" class="logo-link">
             <img
               src="lm3dptfy-logo-tp-cropped.png"
@@ -33,10 +33,11 @@
               </a>
             </label>
             <input
-              type="url"
+              type="text"
               id="stlLinkDisplay"
               class="field-input"
-              disabled
+              readonly
+              style="background: #f3f4f6; color: #6b7280;"
             />
             <input type="hidden" id="stlLinkHidden" name="stlLink" />
           </div>
@@ -66,11 +67,11 @@
             ></textarea>
           </div>
 
-          <button type="submit" class="btn-primary">
+          <button type="submit" class="btn-primary" style="width:100%;">
             Submit request
           </button>
 
-          <p id="statusMessage" class="status-message"></p>
+          <p id="statusMessage" class="status-message" style="display:none;"></p>
         </form>
 
         <p class="small-note">
@@ -87,22 +88,35 @@
   </div>
 
   <script>
-    // Get the STL link from URL parameter
-    const params = new URLSearchParams(window.location.search);
-    const stlLink = params.get('link') || '';
-    document.getElementById('stlLinkDisplay').value = stlLink;
-    document.getElementById('stlLinkHidden').value = stlLink;
+    // Get the STL link from URL when page loads
+    window.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const stlLink = urlParams.get('link') || '';
+      
+      const displayField = document.getElementById('stlLinkDisplay');
+      const hiddenField = document.getElementById('stlLinkHidden');
+      
+      if (stlLink) {
+        displayField.value = stlLink;
+        hiddenField.value = stlLink;
+      } else {
+        displayField.value = 'No link provided - please go back to homepage';
+      }
+    });
 
-    const form = document.getElementById('quoteForm');
-    const statusMessage = document.getElementById('statusMessage');
-
-    form.addEventListener('submit', async (e) => {
+    // Handle form submission
+    document.getElementById('quoteForm').addEventListener('submit', async function(e) {
       e.preventDefault();
+      
+      const statusMessage = document.getElementById('statusMessage');
+      const submitButton = e.target.querySelector('button[type="submit"]');
       
       // Show loading state
       statusMessage.textContent = 'Sending your request...';
-      statusMessage.classList.remove('status-success', 'status-error');
       statusMessage.style.display = 'block';
+      statusMessage.classList.remove('status-success', 'status-error');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending...';
 
       const payload = {
         stlLink: document.getElementById('stlLinkHidden').value,
@@ -111,8 +125,17 @@
         details: document.getElementById('details').value
       };
 
+      // Validate we have a link
+      if (!payload.stlLink || payload.stlLink === '') {
+        statusMessage.textContent = '✗ Error: No STL link provided. Please go back to the homepage.';
+        statusMessage.classList.add('status-error');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit request';
+        return;
+      }
+
       try {
-        const res = await fetch('/api/requests', {
+        const response = await fetch('/api/requests', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
@@ -122,25 +145,27 @@
           body: JSON.stringify(payload)
         });
 
-        const data = await res.json();
+        const data = await response.json();
 
-        if (!res.ok) {
-          throw new Error(data.error || 'Request failed');
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to submit request');
         }
 
         // Success!
         statusMessage.textContent = '✓ Request sent successfully! I'll email you a quote within one business day.';
         statusMessage.classList.add('status-success');
         
-        // Reset form after delay
-        setTimeout(() => {
+        // Redirect to homepage after 2 seconds
+        setTimeout(function() {
           window.location.href = '/';
         }, 2000);
 
-      } catch (err) {
-        console.error('Submission error:', err);
-        statusMessage.textContent = '✗ Something went wrong. Please email me directly at lm3dptfy@gmail.com';
+      } catch (error) {
+        // Error
+        statusMessage.textContent = '✗ Something went wrong: ' + error.message + '. Please email me directly at lm3dptfy@gmail.com';
         statusMessage.classList.add('status-error');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit request';
       }
     });
   </script>
