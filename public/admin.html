@@ -9,21 +9,19 @@
 <body>
   <div class="page-shell">
     <main class="page-main">
-      <div class="main-inner admin-main-inner">
+      <div class="main-inner">
         <!-- Login section -->
         <div id="loginCard">
-          <div class="logo-wrap" style="margin-bottom:16px; text-align:center;">
-            <a href="/" class="logo-link" style="justify-content:center;">
-              <img
-                src="lm3dptfy-logo-tp-cropped.png"
-                alt="LM3DPTFY.online - Let Me 3D Print That For You"
-                class="main-logo"
-              />
-            </a>
+          <div class="logo-wrap">
+            <img
+              src="lm3dptfy-logo-tp-cropped.png"
+              alt="LM3DPTFY.online - Let Me 3D Print That For You"
+              class="main-logo"
+            />
           </div>
 
-          <h1 class="admin-header-text" style="text-align:center;">Admin login</h1>
-          <p class="admin-subtitle" style="text-align:center;">Sign in to see and manage quote requests.</p>
+          <h1 class="request-title">Admin login</h1>
+          <p class="request-subtitle">Sign in to see and manage quote requests.</p>
 
           <form id="loginForm" class="stl-form">
             <div class="field-group">
@@ -35,12 +33,12 @@
               <input type="password" id="adminPassword" class="field-input" required />
             </div>
             <button type="submit" class="btn-primary" style="width:100%;">Log in</button>
-            <p id="loginStatus" class="status-message"></p>
+            <p id="loginStatus" class="status-message" style="display:none;"></p>
           </form>
         </div>
 
         <!-- Dashboard section -->
-        <div id="dashboardCard" style="display:none;">
+        <div id="dashboardCard" class="admin-main-inner" style="display:none;">
           <div class="top-util-bar">
             <a href="/" class="logo-link">
               <img
@@ -94,7 +92,7 @@
             </table>
           </div>
 
-          <p id="dashboardStatus" class="status-message"></p>
+          <p id="dashboardStatus" class="status-message" style="display:none;"></p>
         </div>
       </div>
     </main>
@@ -191,8 +189,10 @@
     }
 
     async function loadRequests() {
+      console.log('Loading requests...');
       dashboardStatus.textContent = 'Loading requests...';
       dashboardStatus.style.display = 'block';
+      dashboardStatus.classList.remove('status-error', 'status-success');
       
       try {
         const res = await fetch('/api/requests', {
@@ -202,14 +202,19 @@
           }
         });
         
+        console.log('Requests response status:', res.status);
+        
         if (res.status === 401) {
+          console.log('Not authenticated, showing login');
           loginCard.style.display = 'block';
           dashboardCard.style.display = 'none';
           dashboardStatus.textContent = '';
+          dashboardStatus.style.display = 'none';
           return;
         }
         
         const data = await res.json();
+        console.log('Loaded requests:', data);
 
         const active = data.filter(r => !r.archived);
         const archived = data.filter(r => r.archived);
@@ -244,12 +249,16 @@
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      console.log('Login attempt started');
+      
       loginStatus.textContent = 'Logging in...';
       loginStatus.style.display = 'block';
       loginStatus.classList.remove('status-error', 'status-success');
       
       const email = document.getElementById('adminEmail').value;
       const password = document.getElementById('adminPassword').value;
+
+      console.log('Email:', email);
 
       try {
         const res = await fetch('/api/login', {
@@ -262,33 +271,39 @@
           body: JSON.stringify({ email, password })
         });
 
+        console.log('Login response status:', res.status);
         const data = await res.json();
+        console.log('Login response data:', data);
 
         if (!res.ok) {
-          loginStatus.textContent = 'Invalid credentials: ' + (data.error || 'Unknown error');
-          loginStatus.classList.add('status-error');
-          return;
+          throw new Error(data.error || 'Login failed');
         }
 
+        // Login successful!
+        console.log('Login successful, switching to dashboard');
         loginStatus.textContent = 'Login successful!';
         loginStatus.classList.add('status-success');
         
-        setTimeout(() => {
-          loginStatus.textContent = '';
-          loginStatus.style.display = 'none';
-          loginCard.style.display = 'none';
-          dashboardCard.style.display = 'block';
-          loadRequests();
-        }, 500);
+        // Wait a moment, then switch views
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        loginCard.style.display = 'none';
+        dashboardCard.style.display = 'block';
+        loginStatus.textContent = '';
+        loginStatus.style.display = 'none';
+        
+        // Load the requests
+        await loadRequests();
         
       } catch (err) {
         console.error('Login error:', err);
-        loginStatus.textContent = 'Login error: ' + err.message;
+        loginStatus.textContent = 'Login failed: ' + err.message;
         loginStatus.classList.add('status-error');
       }
     });
 
     logoutBtn.addEventListener('click', async () => {
+      console.log('Logging out');
       try {
         await fetch('/api/logout', { 
           method: 'POST',
@@ -415,7 +430,7 @@
           loadRequests();
         })
         .catch((err) => {
-          dashboardStatus.textContent = 'Error updating status after reply: ' + err.message;
+          dashboardStatus.textContent = 'Error updating status: ' + err.message;
           dashboardStatus.classList.add('status-error');
         });
     }
@@ -427,7 +442,8 @@
     activeBody.addEventListener('click', handleReplyClick);
     archivedBody.addEventListener('click', handleReplyClick);
 
-    // Try to load requests on page load
+    // Check if already logged in on page load
+    console.log('Page loaded, checking auth status');
     loadRequests();
   </script>
 </body>
