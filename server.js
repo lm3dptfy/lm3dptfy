@@ -15,8 +15,8 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'requests-data.json');
 
 // Admin credentials
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@lm3dptfy.online';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm2dptfy+admin@gmail.com';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'MJR1125!3dp';
 
 if (!ADMIN_PASSWORD) {
   console.error('ERROR: ADMIN_PASSWORD not set in environment variables!');
@@ -67,7 +67,7 @@ loadRequests();
 
 // CORS - Allow credentials
 app.use(cors({
-  origin: true, // Allow all origins in development, or specify your domain
+  origin: true,
   credentials: true
 }));
 
@@ -82,17 +82,17 @@ if (!SESSION_SECRET) {
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-// Session configuration - FIXED for cookies to work
+// Session configuration
 app.use(
   session({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Changed from isProduction - cookies work on HTTP too
+      secure: false,
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      sameSite: 'lax' // Allow cookies on same-site navigation
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'lax'
     }
   })
 );
@@ -106,8 +106,8 @@ if (GMAIL_USER && GMAIL_PASS) {
   mailer = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: GMAIL_USER,
-      pass: GMAIL_PASS,
+      user: 'lm3dptfy@gmail.com',
+      pass: 'MJR1125!3dp',
     },
   });
   console.log('Gmail notifications enabled.');
@@ -209,6 +209,50 @@ function requireAdmin(req, res, next) {
 // Get all requests
 app.get('/api/requests', requireAdmin, (req, res) => {
   res.json(requests);
+});
+
+// NEW: Export requests as CSV
+app.get('/api/export/csv', requireAdmin, (req, res) => {
+  try {
+    // CSV headers
+    const headers = ['ID', 'Created', 'Name', 'Email', 'STL Link', 'Details', 'Status', 'Archived'];
+    
+    // Convert requests to CSV rows
+    const rows = requests.map(r => {
+      return [
+        r.id,
+        new Date(r.createdAt).toLocaleString(),
+        r.name,
+        r.email,
+        r.stlLink,
+        (r.details || '').replace(/"/g, '""'), // Escape quotes
+        r.status,
+        r.archived ? 'Yes' : 'No'
+      ].map(field => `"${field}"`).join(',');
+    });
+    
+    const csv = [headers.join(','), ...rows].join('\n');
+    
+    // Send as downloadable file
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="lm3dptfy-requests-${Date.now()}.csv"`);
+    res.send(csv);
+  } catch (err) {
+    console.error('Export error:', err);
+    res.status(500).json({ error: 'Export failed' });
+  }
+});
+
+// NEW: Export requests as JSON (for backup)
+app.get('/api/export/json', requireAdmin, (req, res) => {
+  try {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="lm3dptfy-requests-${Date.now()}.json"`);
+    res.json(requests);
+  } catch (err) {
+    console.error('Export error:', err);
+    res.status(500).json({ error: 'Export failed' });
+  }
 });
 
 // Update status
