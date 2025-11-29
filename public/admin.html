@@ -10,9 +10,10 @@
   <div class="page-shell">
     <main class="page-main">
       <div class="main-inner admin-main-inner">
+        <!-- Login section -->
         <div id="loginCard">
-          <div class="logo-wrap" style="margin-bottom:16px;">
-            <a href="/" class="logo-link">
+          <div class="logo-wrap" style="margin-bottom:16px; text-align:center;">
+            <a href="/" class="logo-link" style="justify-content:center;">
               <img
                 src="lm3dptfy-logo-tp-cropped.png"
                 alt="LM3DPTFY.online - Let Me 3D Print That For You"
@@ -21,8 +22,8 @@
             </a>
           </div>
 
-          <h1 class="admin-header-text">Admin login</h1>
-          <p class="admin-subtitle">Sign in to see and manage quote requests.</p>
+          <h1 class="admin-header-text" style="text-align:center;">Admin login</h1>
+          <p class="admin-subtitle" style="text-align:center;">Sign in to see and manage quote requests.</p>
 
           <form id="loginForm" class="stl-form">
             <div class="field-group">
@@ -33,11 +34,12 @@
               <label for="adminPassword" class="field-label">Password</label>
               <input type="password" id="adminPassword" class="field-input" required />
             </div>
-            <button type="submit" class="btn-primary">Log in</button>
+            <button type="submit" class="btn-primary" style="width:100%;">Log in</button>
             <p id="loginStatus" class="status-message"></p>
           </form>
         </div>
 
+        <!-- Dashboard section -->
         <div id="dashboardCard" style="display:none;">
           <div class="top-util-bar">
             <a href="/" class="logo-link">
@@ -45,6 +47,7 @@
                 src="lm3dptfy-logo-tp-cropped.png"
                 alt="LM3DPTFY.online - Let Me 3D Print That For You"
                 class="main-logo"
+                style="max-width:200px;"
               />
             </a>
             <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
@@ -189,13 +192,23 @@
 
     async function loadRequests() {
       dashboardStatus.textContent = 'Loading requests...';
+      dashboardStatus.style.display = 'block';
+      
       try {
-        const res = await fetch('/api/requests');
+        const res = await fetch('/api/requests', {
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
         if (res.status === 401) {
           loginCard.style.display = 'block';
           dashboardCard.style.display = 'none';
+          dashboardStatus.textContent = '';
           return;
         }
+        
         const data = await res.json();
 
         const active = data.filter(r => !r.archived);
@@ -205,7 +218,7 @@
         archivedBody.innerHTML = '';
 
         if (active.length === 0) {
-          activeBody.innerHTML = '<tr><td colspan="8">No active requests.</td></tr>';
+          activeBody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;">No active requests.</td></tr>';
         } else {
           active.forEach(r => {
             activeBody.appendChild(buildRow(r));
@@ -213,7 +226,7 @@
         }
 
         if (archived.length === 0) {
-          archivedBody.innerHTML = '<tr><td colspan="8">No archived requests.</td></tr>';
+          archivedBody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;">No archived requests.</td></tr>';
         } else {
           archived.forEach(r => {
             archivedBody.appendChild(buildRow(r));
@@ -221,44 +234,72 @@
         }
 
         dashboardStatus.textContent = '';
+        dashboardStatus.style.display = 'none';
       } catch (err) {
-        dashboardStatus.textContent = 'Error loading requests.';
+        console.error('Load error:', err);
+        dashboardStatus.textContent = 'Error loading requests: ' + err.message;
+        dashboardStatus.classList.add('status-error');
       }
     }
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       loginStatus.textContent = 'Logging in...';
+      loginStatus.style.display = 'block';
+      loginStatus.classList.remove('status-error', 'status-success');
+      
       const email = document.getElementById('adminEmail').value;
       const password = document.getElementById('adminPassword').value;
 
       try {
         const res = await fetch('/api/login', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          credentials: 'include',
           body: JSON.stringify({ email, password })
         });
 
+        const data = await res.json();
+
         if (!res.ok) {
-          loginStatus.textContent = 'Invalid credentials.';
+          loginStatus.textContent = 'Invalid credentials: ' + (data.error || 'Unknown error');
           loginStatus.classList.add('status-error');
           return;
         }
 
-        loginStatus.textContent = '';
-        loginCard.style.display = 'none';
-        dashboardCard.style.display = 'block';
-        loadRequests();
+        loginStatus.textContent = 'Login successful!';
+        loginStatus.classList.add('status-success');
+        
+        setTimeout(() => {
+          loginStatus.textContent = '';
+          loginStatus.style.display = 'none';
+          loginCard.style.display = 'none';
+          dashboardCard.style.display = 'block';
+          loadRequests();
+        }, 500);
+        
       } catch (err) {
-        loginStatus.textContent = 'Login error, try again.';
+        console.error('Login error:', err);
+        loginStatus.textContent = 'Login error: ' + err.message;
         loginStatus.classList.add('status-error');
       }
     });
 
     logoutBtn.addEventListener('click', async () => {
-      await fetch('/api/logout', { method: 'POST' });
-      loginCard.style.display = 'block';
-      dashboardCard.style.display = 'none';
+      try {
+        await fetch('/api/logout', { 
+          method: 'POST',
+          credentials: 'include'
+        });
+        loginCard.style.display = 'block';
+        dashboardCard.style.display = 'none';
+        loginForm.reset();
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
     });
 
     function handleStatusChange(e) {
@@ -268,11 +309,13 @@
       const status = select.value;
 
       dashboardStatus.textContent = 'Updating status...';
+      dashboardStatus.style.display = 'block';
       dashboardStatus.classList.remove('status-success', 'status-error');
 
       fetch(`/api/requests/${id}/status`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ status })
       })
         .then(res => res.json().then(data => ({ res, data })))
@@ -282,9 +325,12 @@
           }
           dashboardStatus.textContent = 'Status updated.';
           dashboardStatus.classList.add('status-success');
+          setTimeout(() => {
+            dashboardStatus.style.display = 'none';
+          }, 2000);
         })
-        .catch(() => {
-          dashboardStatus.textContent = 'Error updating status.';
+        .catch((err) => {
+          dashboardStatus.textContent = 'Error updating status: ' + err.message;
           dashboardStatus.classList.add('status-error');
         });
     }
@@ -296,11 +342,13 @@
       const archived = checkbox.checked;
 
       dashboardStatus.textContent = archived ? 'Archiving...' : 'Unarchiving...';
+      dashboardStatus.style.display = 'block';
       dashboardStatus.classList.remove('status-success', 'status-error');
 
       fetch(`/api/requests/${id}/archive`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ archived })
       })
         .then(res => res.json().then(data => ({ res, data })))
@@ -312,8 +360,8 @@
           dashboardStatus.classList.add('status-success');
           loadRequests();
         })
-        .catch(() => {
-          dashboardStatus.textContent = 'Error updating archive state.';
+        .catch((err) => {
+          dashboardStatus.textContent = 'Error updating archive state: ' + err.message;
           dashboardStatus.classList.add('status-error');
         });
     }
@@ -345,11 +393,13 @@
       window.open(gmailUrl, '_blank');
 
       dashboardStatus.textContent = 'Opening Gmail…';
+      dashboardStatus.style.display = 'block';
       dashboardStatus.classList.remove('status-success', 'status-error');
 
       fetch(`/api/requests/${id}/status`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ status: 'responded' })
       })
         .then(res => res.json().then(data => ({ res, data })))
@@ -359,10 +409,13 @@
           }
           dashboardStatus.textContent = 'Status set to "Responded".';
           dashboardStatus.classList.add('status-success');
+          setTimeout(() => {
+            dashboardStatus.style.display = 'none';
+          }, 2000);
           loadRequests();
         })
-        .catch(() => {
-          dashboardStatus.textContent = 'Error updating status after reply.';
+        .catch((err) => {
+          dashboardStatus.textContent = 'Error updating status after reply: ' + err.message;
           dashboardStatus.classList.add('status-error');
         });
     }
@@ -374,6 +427,7 @@
     activeBody.addEventListener('click', handleReplyClick);
     archivedBody.addEventListener('click', handleReplyClick);
 
+    // Try to load requests on page load
     loadRequests();
   </script>
 </body>
