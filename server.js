@@ -7,12 +7,12 @@ const session = require('express-session');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const cors = require('cors');
+const { google } = require('googleapis');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Data persistence file
-// Use persistent disk if available, otherwise current directory
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const DATA_FILE = path.join(DATA_DIR, 'requests-data.json');
 
@@ -29,6 +29,9 @@ if (!ADMIN_PASSWORD) {
 const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_PASS = process.env.GMAIL_PASS;
 const GMAIL_FROM_NAME = process.env.GMAIL_FROM_NAME || 'LM3DPTFY';
+
+// Google Sheets ID (extracted from your URL)
+const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID || '1IAwz8OtfuwSOSQJDIyOuwB_PI_ugHlEzvGKE_uUo2HI';
 
 // Status workflow
 const VALID_STATUSES = [
@@ -67,7 +70,67 @@ function saveRequests() {
 
 loadRequests();
 
-// CORS - Allow credentials
+// Initialize Google Sheets
+let sheetsClient = null;
+if (process.env.GOOGLE_SERVICE_ACCOUNT) {
+  try {
+    const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
+    const auth = new google.auth.GoogleAuth({
+      credentials,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    });
+    sheetsClient = google.sheets({ version: 'v4', auth });
+    console.log('Google Sheets integration enabled.');
+  } catch (err) {
+    console.error('Error initializing Google Sheets:', err);
+  }
+}
+
+// Function to export to Google Sheets
+async function exportToGoogleSheets() {
+  if (!sheetsClient) {
+    console.log('Google Sheets export skipped (not configured)');
+    return null;
+  }
+
+  try {
+    // Prepare the data
+    const headers = ['ID', 'Created', 'Name', 'Email', 'STL Link', 'Details', 'Status', 'Archived'];
+    const rows = requests.map(r => [
+      r.id,
+      new Date(r.createdAt).toLocaleString(),
+      r.name,
+      r.email,
+      r.stlLink,
+      r.details || '',
+      r.status,
+      r.archived ? 'Yes' : 'No'
+    ]);
+
+    // Clear existing data and write new data
+    await sheetsClient.spreadsheets.values.clear({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: 'Sheet1!A:H',
+    });
+
+    const response = await sheetsClient.spreadsheets.values.update({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: 'Sheet1!A1',
+      valueInputOption: 'RAW',
+      requestBody: {
+        values: [headers, ...rows],
+      },
+    });
+
+    console.log(`Exported ${rows.length} requests to Google Sheets`);
+    return response.data;
+  } catch (err) {
+    console.error('Google Sheets export error:', err);
+    throw err;
+  }
+}
+
+// CORS
 app.use(cors({
   origin: true,
   credentials: true
@@ -81,8 +144,6 @@ if (!SESSION_SECRET) {
   console.error('ERROR: SESSION_SECRET not set in environment variables!');
   process.exit(1);
 }
-
-const isProduction = process.env.NODE_ENV === 'production';
 
 // Session configuration
 app.use(
@@ -120,7 +181,7 @@ if (GMAIL_USER && GMAIL_PASS) {
 // --- Routes ---
 
 // Create new quote request
-app.post('/api/requests', (req, res) => {
+app.post('/api/requests', async (req, res) => {
   const { stlLink, name, email, details } = req.body;
 
   if (!stlLink || !name || !email) {
@@ -147,6 +208,11 @@ app.post('/api/requests', (req, res) => {
   saveRequests();
   
   console.log('New request:', newRequest);
+
+  // Auto-export to Google Sheets
+  if (sheetsClient) {
+    exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
+  }
 
   if (mailer) {
     mailer
@@ -199,12 +265,9 @@ app.post('/api/logout', (req, res) => {
 
 // Auth middleware
 function requireAdmin(req, res, next) {
-  console.log('Auth check - Session:', req.session);
   if (req.session && req.session.admin && req.session.admin.email === ADMIN_EMAIL) {
-    console.log('Auth check passed');
     return next();
   }
-  console.log('Auth check failed');
   res.status(401).json({ error: 'Unauthorized' });
 }
 
@@ -213,13 +276,10 @@ app.get('/api/requests', requireAdmin, (req, res) => {
   res.json(requests);
 });
 
-// NEW: Export requests as CSV
+// Export CSV
 app.get('/api/export/csv', requireAdmin, (req, res) => {
   try {
-    // CSV headers
     const headers = ['ID', 'Created', 'Name', 'Email', 'STL Link', 'Details', 'Status', 'Archived'];
-    
-    // Convert requests to CSV rows
     const rows = requests.map(r => {
       return [
         r.id,
@@ -227,7 +287,7 @@ app.get('/api/export/csv', requireAdmin, (req, res) => {
         r.name,
         r.email,
         r.stlLink,
-        (r.details || '').replace(/"/g, '""'), // Escape quotes
+        (r.details || '').replace(/"/g, '""'),
         r.status,
         r.archived ? 'Yes' : 'No'
       ].map(field => `"${field}"`).join(',');
@@ -235,7 +295,6 @@ app.get('/api/export/csv', requireAdmin, (req, res) => {
     
     const csv = [headers.join(','), ...rows].join('\n');
     
-    // Send as downloadable file
     res.setHeader('Content-Type', 'text/csv');
     res.setHeader('Content-Disposition', `attachment; filename="lm3dptfy-requests-${Date.now()}.csv"`);
     res.send(csv);
@@ -245,7 +304,7 @@ app.get('/api/export/csv', requireAdmin, (req, res) => {
   }
 });
 
-// NEW: Export requests as JSON (for backup)
+// Export JSON
 app.get('/api/export/json', requireAdmin, (req, res) => {
   try {
     res.setHeader('Content-Type', 'application/json');
@@ -257,8 +316,23 @@ app.get('/api/export/json', requireAdmin, (req, res) => {
   }
 });
 
+// NEW: Manual export to Google Sheets
+app.post('/api/export/sheets', requireAdmin, async (req, res) => {
+  try {
+    const result = await exportToGoogleSheets();
+    if (result) {
+      res.json({ ok: true, updatedCells: result.updatedCells });
+    } else {
+      res.status(500).json({ error: 'Export failed - check configuration' });
+    }
+  } catch (err) {
+    console.error('Export error:', err);
+    res.status(500).json({ error: err.message || 'Export failed' });
+  }
+});
+
 // Update status
-app.post('/api/requests/:id/status', requireAdmin, (req, res) => {
+app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
@@ -273,11 +347,17 @@ app.post('/api/requests/:id/status', requireAdmin, (req, res) => {
 
   requests[index].status = status;
   saveRequests();
+  
+  // Auto-export to Sheets on status change
+  if (sheetsClient) {
+    exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
+  }
+  
   res.json({ ok: true, status });
 });
 
 // Archive / unarchive
-app.post('/api/requests/:id/archive', requireAdmin, (req, res) => {
+app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { archived } = req.body;
 
@@ -292,19 +372,26 @@ app.post('/api/requests/:id/archive', requireAdmin, (req, res) => {
 
   requests[index].archived = archived;
   saveRequests();
+  
+  // Auto-export to Sheets on archive change
+  if (sheetsClient) {
+    exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
+  }
+  
   res.json({ ok: true, archived });
 });
 
-// Health check endpoint
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     requests: requests.length,
-    emailEnabled: !!mailer 
+    emailEnabled: !!mailer,
+    sheetsEnabled: !!sheetsClient
   });
 });
 
-// Fallback: serve homepage
+// Fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
