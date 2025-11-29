@@ -26,7 +26,7 @@
           <form id="loginForm" class="stl-form">
             <div class="field-group">
               <label for="adminEmail" class="field-label">Admin email</label>
-              <input type="email" id="adminEmail" class="field-input" value="lm3dptfy+admin@gmail.com" required />
+              <input type="email" id="adminEmail" class="field-input" required />
             </div>
             <div class="field-group">
               <label for="adminPassword" class="field-label">Password</label>
@@ -54,7 +54,11 @@
               <h1 class="admin-header-text">Quote requests</h1>
               <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
             </div>
-            <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
+            <div style="display:flex; gap:12px; align-items:center;">
+              <a href="/api/export/csv" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export CSV</a>
+              <a href="/api/export/json" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export JSON</a>
+              <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
+            </div>
           </div>
 
           <div class="table-wrapper">
@@ -128,12 +132,12 @@
 
     const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
 
-    function buildGmailUrl(toEmail, subject, body) {
+    function buildGmailUrl(toEmail, subject, bodyLines) {
       let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
       url += '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER);
       url += '&to=' + encodeURIComponent(toEmail);
       url += '&su=' + encodeURIComponent(subject);
-      url += '&body=' + encodeURIComponent(body);
+      url += '&body=' + encodeURIComponent(bodyLines.join('\\n'));
       return url;
     }
 
@@ -369,8 +373,6 @@
       const link = btn.getAttribute('data-link') || '';
 
       const subject = '3D printing quote from LM3DPTFY';
-      
-      // Build email body with proper line breaks
       const bodyLines = [
         name ? `Hi ${name},` : 'Hi,',
         '',
@@ -382,10 +384,9 @@
         '',
         'Thank you,',
         'LM3DPTFY'
-      ];
-      
-      const body = bodyLines.join('\n');
-      const gmailUrl = buildGmailUrl(email, subject, body);
+      ].filter(Boolean);
+
+      const gmailUrl = buildGmailUrl(email, subject, bodyLines);
       window.open(gmailUrl, '_blank');
 
       fetch(`/api/requests/${id}/status`, {
