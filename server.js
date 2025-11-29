@@ -15,8 +15,8 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'requests-data.json');
 
 // Admin credentials
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@lm3dptfy.online';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy+admin@gmail.com';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'MJR1125!3dp';
 
 if (!ADMIN_PASSWORD) {
   console.error('ERROR: ADMIN_PASSWORD not set in environment variables!');
@@ -102,8 +102,8 @@ if (GMAIL_USER && GMAIL_PASS) {
   mailer = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: GMAIL_USER,
-      pass: GMAIL_PASS,
+      user: 'lm3dptfy@gmail.com',
+      pass: 'MJR1125!3dp',
     },
   });
   console.log('Gmail notifications enabled.');
