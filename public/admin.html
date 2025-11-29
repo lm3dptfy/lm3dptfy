@@ -10,9 +10,8 @@
   <div class="page-shell">
     <main class="page-main">
       <div class="main-inner admin-main-inner">
-        <!-- Login card -->
-        <div id="loginCard" class="admin-card">
-          <div class="top-util-bar">
+        <div id="loginCard">
+          <div class="logo-wrap" style="margin-bottom:16px;">
             <a href="/" class="logo-link">
               <img
                 src="lm3dptfy-logo-tp-cropped.png"
@@ -20,8 +19,8 @@
                 class="main-logo"
               />
             </a>
-            <div class="brand-mark">ADMIN</div>
           </div>
+
           <h1 class="admin-header-text">Admin login</h1>
           <p class="admin-subtitle">Sign in to see and manage quote requests.</p>
 
@@ -39,8 +38,7 @@
           </form>
         </div>
 
-        <!-- Dashboard card -->
-        <div id="dashboardCard" class="admin-card" style="display:none;">
+        <div id="dashboardCard" style="display:none;">
           <div class="top-util-bar">
             <a href="/" class="logo-link">
               <img
@@ -70,9 +68,7 @@
                   <th>Archive</th>
                 </tr>
               </thead>
-              <tbody id="activeBody">
-                <!-- filled by JS -->
-              </tbody>
+              <tbody id="activeBody"></tbody>
             </table>
           </div>
 
@@ -91,9 +87,7 @@
                   <th>Archive</th>
                 </tr>
               </thead>
-              <tbody id="archivedBody">
-                <!-- filled by JS -->
-              </tbody>
+              <tbody id="archivedBody"></tbody>
             </table>
           </div>
 
@@ -200,7 +194,6 @@
         if (res.status === 401) {
           loginCard.style.display = 'block';
           dashboardCard.style.display = 'none';
-          logoutBtn.style.display = 'none';
           return;
         }
         const data = await res.json();
@@ -248,16 +241,17 @@
 
         if (!res.ok) {
           loginStatus.textContent = 'Invalid credentials.';
+          loginStatus.classList.add('status-error');
           return;
         }
 
         loginStatus.textContent = '';
         loginCard.style.display = 'none';
         dashboardCard.style.display = 'block';
-        logoutBtn.style.display = 'inline-block';
         loadRequests();
       } catch (err) {
         loginStatus.textContent = 'Login error, try again.';
+        loginStatus.classList.add('status-error');
       }
     });
 
@@ -265,7 +259,6 @@
       await fetch('/api/logout', { method: 'POST' });
       loginCard.style.display = 'block';
       dashboardCard.style.display = 'none';
-      logoutBtn.style.display = 'none';
     });
 
     function handleStatusChange(e) {
