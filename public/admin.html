@@ -26,7 +26,7 @@
           <form id="loginForm" class="stl-form">
             <div class="field-group">
               <label for="adminEmail" class="field-label">Admin email</label>
-              <input type="email" id="adminEmail" class="field-input" required />
+              <input type="email" id="adminEmail" class="field-input" value="lm3dptfy+admin@gmail.com" required />
             </div>
             <div class="field-group">
               <label for="adminPassword" class="field-label">Password</label>
@@ -35,6 +35,12 @@
             <button type="submit" class="btn-primary" style="width:100%;">Log in</button>
             <p id="loginStatus" class="status-message" style="display:none;"></p>
           </form>
+
+          <!-- Debug info -->
+          <div style="margin-top:20px; padding:12px; background:#f3f4f6; border-radius:8px; font-size:0.75rem;">
+            <strong>Debug Info:</strong>
+            <div id="debugInfo" style="margin-top:8px; font-family:monospace; white-space:pre-wrap;"></div>
+          </div>
         </div>
 
         <!-- Dashboard section -->
@@ -111,6 +117,7 @@
     const archivedBody = document.getElementById('archivedBody');
     const dashboardStatus = document.getElementById('dashboardStatus');
     const logoutBtn = document.getElementById('logoutBtn');
+    const debugInfo = document.getElementById('debugInfo');
 
     const STATUS_OPTIONS = [
       { value: 'new', label: 'New' },
@@ -124,6 +131,11 @@
     ];
 
     const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
+
+    function log(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      debugInfo.textContent += `[${timestamp}] ${message}\n`;
+    }
 
     function buildGmailUrl(toEmail, subject, bodyLines) {
       let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
@@ -189,12 +201,13 @@
     }
 
     async function loadRequests() {
-      console.log('Loading requests...');
+      log('Loading requests...');
       dashboardStatus.textContent = 'Loading requests...';
       dashboardStatus.style.display = 'block';
       dashboardStatus.classList.remove('status-error', 'status-success');
       
       try {
+        log('Fetching /api/requests');
         const res = await fetch('/api/requests', {
           credentials: 'include',
           headers: {
@@ -202,10 +215,10 @@
           }
         });
         
-        console.log('Requests response status:', res.status);
+        log(`Response status: ${res.status}`);
         
         if (res.status === 401) {
-          console.log('Not authenticated, showing login');
+          log('Not authenticated (401)');
           loginCard.style.display = 'block';
           dashboardCard.style.display = 'none';
           dashboardStatus.textContent = '';
@@ -214,7 +227,7 @@
         }
         
         const data = await res.json();
-        console.log('Loaded requests:', data);
+        log(`Loaded ${data.length} requests`);
 
         const active = data.filter(r => !r.archived);
         const archived = data.filter(r => r.archived);
@@ -241,15 +254,15 @@
         dashboardStatus.textContent = '';
         dashboardStatus.style.display = 'none';
       } catch (err) {
-        console.error('Load error:', err);
+        log(`Error: ${err.message}`);
         dashboardStatus.textContent = 'Error loading requests: ' + err.message;
         dashboardStatus.classList.add('status-error');
       }
     }
 
-    loginForm.addEventListener('submit', async (e) => {
+    loginForm.addEventListener('submit', async function(e) {
       e.preventDefault();
-      console.log('Login attempt started');
+      log('Login attempt started');
       
       loginStatus.textContent = 'Logging in...';
       loginStatus.style.display = 'block';
@@ -258,9 +271,10 @@
       const email = document.getElementById('adminEmail').value;
       const password = document.getElementById('adminPassword').value;
 
-      console.log('Email:', email);
+      log(`Email: ${email}`);
 
       try {
+        log('Sending POST to /api/login');
         const res = await fetch('/api/login', {
           method: 'POST',
           headers: { 
@@ -271,39 +285,37 @@
           body: JSON.stringify({ email, password })
         });
 
-        console.log('Login response status:', res.status);
+        log(`Login response status: ${res.status}`);
         const data = await res.json();
-        console.log('Login response data:', data);
+        log(`Login response: ${JSON.stringify(data)}`);
 
         if (!res.ok) {
           throw new Error(data.error || 'Login failed');
         }
 
         // Login successful!
-        console.log('Login successful, switching to dashboard');
-        loginStatus.textContent = 'Login successful!';
+        log('Login successful! Switching to dashboard...');
+        loginStatus.textContent = 'Login successful! Loading dashboard...';
         loginStatus.classList.add('status-success');
         
-        // Wait a moment, then switch views
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Wait then switch
+        await new Promise(resolve => setTimeout(resolve, 1000));
         
         loginCard.style.display = 'none';
         dashboardCard.style.display = 'block';
-        loginStatus.textContent = '';
-        loginStatus.style.display = 'none';
         
-        // Load the requests
+        // Try to load requests
         await loadRequests();
         
       } catch (err) {
-        console.error('Login error:', err);
+        log(`Login error: ${err.message}`);
         loginStatus.textContent = 'Login failed: ' + err.message;
         loginStatus.classList.add('status-error');
       }
     });
 
-    logoutBtn.addEventListener('click', async () => {
-      console.log('Logging out');
+    logoutBtn.addEventListener('click', async function() {
+      log('Logging out');
       try {
         await fetch('/api/logout', { 
           method: 'POST',
@@ -312,8 +324,9 @@
         loginCard.style.display = 'block';
         dashboardCard.style.display = 'none';
         loginForm.reset();
+        debugInfo.textContent = '';
       } catch (err) {
-        console.error('Logout error:', err);
+        log(`Logout error: ${err.message}`);
       }
     });
 
@@ -345,7 +358,7 @@
           }, 2000);
         })
         .catch((err) => {
-          dashboardStatus.textContent = 'Error updating status: ' + err.message;
+          dashboardStatus.textContent = 'Error: ' + err.message;
           dashboardStatus.classList.add('status-error');
         });
     }
@@ -356,10 +369,6 @@
       const id = checkbox.dataset.id;
       const archived = checkbox.checked;
 
-      dashboardStatus.textContent = archived ? 'Archiving...' : 'Unarchiving...';
-      dashboardStatus.style.display = 'block';
-      dashboardStatus.classList.remove('status-success', 'status-error');
-
       fetch(`/api/requests/${id}/archive`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -368,15 +377,11 @@
       })
         .then(res => res.json().then(data => ({ res, data })))
         .then(({ res, data }) => {
-          if (!res.ok || !data.ok) {
-            throw new Error(data.error || 'fail');
-          }
-          dashboardStatus.textContent = archived ? 'Moved to archived.' : 'Moved to active.';
-          dashboardStatus.classList.add('status-success');
+          if (!res.ok || !data.ok) throw new Error(data.error || 'fail');
           loadRequests();
         })
         .catch((err) => {
-          dashboardStatus.textContent = 'Error updating archive state: ' + err.message;
+          dashboardStatus.textContent = 'Error: ' + err.message;
           dashboardStatus.classList.add('status-error');
         });
     }
@@ -407,32 +412,14 @@
       const gmailUrl = buildGmailUrl(email, subject, bodyLines);
       window.open(gmailUrl, '_blank');
 
-      dashboardStatus.textContent = 'Opening Gmail…';
-      dashboardStatus.style.display = 'block';
-      dashboardStatus.classList.remove('status-success', 'status-error');
-
       fetch(`/api/requests/${id}/status`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ status: 'responded' })
       })
-        .then(res => res.json().then(data => ({ res, data })))
-        .then(({ res, data }) => {
-          if (!res.ok || !data.ok) {
-            throw new Error(data.error || 'fail');
-          }
-          dashboardStatus.textContent = 'Status set to "Responded".';
-          dashboardStatus.classList.add('status-success');
-          setTimeout(() => {
-            dashboardStatus.style.display = 'none';
-          }, 2000);
-          loadRequests();
-        })
-        .catch((err) => {
-          dashboardStatus.textContent = 'Error updating status: ' + err.message;
-          dashboardStatus.classList.add('status-error');
-        });
+        .then(() => loadRequests())
+        .catch((err) => log(`Error: ${err.message}`));
     }
 
     activeBody.addEventListener('change', handleStatusChange);
@@ -442,9 +429,7 @@
     activeBody.addEventListener('click', handleReplyClick);
     archivedBody.addEventListener('click', handleReplyClick);
 
-    // Check if already logged in on page load
-    console.log('Page loaded, checking auth status');
-    loadRequests();
+    log('Page loaded');
   </script>
 </body>
 </html>
