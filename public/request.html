@@ -26,21 +26,8 @@
         </p>
 
         <form id="quoteForm" class="stl-form">
-          <div class="field-group">
-            <label class="field-label">
-              <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
-                STLFlix model link
-              </a>
-            </label>
-            <input
-              type="text"
-              id="stlLinkDisplay"
-              class="field-input"
-              readonly
-              style="background: #f3f4f6; color: #6b7280;"
-            />
-            <input type="hidden" id="stlLinkHidden" name="stlLink" />
-          </div>
+          <!-- Hidden field to store the STL link -->
+          <input type="hidden" id="stlLinkHidden" name="stlLink" />
 
           <div class="field-row">
             <div class="field-group">
@@ -89,20 +76,19 @@
 
   <script>
     // Get the STL link from URL when page loads
-    window.addEventListener('DOMContentLoaded', function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const stlLink = urlParams.get('link') || '';
-      
-      const displayField = document.getElementById('stlLinkDisplay');
-      const hiddenField = document.getElementById('stlLinkHidden');
-      
-      if (stlLink) {
-        displayField.value = stlLink;
-        hiddenField.value = stlLink;
-      } else {
-        displayField.value = 'No link provided - please go back to homepage';
-      }
-    });
+    const urlParams = new URLSearchParams(window.location.search);
+    const stlLink = urlParams.get('link') || '';
+    
+    // Store it in hidden field
+    document.getElementById('stlLinkHidden').value = stlLink;
+
+    // If no link provided, show warning
+    if (!stlLink) {
+      const statusMessage = document.getElementById('statusMessage');
+      statusMessage.textContent = '⚠ No STL link provided. Please go back to the homepage and paste a link.';
+      statusMessage.classList.add('status-error');
+      statusMessage.style.display = 'block';
+    }
 
     // Handle form submission
     document.getElementById('quoteForm').addEventListener('submit', async function(e) {
@@ -126,7 +112,7 @@
       };
 
       // Validate we have a link
-      if (!payload.stlLink || payload.stlLink === '') {
+      if (!payload.stlLink || payload.stlLink.trim() === '') {
         statusMessage.textContent = '✗ Error: No STL link provided. Please go back to the homepage.';
         statusMessage.classList.add('status-error');
         submitButton.disabled = false;
@@ -152,17 +138,17 @@
         }
 
         // Success!
-        statusMessage.textContent = '✓ Request sent successfully! I'll email you a quote within one business day.';
+        statusMessage.textContent = '✓ Request sent successfully! Redirecting to homepage...';
         statusMessage.classList.add('status-success');
         
-        // Redirect to homepage after 2 seconds
+        // Redirect to homepage after 1.5 seconds
         setTimeout(function() {
           window.location.href = '/';
-        }, 2000);
+        }, 1500);
 
       } catch (error) {
         // Error
-        statusMessage.textContent = '✗ Something went wrong: ' + error.message + '. Please email me directly at lm3dptfy@gmail.com';
+        statusMessage.textContent = '✗ Error: ' + error.message + '. Please email me at lm3dptfy@gmail.com';
         statusMessage.classList.add('status-error');
         submitButton.disabled = false;
         submitButton.textContent = 'Submit request';
