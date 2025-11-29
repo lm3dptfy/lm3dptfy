@@ -35,30 +35,27 @@
             <button type="submit" class="btn-primary" style="width:100%;">Log in</button>
             <p id="loginStatus" class="status-message" style="display:none;"></p>
           </form>
-
-          <!-- Debug info -->
-          <div style="margin-top:20px; padding:12px; background:#f3f4f6; border-radius:8px; font-size:0.75rem;">
-            <strong>Debug Info:</strong>
-            <div id="debugInfo" style="margin-top:8px; font-family:monospace; white-space:pre-wrap;"></div>
-          </div>
         </div>
 
         <!-- Dashboard section -->
         <div id="dashboardCard" class="admin-main-inner" style="display:none;">
-          <div class="top-util-bar">
+          <div class="logo-wrap" style="margin-bottom:24px;">
             <a href="/" class="logo-link">
               <img
                 src="lm3dptfy-logo-tp-cropped.png"
                 alt="LM3DPTFY.online - Let Me 3D Print That For You"
                 class="main-logo"
-                style="max-width:200px;"
               />
             </a>
-            <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
           </div>
 
-          <h1 class="admin-header-text">Quote requests</h1>
-          <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <h1 class="admin-header-text">Quote requests</h1>
+              <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
+            </div>
+            <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
+          </div>
 
           <div class="table-wrapper">
             <h2 class="info-title">Active</h2>
@@ -117,7 +114,6 @@
     const archivedBody = document.getElementById('archivedBody');
     const dashboardStatus = document.getElementById('dashboardStatus');
     const logoutBtn = document.getElementById('logoutBtn');
-    const debugInfo = document.getElementById('debugInfo');
 
     const STATUS_OPTIONS = [
       { value: 'new', label: 'New' },
@@ -131,11 +127,6 @@
     ];
 
     const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
-
-    function log(message) {
-      const timestamp = new Date().toLocaleTimeString();
-      debugInfo.textContent += `[${timestamp}] ${message}\n`;
-    }
 
     function buildGmailUrl(toEmail, subject, bodyLines) {
       let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
@@ -201,13 +192,11 @@
     }
 
     async function loadRequests() {
-      log('Loading requests...');
       dashboardStatus.textContent = 'Loading requests...';
       dashboardStatus.style.display = 'block';
       dashboardStatus.classList.remove('status-error', 'status-success');
       
       try {
-        log('Fetching /api/requests');
         const res = await fetch('/api/requests', {
           credentials: 'include',
           headers: {
@@ -215,10 +204,7 @@
           }
         });
         
-        log(`Response status: ${res.status}`);
-        
         if (res.status === 401) {
-          log('Not authenticated (401)');
           loginCard.style.display = 'block';
           dashboardCard.style.display = 'none';
           dashboardStatus.textContent = '';
@@ -227,7 +213,6 @@
         }
         
         const data = await res.json();
-        log(`Loaded ${data.length} requests`);
 
         const active = data.filter(r => !r.archived);
         const archived = data.filter(r => r.archived);
@@ -254,7 +239,6 @@
         dashboardStatus.textContent = '';
         dashboardStatus.style.display = 'none';
       } catch (err) {
-        log(`Error: ${err.message}`);
         dashboardStatus.textContent = 'Error loading requests: ' + err.message;
         dashboardStatus.classList.add('status-error');
       }
@@ -262,7 +246,6 @@
 
     loginForm.addEventListener('submit', async function(e) {
       e.preventDefault();
-      log('Login attempt started');
       
       loginStatus.textContent = 'Logging in...';
       loginStatus.style.display = 'block';
@@ -271,10 +254,7 @@
       const email = document.getElementById('adminEmail').value;
       const password = document.getElementById('adminPassword').value;
 
-      log(`Email: ${email}`);
-
       try {
-        log('Sending POST to /api/login');
         const res = await fetch('/api/login', {
           method: 'POST',
           headers: { 
@@ -285,37 +265,31 @@
           body: JSON.stringify({ email, password })
         });
 
-        log(`Login response status: ${res.status}`);
         const data = await res.json();
-        log(`Login response: ${JSON.stringify(data)}`);
 
         if (!res.ok) {
           throw new Error(data.error || 'Login failed');
         }
 
-        // Login successful!
-        log('Login successful! Switching to dashboard...');
-        loginStatus.textContent = 'Login successful! Loading dashboard...';
+        loginStatus.textContent = 'Login successful!';
         loginStatus.classList.add('status-success');
         
-        // Wait then switch
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 500));
         
         loginCard.style.display = 'none';
         dashboardCard.style.display = 'block';
+        loginStatus.textContent = '';
+        loginStatus.style.display = 'none';
         
-        // Try to load requests
         await loadRequests();
         
       } catch (err) {
-        log(`Login error: ${err.message}`);
         loginStatus.textContent = 'Login failed: ' + err.message;
         loginStatus.classList.add('status-error');
       }
     });
 
     logoutBtn.addEventListener('click', async function() {
-      log('Logging out');
       try {
         await fetch('/api/logout', { 
           method: 'POST',
@@ -324,9 +298,8 @@
         loginCard.style.display = 'block';
         dashboardCard.style.display = 'none';
         loginForm.reset();
-        debugInfo.textContent = '';
       } catch (err) {
-        log(`Logout error: ${err.message}`);
+        console.error('Logout error:', err);
       }
     });
 
@@ -419,7 +392,7 @@
         body: JSON.stringify({ status: 'responded' })
       })
         .then(() => loadRequests())
-        .catch((err) => log(`Error: ${err.message}`));
+        .catch((err) => console.error('Error:', err));
     }
 
     activeBody.addEventListener('change', handleStatusChange);
@@ -429,7 +402,7 @@
     activeBody.addEventListener('click', handleReplyClick);
     archivedBody.addEventListener('click', handleReplyClick);
 
-    log('Page loaded');
+    loadRequests();
   </script>
 </body>
 </html>
