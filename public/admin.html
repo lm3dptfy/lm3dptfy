@@ -55,6 +55,7 @@
               <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
             </div>
             <div style="display:flex; gap:12px; align-items:center;">
+              <button id="exportSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Export to Sheets</button>
               <a href="/api/export/csv" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export CSV</a>
               <a href="/api/export/json" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export JSON</a>
               <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
@@ -304,6 +305,41 @@
         loginForm.reset();
       } catch (err) {
         console.error('Logout error:', err);
+      }
+    });
+
+    // Backup to Google Drive
+    document.getElementById('backupBtn').addEventListener('click', async function() {
+      const btn = this;
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Backing up...';
+      
+      try {
+        const res = await fetch('/api/backup/drive', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          dashboardStatus.textContent = `✓ Backed up to Google Drive: ${data.file.name}`;
+          dashboardStatus.classList.add('status-success');
+          dashboardStatus.style.display = 'block';
+          setTimeout(() => {
+            dashboardStatus.style.display = 'none';
+          }, 3000);
+        } else {
+          throw new Error(data.error || 'Backup failed');
+        }
+      } catch (err) {
+        dashboardStatus.textContent = `✗ Backup error: ${err.message}`;
+        dashboardStatus.classList.add('status-error');
+        dashboardStatus.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
       }
     });
 
