@@ -62,6 +62,13 @@ html, body {
   height: auto;
 }
 
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .hero-title {
   font-size: clamp(1.6rem, 2.4vw, 1.9rem);
   font-weight: 700;
@@ -84,6 +91,13 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
 }
 
 .field-label {
@@ -121,6 +135,11 @@ html, body {
 
 .field-input::placeholder {
   color: #9ca3af;
+}
+
+.field-input:disabled {
+  background: var(--bg-muted);
+  cursor: not-allowed;
 }
 
 .big-input {
@@ -218,45 +237,39 @@ textarea.field-input {
   text-decoration: underline;
 }
 
-/* Request page tweaks */
-
-.request-main-inner {
-  align-items: stretch;
-  max-width: 720px;
-}
-
-.request-card {
-  width: 100%;
-  padding: 24px 20px 20px;
-  background: #ffffff;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-soft);
-}
+/* Request page */
 
 .request-title {
   font-size: 1.3rem;
   margin: 0 0 4px;
+  text-align: center;
 }
 
 .request-subtitle {
   margin: 0 0 16px;
   font-size: 0.9rem;
   color: var(--muted);
+  text-align: center;
 }
 
 .status-message {
-  font-size: 0.8rem;
-  margin-top: 6px;
-  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  transition: opacity var(--transition);
 }
 
 .status-success {
-  color: #16a34a;
+  color: #166534;
+  background: #d1fae5;
+  border: 1px solid #86efac;
 }
 
 .status-error {
-  color: #dc2626;
+  color: #991b1b;
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
 }
 
 /* Admin */
@@ -266,24 +279,14 @@ textarea.field-input {
   max-width: 960px;
 }
 
-.admin-card {
-  width: 100%;
-  padding: 20px 18px 18px;
-  background: #ffffff;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-soft);
-  margin-bottom: 16px;
-}
-
 .admin-header-text {
   margin: 0 0 4px;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
 }
 
 .admin-subtitle {
-  margin: 0 0 12px;
-  font-size: 0.85rem;
+  margin: 0 0 16px;
+  font-size: 0.9rem;
   color: var(--muted);
 }
 
@@ -354,7 +357,7 @@ textarea.field-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 .brand-mark {
@@ -368,12 +371,6 @@ textarea.field-input {
 .logout-btn {
   font-size: 0.78rem;
   color: var(--muted);
-}
-
-.logo-link {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
 }
 
 /* Responsive */
@@ -391,9 +388,5 @@ textarea.field-input {
     width: 100%;
     text-align: center;
     justify-content: center;
-  }
-
-  .request-card {
-    padding-inline: 16px;
   }
 }
