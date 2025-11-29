@@ -15,8 +15,8 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'requests-data.json');
 
 // Admin credentials
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy+admin@gmail.com';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'MJR1125!3dp';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@lm3dptfy.online';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 if (!ADMIN_PASSWORD) {
   console.error('ERROR: ADMIN_PASSWORD not set in environment variables!');
@@ -65,9 +65,9 @@ function saveRequests() {
 
 loadRequests();
 
-// Middleware
+// CORS - Allow credentials
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://lm3dptfy.online',
+  origin: true, // Allow all origins in development, or specify your domain
   credentials: true
 }));
 
@@ -80,15 +80,19 @@ if (!SESSION_SECRET) {
   process.exit(1);
 }
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Session configuration - FIXED for cookies to work
 app.use(
   session({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: false, // Changed from isProduction - cookies work on HTTP too
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: 'lax' // Allow cookies on same-site navigation
     }
   })
 );
@@ -102,8 +106,8 @@ if (GMAIL_USER && GMAIL_PASS) {
   mailer = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'lm3dptfy@gmail.com',
-      pass: 'MJR1125!3dp',
+      user: GMAIL_USER,
+      pass: GMAIL_PASS,
     },
   });
   console.log('Gmail notifications enabled.');
@@ -165,12 +169,23 @@ app.post('/api/requests', (req, res) => {
 
 // Admin login
 app.post('/api/login', (req, res) => {
+  console.log('Login attempt:', req.body.email);
   const { email, password } = req.body;
+  
   if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
     req.session.admin = { email };
-    return res.json({ ok: true });
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).json({ error: 'Session error' });
+      }
+      console.log('Login successful, session saved');
+      return res.json({ ok: true });
+    });
+  } else {
+    console.log('Invalid credentials');
+    res.status(401).json({ error: 'Invalid credentials' });
   }
-  res.status(401).json({ error: 'Invalid credentials' });
 });
 
 // Admin logout
@@ -182,9 +197,12 @@ app.post('/api/logout', (req, res) => {
 
 // Auth middleware
 function requireAdmin(req, res, next) {
+  console.log('Auth check - Session:', req.session);
   if (req.session && req.session.admin && req.session.admin.email === ADMIN_EMAIL) {
+    console.log('Auth check passed');
     return next();
   }
+  console.log('Auth check failed');
   res.status(401).json({ error: 'Unauthorized' });
 }
 
@@ -248,4 +266,5 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
   console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
