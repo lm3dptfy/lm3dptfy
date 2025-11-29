@@ -128,12 +128,12 @@
 
     const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
 
-    function buildGmailUrl(toEmail, subject, bodyLines) {
+    function buildGmailUrl(toEmail, subject, body) {
       let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
       url += '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER);
       url += '&to=' + encodeURIComponent(toEmail);
       url += '&su=' + encodeURIComponent(subject);
-      url += '&body=' + encodeURIComponent(bodyLines.join('\\n'));
+      url += '&body=' + encodeURIComponent(body);
       return url;
     }
 
@@ -369,6 +369,8 @@
       const link = btn.getAttribute('data-link') || '';
 
       const subject = '3D printing quote from LM3DPTFY';
+      
+      // Build email body with proper line breaks
       const bodyLines = [
         name ? `Hi ${name},` : 'Hi,',
         '',
@@ -380,9 +382,10 @@
         '',
         'Thank you,',
         'LM3DPTFY'
-      ].filter(Boolean);
-
-      const gmailUrl = buildGmailUrl(email, subject, bodyLines);
+      ];
+      
+      const body = bodyLines.join('\n');
+      const gmailUrl = buildGmailUrl(email, subject, body);
       window.open(gmailUrl, '_blank');
 
       fetch(`/api/requests/${id}/status`, {
