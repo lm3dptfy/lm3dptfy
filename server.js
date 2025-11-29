@@ -12,11 +12,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Data persistence file
-const DATA_FILE = path.join(__dirname, 'requests-data.json');
+// Use persistent disk if available, otherwise current directory
+const DATA_DIR = process.env.DATA_DIR || __dirname;
+const DATA_FILE = path.join(DATA_DIR, 'requests-data.json');
 
 // Admin credentials
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm2dptfy+admin@gmail.com';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'MJR1125!3dp';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@lm3dptfy.online';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 if (!ADMIN_PASSWORD) {
   console.error('ERROR: ADMIN_PASSWORD not set in environment variables!');
@@ -106,8 +108,8 @@ if (GMAIL_USER && GMAIL_PASS) {
   mailer = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'lm3dptfy@gmail.com',
-      pass: 'MJR1125!3dp',
+      user: GMAIL_USER,
+      pass: GMAIL_PASS,
     },
   });
   console.log('Gmail notifications enabled.');
