@@ -10,7 +10,7 @@
   <div class="page-shell">
     <main class="page-main">
       <div class="main-inner">
-        <div class="logo-wrap" style="text-align:left; margin-bottom:12px;">
+        <div class="logo-wrap" style="margin-bottom:16px;">
           <a href="/" class="logo-link">
             <img
               src="lm3dptfy-logo-tp-cropped.png"
@@ -87,6 +87,7 @@
   </div>
 
   <script>
+    // Get the STL link from URL parameter
     const params = new URLSearchParams(window.location.search);
     const stlLink = params.get('link') || '';
     document.getElementById('stlLinkDisplay').value = stlLink;
@@ -97,8 +98,11 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      // Show loading state
       statusMessage.textContent = 'Sending your request...';
       statusMessage.classList.remove('status-success', 'status-error');
+      statusMessage.style.display = 'block';
 
       const payload = {
         stlLink: document.getElementById('stlLinkHidden').value,
@@ -110,24 +114,31 @@
       try {
         const res = await fetch('/api/requests', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          credentials: 'include',
           body: JSON.stringify(payload)
         });
 
+        const data = await res.json();
+
         if (!res.ok) {
-          throw new Error('Request failed');
+          throw new Error(data.error || 'Request failed');
         }
 
+        // Success!
         statusMessage.textContent = '✓ Request sent successfully! I'll email you a quote within one business day.';
         statusMessage.classList.add('status-success');
         
+        // Reset form after delay
         setTimeout(() => {
-          form.reset();
-          statusMessage.textContent = '';
-          statusMessage.classList.remove('status-success');
-        }, 3000);
+          window.location.href = '/';
+        }, 2000);
 
       } catch (err) {
+        console.error('Submission error:', err);
         statusMessage.textContent = '✗ Something went wrong. Please email me directly at lm3dptfy@gmail.com';
         statusMessage.classList.add('status-error');
       }
