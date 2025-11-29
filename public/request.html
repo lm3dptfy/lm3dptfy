@@ -9,76 +9,74 @@
 <body>
   <div class="page-shell">
     <main class="page-main">
-      <div class="main-inner request-main-inner">
-        <div class="request-card">
-          <div class="logo-wrap" style="text-align:left; margin-bottom:12px;">
-            <a href="/" class="logo-link">
-              <img
-                src="lm3dptfy-logo-tp-cropped.png"
-                alt="LM3DPTFY.online - Let Me 3D Print That For You"
-                class="main-logo"
-              />
-            </a>
+      <div class="main-inner">
+        <div class="logo-wrap" style="text-align:left; margin-bottom:12px;">
+          <a href="/" class="logo-link">
+            <img
+              src="lm3dptfy-logo-tp-cropped.png"
+              alt="LM3DPTFY.online - Let Me 3D Print That For You"
+              class="main-logo"
+            />
+          </a>
+        </div>
+
+        <h1 class="request-title">Where should I send your quote?</h1>
+        <p class="request-subtitle">
+          I'll review your STLFlix model, estimate material and print time, then email you a quote.
+        </p>
+
+        <form id="quoteForm" class="stl-form">
+          <div class="field-group">
+            <label class="field-label">
+              <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
+                STLFlix model link
+              </a>
+            </label>
+            <input
+              type="url"
+              id="stlLinkDisplay"
+              class="field-input"
+              disabled
+            />
+            <input type="hidden" id="stlLinkHidden" name="stlLink" />
           </div>
 
-          <h1 class="request-title">Where should I send your quote?</h1>
-          <p class="request-subtitle">
-            I’ll review your STLFlix model, estimate material and print time, then email you a quote.
-          </p>
-
-          <form id="quoteForm" class="stl-form">
+          <div class="field-row">
             <div class="field-group">
-              <label class="field-label">
-                <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
-                  STLFlix model link
-                </a>
-              </label>
-              <input
-                type="url"
-                id="stlLinkDisplay"
-                class="field-input"
-                disabled
-              />
-              <input type="hidden" id="stlLinkHidden" name="stlLink" />
-            </div>
-
-            <div class="field-row">
-              <div class="field-group">
-                <label for="name" class="field-label">Your name</label>
-                <input type="text" id="name" name="name" class="field-input" required />
-              </div>
-
-              <div class="field-group">
-                <label for="email" class="field-label">Email</label>
-                <input type="email" id="email" name="email" class="field-input" required />
-              </div>
+              <label for="name" class="field-label">Your name</label>
+              <input type="text" id="name" name="name" class="field-input" required />
             </div>
 
             <div class="field-group">
-              <label for="details" class="field-label">
-                Notes about this print (optional)
-              </label>
-              <textarea
-                id="details"
-                name="details"
-                rows="4"
-                class="field-input"
-                placeholder="Size, color preference, deadline, what it will be used for…"
-              ></textarea>
+              <label for="email" class="field-label">Email</label>
+              <input type="email" id="email" name="email" class="field-input" required />
             </div>
+          </div>
 
-            <button type="submit" class="btn-primary">
-              Submit request
-            </button>
+          <div class="field-group">
+            <label for="details" class="field-label">
+              Notes about this print (optional)
+            </label>
+            <textarea
+              id="details"
+              name="details"
+              rows="4"
+              class="field-input"
+              placeholder="Size, color preference, deadline, what it will be used for…"
+            ></textarea>
+          </div>
 
-            <p id="statusMessage" class="status-message"></p>
-          </form>
+          <button type="submit" class="btn-primary">
+            Submit request
+          </button>
 
-          <p class="small-note">
-            I usually respond within one business day. If I have questions about wall thickness,
-            print orientation, or supports, I’ll ask before printing.
-          </p>
-        </div>
+          <p id="statusMessage" class="status-message"></p>
+        </form>
+
+        <p class="small-note">
+          I usually respond within one business day. If I have questions about wall thickness,
+          print orientation, or supports, I'll ask before printing.
+        </p>
       </div>
     </main>
 
@@ -120,10 +118,17 @@
           throw new Error('Request failed');
         }
 
-        // On success, go back to homepage so they can submit another link
-        window.location.href = '/';
+        statusMessage.textContent = '✓ Request sent successfully! I'll email you a quote within one business day.';
+        statusMessage.classList.add('status-success');
+        
+        setTimeout(() => {
+          form.reset();
+          statusMessage.textContent = '';
+          statusMessage.classList.remove('status-success');
+        }, 3000);
+
       } catch (err) {
-        statusMessage.textContent = 'Something went wrong. Please try again in a minute.';
+        statusMessage.textContent = '✗ Something went wrong. Please email me directly at lm3dptfy@gmail.com';
         statusMessage.classList.add('status-error');
       }
     });
