@@ -348,12 +348,13 @@ app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
   requests[index].status = status;
   saveRequests();
   
-  // Auto-export to Sheets on status change
+  // Send response immediately, don't wait for Sheets export
+  res.json({ ok: true, status });
+  
+  // Auto-export to Sheets on status change (async, don't block)
   if (sheetsClient) {
     exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
   }
-  
-  res.json({ ok: true, status });
 });
 
 // Archive / unarchive
@@ -373,12 +374,13 @@ app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
   requests[index].archived = archived;
   saveRequests();
   
-  // Auto-export to Sheets on archive change
+  // Send response immediately, don't wait for Sheets export
+  res.json({ ok: true, archived });
+  
+  // Auto-export to Sheets on archive change (async, don't block)
   if (sheetsClient) {
     exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
   }
-  
-  res.json({ ok: true, archived });
 });
 
 // Health check
