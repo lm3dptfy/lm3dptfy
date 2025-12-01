@@ -5,21 +5,17 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
-const fs = require('fs');
 const cors = require('cors');
 const { google } = require('googleapis');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Data persistence file
-const DATA_DIR = process.env.DATA_DIR || __dirname;
-const DATA_FILE = path.join(DATA_DIR, 'requests-data.json');
+// === ADMIN / EMAIL CONFIG ======================================
 
-// Admin credentials (login) and notification target
-// - ADMIN_EMAIL: used for logging into /admin
-// - NOTIFY_EMAIL: where new order emails are sent
+// Admin login email (used to log into /admin)
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy+admin@gmail.com';
+// Where order notifications are sent
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'lm3dptfy@gmail.com';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
@@ -37,7 +33,22 @@ const GMAIL_FROM_NAME = process.env.GMAIL_FROM_NAME || 'LM3DPTFY';
 const GOOGLE_SHEET_ID =
   process.env.GOOGLE_SHEET_ID || '1IAwz8OtfuwSOSQJDIyOuwB_PI_ugHlEzvGKE_uUo2HI';
 
-// Status workflow
+// Column layout in Sheet
+// A: ID, B: Name, C: Email, D: STL Link, E: Details, F: Status,
+// G: Fulfilled By, H: Archived, I: Created At
+const SHEET_HEADER = [
+  'ID',
+  'Name',
+  'Email',
+  'STL Link',
+  'Details',
+  'Status',
+  'Fulfilled By',
+  'Archived',
+  'Created At',
+];
+
+// Valid statuses for workflow
 const VALID_STATUSES = [
   'new',
   'responded',
@@ -48,39 +59,14 @@ const VALID_STATUSES = [
   'cancelled',
 ];
 
-// In-memory requests store
-let requests = [];
+// === GLOBAL STATE ===============================================
 
-// Load requests from file
-function loadRequests() {
-  try {
-    if (fs.existsSync(DATA_FILE)) {
-      const data = fs.readFileSync(DATA_FILE, 'utf8');
-      requests = JSON.parse(data);
-      console.log(`Loaded ${requests.length} requests from disk.`);
-    } else {
-      console.log('No existing data file found, starting fresh.');
-      requests = [];
-    }
-  } catch (err) {
-    console.error('Error loading requests data:', err);
-    requests = [];
-  }
-}
+let requests = []; // in-memory copy, loaded from Google Sheets
 
-// Save requests to file
-function saveRequests() {
-  try {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(requests, null, 2));
-  } catch (err) {
-    console.error('Error saving requests:', err);
-  }
-}
+// === GOOGLE SHEETS CLIENT =======================================
 
-loadRequests();
-
-// Initialize Google Sheets
 let sheetsClient = null;
+
 if (process.env.GOOGLE_SERVICE_ACCOUNT) {
   try {
     const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
@@ -99,8 +85,10 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT) {
   console.log('GOOGLE_SERVICE_ACCOUNT not set. Google Sheets integration disabled.');
 }
 
-// Optional mailer
+// === EMAIL (GMAIL) CLIENT =======================================
+
 let mailer = null;
+
 if (GMAIL_USER && GMAIL_PASS) {
   mailer = nodemailer.createTransport({
     service: 'gmail',
@@ -114,7 +102,8 @@ if (GMAIL_USER && GMAIL_PASS) {
   console.warn('GMAIL_USER or GMAIL_PASS not set. Email notifications disabled.');
 }
 
-// Middleware
+// === EXPRESS MIDDLEWARE =========================================
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -138,7 +127,8 @@ app.use(
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Helper middleware
+// === HELPERS ====================================================
+
 function requireAdmin(req, res, next) {
   if (req.session && req.session.admin && req.session.admin.email === ADMIN_EMAIL) {
     return next();
@@ -150,7 +140,139 @@ function validateStatus(status) {
   return VALID_STATUSES.includes(status);
 }
 
-// Routes
+function mapRowToRequest(row) {
+  const [
+    id,
+    name,
+    email,
+    stlLink,
+    details,
+    status,
+    fulfilledBy,
+    archivedText,
+    createdAt,
+  ] = row;
+
+  if (!id) return null;
+
+  return {
+    id: String(id),
+    name: name || '',
+    email: email || '',
+    stlLink: stlLink || '',
+    details: details || '',
+    status: status || 'new',
+    fulfilledBy: fulfilledBy || null,
+    archived: archivedText === 'Yes' || archivedText === 'TRUE',
+    createdAt: createdAt || new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+function requestToRow(r) {
+  return [
+    r.id,
+    r.name,
+    r.email,
+    r.stlLink,
+    r.details || '',
+    r.status,
+    r.fulfilledBy || '',
+    r.archived ? 'Yes' : 'No',
+    r.createdAt || new Date().toISOString(),
+  ];
+}
+
+// === SHEETS <-> MEMORY SYNC =====================================
+
+async function loadRequestsFromSheet() {
+  if (!sheetsClient) {
+    console.warn('Google Sheets client not initialized; cannot load requests.');
+    requests = [];
+    return;
+  }
+
+  try {
+    const res = await sheetsClient.spreadsheets.values.get({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: 'Sheet1!A1:I10000',
+    });
+
+    const values = res.data.values || [];
+
+    if (values.length === 0) {
+      console.log('Sheet is empty. Initializing header row.');
+      await sheetsClient.spreadsheets.values.update({
+        spreadsheetId: GOOGLE_SHEET_ID,
+        range: 'Sheet1!A1',
+        valueInputOption: 'RAW',
+        requestBody: { values: [SHEET_HEADER] },
+      });
+      requests = [];
+      return;
+    }
+
+    // Skip header row
+    const rows = values.slice(1);
+    const mapped = rows
+      .map(mapRowToRequest)
+      .filter(Boolean)
+      // newest first (by createdAt if parsable)
+      .sort((a, b) => {
+        const ta = Date.parse(a.createdAt) || 0;
+        const tb = Date.parse(b.createdAt) || 0;
+        return tb - ta;
+      });
+
+    requests = mapped;
+    console.log(`Loaded ${requests.length} requests from Google Sheets.`);
+  } catch (err) {
+    console.error('Error loading requests from Google Sheets:', err);
+    requests = [];
+  }
+}
+
+async function appendRequestToSheet(reqObj) {
+  if (!sheetsClient) return;
+
+  const row = requestToRow(reqObj);
+
+  await sheetsClient.spreadsheets.values.append({
+    spreadsheetId: GOOGLE_SHEET_ID,
+    range: 'Sheet1!A1',
+    valueInputOption: 'RAW',
+    insertDataOption: 'INSERT_ROWS',
+    requestBody: {
+      values: [row],
+    },
+  });
+
+  console.log('Appended request to Google Sheets:', reqObj.id);
+}
+
+async function writeAllRequestsToSheet() {
+  if (!sheetsClient) {
+    console.warn('Google Sheets client not initialized; cannot sync.');
+    return;
+  }
+
+  const values = [SHEET_HEADER, ...requests.map(requestToRow)];
+
+  const res = await sheetsClient.spreadsheets.values.update({
+    spreadsheetId: GOOGLE_SHEET_ID,
+    range: 'Sheet1!A1',
+    valueInputOption: 'RAW',
+    requestBody: { values },
+  });
+
+  console.log(
+    `Synced ${requests.length} requests to Google Sheets. Updated cells: ${
+      res.data.updates ? res.data.updates.updatedCells : 'N/A'
+    }`
+  );
+}
+
+// === ROUTES =====================================================
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -159,6 +281,7 @@ app.get('/api/health', (req, res) => {
     env: process.env.NODE_ENV || 'development',
     adminEmail: ADMIN_EMAIL,
     notifyEmail: NOTIFY_EMAIL,
+    sheetId: GOOGLE_SHEET_ID,
   });
 });
 
@@ -170,6 +293,8 @@ app.post('/api/requests', async (req, res) => {
     return res.status(400).json({ error: 'Missing required fields.' });
   }
 
+  const nowIso = new Date().toISOString();
+
   const newRequest = {
     id: Date.now().toString(),
     stlLink,
@@ -177,21 +302,21 @@ app.post('/api/requests', async (req, res) => {
     email,
     details: details || '',
     status: 'new',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: nowIso,
+    updatedAt: nowIso,
     fulfilledBy: null,
     archived: false,
   };
 
-  // Insert at the beginning
+  // Keep newest at top
   requests.unshift(newRequest);
-  saveRequests();
-
   console.log('New request created:', newRequest);
 
-  // Auto-export to Google Sheets
+  // Append to Google Sheets
   if (sheetsClient) {
-    exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
+    appendRequestToSheet(newRequest).catch(err =>
+      console.error('Auto-append to Sheets failed:', err)
+    );
   }
 
   // Admin email notification
@@ -224,10 +349,10 @@ app.post('/api/requests', async (req, res) => {
   res.status(201).json({ ok: true, id: newRequest.id });
 });
 
-// Admin login
+// Admin login / logout / session
 app.post('/api/login', (req, res) => {
-  console.log('Login attempt for:', req.body.email);
   const { email, password } = req.body;
+  console.log('Login attempt for:', email);
   if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
     req.session.admin = { email };
     return res.json({ ok: true });
@@ -241,7 +366,6 @@ app.post('/api/logout', (req, res) => {
   });
 });
 
-// Current admin info
 app.get('/api/me', (req, res) => {
   if (req.session && req.session.admin) {
     return res.json({ admin: req.session.admin });
@@ -249,7 +373,7 @@ app.get('/api/me', (req, res) => {
   res.json({ admin: null });
 });
 
-// Get all requests (admin only) – returns ARRAY for admin.html
+// Get all requests (admin only) – uses in-memory copy
 app.get('/api/requests', requireAdmin, (req, res) => {
   res.json(requests);
 });
@@ -270,12 +394,13 @@ app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
 
   request.status = status;
   request.updatedAt = new Date().toISOString();
-  saveRequests();
 
   res.json({ ok: true, request });
 
   if (sheetsClient) {
-    exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
+    writeAllRequestsToSheet().catch(err =>
+      console.error('Sheets sync failed (status update):', err)
+    );
   }
 });
 
@@ -292,12 +417,13 @@ app.post('/api/requests/:id/fulfilled', requireAdmin, async (req, res) => {
   request.status = 'completed';
   request.fulfilledBy = fulfilledBy || request.fulfilledBy;
   request.updatedAt = new Date().toISOString();
-  saveRequests();
 
   res.json({ ok: true, request });
 
   if (sheetsClient) {
-    exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
+    writeAllRequestsToSheet().catch(err =>
+      console.error('Sheets sync failed (fulfilled):', err)
+    );
   }
 });
 
@@ -317,16 +443,17 @@ app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
 
   request.archived = archived;
   request.updatedAt = new Date().toISOString();
-  saveRequests();
 
   res.json({ ok: true, request });
 
   if (sheetsClient) {
-    exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
+    writeAllRequestsToSheet().catch(err =>
+      console.error('Sheets sync failed (archive):', err)
+    );
   }
 });
 
-// Export CSV
+// Export CSV (from in-memory requests)
 app.get('/api/export/csv', requireAdmin, (req, res) => {
   try {
     const headers = [
@@ -357,9 +484,7 @@ app.get('/api/export/csv', requireAdmin, (req, res) => {
       headers.join(','),
       ...rows.map(r =>
         r
-          .map(field =>
-            `"${String(field).replace(/"/g, '""')}"`
-          )
+          .map(field => `"${String(field).replace(/"/g, '""')}"`)
           .join(',')
       ),
     ].join('\n');
@@ -391,109 +516,29 @@ app.get('/api/export/json', requireAdmin, (req, res) => {
   }
 });
 
-// Export to Google Sheets
-async function exportToGoogleSheets() {
-  if (!sheetsClient) {
-    console.warn('Google Sheets client not initialized.');
-    return;
+// Manual reload from Sheets (IMPORT)
+app.post('/api/sheets/reload', requireAdmin, async (req, res) => {
+  try {
+    await loadRequestsFromSheet();
+    res.json({ ok: true, count: requests.length });
+  } catch (err) {
+    console.error('Reload from Sheets error:', err);
+    res.status(500).json({ error: 'Failed to reload from Sheets' });
   }
+});
 
-  // Get existing rows
-  const getRes = await sheetsClient.spreadsheets.values.get({
-    spreadsheetId: GOOGLE_SHEET_ID,
-    range: 'Sheet1!A1:I10000',
-  });
-
-  const existingRows = getRes.data.values || [];
-  const existingIds = new Set(existingRows.slice(1).map(row => row[0]));
-
-  // Filter only new requests
-  const newRequests = requests.filter(r => !existingIds.has(r.id));
-
-  if (newRequests.length === 0) {
-    console.log('No new requests to add to Google Sheets');
-    return { updatedCells: 0 };
+// Manual sync to Sheets (EXPORT ALL)
+app.post('/api/sheets/sync', requireAdmin, async (req, res) => {
+  try {
+    await writeAllRequestsToSheet();
+    res.json({ ok: true, count: requests.length });
+  } catch (err) {
+    console.error('Sync to Sheets error:', err);
+    res.status(500).json({ error: 'Failed to sync to Sheets' });
   }
+});
 
-  // Prepare rows for new requests only
-  const newRows = newRequests.map(r => [
-    r.id,
-    new Date(r.createdAt).toLocaleString(),
-    r.name,
-    r.email,
-    r.stlLink,
-    r.details || '',
-    r.status,
-    r.fulfilledBy || '',
-    r.archived ? 'Yes' : 'No',
-  ]);
-
-  // Append new rows to the end
-  const response = await sheetsClient.spreadsheets.values.append({
-    spreadsheetId: GOOGLE_SHEET_ID,
-    range: 'Sheet1!A1',
-    valueInputOption: 'RAW',
-    insertDataOption: 'INSERT_ROWS',
-    requestBody: {
-      values: newRows,
-    },
-  });
-
-  console.log(
-    `Exported ${newRows.length} new requests to Google Sheets. Updated cells: ${
-      response.data.updates ? response.data.updates.updatedCells : 'N/A'
-    }`
-  );
-
-  return response.data;
-}
-
-// Schedule weekly export (Friday at 5 PM) and hourly check for new rows
-function scheduleWeeklyExport() {
-  function scheduleNext() {
-    const now = new Date();
-    const day = now.getDay(); // 0-6, 5 = Friday
-    const targetDay = 5; // Friday
-    let daysUntilFriday = (targetDay - day + 7) % 7;
-
-    if (daysUntilFriday === 0 && now.getHours() >= 17) {
-      daysUntilFriday = 7;
-    }
-
-    const nextFriday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() + daysUntilFriday,
-      17,
-      0,
-      0
-    );
-
-    const delay = nextFriday.getTime() - now.getTime();
-
-    setTimeout(async () => {
-      try {
-        await exportToGoogleSheets();
-      } catch (err) {
-        console.error('Scheduled export failed:', err);
-      }
-      scheduleNext();
-    }, delay);
-
-    console.log('Next weekly export scheduled for:', nextFriday.toString());
-  }
-
-  scheduleNext();
-
-  // Optional hourly check (keeps Sheets more up to date)
-  setInterval(() => {
-    exportToGoogleSheets().catch(err =>
-      console.error('Hourly export failed:', err)
-    );
-  }, 60 * 60 * 1000);
-
-  console.log('Weekly export scheduled: Every Friday at 5 PM');
-}
+// === APP STARTUP ================================================
 
 app.listen(PORT, () => {
   console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
@@ -503,6 +548,8 @@ app.listen(PORT, () => {
   console.log(`Notification email target: ${NOTIFY_EMAIL}`);
 
   if (sheetsClient) {
-    scheduleWeeklyExport();
+    loadRequestsFromSheet().catch(err =>
+      console.error('Initial load from Sheets failed:', err)
+    );
   }
 });
