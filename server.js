@@ -13,9 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 // === ADMIN / EMAIL CONFIG ======================================
 
-// Admin login email (used to log into /admin)
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy+admin@gmail.com';
-// Where order notifications are sent
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'lm3dptfy@gmail.com';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
@@ -24,7 +22,6 @@ if (!ADMIN_PASSWORD) {
   process.exit(1);
 }
 
-// Gmail credentials
 const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_PASS = process.env.GMAIL_PASS;
 const GMAIL_FROM_NAME = process.env.GMAIL_FROM_NAME || 'LM3DPTFY';
@@ -33,11 +30,10 @@ const GMAIL_FROM_NAME = process.env.GMAIL_FROM_NAME || 'LM3DPTFY';
 const GOOGLE_SHEET_ID =
   process.env.GOOGLE_SHEET_ID || '1IAwz8OtfuwSOSQJDIyOuwB_PI_ugHlEzvGKE_uUo2HI';
 
-// Column layout in Sheet
-// A: ID, B: Name, C: Email, D: STL Link, E: Details, F: Status,
-// G: Fulfilled By, H: Archived, I: Created At
+// Sheet header layout (matches your existing sheet)
 const SHEET_HEADER = [
   'ID',
+  'Created',
   'Name',
   'Email',
   'STL Link',
@@ -45,17 +41,20 @@ const SHEET_HEADER = [
   'Status',
   'Fulfilled By',
   'Archived',
-  'Created At',
 ];
 
-// Valid statuses for workflow
+// Allow old + new status values
 const VALID_STATUSES = [
   'new',
   'responded',
   'quote_approved',
+  'sent_to_printer',
+  'print_complete',
+  'qc_complete',
+  'shipped',
+  'paid',
   'printing',
   'completed',
-  'shipped',
   'cancelled',
 ];
 
@@ -118,7 +117,7 @@ app.use(
     cookie: {
       secure: false,
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'lax',
     },
   })
@@ -140,9 +139,17 @@ function validateStatus(status) {
   return VALID_STATUSES.includes(status);
 }
 
+function parseCreatedToIso(created) {
+  if (!created) return new Date().toISOString();
+  const parsed = Date.parse(created);
+  if (Number.isNaN(parsed)) return new Date().toISOString();
+  return new Date(parsed).toISOString();
+}
+
 function mapRowToRequest(row) {
   const [
     id,
+    created,
     name,
     email,
     stlLink,
@@ -150,10 +157,16 @@ function mapRowToRequest(row) {
     status,
     fulfilledBy,
     archivedText,
-    createdAt,
   ] = row;
 
   if (!id) return null;
+
+  const createdAt = parseCreatedToIso(created);
+  const archived =
+    archivedText === 'Yes' ||
+    archivedText === 'TRUE' ||
+    archivedText === 'true' ||
+    archivedText === 'Y';
 
   return {
     id: String(id),
@@ -162,24 +175,29 @@ function mapRowToRequest(row) {
     stlLink: stlLink || '',
     details: details || '',
     status: status || 'new',
-    fulfilledBy: fulfilledBy || null,
-    archived: archivedText === 'Yes' || archivedText === 'TRUE',
-    createdAt: createdAt || new Date().toISOString(),
+    fulfilledBy: fulfilledBy || '',
+    archived,
+    createdAt,
     updatedAt: new Date().toISOString(),
   };
 }
 
 function requestToRow(r) {
+  const createdDate = new Date(r.createdAt);
+  const createdDisplay = Number.isNaN(createdDate.getTime())
+    ? (r.createdAt || '')
+    : createdDate.toLocaleString();
+
   return [
     r.id,
-    r.name,
-    r.email,
-    r.stlLink,
+    createdDisplay,
+    r.name || '',
+    r.email || '',
+    r.stlLink || '',
     r.details || '',
-    r.status,
+    r.status || 'new',
     r.fulfilledBy || '',
     r.archived ? 'Yes' : 'No',
-    r.createdAt || new Date().toISOString(),
   ];
 }
 
@@ -217,7 +235,6 @@ async function loadRequestsFromSheet() {
     const mapped = rows
       .map(mapRowToRequest)
       .filter(Boolean)
-      // newest first (by createdAt if parsable)
       .sort((a, b) => {
         const ta = Date.parse(a.createdAt) || 0;
         const tb = Date.parse(b.createdAt) || 0;
@@ -232,27 +249,9 @@ async function loadRequestsFromSheet() {
   }
 }
 
-async function appendRequestToSheet(reqObj) {
-  if (!sheetsClient) return;
-
-  const row = requestToRow(reqObj);
-
-  await sheetsClient.spreadsheets.values.append({
-    spreadsheetId: GOOGLE_SHEET_ID,
-    range: 'Sheet1!A1',
-    valueInputOption: 'RAW',
-    insertDataOption: 'INSERT_ROWS',
-    requestBody: {
-      values: [row],
-    },
-  });
-
-  console.log('Appended request to Google Sheets:', reqObj.id);
-}
-
 async function writeAllRequestsToSheet() {
   if (!sheetsClient) {
-    console.warn('Google Sheets client not initialized; cannot sync.');
+    console.warn('Google Sheets client not initialized; cannot sync to Sheets.');
     return;
   }
 
@@ -285,7 +284,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Create new quote request
+// Public: create new quote request
 app.post('/api/requests', async (req, res) => {
   const { stlLink, name, email, details } = req.body;
 
@@ -304,22 +303,21 @@ app.post('/api/requests', async (req, res) => {
     status: 'new',
     createdAt: nowIso,
     updatedAt: nowIso,
-    fulfilledBy: null,
+    fulfilledBy: '',
     archived: false,
   };
 
-  // Keep newest at top
   requests.unshift(newRequest);
   console.log('New request created:', newRequest);
 
-  // Append to Google Sheets
+  // Persist to Google Sheets (in background)
   if (sheetsClient) {
-    appendRequestToSheet(newRequest).catch(err =>
-      console.error('Auto-append to Sheets failed:', err)
+    writeAllRequestsToSheet().catch(err =>
+      console.error('Sheets sync failed (new request):', err)
     );
   }
 
-  // Admin email notification
+  // Admin notification email
   if (mailer) {
     console.log('Attempting to send admin notification email to:', NOTIFY_EMAIL);
     mailer
@@ -333,15 +331,11 @@ app.post('/api/requests', async (req, res) => {
           <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
           <p><strong>STLFlix link:</strong> <a href="${stlLink}">${stlLink}</a></p>
           <p><strong>Details:</strong> ${details || '(none)'}</p>
-          <p><a href="${
-            process.env.BACKEND_URL || 'http://localhost:3000'
-          }/admin.html">View in Admin Panel</a></p>
+          <p><a href="${process.env.BACKEND_URL || 'http://localhost:3000'}/admin.html">View in Admin Panel</a></p>
         `,
       })
       .then(() => console.log('Admin notification email sent successfully.'))
-      .catch(err =>
-        console.error('Error sending admin notification email:', err)
-      );
+      .catch(err => console.error('Error sending admin notification email:', err));
   } else {
     console.warn('Mailer not configured; skipping admin notification email.');
   }
@@ -349,7 +343,7 @@ app.post('/api/requests', async (req, res) => {
   res.status(201).json({ ok: true, id: newRequest.id });
 });
 
-// Admin login / logout / session
+// Admin auth
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
   console.log('Login attempt for:', email);
@@ -373,12 +367,12 @@ app.get('/api/me', (req, res) => {
   res.json({ admin: null });
 });
 
-// Get all requests (admin only) – uses in-memory copy
+// Admin: get all requests
 app.get('/api/requests', requireAdmin, (req, res) => {
   res.json(requests);
 });
 
-// Update request status
+// Update status
 app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -387,15 +381,15 @@ app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
     return res.status(400).json({ error: 'Invalid status' });
   }
 
-  const request = requests.find(r => r.id === id);
-  if (!request) {
+  const r = requests.find(reqObj => reqObj.id === id);
+  if (!r) {
     return res.status(404).json({ error: 'Request not found' });
   }
 
-  request.status = status;
-  request.updatedAt = new Date().toISOString();
+  r.status = status;
+  r.updatedAt = new Date().toISOString();
 
-  res.json({ ok: true, request });
+  res.json({ ok: true, request: r });
 
   if (sheetsClient) {
     writeAllRequestsToSheet().catch(err =>
@@ -404,25 +398,25 @@ app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
   }
 });
 
-// Mark as fulfilled
+// Update fulfilledBy (and mark as completed)
 app.post('/api/requests/:id/fulfilled', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { fulfilledBy } = req.body;
 
-  const request = requests.find(r => r.id === id);
-  if (!request) {
+  const r = requests.find(reqObj => reqObj.id === id);
+  if (!r) {
     return res.status(404).json({ error: 'Request not found' });
   }
 
-  request.status = 'completed';
-  request.fulfilledBy = fulfilledBy || request.fulfilledBy;
-  request.updatedAt = new Date().toISOString();
+  r.fulfilledBy = fulfilledBy || r.fulfilledBy;
+  // Don't force a particular status; let admin choose via dropdown
+  r.updatedAt = new Date().toISOString();
 
-  res.json({ ok: true, request });
+  res.json({ ok: true, request: r });
 
   if (sheetsClient) {
     writeAllRequestsToSheet().catch(err =>
-      console.error('Sheets sync failed (fulfilled):', err)
+      console.error('Sheets sync failed (fulfilled update):', err)
     );
   }
 });
@@ -436,24 +430,24 @@ app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
     return res.status(400).json({ error: 'archived must be boolean' });
   }
 
-  const request = requests.find(r => r.id === id);
-  if (!request) {
+  const r = requests.find(reqObj => reqObj.id === id);
+  if (!r) {
     return res.status(404).json({ error: 'Request not found' });
   }
 
-  request.archived = archived;
-  request.updatedAt = new Date().toISOString();
+  r.archived = archived;
+  r.updatedAt = new Date().toISOString();
 
-  res.json({ ok: true, request });
+  res.json({ ok: true, request: r });
 
   if (sheetsClient) {
     writeAllRequestsToSheet().catch(err =>
-      console.error('Sheets sync failed (archive):', err)
+      console.error('Sheets sync failed (archive update):', err)
     );
   }
 });
 
-// Export CSV (from in-memory requests)
+// Export CSV
 app.get('/api/export/csv', requireAdmin, (req, res) => {
   try {
     const headers = [
@@ -516,7 +510,7 @@ app.get('/api/export/json', requireAdmin, (req, res) => {
   }
 });
 
-// Manual reload from Sheets (IMPORT)
+// Manual reload from Sheets
 app.post('/api/sheets/reload', requireAdmin, async (req, res) => {
   try {
     await loadRequestsFromSheet();
@@ -527,7 +521,7 @@ app.post('/api/sheets/reload', requireAdmin, async (req, res) => {
   }
 });
 
-// Manual sync to Sheets (EXPORT ALL)
+// Manual sync to Sheets
 app.post('/api/sheets/sync', requireAdmin, async (req, res) => {
   try {
     await writeAllRequestsToSheet();
