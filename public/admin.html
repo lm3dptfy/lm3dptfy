@@ -133,12 +133,12 @@
 
     const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
 
-    function buildGmailUrl(toEmail, subject, bodyLines) {
+    function buildGmailUrl(toEmail, subject, body) {
       let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
       url += '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER);
       url += '&to=' + encodeURIComponent(toEmail);
       url += '&su=' + encodeURIComponent(subject);
-      url += '&body=' + encodeURIComponent(bodyLines.join('\\n'));
+      url += '&body=' + encodeURIComponent(body);
       return url;
     }
 
@@ -308,40 +308,61 @@
       }
     });
 
-    // Backup to Google Drive
-    document.getElementById('backupBtn').addEventListener('click', async function() {
-      const btn = this;
-      const originalText = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = 'Backing up...';
-      
-      try {
-        const res = await fetch('/api/backup/drive', {
-          method: 'POST',
-          credentials: 'include'
-        });
+    // Export to Google Sheets - WITH DEBUG
+    const exportBtn = document.getElementById('exportSheetsBtn');
+    if (exportBtn) {
+      console.log('Export button found!');
+      exportBtn.addEventListener('click', async function() {
+        console.log('Export button clicked!');
         
-        const data = await res.json();
+        const btn = this;
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Exporting...';
         
-        if (res.ok) {
-          dashboardStatus.textContent = `✓ Backed up to Google Drive: ${data.file.name}`;
-          dashboardStatus.classList.add('status-success');
-          dashboardStatus.style.display = 'block';
-          setTimeout(() => {
-            dashboardStatus.style.display = 'none';
-          }, 3000);
-        } else {
-          throw new Error(data.error || 'Backup failed');
-        }
-      } catch (err) {
-        dashboardStatus.textContent = `✗ Backup error: ${err.message}`;
-        dashboardStatus.classList.add('status-error');
+        dashboardStatus.textContent = 'Starting export...';
+        dashboardStatus.classList.remove('status-error', 'status-success');
         dashboardStatus.style.display = 'block';
-      } finally {
-        btn.disabled = false;
-        btn.textContent = originalText;
-      }
-    });
+        
+        try {
+          console.log('Sending request to /api/export/sheets');
+          
+          const res = await fetch('/api/export/sheets', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+          
+          console.log('Response status:', res.status);
+          
+          const data = await res.json();
+          console.log('Response data:', data);
+          
+          if (res.ok) {
+            dashboardStatus.textContent = `✓ Exported to Google Sheets! Updated ${data.updatedCells || 'multiple'} cells.`;
+            dashboardStatus.classList.remove('status-error');
+            dashboardStatus.classList.add('status-success');
+            setTimeout(() => {
+              dashboardStatus.style.display = 'none';
+            }, 5000);
+          } else {
+            throw new Error(data.error || 'Export failed');
+          }
+        } catch (err) {
+          console.error('Export error:', err);
+          dashboardStatus.textContent = `✗ Export failed: ${err.message}`;
+          dashboardStatus.classList.remove('status-success');
+          dashboardStatus.classList.add('status-error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      });
+    } else {
+      console.error('Export button NOT FOUND!');
+    }
 
     function handleStatusChange(e) {
       const select = e.target.closest('.status-select');
@@ -391,11 +412,14 @@
         .then(res => res.json().then(data => ({ res, data })))
         .then(({ res, data }) => {
           if (!res.ok || !data.ok) throw new Error(data.error || 'fail');
-          loadRequests();
+          // Reload to show in correct section
+          setTimeout(() => loadRequests(), 300);
         })
         .catch((err) => {
+          checkbox.checked = !archived; // Revert checkbox on error
           dashboardStatus.textContent = 'Error: ' + err.message;
           dashboardStatus.classList.add('status-error');
+          dashboardStatus.style.display = 'block';
         });
     }
 
@@ -409,6 +433,7 @@
       const link = btn.getAttribute('data-link') || '';
 
       const subject = '3D printing quote from LM3DPTFY';
+      
       const bodyLines = [
         name ? `Hi ${name},` : 'Hi,',
         '',
@@ -420,9 +445,10 @@
         '',
         'Thank you,',
         'LM3DPTFY'
-      ].filter(Boolean);
-
-      const gmailUrl = buildGmailUrl(email, subject, bodyLines);
+      ];
+      
+      const body = bodyLines.join('\n');
+      const gmailUrl = buildGmailUrl(email, subject, body);
       window.open(gmailUrl, '_blank');
 
       fetch(`/api/requests/${id}/status`, {
@@ -443,6 +469,8 @@
     archivedBody.addEventListener('click', handleReplyClick);
 
     loadRequests();
+    
+    console.log('Admin page loaded successfully');
   </script>
 </body>
 </html>
