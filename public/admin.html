@@ -32,7 +32,8 @@
               <label for="adminPassword" class="field-label">Password</label>
               <input type="password" id="adminPassword" class="field-input" required />
             </div>
-            <button type="submit" class="primary-btn">Log in</button>
+            <!-- CHANGE IS HERE: use btn-primary so it matches "Get Quote" -->
+            <button type="submit" class="btn-primary">Log in</button>
             <p id="loginStatus" class="status-text" style="display:none;"></p>
           </form>
         </div>
@@ -129,6 +130,8 @@
     const archivedBody = document.getElementById('archivedBody');
     const dashboardStatus = document.getElementById('dashboardStatus');
     const logoutBtn = document.getElementById('logoutBtn');
+    const reloadBtn = document.getElementById('reloadSheetsBtn');
+    const syncBtn = document.getElementById('syncSheetsBtn');
 
     const STATUS_OPTIONS = [
       { value: 'new', label: 'New' },
@@ -141,14 +144,14 @@
       { value: 'paid', label: 'Paid' },
     ];
 
-    const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
-    
     const FULFILLED_BY_OPTIONS = [
       { value: '', label: '-- None --' },
       { value: 'Jared', label: 'Jared' },
       { value: 'Robert', label: 'Robert' },
       { value: 'Terence', label: 'Terence' }
     ];
+
+    const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
 
     function buildGmailUrl(toEmail, subject, body) {
       let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
@@ -159,126 +162,110 @@
       return url;
     }
 
-    function safeText(text) {
-      return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
-    }
-
-    function renderRow(r, isArchived) {
+    function renderRow(r) {
       const tr = document.createElement('tr');
 
-      const createdCell = document.createElement('td');
-      createdCell.textContent = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
-      tr.appendChild(createdCell);
+      const createdTd = document.createElement('td');
+      createdTd.textContent = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
+      tr.appendChild(createdTd);
 
-      const nameCell = document.createElement('td');
-      nameCell.textContent = r.name || '';
-      tr.appendChild(nameCell);
+      const nameTd = document.createElement('td');
+      nameTd.textContent = r.name || '';
+      tr.appendChild(nameTd);
 
-      const emailCell = document.createElement('td');
+      const emailTd = document.createElement('td');
       if (r.email) {
-        const link = document.createElement('a');
-        link.href = 'mailto:' + r.email;
-        link.textContent = r.email;
-        emailCell.appendChild(link);
+        const a = document.createElement('a');
+        a.href = 'mailto:' + r.email;
+        a.textContent = r.email;
+        emailTd.appendChild(a);
       }
-      tr.appendChild(emailCell);
+      tr.appendChild(emailTd);
 
-      const stlCell = document.createElement('td');
+      const stlTd = document.createElement('td');
       if (r.stlLink) {
-        const link = document.createElement('a');
-        link.href = r.stlLink;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = 'View STL';
-        stlCell.appendChild(link);
+        const a = document.createElement('a');
+        a.href = r.stlLink;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.textContent = 'View STL';
+        stlTd.appendChild(a);
       }
-      tr.appendChild(stlCell);
+      tr.appendChild(stlTd);
 
-      const notesCell = document.createElement('td');
-      notesCell.textContent = r.details || '';
-      tr.appendChild(notesCell);
+      const notesTd = document.createElement('td');
+      notesTd.textContent = r.details || '';
+      tr.appendChild(notesTd);
 
-      const statusCell = document.createElement('td');
+      const statusTd = document.createElement('td');
       const statusSelect = document.createElement('select');
       statusSelect.className = 'status-select';
       statusSelect.dataset.id = r.id;
-
       STATUS_OPTIONS.forEach(opt => {
-        const option = document.createElement('option');
-        option.value = opt.value;
-        option.textContent = opt.label;
-        if ((r.status || 'new') === opt.value) {
-          option.selected = true;
-        }
-        statusSelect.appendChild(option);
+        const o = document.createElement('option');
+        o.value = opt.value;
+        o.textContent = opt.label;
+        if ((r.status || 'new') === opt.value) o.selected = true;
+        statusSelect.appendChild(o);
       });
+      statusTd.appendChild(statusSelect);
+      tr.appendChild(statusTd);
 
-      statusCell.appendChild(statusSelect);
-      tr.appendChild(statusCell);
-
-      const fulfilledCell = document.createElement('td');
+      const fulfilledTd = document.createElement('td');
       const fulfilledSelect = document.createElement('select');
       fulfilledSelect.className = 'status-select fulfilled-select';
       fulfilledSelect.dataset.id = r.id;
-
       FULFILLED_BY_OPTIONS.forEach(opt => {
-        const option = document.createElement('option');
-        option.value = opt.value;
-        option.textContent = opt.label;
-        if ((r.fulfilledBy || '') === opt.value) {
-          option.selected = true;
-        }
-        fulfilledSelect.appendChild(option);
+        const o = document.createElement('option');
+        o.value = opt.value;
+        o.textContent = opt.label;
+        if ((r.fulfilledBy || '') === opt.value) o.selected = true;
+        fulfilledSelect.appendChild(o);
       });
-      fulfilledCell.appendChild(fulfilledSelect);
+      fulfilledTd.appendChild(fulfilledSelect);
+      tr.appendChild(fulfilledTd);
 
-      tr.appendChild(fulfilledCell);
-
-      const replyCell = document.createElement('td');
+      const replyTd = document.createElement('td');
       const replyBtn = document.createElement('button');
       replyBtn.className = 'link-btn reply-btn';
       replyBtn.dataset.email = r.email || '';
       replyBtn.dataset.name = r.name || '';
       replyBtn.dataset.stl = r.stlLink || '';
       replyBtn.textContent = 'Reply';
-      replyCell.appendChild(replyBtn);
-      tr.appendChild(replyCell);
+      replyTd.appendChild(replyBtn);
+      tr.appendChild(replyTd);
 
-      const archiveCell = document.createElement('td');
+      const archiveTd = document.createElement('td');
       const archiveCheckbox = document.createElement('input');
       archiveCheckbox.type = 'checkbox';
       archiveCheckbox.className = 'archive-checkbox';
       archiveCheckbox.dataset.id = r.id;
       archiveCheckbox.checked = !!r.archived;
-      archiveCell.appendChild(archiveCheckbox);
-      tr.appendChild(archiveCell);
+      archiveTd.appendChild(archiveCheckbox);
+      tr.appendChild(archiveTd);
 
       return tr;
     }
 
-    async function loadRequests() {
-      dashboardStatus.textContent = 'Loading requests...';
+    function showDashStatus(msg, isError) {
+      dashboardStatus.textContent = msg;
       dashboardStatus.style.display = 'block';
-      dashboardStatus.classList.remove('status-error', 'status-success');
-      
+      dashboardStatus.classList.toggle('status-error', !!isError);
+      dashboardStatus.classList.toggle('status-success', !isError);
+      if (!isError) {
+        setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
+      }
+    }
+
+    async function loadRequests() {
       try {
-        const res = await fetch('/api/requests', {
-          credentials: 'include',
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-        
+        const res = await fetch('/api/requests', { credentials: 'include' });
         if (res.status === 401) {
           loginCard.style.display = 'block';
           dashboardCard.style.display = 'none';
-          dashboardStatus.textContent = '';
-          dashboardStatus.style.display = 'none';
           return;
         }
-        
         const data = await res.json();
-
         const active = data.filter(r => !r.archived);
         const archived = data.filter(r => r.archived);
 
@@ -288,30 +275,21 @@
         if (active.length === 0) {
           activeBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;">No active requests.</td></tr>';
         } else {
-          active.forEach(r => {
-            activeBody.appendChild(renderRow(r, false));
-          });
+          active.forEach(r => activeBody.appendChild(renderRow(r)));
         }
 
         if (archived.length === 0) {
           archivedBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;">No archived requests.</td></tr>';
         } else {
-          archived.forEach(r => {
-            archivedBody.appendChild(renderRow(r, true));
-          });
+          archived.forEach(r => archivedBody.appendChild(renderRow(r)));
         }
 
         loginCard.style.display = 'none';
         dashboardCard.style.display = 'block';
-        dashboardStatus.textContent = 'Loaded ' + data.length + ' total request(s).';
-        dashboardStatus.classList.add('status-success');
-        setTimeout(() => {
-          dashboardStatus.style.display = 'none';
-        }, 5000);
+        showDashStatus('Loaded ' + data.length + ' request(s).', false);
       } catch (err) {
         console.error('Error loading requests:', err);
-        dashboardStatus.textContent = 'Error loading requests: ' + err.message;
-        dashboardStatus.classList.add('status-error');
+        showDashStatus('Error loading requests: ' + err.message, true);
       }
     }
 
@@ -327,16 +305,11 @@
       try {
         const res = await fetch('/api/login', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password }),
         });
 
-        if (!res.ok) {
-          throw new Error('Invalid email or password');
-        }
+        if (!res.ok) throw new Error('Invalid email or password');
 
         loginStatus.textContent = 'Login successful. Loading dashboard...';
         loginStatus.classList.add('status-success');
@@ -351,100 +324,40 @@
 
     logoutBtn.addEventListener('click', async () => {
       try {
-        await fetch('/api/logout', {
-          method: 'POST',
-          credentials: 'include'
-        });
-        loginCard.style.display = 'block';
-        dashboardCard.style.display = 'none';
-        loginForm.reset();
-      } catch (err) {
-        console.error('Logout error:', err);
-      }
+        await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+      } catch (e) { /* ignore */ }
+      loginCard.style.display = 'block';
+      dashboardCard.style.display = 'none';
+      loginForm.reset();
     });
 
-    // Export to Google Sheets / sync with DB
-    // Google Sheets controls
-    const reloadBtn = document.getElementById('reloadSheetsBtn');
-    const syncBtn = document.getElementById('syncSheetsBtn');
-
     if (reloadBtn) {
-      reloadBtn.addEventListener('click', async function () {
-        const btn = this;
-        const originalText = btn.textContent;
-        btn.disabled = true;
-        btn.textContent = 'Refreshing...';
-
-        dashboardStatus.textContent = 'Refreshing from Google Sheets...';
-        dashboardStatus.classList.remove('status-error', 'status-success');
-        dashboardStatus.style.display = 'block';
-
+      reloadBtn.addEventListener('click', async () => {
+        showDashStatus('Refreshing from Google Sheets...', false);
         try {
-          const res = await fetch('/api/sheets/reload', {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Accept': 'application/json' }
-          });
-
+          const res = await fetch('/api/sheets/reload', { method: 'POST', credentials: 'include' });
           const data = await res.json().catch(() => ({}));
-
-          if (!res.ok) {
-            throw new Error(data.error || 'Reload failed');
-          }
-
-          dashboardStatus.textContent = `✓ Reloaded ${data.count || 0} requests from Google Sheets.`;
-          dashboardStatus.classList.remove('status-error');
-          dashboardStatus.classList.add('status-success');
+          if (!res.ok) throw new Error(data.error || 'Reload failed');
+          showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
           loadRequests();
-          setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
         } catch (err) {
           console.error('Reload error:', err);
-          dashboardStatus.textContent = `✗ Reload failed: ${err.message}`;
-          dashboardStatus.classList.remove('status-success');
-          dashboardStatus.classList.add('status-error');
-        } finally {
-          btn.disabled = false;
-          btn.textContent = originalText;
+          showDashStatus('Reload failed: ' + err.message, true);
         }
       });
     }
 
     if (syncBtn) {
-      syncBtn.addEventListener('click', async function () {
-        const btn = this;
-        const originalText = btn.textContent;
-        btn.disabled = true;
-        btn.textContent = 'Syncing...';
-
-        dashboardStatus.textContent = 'Syncing to Google Sheets...';
-        dashboardStatus.classList.remove('status-error', 'status-success');
-        dashboardStatus.style.display = 'block';
-
+      syncBtn.addEventListener('click', async () => {
+        showDashStatus('Syncing to Google Sheets...', false);
         try {
-          const res = await fetch('/api/sheets/sync', {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Accept': 'application/json' }
-          });
-
+          const res = await fetch('/api/sheets/sync', { method: 'POST', credentials: 'include' });
           const data = await res.json().catch(() => ({}));
-
-          if (!res.ok) {
-            throw new Error(data.error || 'Sync failed');
-          }
-
-          dashboardStatus.textContent = `✓ Synced ${data.count || 0} requests to Google Sheets.`;
-          dashboardStatus.classList.remove('status-error');
-          dashboardStatus.classList.add('status-success');
-          setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
+          if (!res.ok) throw new Error(data.error || 'Sync failed');
+          showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
         } catch (err) {
           console.error('Sync error:', err);
-          dashboardStatus.textContent = `✗ Sync failed: ${err.message}`;
-          dashboardStatus.classList.remove('status-success');
-          dashboardStatus.classList.add('status-error');
-        } finally {
-          btn.disabled = false;
-          btn.textContent = originalText;
+          showDashStatus('Sync failed: ' + err.message, true);
         }
       });
     }
@@ -454,145 +367,100 @@
       if (!select || select.classList.contains('fulfilled-select')) return;
       const id = select.dataset.id;
       const status = select.value;
-
-      dashboardStatus.textContent = 'Updating status...';
-      dashboardStatus.style.display = 'block';
-      dashboardStatus.classList.remove('status-success', 'status-error');
-
+      showDashStatus('Updating status...', false);
       fetch(`/api/requests/${id}/status`, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       })
-        .then((res) => {
+        .then(res => {
           if (!res.ok) throw new Error('Failed to update status');
           return res.json();
         })
-        .then(() => {
-          dashboardStatus.textContent = 'Status updated.';
-          dashboardStatus.classList.add('status-success');
-          setTimeout(() => {
-            dashboardStatus.style.display = 'none';
-          }, 3000);
-        })
-        .catch((err) => {
+        .then(() => showDashStatus('Status updated.', false))
+        .catch(err => {
           console.error('Status update error:', err);
-          dashboardStatus.textContent = 'Error updating status: ' + err.message;
-          dashboardStatus.classList.add('status-error');
+          showDashStatus('Error updating status: ' + err.message, true);
         });
     }
 
-    function handleFulfilledByChange(e) {
+    function handleFulfilledChange(e) {
       const select = e.target.closest('.fulfilled-select');
       if (!select) return;
       const id = select.dataset.id;
       const fulfilledBy = select.value;
-
-      dashboardStatus.textContent = 'Updating fulﬁlled by...';
-      dashboardStatus.style.display = 'block';
-      dashboardStatus.classList.remove('status-success', 'status-error');
-
+      showDashStatus('Updating fulfilled by...', false);
       fetch(`/api/requests/${id}/fulfilled`, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fulfilledBy }),
       })
-        .then((res) => {
+        .then(res => {
           if (!res.ok) throw new Error('Failed to update fulfilled by');
           return res.json();
         })
-        .then(() => {
-          dashboardStatus.textContent = 'Fulfilled by updated.';
-          dashboardStatus.classList.add('status-success');
-          setTimeout(() => {
-            dashboardStatus.style.display = 'none';
-          }, 3000);
-        })
-        .catch((err) => {
+        .then(() => showDashStatus('Fulfilled by updated.', false))
+        .catch(err => {
           console.error('Fulfilled update error:', err);
-          dashboardStatus.textContent = 'Error updating fulfilled by: ' + err.message;
-          dashboardStatus.classList.add('status-error');
+          showDashStatus('Error updating fulfilled by: ' + err.message, true);
         });
     }
 
-    function handleArchiveToggle(e) {
+    function handleArchiveChange(e) {
       const checkbox = e.target.closest('.archive-checkbox');
       if (!checkbox) return;
       const id = checkbox.dataset.id;
       const archived = checkbox.checked;
-
-      dashboardStatus.textContent = archived ? 'Archiving request...' : 'Unarchiving request...';
-      dashboardStatus.style.display = 'block';
-      dashboardStatus.classList.remove('status-success', 'status-error');
-
+      showDashStatus(archived ? 'Archiving request...' : 'Unarchiving request...', false);
       fetch(`/api/requests/${id}/archive`, {
         method: 'POST',
         credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ archived }),
       })
-        .then((res) => {
+        .then(res => {
           if (!res.ok) throw new Error('Failed to update archive state');
           return res.json();
         })
         .then(() => {
-          dashboardStatus.textContent = archived ? 'Request archived.' : 'Request unarchived.';
-          dashboardStatus.classList.add('status-success');
-          setTimeout(() => {
-            dashboardStatus.style.display = 'none';
-          }, 3000);
+          showDashStatus(archived ? 'Request archived.' : 'Request unarchived.', false);
           loadRequests();
         })
-        .catch((err) => {
+        .catch(err => {
           console.error('Archive update error:', err);
-          dashboardStatus.textContent = 'Error updating archive state: ' + err.message;
-          dashboardStatus.classList.add('status-error');
+          showDashStatus('Error updating archive: ' + err.message, true);
         });
     }
 
     function handleReplyClick(e) {
       const btn = e.target.closest('.reply-btn');
       if (!btn) return;
-
       const email = btn.dataset.email;
       if (!email) return;
-
       const name = btn.dataset.name || '';
       const stl = btn.dataset.stl || '';
-
       const subject = 'LM3DPTFY Quote Reply';
       const body =
-        'Hi ' + name + ',%0D%0A%0D%0A' +
-        'Thanks for your quote request for:%0D%0A' +
-        stl + '%0D%0A%0D%0A' +
+        'Hi ' + name + ',\n\n' +
+        'Thanks for your quote request for:\n' +
+        stl + '\n\n' +
         '— LM3DPTFY';
-
       window.open(buildGmailUrl(email, subject, body), '_blank');
     }
 
     activeBody.addEventListener('change', handleStatusChange);
     archivedBody.addEventListener('change', handleStatusChange);
-    activeBody.addEventListener('change', handleFulfilledByChange);
-    archivedBody.addEventListener('change', handleFulfilledByChange);
-    activeBody.addEventListener('change', handleArchiveToggle);
-    archivedBody.addEventListener('change', handleArchiveToggle);
+    activeBody.addEventListener('change', handleFulfilledChange);
+    archivedBody.addEventListener('change', handleFulfilledChange);
+    activeBody.addEventListener('change', handleArchiveChange);
+    archivedBody.addEventListener('change', handleArchiveChange);
     activeBody.addEventListener('click', handleReplyClick);
     archivedBody.addEventListener('click', handleReplyClick);
 
+    // Initial load (will show dashboard only if already logged in)
     loadRequests();
-    
-    console.log('Admin page loaded successfully');
   </script>
 </body>
 </html>
