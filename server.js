@@ -30,7 +30,7 @@ const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_PASS = process.env.GMAIL_PASS;
 const GMAIL_FROM_NAME = process.env.GMAIL_FROM_NAME || ‘LM3DPTFY’;
 
-// Google Sheets ID (extracted from your URL)
+// Google Sheets ID
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID || ‘1IAwz8OtfuwSOSQJDIyOuwB_PI_ugHlEzvGKE_uUo2HI’;
 
 // Status workflow
@@ -119,11 +119,11 @@ if (!existingData.data.values || existingData.data.values.length === 0) {
 // Get all existing IDs from the sheet
 const allData = await sheetsClient.spreadsheets.values.get({
   spreadsheetId: GOOGLE_SHEET_ID,
-  range: 'Sheet1!A:A', // Get all IDs (column A)
+  range: 'Sheet1!A:A',
 });
 
 const existingIds = new Set(
-  (allData.data.values || []).slice(1).map(row => row[0]) // Skip header row
+  (allData.data.values || []).slice(1).map(row => row[0])
 );
 
 // Find new requests that aren't in the sheet yet
@@ -216,7 +216,7 @@ console.log(‘Gmail notifications enabled.’);
 console.warn(‘GMAIL_USER or GMAIL_PASS not set. Email notifications disabled.’);
 }
 
-// — Routes —
+// Routes
 
 // Create new quote request
 app.post(’/api/requests’, async (req, res) => {
@@ -311,7 +311,7 @@ res.json(requests);
 // Export CSV
 app.get(’/api/export/csv’, requireAdmin, (req, res) => {
 try {
-const headers = [‘ID’, ‘Created’, ‘Name’, ‘Email’, ‘STL Link’, ‘Details’, ‘Status’, ‘Archived’];
+const headers = [‘ID’, ‘Created’, ‘Name’, ‘Email’, ‘STL Link’, ‘Details’, ‘Status’, ‘Fulfilled By’, ‘Archived’];
 const rows = requests.map(r => {
 return [
 r.id,
@@ -321,6 +321,7 @@ r.email,
 r.stlLink,
 (r.details || ‘’).replace(/”/g, ‘””’),
 r.status,
+r.fulfilledBy || ‘’,
 r.archived ? ‘Yes’ : ‘No’
 ].map(field => `"${field}"`).join(’,’);
 });
@@ -351,12 +352,12 @@ res.status(500).json({ error: ‘Export failed’ });
 }
 });
 
-// NEW: Manual export to Google Sheets
+// Manual export to Google Sheets
 app.post(’/api/export/sheets’, requireAdmin, async (req, res) => {
 try {
 const result = await exportToGoogleSheets();
 if (result) {
-res.json({ ok: true, updatedCells: result.updatedCells });
+res.json({ ok: true, updatedCells: result.updatedCells || 0 });
 } else {
 res.status(500).json({ error: ‘Export failed - check configuration’ });
 }
@@ -383,10 +384,8 @@ return res.status(404).json({ error: ‘Request not found’ });
 requests[index].status = status;
 saveRequests();
 
-// Send response immediately, don’t wait for Sheets export
 res.json({ ok: true, status });
 
-// Auto-export to Sheets on status change (async, don’t block)
 if (sheetsClient) {
 exportToGoogleSheets().catch(err => console.error(‘Auto-export failed:’, err));
 }
@@ -429,10 +428,8 @@ return res.status(404).json({ error: ‘Request not found’ });
 requests[index].archived = archived;
 saveRequests();
 
-// Send response immediately, don’t wait for Sheets export
 res.json({ ok: true, archived });
 
-// Auto-export to Sheets on archive change (async, don’t block)
 if (sheetsClient) {
 exportToGoogleSheets().catch(err => console.error(‘Auto-export failed:’, err));
 }
@@ -453,28 +450,15 @@ app.get(’*’, (req, res) => {
 res.sendFile(path.join(__dirname, ‘public’, ‘index.html’));
 });
 
-app.listen(PORT, () => {
-console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
-console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
-console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-
-// Schedule weekly export to Google Sheets every Friday at 5 PM
-if (sheetsClient) {
-scheduleWeeklyExport();
-}
-});
-
 // Function to schedule weekly exports
 function scheduleWeeklyExport() {
-// Check every hour if it’s time to export
 setInterval(() => {
 const now = new Date();
-const day = now.getDay(); // 0 = Sunday, 5 = Friday
+const day = now.getDay();
 const hour = now.getHours();
 const minute = now.getMinutes();
 
 ```
-// Friday at 5 PM (17:00)
 if (day === 5 && hour === 17 && minute < 60) {
   console.log('Running weekly Google Sheets export...');
   exportToGoogleSheets()
@@ -483,7 +467,17 @@ if (day === 5 && hour === 17 && minute < 60) {
 }
 ```
 
-}, 60 * 60 * 1000); // Check every hour
+}, 60 * 60 * 1000);
 
 console.log(‘Weekly export scheduled: Every Friday at 5 PM’);
 }
+
+app.listen(PORT, () => {
+console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
+console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
+console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+
+if (sheetsClient) {
+scheduleWeeklyExport();
+}
+});
