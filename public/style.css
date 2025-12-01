@@ -315,6 +315,16 @@ textarea.field-input {
   white-space: nowrap;
 }
 
+/* Make Notes column wider */
+.request-table th:nth-child(5),
+.request-table td:nth-child(5) {
+  min-width: 250px;
+  max-width: 400px;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.4;
+}
+
 .request-table td a {
   color: var(--accent);
   text-decoration: none;
