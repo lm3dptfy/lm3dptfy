@@ -3,406 +3,596 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin | LM3DPTFY Requests</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="admin-body">
-  <header class="site-header admin-header">
-    <div class="admin-logo-wrapper">
-      <!-- Just a centered logo, NOT clickable -->
-      <img src="lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY Logo" class="main-logo" />
-    </div>
-    <div class="admin-actions">
-      <button id="btn-reload-sheets" class="pill-button">Refresh from Sheets</button>
-      <button id="btn-sync-sheets" class="pill-button">Sync to Sheets</button>
-      <button id="btn-export-csv" class="pill-button">Export CSV</button>
-      <button id="btn-export-json" class="pill-button">Export JSON</button>
-      <button id="btn-logout" class="link-button">Log out</button>
-    </div>
-  </header>
+<body>
+  <div class="page-shell">
+    <main class="page-main">
+      <div class="main-inner">
+        <!-- Login section -->
+        <div id="loginCard">
+          <div class="logo-wrap">
+            <img
+              src="lm3dptfy-logo-tp-cropped.png"
+              alt="LM3DPTFY.online - Let Me 3D Print That For You"
+              class="main-logo"
+            />
+          </div>
 
-  <main class="page-main">
-    <section class="page-section admin-section">
-      <h1>Quote requests</h1>
-      <p class="section-subtitle">
-        Active and archived requests from lm3dptfy.online.
-      </p>
+          <h1 class="request-title">Admin login</h1>
+          <p class="request-subtitle">Sign in to see and manage quote requests.</p>
 
-      <div id="error-banner" class="error-banner" style="display:none;"></div>
-      <div id="info-banner" class="info-banner" style="display:none;"></div>
+          <form id="loginForm" class="stl-form">
+            <div class="field-group">
+              <label for="adminEmail" class="field-label">Admin email</label>
+              <input type="email" id="adminEmail" class="field-input" required />
+            </div>
+            <div class="field-group">
+              <label for="adminPassword" class="field-label">Password</label>
+              <input type="password" id="adminPassword" class="field-input" required />
+            </div>
+            <button type="submit" class="primary-btn">Log in</button>
+            <p id="loginStatus" class="status-text" style="display:none;"></p>
+          </form>
+        </div>
 
-      <div class="requests-wrapper">
-        <h2>Active</h2>
-        <table class="requests-table" id="active-table">
-          <thead>
-            <tr>
-              <th>Created</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>STL link</th>
-              <th>Notes</th>
-              <th>Status</th>
-              <th>Fulfilled By</th>
-              <th>Reply</th>
-              <th>Archive</th>
-            </tr>
-          </thead>
-          <tbody id="active-tbody">
-            <tr>
-              <td colspan="9" class="empty-row">Loading…</td>
-            </tr>
-          </tbody>
-        </table>
+        <!-- Dashboard section -->
+        <div id="dashboardCard" class="admin-main-inner" style="display:none;">
+          <div class="logo-wrap" style="margin-bottom:24px;">
+            <!-- Centered logo, NOT clickable -->
+            <img
+              src="lm3dptfy-logo-tp-cropped.png"
+              alt="LM3DPTFY.online - Let Me 3D Print That For You"
+              class="main-logo"
+            />
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:16px; flex-wrap:wrap;">
+            <div>
+              <h1 class="admin-header-text">Quote requests</h1>
+              <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <button id="reloadSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Refresh from Sheets</button>
+              <button id="syncSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Sync to Sheets</button>
+              <a href="/api/export/csv" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export CSV</a>
+              <a href="/api/export/json" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export JSON</a>
+              <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
+            </div>
+          </div>
+
+          <p id="dashboardStatus" class="status-text" style="display:none;"></p>
+
+          <div class="table-wrapper">
+            <h2 class="info-title">Active</h2>
+            <table class="request-table">
+              <thead>
+                <tr>
+                  <th>Created</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>STL link</th>
+                  <th>Notes</th>
+                  <th>Status</th>
+                  <th>Fulfilled By</th>
+                  <th>Reply</th>
+                  <th>Archive</th>
+                </tr>
+              </thead>
+              <tbody id="activeBody">
+                <tr>
+                  <td colspan="9" style="text-align:center;padding:20px;">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-wrapper">
+            <h2 class="info-title">Archived</h2>
+            <table class="request-table">
+              <thead>
+                <tr>
+                  <th>Created</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>STL link</th>
+                  <th>Notes</th>
+                  <th>Status</th>
+                  <th>Fulfilled By</th>
+                  <th>Reply</th>
+                  <th>Archive</th>
+                </tr>
+              </thead>
+              <tbody id="archivedBody">
+                <tr>
+                  <td colspan="9" style="text-align:center;padding:20px;">No archived requests.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
+    </main>
 
-      <div class="requests-wrapper archived-wrapper">
-        <h2>Archived</h2>
-        <table class="requests-table" id="archived-table">
-          <thead>
-            <tr>
-              <th>Created</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>STL link</th>
-              <th>Notes</th>
-              <th>Status</th>
-              <th>Fulfilled By</th>
-              <th>Reply</th>
-              <th>Archive</th>
-            </tr>
-          </thead>
-          <tbody id="archived-tbody">
-            <tr>
-              <td colspan="9" class="empty-row">Loading…</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-
-  <!-- Simple login overlay -->
-  <div id="login-overlay" class="login-overlay" style="display:none;">
-    <div class="login-card">
-      <h2>Admin login</h2>
-      <p>Enter your admin email and password to view requests.</p>
-      <form id="login-form">
-        <label>Email<br />
-          <input type="email" id="login-email" required />
-        </label>
-        <label>Password<br />
-          <input type="password" id="login-password" required />
-        </label>
-        <button type="submit" class="pill-button">Log in</button>
-        <div id="login-error" class="error-text" style="display:none;"></div>
-      </form>
-    </div>
+    <footer class="site-footer">
+      LM3DPTFY Admin · Keep this page private.
+    </footer>
   </div>
 
   <script>
-    const errorBanner = document.getElementById('error-banner');
-    const infoBanner = document.getElementById('info-banner');
-    const loginOverlay = document.getElementById('login-overlay');
-    const loginForm = document.getElementById('login-form');
-    const loginError = document.getElementById('login-error');
+    const loginForm = document.getElementById('loginForm');
+    const loginStatus = document.getElementById('loginStatus');
+    const loginCard = document.getElementById('loginCard');
+    const dashboardCard = document.getElementById('dashboardCard');
+    const activeBody = document.getElementById('activeBody');
+    const archivedBody = document.getElementById('archivedBody');
+    const dashboardStatus = document.getElementById('dashboardStatus');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-    function showError(msg) {
-      errorBanner.textContent = msg;
-      errorBanner.style.display = 'block';
-      setTimeout(() => (errorBanner.style.display = 'none'), 8000);
+    const STATUS_OPTIONS = [
+      { value: 'new', label: 'New' },
+      { value: 'responded', label: 'Responded' },
+      { value: 'quote_approved', label: 'Quote approved' },
+      { value: 'sent_to_printer', label: 'Sent to printer' },
+      { value: 'print_complete', label: 'Print complete' },
+      { value: 'qc_complete', label: 'QC complete' },
+      { value: 'shipped', label: 'Shipped' },
+      { value: 'paid', label: 'Paid' },
+    ];
+
+    const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
+    
+    const FULFILLED_BY_OPTIONS = [
+      { value: '', label: '-- None --' },
+      { value: 'Jared', label: 'Jared' },
+      { value: 'Robert', label: 'Robert' },
+      { value: 'Terence', label: 'Terence' }
+    ];
+
+    function buildGmailUrl(toEmail, subject, body) {
+      let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
+      url += '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER);
+      url += '&to=' + encodeURIComponent(toEmail);
+      url += '&su=' + encodeURIComponent(subject);
+      url += '&body=' + encodeURIComponent(body);
+      return url;
     }
 
-    function showInfo(msg) {
-      infoBanner.textContent = msg;
-      infoBanner.style.display = 'block';
-      setTimeout(() => (infoBanner.style.display = 'none'), 5000);
+    function safeText(text) {
+      return (text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
     }
 
-    function formatDate(iso) {
-      if (!iso) return '';
-      const d = new Date(iso);
-      if (isNaN(d.getTime())) return iso;
-      return d.toLocaleString();
-    }
-
-    function buildRow(request) {
+    function renderRow(r, isArchived) {
       const tr = document.createElement('tr');
 
-      const createdTd = document.createElement('td');
-      createdTd.textContent = formatDate(request.createdAt);
+      const createdCell = document.createElement('td');
+      createdCell.textContent = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
+      tr.appendChild(createdCell);
 
-      const nameTd = document.createElement('td');
-      nameTd.textContent = request.name || '';
+      const nameCell = document.createElement('td');
+      nameCell.textContent = r.name || '';
+      tr.appendChild(nameCell);
 
-      const emailTd = document.createElement('td');
-      if (request.email) {
-        const a = document.createElement('a');
-        a.href = 'mailto:' + request.email;
-        a.textContent = request.email;
-        emailTd.appendChild(a);
+      const emailCell = document.createElement('td');
+      if (r.email) {
+        const link = document.createElement('a');
+        link.href = 'mailto:' + r.email;
+        link.textContent = r.email;
+        emailCell.appendChild(link);
       }
+      tr.appendChild(emailCell);
 
-      const stlTd = document.createElement('td');
-      if (request.stlLink) {
-        const a = document.createElement('a');
-        a.href = request.stlLink;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.textContent = 'View STL';
-        stlTd.appendChild(a);
+      const stlCell = document.createElement('td');
+      if (r.stlLink) {
+        const link = document.createElement('a');
+        link.href = r.stlLink;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'View STL';
+        stlCell.appendChild(link);
       }
+      tr.appendChild(stlCell);
 
-      const notesTd = document.createElement('td');
-      notesTd.textContent = request.details || '';
+      const notesCell = document.createElement('td');
+      notesCell.textContent = r.details || '';
+      tr.appendChild(notesCell);
 
-      const statusTd = document.createElement('td');
+      const statusCell = document.createElement('td');
       const statusSelect = document.createElement('select');
-      ['new','responded','quote_approved','printing','completed','shipped','cancelled'].forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s;
-        opt.textContent = s.charAt(0).toUpperCase() + s.slice(1).replace('_',' ');
-        if (request.status === s) opt.selected = true;
-        statusSelect.appendChild(opt);
-      });
-      statusSelect.addEventListener('change', () => {
-        updateStatus(request.id, statusSelect.value);
-      });
-      statusTd.appendChild(statusSelect);
+      statusSelect.className = 'status-select';
+      statusSelect.dataset.id = r.id;
 
-      const fulfilledTd = document.createElement('td');
-      const fulfilledInput = document.createElement('input');
-      fulfilledInput.type = 'text';
-      fulfilledInput.value = request.fulfilledBy || '';
-      fulfilledInput.placeholder = 'Name';
-      fulfilledInput.addEventListener('blur', () => {
-        if (fulfilledInput.value !== request.fulfilledBy) {
-          updateFulfilled(request.id, fulfilledInput.value);
+      STATUS_OPTIONS.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value;
+        option.textContent = opt.label;
+        if ((r.status || 'new') === opt.value) {
+          option.selected = true;
         }
+        statusSelect.appendChild(option);
       });
-      fulfilledTd.appendChild(fulfilledInput);
 
-      const replyTd = document.createElement('td');
+      statusCell.appendChild(statusSelect);
+      tr.appendChild(statusCell);
+
+      const fulfilledCell = document.createElement('td');
+      const fulfilledSelect = document.createElement('select');
+      fulfilledSelect.className = 'status-select fulfilled-select';
+      fulfilledSelect.dataset.id = r.id;
+
+      FULFILLED_BY_OPTIONS.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value;
+        option.textContent = opt.label;
+        if ((r.fulfilledBy || '') === opt.value) {
+          option.selected = true;
+        }
+        fulfilledSelect.appendChild(option);
+      });
+      fulfilledCell.appendChild(fulfilledSelect);
+
+      tr.appendChild(fulfilledCell);
+
+      const replyCell = document.createElement('td');
       const replyBtn = document.createElement('button');
+      replyBtn.className = 'link-btn reply-btn';
+      replyBtn.dataset.email = r.email || '';
+      replyBtn.dataset.name = r.name || '';
+      replyBtn.dataset.stl = r.stlLink || '';
       replyBtn.textContent = 'Reply';
-      replyBtn.className = 'link-button';
-      replyBtn.addEventListener('click', () => {
-        if (request.email) {
-          window.location.href =
-            'mailto:' + encodeURIComponent(request.email) +
-            '?subject=' + encodeURIComponent('LM3DPTFY Quote Reply') +
-            '&body=' + encodeURIComponent(
-              'Hi ' + (request.name || '') + ',\n\n' +
-              'Thanks for your quote request for:\n' +
-              (request.stlLink || '') + '\n\n' +
-              '— LM3DPTFY'
-            );
-        }
-      });
-      replyTd.appendChild(replyBtn);
+      replyCell.appendChild(replyBtn);
+      tr.appendChild(replyCell);
 
-      const archiveTd = document.createElement('td');
+      const archiveCell = document.createElement('td');
       const archiveCheckbox = document.createElement('input');
       archiveCheckbox.type = 'checkbox';
-      archiveCheckbox.checked = !!request.archived;
-      archiveCheckbox.addEventListener('change', () => {
-        updateArchive(request.id, archiveCheckbox.checked);
-      });
-      archiveTd.appendChild(archiveCheckbox);
-
-      tr.appendChild(createdTd);
-      tr.appendChild(nameTd);
-      tr.appendChild(emailTd);
-      tr.appendChild(stlTd);
-      tr.appendChild(notesTd);
-      tr.appendChild(statusTd);
-      tr.appendChild(fulfilledTd);
-      tr.appendChild(replyTd);
-      tr.appendChild(archiveTd);
+      archiveCheckbox.className = 'archive-checkbox';
+      archiveCheckbox.dataset.id = r.id;
+      archiveCheckbox.checked = !!r.archived;
+      archiveCell.appendChild(archiveCheckbox);
+      tr.appendChild(archiveCell);
 
       return tr;
     }
 
-    function renderTables(requests) {
-      const activeTbody = document.getElementById('active-tbody');
-      const archivedTbody = document.getElementById('archived-tbody');
-      activeTbody.innerHTML = '';
-      archivedTbody.innerHTML = '';
-
-      const active = requests.filter(r => !r.archived);
-      const archived = requests.filter(r => r.archived);
-
-      if (active.length === 0) {
-        const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        td.colSpan = 9;
-        td.className = 'empty-row';
-        td.textContent = 'No active requests.';
-        tr.appendChild(td);
-        activeTbody.appendChild(tr);
-      } else {
-        active.forEach(r => activeTbody.appendChild(buildRow(r)));
-      }
-
-      if (archived.length === 0) {
-        const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        td.colSpan = 9;
-        td.className = 'empty-row';
-        td.textContent = 'No archived requests.';
-        tr.appendChild(td);
-        archivedTbody.appendChild(tr);
-      } else {
-        archived.forEach(r => archivedTbody.appendChild(buildRow(r)));
-      }
-    }
-
-    async function fetchRequests() {
+    async function loadRequests() {
+      dashboardStatus.textContent = 'Loading requests...';
+      dashboardStatus.style.display = 'block';
+      dashboardStatus.classList.remove('status-error', 'status-success');
+      
       try {
-        const res = await fetch('/api/requests');
-        if (!res.ok) throw new Error('Failed to load requests');
-        const data = await res.json();
-        renderTables(data);
-      } catch (err) {
-        console.error(err);
-        showError('Error loading requests: ' + err.message);
-      }
-    }
-
-    async function updateStatus(id, status) {
-      try {
-        const res = await fetch('/api/requests/' + encodeURIComponent(id) + '/status', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status }),
+        const res = await fetch('/api/requests', {
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json'
+          }
         });
-        if (!res.ok) throw new Error('Failed to update status');
-        showInfo('Status updated.');
-      } catch (err) {
-        console.error(err);
-        showError('Error updating status: ' + err.message);
-        fetchRequests();
-      }
-    }
-
-    async function updateFulfilled(id, fulfilledBy) {
-      try {
-        const res = await fetch('/api/requests/' + encodeURIComponent(id) + '/fulfilled', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fulfilledBy }),
-        });
-        if (!res.ok) throw new Error('Failed to update fulfilled by');
-        showInfo('Fulfilled by updated.');
-      } catch (err) {
-        console.error(err);
-        showError('Error updating fulfilled by: ' + err.message);
-        fetchRequests();
-      }
-    }
-
-    async function updateArchive(id, archived) {
-      try {
-        const res = await fetch('/api/requests/' + encodeURIComponent(id) + '/archive', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ archived }),
-        });
-        if (!res.ok) throw new Error('Failed to update archive state');
-        showInfo('Archive state updated.');
-        fetchRequests();
-      } catch (err) {
-        console.error(err);
-        showError('Error updating archive state: ' + err.message);
-        fetchRequests();
-      }
-    }
-
-    async function reloadFromSheets() {
-      try {
-        const res = await fetch('/api/sheets/reload', { method: 'POST' });
-        if (!res.ok) throw new Error('Failed to reload from Sheets');
-        const data = await res.json();
-        showInfo('Reloaded ' + data.count + ' requests from Sheets.');
-        fetchRequests();
-      } catch (err) {
-        console.error(err);
-        showError('Error reloading from Sheets: ' + err.message);
-      }
-    }
-
-    async function syncToSheets() {
-      try {
-        const res = await fetch('/api/sheets/sync', { method: 'POST' });
-        if (!res.ok) throw new Error('Failed to sync to Sheets');
-        const data = await res.json();
-        showInfo('Synced ' + data.count + ' requests to Sheets.');
-      } catch (err) {
-        console.error(err);
-        showError('Error syncing to Sheets: ' + err.message);
-      }
-    }
-
-    async function checkAuthAndInit() {
-      try {
-        const res = await fetch('/api/me');
-        const data = await res.json();
-        if (data && data.admin) {
-          loginOverlay.style.display = 'none';
-          fetchRequests();
-        } else {
-          loginOverlay.style.display = 'flex';
+        
+        if (res.status === 401) {
+          loginCard.style.display = 'block';
+          dashboardCard.style.display = 'none';
+          dashboardStatus.textContent = '';
+          dashboardStatus.style.display = 'none';
+          return;
         }
+        
+        const data = await res.json();
+
+        const active = data.filter(r => !r.archived);
+        const archived = data.filter(r => r.archived);
+
+        activeBody.innerHTML = '';
+        archivedBody.innerHTML = '';
+
+        if (active.length === 0) {
+          activeBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;">No active requests.</td></tr>';
+        } else {
+          active.forEach(r => {
+            activeBody.appendChild(renderRow(r, false));
+          });
+        }
+
+        if (archived.length === 0) {
+          archivedBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;">No archived requests.</td></tr>';
+        } else {
+          archived.forEach(r => {
+            archivedBody.appendChild(renderRow(r, true));
+          });
+        }
+
+        loginCard.style.display = 'none';
+        dashboardCard.style.display = 'block';
+        dashboardStatus.textContent = 'Loaded ' + data.length + ' total request(s).';
+        dashboardStatus.classList.add('status-success');
+        setTimeout(() => {
+          dashboardStatus.style.display = 'none';
+        }, 5000);
       } catch (err) {
-        console.error(err);
-        loginOverlay.style.display = 'flex';
+        console.error('Error loading requests:', err);
+        dashboardStatus.textContent = 'Error loading requests: ' + err.message;
+        dashboardStatus.classList.add('status-error');
       }
     }
-
-    // Event handlers
-    document.getElementById('btn-logout').addEventListener('click', async () => {
-      await fetch('/api/logout', { method: 'POST' });
-      loginOverlay.style.display = 'flex';
-    });
-
-    document.getElementById('btn-export-csv').addEventListener('click', () => {
-      window.location.href = '/api/export/csv';
-    });
-
-    document.getElementById('btn-export-json').addEventListener('click', () => {
-      window.location.href = '/api/export/json';
-    });
-
-    document.getElementById('btn-reload-sheets').addEventListener('click', () => {
-      reloadFromSheets();
-    });
-
-    document.getElementById('btn-sync-sheets').addEventListener('click', () => {
-      syncToSheets();
-    });
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      loginError.style.display = 'none';
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
+      loginStatus.style.display = 'block';
+      loginStatus.textContent = 'Signing in...';
+      loginStatus.classList.remove('status-error', 'status-success');
+
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value;
+
       try {
         const res = await fetch('/api/login', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
           body: JSON.stringify({ email, password }),
         });
-        if (!res.ok) throw new Error('Invalid credentials');
-        loginOverlay.style.display = 'none';
-        fetchRequests();
+
+        if (!res.ok) {
+          throw new Error('Invalid email or password');
+        }
+
+        loginStatus.textContent = 'Login successful. Loading dashboard...';
+        loginStatus.classList.add('status-success');
+
+        await loadRequests();
       } catch (err) {
-        console.error(err);
-        loginError.textContent = err.message;
-        loginError.style.display = 'block';
+        console.error('Login error:', err);
+        loginStatus.textContent = err.message;
+        loginStatus.classList.add('status-error');
       }
     });
 
-    // Init
-    checkAuthAndInit();
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await fetch('/api/logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        loginCard.style.display = 'block';
+        dashboardCard.style.display = 'none';
+        loginForm.reset();
+      } catch (err) {
+        console.error('Logout error:', err);
+      }
+    });
+
+    // Export to Google Sheets / sync with DB
+    // Google Sheets controls
+    const reloadBtn = document.getElementById('reloadSheetsBtn');
+    const syncBtn = document.getElementById('syncSheetsBtn');
+
+    if (reloadBtn) {
+      reloadBtn.addEventListener('click', async function () {
+        const btn = this;
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Refreshing...';
+
+        dashboardStatus.textContent = 'Refreshing from Google Sheets...';
+        dashboardStatus.classList.remove('status-error', 'status-success');
+        dashboardStatus.style.display = 'block';
+
+        try {
+          const res = await fetch('/api/sheets/reload', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Accept': 'application/json' }
+          });
+
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok) {
+            throw new Error(data.error || 'Reload failed');
+          }
+
+          dashboardStatus.textContent = `✓ Reloaded ${data.count || 0} requests from Google Sheets.`;
+          dashboardStatus.classList.remove('status-error');
+          dashboardStatus.classList.add('status-success');
+          loadRequests();
+          setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
+        } catch (err) {
+          console.error('Reload error:', err);
+          dashboardStatus.textContent = `✗ Reload failed: ${err.message}`;
+          dashboardStatus.classList.remove('status-success');
+          dashboardStatus.classList.add('status-error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      });
+    }
+
+    if (syncBtn) {
+      syncBtn.addEventListener('click', async function () {
+        const btn = this;
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Syncing...';
+
+        dashboardStatus.textContent = 'Syncing to Google Sheets...';
+        dashboardStatus.classList.remove('status-error', 'status-success');
+        dashboardStatus.style.display = 'block';
+
+        try {
+          const res = await fetch('/api/sheets/sync', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Accept': 'application/json' }
+          });
+
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok) {
+            throw new Error(data.error || 'Sync failed');
+          }
+
+          dashboardStatus.textContent = `✓ Synced ${data.count || 0} requests to Google Sheets.`;
+          dashboardStatus.classList.remove('status-error');
+          dashboardStatus.classList.add('status-success');
+          setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
+        } catch (err) {
+          console.error('Sync error:', err);
+          dashboardStatus.textContent = `✗ Sync failed: ${err.message}`;
+          dashboardStatus.classList.remove('status-success');
+          dashboardStatus.classList.add('status-error');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      });
+    }
+
+    function handleStatusChange(e) {
+      const select = e.target.closest('.status-select');
+      if (!select || select.classList.contains('fulfilled-select')) return;
+      const id = select.dataset.id;
+      const status = select.value;
+
+      dashboardStatus.textContent = 'Updating status...';
+      dashboardStatus.style.display = 'block';
+      dashboardStatus.classList.remove('status-success', 'status-error');
+
+      fetch(`/api/requests/${id}/status`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to update status');
+          return res.json();
+        })
+        .then(() => {
+          dashboardStatus.textContent = 'Status updated.';
+          dashboardStatus.classList.add('status-success');
+          setTimeout(() => {
+            dashboardStatus.style.display = 'none';
+          }, 3000);
+        })
+        .catch((err) => {
+          console.error('Status update error:', err);
+          dashboardStatus.textContent = 'Error updating status: ' + err.message;
+          dashboardStatus.classList.add('status-error');
+        });
+    }
+
+    function handleFulfilledByChange(e) {
+      const select = e.target.closest('.fulfilled-select');
+      if (!select) return;
+      const id = select.dataset.id;
+      const fulfilledBy = select.value;
+
+      dashboardStatus.textContent = 'Updating fulﬁlled by...';
+      dashboardStatus.style.display = 'block';
+      dashboardStatus.classList.remove('status-success', 'status-error');
+
+      fetch(`/api/requests/${id}/fulfilled`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ fulfilledBy }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to update fulfilled by');
+          return res.json();
+        })
+        .then(() => {
+          dashboardStatus.textContent = 'Fulfilled by updated.';
+          dashboardStatus.classList.add('status-success');
+          setTimeout(() => {
+            dashboardStatus.style.display = 'none';
+          }, 3000);
+        })
+        .catch((err) => {
+          console.error('Fulfilled update error:', err);
+          dashboardStatus.textContent = 'Error updating fulfilled by: ' + err.message;
+          dashboardStatus.classList.add('status-error');
+        });
+    }
+
+    function handleArchiveToggle(e) {
+      const checkbox = e.target.closest('.archive-checkbox');
+      if (!checkbox) return;
+      const id = checkbox.dataset.id;
+      const archived = checkbox.checked;
+
+      dashboardStatus.textContent = archived ? 'Archiving request...' : 'Unarchiving request...';
+      dashboardStatus.style.display = 'block';
+      dashboardStatus.classList.remove('status-success', 'status-error');
+
+      fetch(`/api/requests/${id}/archive`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({ archived }),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to update archive state');
+          return res.json();
+        })
+        .then(() => {
+          dashboardStatus.textContent = archived ? 'Request archived.' : 'Request unarchived.';
+          dashboardStatus.classList.add('status-success');
+          setTimeout(() => {
+            dashboardStatus.style.display = 'none';
+          }, 3000);
+          loadRequests();
+        })
+        .catch((err) => {
+          console.error('Archive update error:', err);
+          dashboardStatus.textContent = 'Error updating archive state: ' + err.message;
+          dashboardStatus.classList.add('status-error');
+        });
+    }
+
+    function handleReplyClick(e) {
+      const btn = e.target.closest('.reply-btn');
+      if (!btn) return;
+
+      const email = btn.dataset.email;
+      if (!email) return;
+
+      const name = btn.dataset.name || '';
+      const stl = btn.dataset.stl || '';
+
+      const subject = 'LM3DPTFY Quote Reply';
+      const body =
+        'Hi ' + name + ',%0D%0A%0D%0A' +
+        'Thanks for your quote request for:%0D%0A' +
+        stl + '%0D%0A%0D%0A' +
+        '— LM3DPTFY';
+
+      window.open(buildGmailUrl(email, subject, body), '_blank');
+    }
+
+    activeBody.addEventListener('change', handleStatusChange);
+    archivedBody.addEventListener('change', handleStatusChange);
+    activeBody.addEventListener('change', handleFulfilledByChange);
+    archivedBody.addEventListener('change', handleFulfilledByChange);
+    activeBody.addEventListener('change', handleArchiveToggle);
+    archivedBody.addEventListener('change', handleArchiveToggle);
+    activeBody.addEventListener('click', handleReplyClick);
+    archivedBody.addEventListener('click', handleReplyClick);
+
+    loadRequests();
+    
+    console.log('Admin page loaded successfully');
   </script>
 </body>
 </html>
