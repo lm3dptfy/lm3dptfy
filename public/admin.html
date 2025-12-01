@@ -73,6 +73,7 @@
                   <th>STL link</th>
                   <th>Notes</th>
                   <th>Status</th>
+                  <th>Fulfilled By</th>
                   <th>Reply</th>
                   <th>Archive</th>
                 </tr>
@@ -92,6 +93,7 @@
                   <th>STL link</th>
                   <th>Notes</th>
                   <th>Status</th>
+                  <th>Fulfilled By</th>
                   <th>Reply</th>
                   <th>Archive</th>
                 </tr>
@@ -132,6 +134,13 @@
     ];
 
     const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
+    
+    const FULFILLED_BY_OPTIONS = [
+      { value: '', label: '-- None --' },
+      { value: 'Jared', label: 'Jared' },
+      { value: 'Robert', label: 'Robert' },
+      { value: 'Terence', label: 'Terence' }
+    ];
 
     function buildGmailUrl(toEmail, subject, body) {
       let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
@@ -157,6 +166,7 @@
         <td><a href="${safeText(r.stlLink)}" target="_blank">View STL</a></td>
         <td>${safeDetails}</td>
         <td class="status-cell"></td>
+        <td class="fulfilled-cell"></td>
         <td>
           <button
             class="link-btn reply-gmail-btn"
@@ -192,6 +202,21 @@
         select.appendChild(option);
       });
       statusCell.appendChild(select);
+      
+      const fulfilledCell = tr.querySelector('.fulfilled-cell');
+      const fulfilledSelect = document.createElement('select');
+      fulfilledSelect.className = 'status-select fulfilled-select';
+      fulfilledSelect.dataset.id = r.id;
+      FULFILLED_BY_OPTIONS.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.value;
+        option.textContent = opt.label;
+        if ((r.fulfilledBy || '') === opt.value) {
+          option.selected = true;
+        }
+        fulfilledSelect.appendChild(option);
+      });
+      fulfilledCell.appendChild(fulfilledSelect);
 
       return tr;
     }
@@ -366,7 +391,7 @@
 
     function handleStatusChange(e) {
       const select = e.target.closest('.status-select');
-      if (!select) return;
+      if (!select || select.classList.contains('fulfilled-select')) return;
       const id = select.dataset.id;
       const status = select.value;
 
@@ -394,6 +419,37 @@
         .catch((err) => {
           dashboardStatus.textContent = 'Error: ' + err.message;
           dashboardStatus.classList.add('status-error');
+        });
+    }
+    
+    function handleFulfilledByChange(e) {
+      const select = e.target.closest('.fulfilled-select');
+      if (!select) return;
+      const id = select.dataset.id;
+      const fulfilledBy = select.value;
+
+      fetch(`/api/requests/${id}/fulfilled`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ fulfilledBy })
+      })
+        .then(res => res.json().then(data => ({ res, data })))
+        .then(({ res, data }) => {
+          if (!res.ok || !data.ok) {
+            throw new Error(data.error || 'fail');
+          }
+          dashboardStatus.textContent = 'Fulfilled by updated.';
+          dashboardStatus.classList.add('status-success');
+          dashboardStatus.style.display = 'block';
+          setTimeout(() => {
+            dashboardStatus.style.display = 'none';
+          }, 2000);
+        })
+        .catch((err) => {
+          dashboardStatus.textContent = 'Error: ' + err.message;
+          dashboardStatus.classList.add('status-error');
+          dashboardStatus.style.display = 'block';
         });
     }
 
@@ -463,6 +519,8 @@
 
     activeBody.addEventListener('change', handleStatusChange);
     archivedBody.addEventListener('change', handleStatusChange);
+    activeBody.addEventListener('change', handleFulfilledByChange);
+    archivedBody.addEventListener('change', handleFulfilledByChange);
     activeBody.addEventListener('change', handleArchiveToggle);
     archivedBody.addEventListener('change', handleArchiveToggle);
     activeBody.addEventListener('click', handleReplyClick);
