@@ -16,8 +16,11 @@ const PORT = process.env.PORT || 3000;
 const DATA_DIR = process.env.DATA_DIR || __dirname;
 const DATA_FILE = path.join(DATA_DIR, 'requests-data.json');
 
-// Admin credentials
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy@gmail.com';
+// Admin credentials (login) and notification target
+// - ADMIN_EMAIL: used for logging into /admin
+// - NOTIFY_EMAIL: where new order emails are sent
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy+admin@gmail.com';
+const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'lm3dptfy@gmail.com';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 if (!ADMIN_PASSWORD) {
@@ -106,7 +109,7 @@ if (GMAIL_USER && GMAIL_PASS) {
       pass: GMAIL_PASS,
     },
   });
-  console.log('Gmail notifications enabled.');
+  console.log('Gmail notifications enabled. Will send to:', NOTIFY_EMAIL);
 } else {
   console.warn('GMAIL_USER or GMAIL_PASS not set. Email notifications disabled.');
 }
@@ -151,7 +154,12 @@ function validateStatus(status) {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ ok: true, env: process.env.NODE_ENV || 'development' });
+  res.json({
+    ok: true,
+    env: process.env.NODE_ENV || 'development',
+    adminEmail: ADMIN_EMAIL,
+    notifyEmail: NOTIFY_EMAIL,
+  });
 });
 
 // Create new quote request
@@ -179,7 +187,7 @@ app.post('/api/requests', async (req, res) => {
   requests.unshift(newRequest);
   saveRequests();
 
-  console.log('New request:', newRequest);
+  console.log('New request created:', newRequest);
 
   // Auto-export to Google Sheets
   if (sheetsClient) {
@@ -188,10 +196,11 @@ app.post('/api/requests', async (req, res) => {
 
   // Admin email notification
   if (mailer) {
+    console.log('Attempting to send admin notification email to:', NOTIFY_EMAIL);
     mailer
       .sendMail({
         from: `"${GMAIL_FROM_NAME}" <${GMAIL_USER}>`,
-        to: ADMIN_EMAIL,
+        to: NOTIFY_EMAIL,
         subject: `New LM3DPTFY quote request from ${name}`,
         html: `
           <h2>New Quote Request</h2>
@@ -204,9 +213,12 @@ app.post('/api/requests', async (req, res) => {
           }/admin.html">View in Admin Panel</a></p>
         `,
       })
+      .then(() => console.log('Admin notification email sent successfully.'))
       .catch(err =>
         console.error('Error sending admin notification email:', err)
       );
+  } else {
+    console.warn('Mailer not configured; skipping admin notification email.');
   }
 
   res.status(201).json({ ok: true, id: newRequest.id });
@@ -214,7 +226,7 @@ app.post('/api/requests', async (req, res) => {
 
 // Admin login
 app.post('/api/login', (req, res) => {
-  console.log('Login attempt:', req.body.email);
+  console.log('Login attempt for:', req.body.email);
   const { email, password } = req.body;
   if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
     req.session.admin = { email };
@@ -487,6 +499,8 @@ app.listen(PORT, () => {
   console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
   console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Admin login email: ${ADMIN_EMAIL}`);
+  console.log(`Notification email target: ${NOTIFY_EMAIL}`);
 
   if (sheetsClient) {
     scheduleWeeklyExport();
