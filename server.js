@@ -95,7 +95,7 @@ async function exportToGoogleSheets() {
 
   try {
     // Prepare the data
-    const headers = ['ID', 'Created', 'Name', 'Email', 'STL Link', 'Details', 'Status', 'Archived'];
+    const headers = ['ID', 'Created', 'Name', 'Email', 'STL Link', 'Details', 'Status', 'Fulfilled By', 'Archived'];
     const rows = requests.map(r => [
       r.id,
       new Date(r.createdAt).toLocaleString(),
@@ -104,13 +104,14 @@ async function exportToGoogleSheets() {
       r.stlLink,
       r.details || '',
       r.status,
+      r.fulfilledBy || '',
       r.archived ? 'Yes' : 'No'
     ]);
 
     // Clear existing data and write new data
     await sheetsClient.spreadsheets.values.clear({
       spreadsheetId: GOOGLE_SHEET_ID,
-      range: 'Sheet1!A:H',
+      range: 'Sheet1!A:I',
     });
 
     const response = await sheetsClient.spreadsheets.values.update({
@@ -201,6 +202,7 @@ app.post('/api/requests', async (req, res) => {
     details: details || '',
     status: 'new',
     archived: false,
+    fulfilledBy: '',
     createdAt: new Date().toISOString(),
   };
 
@@ -352,6 +354,26 @@ app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
   res.json({ ok: true, status });
   
   // Auto-export to Sheets on status change (async, don't block)
+  if (sheetsClient) {
+    exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
+  }
+});
+
+// Update fulfilled by
+app.post('/api/requests/:id/fulfilled', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { fulfilledBy } = req.body;
+
+  const index = requests.findIndex((r) => r.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Request not found' });
+  }
+
+  requests[index].fulfilledBy = fulfilledBy || '';
+  saveRequests();
+  
+  res.json({ ok: true, fulfilledBy });
+  
   if (sheetsClient) {
     exportToGoogleSheets().catch(err => console.error('Auto-export failed:', err));
   }
