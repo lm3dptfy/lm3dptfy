@@ -11,7 +11,7 @@ const { google } = require('googleapis');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// === ADMIN / EMAIL CONFIG ======================================
+// ========== ADMIN / EMAIL CONFIG =================================
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy+admin@gmail.com';
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'lm3dptfy@gmail.com';
@@ -26,11 +26,12 @@ const GMAIL_USER = process.env.GMAIL_USER;
 const GMAIL_PASS = process.env.GMAIL_PASS;
 const GMAIL_FROM_NAME = process.env.GMAIL_FROM_NAME || 'LM3DPTFY';
 
-// Google Sheets ID
+// Sheets
 const GOOGLE_SHEET_ID =
   process.env.GOOGLE_SHEET_ID || '1IAwz8OtfuwSOSQJDIyOuwB_PI_ugHlEzvGKE_uUo2HI';
+const ACTIVE_SHEET_NAME = process.env.GOOGLE_ACTIVE_SHEET || 'Active';
+const ARCHIVED_SHEET_NAME = process.env.GOOGLE_ARCHIVED_SHEET || 'Archived';
 
-// Sheet header layout (matches your existing sheet)
 const SHEET_HEADER = [
   'ID',
   'Created',
@@ -43,7 +44,7 @@ const SHEET_HEADER = [
   'Archived',
 ];
 
-// Allow old + new status values
+// internal status codes
 const VALID_STATUSES = [
   'new',
   'responded',
@@ -53,16 +54,38 @@ const VALID_STATUSES = [
   'qc_complete',
   'shipped',
   'paid',
-  'printing',
-  'completed',
-  'cancelled',
 ];
 
-// === GLOBAL STATE ===============================================
+// mapping internal → pretty-for-sheets
+const STATUS_LABELS = {
+  new: 'New',
+  responded: 'Responded',
+  quote_approved: 'Quote approved',
+  sent_to_printer: 'Sent to printer',
+  print_complete: 'Print complete',
+  qc_complete: 'QC complete',
+  shipped: 'Shipped',
+  paid: 'Paid',
+};
 
-let requests = []; // in-memory copy, loaded from Google Sheets
+function statusToSheet(status) {
+  return STATUS_LABELS[status] || STATUS_LABELS.new;
+}
 
-// === GOOGLE SHEETS CLIENT =======================================
+function sheetToStatus(value) {
+  if (!value) return 'new';
+  const norm = String(value)
+    .trim()
+    .toLowerCase()
+    .replace(/[_\s]+/g, '_'); // "Quote approved" or "quote approved" -> "quote_approved"
+  return VALID_STATUSES.includes(norm) ? norm : 'new';
+}
+
+// ========== GLOBAL STATE =========================================
+
+let requests = []; // in-memory list, hydrated from Sheets
+
+// ========== GOOGLE SHEETS CLIENT =================================
 
 let sheetsClient = null;
 
@@ -84,7 +107,7 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT) {
   console.log('GOOGLE_SERVICE_ACCOUNT not set. Google Sheets integration disabled.');
 }
 
-// === EMAIL (GMAIL) CLIENT =======================================
+// ========== EMAIL (GMAIL) CLIENT =================================
 
 let mailer = null;
 
@@ -98,10 +121,10 @@ if (GMAIL_USER && GMAIL_PASS) {
   });
   console.log('Gmail notifications enabled. Will send to:', NOTIFY_EMAIL);
 } else {
-  console.warn('GMAIL_USER or GMAIL_PASS not set. Email notifications disabled.');
+  console.warn('GMAIL_USER or GMAIL_PASS not set. Email notifications disabled (will log errors on send).');
 }
 
-// === EXPRESS MIDDLEWARE =========================================
+// ========== EXPRESS MIDDLEWARE ===================================
 
 app.use(cors());
 app.use(express.json());
@@ -117,16 +140,15 @@ app.use(
     cookie: {
       secure: false,
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: 'lax',
     },
   })
 );
 
-// Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// === HELPERS ====================================================
+// ========== HELPERS ==============================================
 
 function requireAdmin(req, res, next) {
   if (req.session && req.session.admin && req.session.admin.email === ADMIN_EMAIL) {
@@ -154,7 +176,7 @@ function mapRowToRequest(row) {
     email,
     stlLink,
     details,
-    status,
+    statusRaw,
     fulfilledBy,
     archivedText,
   ] = row;
@@ -163,10 +185,10 @@ function mapRowToRequest(row) {
 
   const createdAt = parseCreatedToIso(created);
   const archived =
-    archivedText === 'Yes' ||
-    archivedText === 'TRUE' ||
-    archivedText === 'true' ||
-    archivedText === 'Y';
+    String(archivedText).trim().toLowerCase() === 'yes' ||
+    String(archivedText).trim().toLowerCase() === 'true';
+
+  const status = sheetToStatus(statusRaw);
 
   return {
     id: String(id),
@@ -174,7 +196,7 @@ function mapRowToRequest(row) {
     email: email || '',
     stlLink: stlLink || '',
     details: details || '',
-    status: status || 'new',
+    status,
     fulfilledBy: fulfilledBy || '',
     archived,
     createdAt,
@@ -182,26 +204,43 @@ function mapRowToRequest(row) {
   };
 }
 
-function requestToRow(r) {
-  const createdDate = new Date(r.createdAt);
+function requestToRow(reqObj) {
+  const createdDate = new Date(reqObj.createdAt);
   const createdDisplay = Number.isNaN(createdDate.getTime())
-    ? (r.createdAt || '')
+    ? reqObj.createdAt || ''
     : createdDate.toLocaleString();
 
   return [
-    r.id,
+    reqObj.id,
     createdDisplay,
-    r.name || '',
-    r.email || '',
-    r.stlLink || '',
-    r.details || '',
-    r.status || 'new',
-    r.fulfilledBy || '',
-    r.archived ? 'Yes' : 'No',
+    reqObj.name || '',
+    reqObj.email || '',
+    reqObj.stlLink || '',
+    reqObj.details || '',
+    statusToSheet(reqObj.status || 'new'), // pretty, capitalized in Sheets
+    reqObj.fulfilledBy || '',
+    reqObj.archived ? 'Yes' : 'No',
   ];
 }
 
-// === SHEETS <-> MEMORY SYNC =====================================
+// ========== SHEETS <-> MEMORY SYNC ===============================
+
+async function ensureHeader(sheetName) {
+  const existing = await sheetsClient.spreadsheets.values.get({
+    spreadsheetId: GOOGLE_SHEET_ID,
+    range: `${sheetName}!A1:I1`,
+  });
+  const values = existing.data.values || [];
+  if (!values.length || values[0].join('') === '') {
+    await sheetsClient.spreadsheets.values.update({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: `${sheetName}!A1`,
+      valueInputOption: 'RAW',
+      requestBody: { values: [SHEET_HEADER] },
+    });
+    console.log(`Initialized header row on sheet "${sheetName}".`);
+  }
+}
 
 async function loadRequestsFromSheet() {
   if (!sheetsClient) {
@@ -211,38 +250,49 @@ async function loadRequestsFromSheet() {
   }
 
   try {
-    const res = await sheetsClient.spreadsheets.values.get({
-      spreadsheetId: GOOGLE_SHEET_ID,
-      range: 'Sheet1!A1:I10000',
-    });
+    // Make sure both tabs have headers
+    await Promise.all([
+      ensureHeader(ACTIVE_SHEET_NAME),
+      ensureHeader(ARCHIVED_SHEET_NAME),
+    ]);
 
-    const values = res.data.values || [];
-
-    if (values.length === 0) {
-      console.log('Sheet is empty. Initializing header row.');
-      await sheetsClient.spreadsheets.values.update({
+    const [activeRes, archivedRes] = await Promise.all([
+      sheetsClient.spreadsheets.values.get({
         spreadsheetId: GOOGLE_SHEET_ID,
-        range: 'Sheet1!A1',
-        valueInputOption: 'RAW',
-        requestBody: { values: [SHEET_HEADER] },
-      });
-      requests = [];
-      return;
-    }
+        range: `${ACTIVE_SHEET_NAME}!A1:I10000`,
+      }),
+      sheetsClient.spreadsheets.values.get({
+        spreadsheetId: GOOGLE_SHEET_ID,
+        range: `${ARCHIVED_SHEET_NAME}!A1:I10000`,
+      }),
+    ]);
 
-    // Skip header row
-    const rows = values.slice(1);
-    const mapped = rows
+    const activeValues = activeRes.data.values || [];
+    const archivedValues = archivedRes.data.values || [];
+
+    const activeRows = activeValues.slice(1);
+    const archivedRows = archivedValues.slice(1);
+
+    const activeRequests = activeRows
       .map(mapRowToRequest)
       .filter(Boolean)
-      .sort((a, b) => {
-        const ta = Date.parse(a.createdAt) || 0;
-        const tb = Date.parse(b.createdAt) || 0;
-        return tb - ta;
-      });
+      .map(r => ({ ...r, archived: false }));
 
-    requests = mapped;
-    console.log(`Loaded ${requests.length} requests from Google Sheets.`);
+    const archivedRequests = archivedRows
+      .map(mapRowToRequest)
+      .filter(Boolean)
+      .map(r => ({ ...r, archived: true }));
+
+    const merged = [...activeRequests, ...archivedRequests].sort((a, b) => {
+      const ta = Date.parse(a.createdAt) || 0;
+      const tb = Date.parse(b.createdAt) || 0;
+      return tb - ta;
+    });
+
+    requests = merged;
+    console.log(
+      `Loaded ${requests.length} requests from Sheets (${activeRequests.length} active, ${archivedRequests.length} archived).`
+    );
   } catch (err) {
     console.error('Error loading requests from Google Sheets:', err);
     requests = [];
@@ -255,23 +305,35 @@ async function writeAllRequestsToSheet() {
     return;
   }
 
-  const values = [SHEET_HEADER, ...requests.map(requestToRow)];
+  const active = requests.filter(r => !r.archived);
+  const archived = requests.filter(r => r.archived);
 
-  const res = await sheetsClient.spreadsheets.values.update({
-    spreadsheetId: GOOGLE_SHEET_ID,
-    range: 'Sheet1!A1',
-    valueInputOption: 'RAW',
-    requestBody: { values },
-  });
+  const activeValues = [SHEET_HEADER, ...active.map(requestToRow)];
+  const archivedValues = [SHEET_HEADER, ...archived.map(requestToRow)];
+
+  const [activeUpdate, archivedUpdate] = await Promise.all([
+    sheetsClient.spreadsheets.values.update({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: `${ACTIVE_SHEET_NAME}!A1`,
+      valueInputOption: 'RAW',
+      requestBody: { values: activeValues },
+    }),
+    sheetsClient.spreadsheets.values.update({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: `${ARCHIVED_SHEET_NAME}!A1`,
+      valueInputOption: 'RAW',
+      requestBody: { values: archivedValues },
+    }),
+  ]);
 
   console.log(
-    `Synced ${requests.length} requests to Google Sheets. Updated cells: ${
-      res.data.updates ? res.data.updates.updatedCells : 'N/A'
-    }`
+    `Synced to Sheets: ${active.length} active, ${archived.length} archived. Updated cells: active=${
+      activeUpdate.data.updates ? activeUpdate.data.updates.updatedCells : 'N/A'
+    }, archived=${archivedUpdate.data.updates ? archivedUpdate.data.updates.updatedCells : 'N/A'}`
   );
 }
 
-// === ROUTES =====================================================
+// ========== ROUTES ===============================================
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -281,6 +343,8 @@ app.get('/api/health', (req, res) => {
     adminEmail: ADMIN_EMAIL,
     notifyEmail: NOTIFY_EMAIL,
     sheetId: GOOGLE_SHEET_ID,
+    activeSheet: ACTIVE_SHEET_NAME,
+    archivedSheet: ARCHIVED_SHEET_NAME,
   });
 });
 
@@ -310,14 +374,14 @@ app.post('/api/requests', async (req, res) => {
   requests.unshift(newRequest);
   console.log('New request created:', newRequest);
 
-  // Persist to Google Sheets (in background)
+  // Persist to Sheets (this will put it on Active tab)
   if (sheetsClient) {
     writeAllRequestsToSheet().catch(err =>
       console.error('Sheets sync failed (new request):', err)
     );
   }
 
-  // Admin notification email
+  // Admin notification email (Render blocks SMTP; expect ETIMEDOUT in logs)
   if (mailer) {
     console.log('Attempting to send admin notification email to:', NOTIFY_EMAIL);
     mailer
@@ -336,8 +400,6 @@ app.post('/api/requests', async (req, res) => {
       })
       .then(() => console.log('Admin notification email sent successfully.'))
       .catch(err => console.error('Error sending admin notification email:', err));
-  } else {
-    console.warn('Mailer not configured; skipping admin notification email.');
   }
 
   res.status(201).json({ ok: true, id: newRequest.id });
@@ -381,7 +443,7 @@ app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
     return res.status(400).json({ error: 'Invalid status' });
   }
 
-  const r = requests.find(reqObj => reqObj.id === id);
+  const r = requests.find(x => x.id === id);
   if (!r) {
     return res.status(404).json({ error: 'Request not found' });
   }
@@ -398,30 +460,29 @@ app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
   }
 });
 
-// Update fulfilledBy (and mark as completed)
+// Update fulfilledBy
 app.post('/api/requests/:id/fulfilled', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { fulfilledBy } = req.body;
 
-  const r = requests.find(reqObj => reqObj.id === id);
+  const r = requests.find(x => x.id === id);
   if (!r) {
     return res.status(404).json({ error: 'Request not found' });
   }
 
-  r.fulfilledBy = fulfilledBy || r.fulfilledBy;
-  // Don't force a particular status; let admin choose via dropdown
+  r.fulfilledBy = fulfilledBy || '';
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
 
   if (sheetsClient) {
     writeAllRequestsToSheet().catch(err =>
-      console.error('Sheets sync failed (fulfilled update):', err)
+      console.error('Sheets sync failed (fulfilledBy update):', err)
     );
   }
 });
 
-// Archive / unarchive
+// Archive / unarchive (this is what moves between tabs)
 app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { archived } = req.body;
@@ -430,7 +491,7 @@ app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
     return res.status(400).json({ error: 'archived must be boolean' });
   }
 
-  const r = requests.find(reqObj => reqObj.id === id);
+  const r = requests.find(x => x.id === id);
   if (!r) {
     return res.status(404).json({ error: 'Request not found' });
   }
@@ -450,29 +511,8 @@ app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
 // Export CSV
 app.get('/api/export/csv', requireAdmin, (req, res) => {
   try {
-    const headers = [
-      'ID',
-      'Created',
-      'Name',
-      'Email',
-      'STL Link',
-      'Details',
-      'Status',
-      'Fulfilled By',
-      'Archived',
-    ];
-
-    const rows = requests.map(r => [
-      r.id,
-      new Date(r.createdAt).toLocaleString(),
-      r.name,
-      r.email,
-      r.stlLink,
-      r.details || '',
-      r.status,
-      r.fulfilledBy || '',
-      r.archived ? 'Yes' : 'No',
-    ]);
+    const headers = SHEET_HEADER;
+    const rows = requests.map(requestToRow);
 
     const csv = [
       headers.join(','),
@@ -532,7 +572,7 @@ app.post('/api/sheets/sync', requireAdmin, async (req, res) => {
   }
 });
 
-// === APP STARTUP ================================================
+// ========== APP STARTUP ==========================================
 
 app.listen(PORT, () => {
   console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
