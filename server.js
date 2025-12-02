@@ -137,7 +137,8 @@ async function sendNotificationEmail(newRequest) {
       },
       body: JSON.stringify({
         from: EMAIL_FROM,
-        to: [NOTIFY_EMAIL],
+        // IMPORTANT: single string, not array
+        to: NOTIFY_EMAIL,
         subject,
         html,
       }),
