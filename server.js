@@ -4,7 +4,6 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const nodemailer = require('nodemailer');
 const cors = require('cors');
 const { google } = require('googleapis');
 
@@ -22,9 +21,10 @@ if (!ADMIN_PASSWORD) {
   process.exit(1);
 }
 
-const GMAIL_USER = process.env.GMAIL_USER;
-const GMAIL_PASS = process.env.GMAIL_PASS;
-const GMAIL_FROM_NAME = process.env.GMAIL_FROM_NAME || 'LM3DPTFY';
+// Resend HTTP email API (no SMTP)
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+const EMAIL_FROM = process.env.EMAIL_FROM || 'LM3DPTFY <no-reply@lm3dptfy.online>';
+const EMAIL_ENABLED = !!RESEND_API_KEY;
 
 // Sheets
 const GOOGLE_SHEET_ID =
@@ -77,7 +77,7 @@ function sheetToStatus(value) {
   const norm = String(value)
     .trim()
     .toLowerCase()
-    .replace(/[_\s]+/g, '_'); // "Quote approved" or "quote approved" -> "quote_approved"
+    .replace(/[_\s]+/g, '_'); // "Quote approved" -> "quote_approved"
   return VALID_STATUSES.includes(norm) ? norm : 'new';
 }
 
@@ -107,21 +107,51 @@ if (process.env.GOOGLE_SERVICE_ACCOUNT) {
   console.log('GOOGLE_SERVICE_ACCOUNT not set. Google Sheets integration disabled.');
 }
 
-// ========== EMAIL (GMAIL) CLIENT =================================
+// ========== EMAIL VIA RESEND =====================================
 
-let mailer = null;
+async function sendNotificationEmail(newRequest) {
+  if (!EMAIL_ENABLED) {
+    console.warn('RESEND_API_KEY not set; skipping notification email.');
+    return;
+  }
 
-if (GMAIL_USER && GMAIL_PASS) {
-  mailer = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: GMAIL_USER,
-      pass: GMAIL_PASS,
-    },
-  });
-  console.log('Gmail notifications enabled. Will send to:', NOTIFY_EMAIL);
-} else {
-  console.warn('GMAIL_USER or GMAIL_PASS not set. Email notifications disabled (will log errors on send).');
+  const { name, email, stlLink, details } = newRequest;
+
+  const subject = `New LM3DPTFY quote request from ${name}`;
+  const html = `
+    <h2>New Quote Request</h2>
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+    <p><strong>STLFlix link:</strong> <a href="${stlLink}">${stlLink}</a></p>
+    <p><strong>Details:</strong> ${details || '(none)'}</p>
+    <p><a href="${process.env.BACKEND_URL || 'https://www.lm3dptfy.online'}/admin.html">View in Admin Panel</a></p>
+  `;
+
+  try {
+    console.log('Attempting to send admin notification email via Resend to:', NOTIFY_EMAIL);
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: EMAIL_FROM,
+        to: [NOTIFY_EMAIL],
+        subject,
+        html,
+      }),
+    });
+
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`Resend error ${res.status}: ${txt}`);
+    }
+
+    console.log('Admin notification email sent successfully via Resend.');
+  } catch (err) {
+    console.error('Error sending admin notification email via Resend:', err);
+  }
 }
 
 // ========== EXPRESS MIDDLEWARE ===================================
@@ -250,7 +280,7 @@ async function loadRequestsFromSheet() {
   }
 
   try {
-    // Make sure both tabs have headers
+    // Ensure headers
     await Promise.all([
       ensureHeader(ACTIVE_SHEET_NAME),
       ensureHeader(ARCHIVED_SHEET_NAME),
@@ -311,6 +341,18 @@ async function writeAllRequestsToSheet() {
   const activeValues = [SHEET_HEADER, ...active.map(requestToRow)];
   const archivedValues = [SHEET_HEADER, ...archived.map(requestToRow)];
 
+  // Clear old rows under header so nothing lingers
+  await Promise.all([
+    sheetsClient.spreadsheets.values.clear({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: `${ACTIVE_SHEET_NAME}!A2:I10000`,
+    }),
+    sheetsClient.spreadsheets.values.clear({
+      spreadsheetId: GOOGLE_SHEET_ID,
+      range: `${ARCHIVED_SHEET_NAME}!A2:I10000`,
+    }),
+  ]);
+
   const [activeUpdate, archivedUpdate] = await Promise.all([
     sheetsClient.spreadsheets.values.update({
       spreadsheetId: GOOGLE_SHEET_ID,
@@ -345,6 +387,7 @@ app.get('/api/health', (req, res) => {
     sheetId: GOOGLE_SHEET_ID,
     activeSheet: ACTIVE_SHEET_NAME,
     archivedSheet: ARCHIVED_SHEET_NAME,
+    emailEnabled: EMAIL_ENABLED,
   });
 });
 
@@ -381,26 +424,8 @@ app.post('/api/requests', async (req, res) => {
     );
   }
 
-  // Admin notification email (Render blocks SMTP; expect ETIMEDOUT in logs)
-  if (mailer) {
-    console.log('Attempting to send admin notification email to:', NOTIFY_EMAIL);
-    mailer
-      .sendMail({
-        from: `"${GMAIL_FROM_NAME}" <${GMAIL_USER}>`,
-        to: NOTIFY_EMAIL,
-        subject: `New LM3DPTFY quote request from ${name}`,
-        html: `
-          <h2>New Quote Request</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-          <p><strong>STLFlix link:</strong> <a href="${stlLink}">${stlLink}</a></p>
-          <p><strong>Details:</strong> ${details || '(none)'}</p>
-          <p><a href="${process.env.BACKEND_URL || 'http://localhost:3000'}/admin.html">View in Admin Panel</a></p>
-        `,
-      })
-      .then(() => console.log('Admin notification email sent successfully.'))
-      .catch(err => console.error('Error sending admin notification email:', err));
-  }
+  // Fire-and-forget notification
+  sendNotificationEmail(newRequest).catch(() => {});
 
   res.status(201).json({ ok: true, id: newRequest.id });
 });
@@ -482,7 +507,7 @@ app.post('/api/requests/:id/fulfilled', requireAdmin, async (req, res) => {
   }
 });
 
-// Archive / unarchive (this is what moves between tabs)
+// Archive / unarchive (moves between tabs)
 app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { archived } = req.body;
@@ -580,6 +605,7 @@ app.listen(PORT, () => {
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Admin login email: ${ADMIN_EMAIL}`);
   console.log(`Notification email target: ${NOTIFY_EMAIL}`);
+  console.log(`Email notifications enabled (Resend): ${EMAIL_ENABLED}`);
 
   if (sheetsClient) {
     loadRequestsFromSheet().catch(err =>
