@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy+admin@gmail.com';
 const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'lm3dptfy@gmail.com';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD 'MJR1125!3dp';
 
 if (!ADMIN_PASSWORD) {
   console.error('ERROR: ADMIN_PASSWORD not set in environment variables!');
