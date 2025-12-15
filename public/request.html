@@ -2,78 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Let Me 3D Print That For You</title>
+  <title>Request a 3D Print Quote | Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/style.css?v=20251215" />
 </head>
 <body>
   <div class="page-shell">
-
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="/">
-          <img class="brand-logo" src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
-          <span class="brand-text">
-            <span class="brand-title">Let Me 3D Print That For You</span>
-            <span class="brand-subtitle">Fast quotes • Clear ETA • No spam</span>
-          </span>
+        <a class="brand" href="/" style="text-decoration:none;">
+          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY" />
+          <div class="brand-text">
+            <div class="brand-title">Let Me 3D Print That For You</div>
+            <div class="brand-sub">Quote request</div>
+          </div>
         </a>
-
-        <nav class="nav-links">
-          <a class="nav-link" href="/#how-it-works">How it works</a>
-        </nav>
+        <div class="header-actions">
+          <a class="pill" href="/">← Back</a>
+        </div>
       </div>
     </header>
 
     <main class="page-main">
-      <div class="main-inner">
-
-        <div class="card hero-card">
-          <h1 class="request-title">Where should I send your quote?</h1>
-          <p class="request-subtitle">
-            I'll review your STLFlix model, estimate material and print time, then email you a quote.
+      <div class="container" style="max-width:860px;">
+        <section class="card card-pad-lg">
+          <div class="kicker">📩 Where should I send your quote?</div>
+          <h1 class="hero-title" style="margin-top:0;">Almost done.</h1>
+          <p class="hero-subtitle">
+            I’ll review your STLFlix model, estimate material and print time, then email you a quote.
           </p>
 
-          <form id="quoteForm" class="stl-form" novalidate>
+          <div class="badge" id="linkBadge" style="display:none;"></div>
+
+          <form id="quoteForm" class="form">
             <input type="hidden" id="stlLinkHidden" name="stlLink" />
 
-            <div class="field-row">
-              <div class="field-group">
-                <label for="name" class="field-label">Your name</label>
-                <input type="text" id="name" name="name" class="field-input" autocomplete="name" required />
+            <div class="row2">
+              <div class="field">
+                <label class="label" for="name">Your name</label>
+                <input class="input" type="text" id="name" name="name" required />
               </div>
 
-              <div class="field-group">
-                <label for="email" class="field-label">Email</label>
-                <input type="email" id="email" name="email" class="field-input" autocomplete="email" required />
+              <div class="field">
+                <label class="label" for="email">Email</label>
+                <input class="input" type="email" id="email" name="email" required />
               </div>
             </div>
 
-            <div class="field-group">
-              <label for="details" class="field-label">Notes about this print (optional)</label>
+            <div class="field">
+              <label class="label" for="details">Notes about this print (optional)</label>
               <textarea
+                class="textarea"
                 id="details"
                 name="details"
-                rows="4"
-                class="field-input"
                 placeholder="Size, color preference, deadline, what it will be used for…"
               ></textarea>
             </div>
 
-            <button type="submit" class="btn-primary">Submit request</button>
+            <button type="submit" class="btn" id="submitBtn">Submit request</button>
 
-            <p id="statusMessage" class="status-message" style="display:none;"></p>
+            <div id="statusMessage" class="status"></div>
+
+            <div class="note">
+              I usually respond within one business day. If I have questions about wall thickness,
+              print orientation, or supports, I’ll ask before printing.
+            </div>
           </form>
-
-          <p class="small-note">
-            Typical replies in &lt;24h • If I have questions about wall thickness, orientation, or supports, I'll ask before printing.
-          </p>
-        </div>
-
+        </section>
       </div>
     </main>
 
-    <footer class="site-footer">
+    <footer class="footer">
       Let Me 3D Print That For You · LM3DPTFY.online ·
       Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
     </footer>
@@ -82,69 +81,63 @@
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const stlLink = urlParams.get('link') || '';
-    document.getElementById('stlLinkHidden').value = stlLink;
+    const hidden = document.getElementById('stlLinkHidden');
+    const statusEl = document.getElementById('statusMessage');
+    const submitBtn = document.getElementById('submitBtn');
+    const linkBadge = document.getElementById('linkBadge');
 
-    if (!stlLink) {
-      const statusMessage = document.getElementById('statusMessage');
-      statusMessage.textContent = '⚠ No STL link provided. Please go back to the homepage and paste a link.';
-      statusMessage.classList.add('status-error');
-      statusMessage.style.display = 'block';
+    hidden.value = stlLink;
+
+    if (stlLink) {
+      linkBadge.style.display = 'inline-flex';
+      linkBadge.textContent = 'Model: ' + stlLink;
+    } else {
+      statusEl.className = 'status err';
+      statusEl.textContent = '⚠ No STL link provided. Please go back and paste a link on the homepage.';
+    }
+
+    function setStatus(type, text){
+      statusEl.className = 'status ' + (type === 'ok' ? 'ok' : 'err');
+      statusEl.textContent = text;
     }
 
     document.getElementById('quoteForm').addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      const statusMessage = document.getElementById('statusMessage');
-      const submitButton = e.target.querySelector('button[type="submit"]');
-
-      statusMessage.textContent = 'Sending your request...';
-      statusMessage.style.display = 'block';
-      statusMessage.classList.remove('status-success', 'status-error');
-      submitButton.disabled = true;
-      submitButton.textContent = 'Sending...';
-
       const payload = {
-        stlLink: document.getElementById('stlLinkHidden').value,
+        stlLink: hidden.value,
         name: document.getElementById('name').value,
         email: document.getElementById('email').value,
         details: document.getElementById('details').value
       };
 
       if (!payload.stlLink || payload.stlLink.trim() === '') {
-        statusMessage.textContent = '✗ Error: No STL link provided. Please go back to the homepage.';
-        statusMessage.classList.add('status-error');
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit request';
+        setStatus('err', '✗ Error: No STL link provided. Please go back to the homepage.');
         return;
       }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      setStatus('ok', 'Sending your request...');
 
       try {
         const response = await fetch('/api/requests', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(payload)
         });
 
         const data = await response.json();
-
         if (!response.ok) throw new Error(data.error || 'Failed to submit request');
 
-        statusMessage.textContent = '✓ Request sent successfully! Redirecting to homepage...';
-        statusMessage.classList.add('status-success');
-
-        setTimeout(function() {
-          window.location.href = '/';
-        }, 1500);
+        setStatus('ok', '✓ Request sent successfully! Redirecting to homepage...');
+        setTimeout(() => window.location.href = '/', 1200);
 
       } catch (error) {
-        statusMessage.textContent = '✗ Error: ' + error.message + '. Please email me at lm3dptfy@gmail.com';
-        statusMessage.classList.add('status-error');
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit request';
+        setStatus('err', '✗ Error: ' + error.message + '. Please email lm3dptfy@gmail.com');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit request';
       }
     });
   </script>
