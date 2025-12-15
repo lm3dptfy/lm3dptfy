@@ -4,68 +4,62 @@
   <meta charset="UTF-8" />
   <title>Request a 3D Print Quote | Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/style.css?v=modern2" />
 </head>
 <body>
   <div class="page-shell">
+    <header class="header">
+      <div class="header-inner">
+        <a class="brand" href="/" style="text-decoration:none;">
+          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY" />
+          <div class="brand-text">
+            <div class="brand-title">Let Me 3D Print That For You</div>
+            <div class="brand-sub">Quote request</div>
+          </div>
+        </a>
+        <nav class="nav"><a href="/">Home</a></nav>
+      </div>
+    </header>
+
     <main class="page-main">
-      <div class="main-inner">
-        <div class="logo-wrap">
-          <a href="/" class="logo-link">
-            <img
-              src="/lm3dptfy-logo-tp-cropped.png"
-              alt="Let Me 3D Print That For You"
-              class="main-logo"
-            />
-          </a>
-        </div>
+      <div class="container">
+        <section class="hero">
+          <h1>Where should I send your quote?</h1>
+          <p>I’ll review your STLFlix model, estimate material and print time, then email you a quote.</p>
+        </section>
 
-        <h1 class="request-title">Where should I send your quote?</h1>
-        <p class="request-subtitle">
-          I'll review your STLFlix model, estimate material and print time, then email you a quote.
-        </p>
+        <section class="card form-card" style="max-width:720px;">
+          <form id="quoteForm">
+            <input type="hidden" id="stlLinkHidden" name="stlLink" />
 
-        <form id="quoteForm" class="stl-form">
-          <input type="hidden" id="stlLinkHidden" name="stlLink" />
+            <label class="field-label" for="name">Your name</label>
+            <input class="field-input" type="text" id="name" required />
 
-          <div class="field-row">
-            <div class="field-group">
-              <label for="name" class="field-label">Your name</label>
-              <input type="text" id="name" name="name" class="field-input" required />
+            <div style="height:10px;"></div>
+
+            <label class="field-label" for="email">Email</label>
+            <input class="field-input" type="email" id="email" required />
+
+            <div style="height:10px;"></div>
+
+            <label class="field-label" for="details">Notes (optional)</label>
+            <textarea class="field-input" id="details" rows="4" style="border-radius:16px;"></textarea>
+
+            <button class="btn-primary" type="submit" id="submitBtn">Submit request</button>
+            <div id="statusMessage" class="status-message"></div>
+
+            <div class="small-note">
+              I usually respond within one business day. If I have questions about wall thickness,
+              print orientation, or supports, I’ll ask before printing.
             </div>
-
-            <div class="field-group">
-              <label for="email" class="field-label">Email</label>
-              <input type="email" id="email" name="email" class="field-input" required />
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label for="details" class="field-label">Notes about this print (optional)</label>
-            <textarea
-              id="details"
-              name="details"
-              rows="4"
-              class="field-input"
-              placeholder="Size, color preference, deadline, what it will be used for…"
-            ></textarea>
-          </div>
-
-          <button type="submit" class="btn-primary" style="width:100%;">Submit request</button>
-
-          <p id="statusMessage" class="status-message" style="display:none;"></p>
-        </form>
-
-        <p class="small-note">
-          I usually respond within one business day. If I have questions about wall thickness,
-          print orientation, or supports, I'll ask before printing.
-        </p>
+          </form>
+        </section>
       </div>
     </main>
 
-    <footer class="site-footer">
-      Let Me 3D Print That For You · LM3DPTFY.online ·
-      Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+    <footer class="footer">
+      Let Me 3D Print That For You · LM3DPTFY.online · Questions? Email
+      <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
     </footer>
   </div>
 
@@ -74,61 +68,54 @@
     const stlLink = urlParams.get('link') || '';
     document.getElementById('stlLinkHidden').value = stlLink;
 
+    const statusEl = document.getElementById('statusMessage');
+    const btn = document.getElementById('submitBtn');
+
     if (!stlLink) {
-      const statusMessage = document.getElementById('statusMessage');
-      statusMessage.textContent = '⚠ No STL link provided. Please go back to the homepage and paste a link.';
-      statusMessage.classList.add('status-error');
-      statusMessage.style.display = 'block';
+      statusEl.textContent = '⚠ No STL link provided. Please go back to the homepage and paste a link.';
+      statusEl.classList.add('status-error');
     }
 
-    document.getElementById('quoteForm').addEventListener('submit', async function(e) {
+    document.getElementById('quoteForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      const statusMessage = document.getElementById('statusMessage');
-      const submitButton = e.target.querySelector('button[type="submit"]');
-
-      statusMessage.textContent = 'Sending your request...';
-      statusMessage.style.display = 'block';
-      statusMessage.classList.remove('status-success', 'status-error');
-      submitButton.disabled = true;
-      submitButton.textContent = 'Sending...';
 
       const payload = {
         stlLink: document.getElementById('stlLinkHidden').value,
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        details: document.getElementById('details').value
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        details: document.getElementById('details').value.trim()
       };
 
-      if (!payload.stlLink || payload.stlLink.trim() === '') {
-        statusMessage.textContent = '✗ Error: No STL link provided. Please go back to the homepage.';
-        statusMessage.classList.add('status-error');
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit request';
+      if (!payload.stlLink) {
+        statusEl.textContent = '✗ Error: No STL link provided. Please go back to the homepage.';
+        statusEl.className = 'status-message status-error';
         return;
       }
 
+      btn.disabled = true;
+      statusEl.textContent = 'Sending your request...';
+      statusEl.className = 'status-message';
+      statusEl.style.display = 'block';
+
       try {
-        const response = await fetch('/api/requests', {
+        const res = await fetch('/api/requests', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           credentials: 'include',
           body: JSON.stringify(payload)
         });
 
-        const data = await response.json();
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Failed to submit request');
 
-        if (!response.ok) throw new Error(data.error || 'Failed to submit request');
+        statusEl.textContent = '✓ Request sent successfully! Redirecting to homepage...';
+        statusEl.className = 'status-message status-success';
 
-        statusMessage.textContent = '✓ Request sent successfully! Redirecting to homepage...';
-        statusMessage.classList.add('status-success');
-
-        setTimeout(() => { window.location.href = '/'; }, 1500);
-      } catch (error) {
-        statusMessage.textContent = '✗ Error: ' + error.message + '. Please email me at lm3dptfy@gmail.com';
-        statusMessage.classList.add('status-error');
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit request';
+        setTimeout(() => { window.location.href = '/'; }, 1200);
+      } catch (err) {
+        statusEl.textContent = '✗ Error: ' + err.message + '. Please email lm3dptfy@gmail.com';
+        statusEl.className = 'status-message status-error';
+        btn.disabled = false;
       }
     });
   </script>
