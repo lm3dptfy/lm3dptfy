@@ -3,13 +3,14 @@ require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
 const session = require('express-session');
 const cors = require('cors');
 const { google } = require('googleapis');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const PUBLIC_DIR = path.join(__dirname, 'public');
 
 // ========== ADMIN / EMAIL CONFIG =================================
 
@@ -33,19 +34,19 @@ const GOOGLE_SHEET_ID =
 const ACTIVE_SHEET_NAME = process.env.GOOGLE_ACTIVE_SHEET || 'Active';
 const ARCHIVED_SHEET_NAME = process.env.GOOGLE_ARCHIVED_SHEET || 'Archived';
 
-// NOTE: Added "Admin Notes" and "Tracking #"
+// NEW: Added Admin Notes + Tracking #
 const SHEET_HEADER = [
   'ID',
   'Created',
   'Name',
   'Email',
   'STL Link',
-  'Details',
+  'Customer Notes',
+  'Admin Notes',
   'Status',
   'Fulfilled By',
-  'Archived',
-  'Admin Notes',
   'Tracking #',
+  'Archived',
 ];
 
 // internal status codes
@@ -81,7 +82,7 @@ function sheetToStatus(value) {
   const norm = String(value)
     .trim()
     .toLowerCase()
-    .replace(/[_\s]+/g, '_'); // "Quote approved" -> "quote_approved"
+    .replace(/[_\s]+/g, '_');
   return VALID_STATUSES.includes(norm) ? norm : 'new';
 }
 
@@ -174,33 +175,19 @@ app.use(
     cookie: {
       secure: false,
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'lax',
     },
   })
 );
 
-// Serve /public as site root
-app.use(express.static(path.join(__dirname, 'public')));
-
-/**
- * BULLETPROOF CSS SERVE:
- * If you accidentally named the file Style.css (capital S), Linux will 404 /style.css.
- * This route will serve either style.css or Style.css.
- */
-function findPublicFile(candidates) {
-  for (const name of candidates) {
-    const p = path.join(__dirname, 'public', name);
-    if (fs.existsSync(p)) return p;
-  }
-  return null;
-}
-
-app.get('/style.css', (req, res, next) => {
-  const p = findPublicFile(['style.css', 'Style.css']);
-  if (!p) return next();
-  return res.sendFile(p);
+// IMPORTANT FIX #1: Force homepage to be index.html (prevents admin-as-root)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
+
+// Static files (CSS/JS/images) MUST be served correctly
+app.use(express.static(PUBLIC_DIR));
 
 // ========== HELPERS ==============================================
 
@@ -222,20 +209,20 @@ function parseCreatedToIso(created) {
   return new Date(parsed).toISOString();
 }
 
+// Row format now supports old (9 cols) and new (11 cols)
 function mapRowToRequest(row) {
-  // NOTE: supports both old (9 cols) and new (11 cols)
   const [
     id,
     created,
     name,
     email,
     stlLink,
-    details,
+    customerNotes,
+    adminNotes,
     statusRaw,
     fulfilledBy,
-    archivedText,
-    adminNotes,
     trackingNumber,
+    archivedText,
   ] = row;
 
   if (!id) return null;
@@ -252,12 +239,12 @@ function mapRowToRequest(row) {
     name: name || '',
     email: email || '',
     stlLink: stlLink || '',
-    details: details || '',
+    details: customerNotes || '',      // customer notes
+    adminNotes: adminNotes || '',      // NEW
+    trackingNumber: trackingNumber || '', // NEW
     status,
     fulfilledBy: fulfilledBy || '',
     archived,
-    adminNotes: adminNotes || '',
-    trackingNumber: trackingNumber || '',
     createdAt,
     updatedAt: new Date().toISOString(),
   };
@@ -276,11 +263,11 @@ function requestToRow(reqObj) {
     reqObj.email || '',
     reqObj.stlLink || '',
     reqObj.details || '',
+    reqObj.adminNotes || '',
     statusToSheet(reqObj.status || 'new'),
     reqObj.fulfilledBy || '',
-    reqObj.archived ? 'Yes' : 'No',
-    reqObj.adminNotes || '',
     reqObj.trackingNumber || '',
+    reqObj.archived ? 'Yes' : 'No',
   ];
 }
 
@@ -292,14 +279,22 @@ async function ensureHeader(sheetName) {
     range: `${sheetName}!A1:K1`,
   });
   const values = existing.data.values || [];
-  if (!values.length || values[0].join('') === '') {
+  const current = values[0] || [];
+
+  // If blank or missing required cols, write the new header
+  const needsInit =
+    !current.length ||
+    current.join('') === '' ||
+    current.length < SHEET_HEADER.length;
+
+  if (needsInit) {
     await sheetsClient.spreadsheets.values.update({
       spreadsheetId: GOOGLE_SHEET_ID,
       range: `${sheetName}!A1`,
       valueInputOption: 'RAW',
       requestBody: { values: [SHEET_HEADER] },
     });
-    console.log(`Initialized header row on sheet "${sheetName}".`);
+    console.log(`Initialized/updated header row on sheet "${sheetName}".`);
   }
 }
 
@@ -311,10 +306,7 @@ async function loadRequestsFromSheet() {
   }
 
   try {
-    await Promise.all([
-      ensureHeader(ACTIVE_SHEET_NAME),
-      ensureHeader(ARCHIVED_SHEET_NAME),
-    ]);
+    await Promise.all([ensureHeader(ACTIVE_SHEET_NAME), ensureHeader(ARCHIVED_SHEET_NAME)]);
 
     const [activeRes, archivedRes] = await Promise.all([
       sheetsClient.spreadsheets.values.get({
@@ -382,7 +374,7 @@ async function writeAllRequestsToSheet() {
     }),
   ]);
 
-  const [activeUpdate, archivedUpdate] = await Promise.all([
+  await Promise.all([
     sheetsClient.spreadsheets.values.update({
       spreadsheetId: GOOGLE_SHEET_ID,
       range: `${ACTIVE_SHEET_NAME}!A1`,
@@ -397,16 +389,11 @@ async function writeAllRequestsToSheet() {
     }),
   ]);
 
-  console.log(
-    `Synced to Sheets: ${active.length} active, ${archived.length} archived. Updated cells: active=${
-      activeUpdate.data.updates ? activeUpdate.data.updates.updatedCells : 'N/A'
-    }, archived=${archivedUpdate.data.updates ? archivedUpdate.data.updates.updatedCells : 'N/A'}`
-  );
+  console.log(`Synced to Sheets: ${active.length} active, ${archived.length} archived.`);
 }
 
 // ========== ROUTES ===============================================
 
-// Health check
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
@@ -436,17 +423,16 @@ app.post('/api/requests', async (req, res) => {
     name,
     email,
     details: details || '',
+    adminNotes: '',
+    trackingNumber: '',
     status: 'new',
     createdAt: nowIso,
     updatedAt: nowIso,
     fulfilledBy: '',
     archived: false,
-    adminNotes: '',
-    trackingNumber: '',
   };
 
   requests.unshift(newRequest);
-  console.log('New request created:', newRequest);
 
   if (sheetsClient) {
     writeAllRequestsToSheet().catch(err =>
@@ -455,14 +441,12 @@ app.post('/api/requests', async (req, res) => {
   }
 
   sendNotificationEmail(newRequest).catch(() => {});
-
   res.status(201).json({ ok: true, id: newRequest.id });
 });
 
 // Admin auth
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
-  console.log('Login attempt for:', email);
   if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
     req.session.admin = { email };
     return res.json({ ok: true });
@@ -477,9 +461,7 @@ app.post('/api/logout', (req, res) => {
 });
 
 app.get('/api/me', (req, res) => {
-  if (req.session && req.session.admin) {
-    return res.json({ admin: req.session.admin });
-  }
+  if (req.session && req.session.admin) return res.json({ admin: req.session.admin });
   res.json({ admin: null });
 });
 
@@ -489,192 +471,132 @@ app.get('/api/requests', requireAdmin, (req, res) => {
 });
 
 // Update status
-app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
+app.post('/api/requests/:id/status', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
-  if (!validateStatus(status)) {
-    return res.status(400).json({ error: 'Invalid status' });
-  }
+  if (!validateStatus(status)) return res.status(400).json({ error: 'Invalid status' });
 
   const r = requests.find(x => x.id === id);
-  if (!r) {
-    return res.status(404).json({ error: 'Request not found' });
-  }
+  if (!r) return res.status(404).json({ error: 'Request not found' });
 
   r.status = status;
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
 
-  if (sheetsClient) {
-    writeAllRequestsToSheet().catch(err =>
-      console.error('Sheets sync failed (status update):', err)
-    );
-  }
+  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
 });
 
 // Update fulfilledBy
-app.post('/api/requests/:id/fulfilled', requireAdmin, async (req, res) => {
+app.post('/api/requests/:id/fulfilled', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { fulfilledBy } = req.body;
 
   const r = requests.find(x => x.id === id);
-  if (!r) {
-    return res.status(404).json({ error: 'Request not found' });
-  }
+  if (!r) return res.status(404).json({ error: 'Request not found' });
 
   r.fulfilledBy = fulfilledBy || '';
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
 
-  if (sheetsClient) {
-    writeAllRequestsToSheet().catch(err =>
-      console.error('Sheets sync failed (fulfilledBy update):', err)
-    );
-  }
+  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
 });
 
-// Update adminNotes
-app.post('/api/requests/:id/notes', requireAdmin, async (req, res) => {
+// NEW: Update admin notes
+app.post('/api/requests/:id/admin-notes', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { adminNotes } = req.body;
 
   const r = requests.find(x => x.id === id);
   if (!r) return res.status(404).json({ error: 'Request not found' });
 
-  r.adminNotes = typeof adminNotes === 'string' ? adminNotes : '';
+  r.adminNotes = String(adminNotes || '');
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
 
-  if (sheetsClient) {
-    writeAllRequestsToSheet().catch(err =>
-      console.error('Sheets sync failed (admin notes update):', err)
-    );
-  }
+  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
 });
 
-// Update trackingNumber
-app.post('/api/requests/:id/tracking', requireAdmin, async (req, res) => {
+// NEW: Update tracking number
+app.post('/api/requests/:id/tracking', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { trackingNumber } = req.body;
 
   const r = requests.find(x => x.id === id);
   if (!r) return res.status(404).json({ error: 'Request not found' });
 
-  r.trackingNumber = typeof trackingNumber === 'string' ? trackingNumber : '';
+  r.trackingNumber = String(trackingNumber || '').trim();
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
 
-  if (sheetsClient) {
-    writeAllRequestsToSheet().catch(err =>
-      console.error('Sheets sync failed (tracking update):', err)
-    );
-  }
+  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
 });
 
 // Archive / unarchive
-app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
+app.post('/api/requests/:id/archive', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { archived } = req.body;
 
-  if (typeof archived !== 'boolean') {
-    return res.status(400).json({ error: 'archived must be boolean' });
-  }
+  if (typeof archived !== 'boolean') return res.status(400).json({ error: 'archived must be boolean' });
 
   const r = requests.find(x => x.id === id);
-  if (!r) {
-    return res.status(404).json({ error: 'Request not found' });
-  }
+  if (!r) return res.status(404).json({ error: 'Request not found' });
 
   r.archived = archived;
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
 
-  if (sheetsClient) {
-    writeAllRequestsToSheet().catch(err =>
-      console.error('Sheets sync failed (archive update):', err)
-    );
-  }
+  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
 });
 
 // Export CSV
 app.get('/api/export/csv', requireAdmin, (req, res) => {
-  try {
-    const headers = SHEET_HEADER;
-    const rows = requests.map(requestToRow);
+  const headers = SHEET_HEADER;
+  const rows = requests.map(requestToRow);
 
-    const csv = [
-      headers.join(','),
-      ...rows.map(r =>
-        r
-          .map(field => `"${String(field).replace(/"/g, '""')}"`)
-          .join(',')
-      ),
-    ].join('\n');
+  const csv = [
+    headers.join(','),
+    ...rows.map(r =>
+      r.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')
+    ),
+  ].join('\n');
 
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="lm3dptfy-requests-${Date.now()}.csv"`
-    );
-    res.send(csv);
-  } catch (err) {
-    console.error('Export CSV error:', err);
-    res.status(500).json({ error: 'Failed to export CSV' });
-  }
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', `attachment; filename="lm3dptfy-requests-${Date.now()}.csv"`);
+  res.send(csv);
 });
 
 // Export JSON
 app.get('/api/export/json', requireAdmin, (req, res) => {
-  try {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="lm3dptfy-requests-${Date.now()}.json"`
-    );
-    res.send(JSON.stringify(requests, null, 2));
-  } catch (err) {
-    console.error('Export JSON error:', err);
-    res.status(500).json({ error: 'Failed to export JSON' });
-  }
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Disposition', `attachment; filename="lm3dptfy-requests-${Date.now()}.json"`);
+  res.send(JSON.stringify(requests, null, 2));
 });
 
 // Manual reload from Sheets
 app.post('/api/sheets/reload', requireAdmin, async (req, res) => {
-  try {
-    await loadRequestsFromSheet();
-    res.json({ ok: true, count: requests.length });
-  } catch (err) {
-    console.error('Reload from Sheets error:', err);
-    res.status(500).json({ error: 'Failed to reload from Sheets' });
-  }
+  await loadRequestsFromSheet();
+  res.json({ ok: true, count: requests.length });
 });
 
 // Manual sync to Sheets
 app.post('/api/sheets/sync', requireAdmin, async (req, res) => {
-  try {
-    await writeAllRequestsToSheet();
-    res.json({ ok: true, count: requests.length });
-  } catch (err) {
-    console.error('Sync to Sheets error:', err);
-    res.status(500).json({ error: 'Failed to sync to Sheets' });
-  }
+  await writeAllRequestsToSheet();
+  res.json({ ok: true, count: requests.length });
 });
 
 // ========== APP STARTUP ==========================================
 
 app.listen(PORT, () => {
   console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
+  console.log(`Homepage: http://localhost:${PORT}/`);
   console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Admin login email: ${ADMIN_EMAIL}`);
-  console.log(`Notification email target: ${NOTIFY_EMAIL}`);
-  console.log(`Email notifications enabled (Resend): ${EMAIL_ENABLED}`);
 
   if (sheetsClient) {
     loadRequestsFromSheet().catch(err =>
