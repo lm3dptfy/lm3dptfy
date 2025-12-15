@@ -57,6 +57,7 @@
           <p id="dashboardStatus" class="status-message" style="display:none;"></p>
         </div>
 
+        <!-- ACTIVE -->
         <div class="card" style="max-width:1100px;">
           <div class="card-pad">
             <h2 class="info-title" style="margin:0;">Active</h2>
@@ -69,22 +70,25 @@
                   <th>Name</th>
                   <th>Email</th>
                   <th>STL link</th>
-                  <th>Notes</th>
+                  <th>Customer Notes</th>
+                  <th>Admin Notes</th>
                   <th>Status</th>
                   <th>Fulfilled By</th>
+                  <th>Tracking #</th>
                   <th>Reply</th>
                   <th>Archive</th>
                 </tr>
               </thead>
               <tbody id="activeBody">
                 <tr>
-                  <td colspan="9" style="text-align:center;padding:20px;">Loading…</td>
+                  <td colspan="11" style="text-align:center;padding:20px;">Loading…</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
+        <!-- ARCHIVED -->
         <div class="card" style="max-width:1100px;">
           <div class="card-pad">
             <h2 class="info-title" style="margin:0;">Archived</h2>
@@ -97,16 +101,18 @@
                   <th>Name</th>
                   <th>Email</th>
                   <th>STL link</th>
-                  <th>Notes</th>
+                  <th>Customer Notes</th>
+                  <th>Admin Notes</th>
                   <th>Status</th>
                   <th>Fulfilled By</th>
+                  <th>Tracking #</th>
                   <th>Reply</th>
                   <th>Archive</th>
                 </tr>
               </thead>
               <tbody id="archivedBody">
                 <tr>
-                  <td colspan="9" style="text-align:center;padding:20px;">No archived requests.</td>
+                  <td colspan="11" style="text-align:center;padding:20px;">No archived requests.</td>
                 </tr>
               </tbody>
             </table>
@@ -114,7 +120,7 @@
         </div>
 
         <p class="small-note" style="max-width:1100px;">
-          Tip: Bookmark <b>/admin</b>. This page is meant to stay private.
+          Tip: Bookmark <b>/admin</b>. Tracking email opens automatically after you paste a tracking number (when Status is Shipped).
         </p>
 
       </div>
@@ -201,10 +207,22 @@
       }
       tr.appendChild(stlTd);
 
+      // Customer notes
       const notesTd = document.createElement('td');
       notesTd.textContent = r.details || '';
       tr.appendChild(notesTd);
 
+      // Admin notes (editable)
+      const adminNotesTd = document.createElement('td');
+      const adminNotes = document.createElement('textarea');
+      adminNotes.className = 'table-textarea admin-notes';
+      adminNotes.dataset.id = r.id;
+      adminNotes.value = r.adminNotes || '';
+      adminNotes.placeholder = 'What did we email them?';
+      adminNotesTd.appendChild(adminNotes);
+      tr.appendChild(adminNotesTd);
+
+      // Status
       const statusTd = document.createElement('td');
       const statusSelect = document.createElement('select');
       statusSelect.className = 'status-select';
@@ -219,6 +237,7 @@
       statusTd.appendChild(statusSelect);
       tr.appendChild(statusTd);
 
+      // Fulfilled by
       const fulfilledTd = document.createElement('td');
       const fulfilledSelect = document.createElement('select');
       fulfilledSelect.className = 'status-select fulfilled-select';
@@ -233,6 +252,21 @@
       fulfilledTd.appendChild(fulfilledSelect);
       tr.appendChild(fulfilledTd);
 
+      // Tracking # (editable; enabled only if shipped)
+      const trackingTd = document.createElement('td');
+      const trackingInput = document.createElement('input');
+      trackingInput.type = 'text';
+      trackingInput.className = 'table-input tracking-input';
+      trackingInput.dataset.id = r.id;
+      trackingInput.dataset.email = r.email || '';
+      trackingInput.dataset.name = r.name || '';
+      trackingInput.value = r.trackingNumber || '';
+      trackingInput.placeholder = 'Paste tracking…';
+      trackingInput.disabled = (r.status !== 'shipped');
+      trackingTd.appendChild(trackingInput);
+      tr.appendChild(trackingTd);
+
+      // Reply button (manual)
       const replyTd = document.createElement('td');
       const replyBtn = document.createElement('button');
       replyBtn.className = 'link-btn reply-btn';
@@ -243,6 +277,7 @@
       replyTd.appendChild(replyBtn);
       tr.appendChild(replyTd);
 
+      // Archive
       const archiveTd = document.createElement('td');
       const archiveCheckbox = document.createElement('input');
       archiveCheckbox.type = 'checkbox';
@@ -271,13 +306,13 @@
         archivedBody.innerHTML = '';
 
         if (active.length === 0) {
-          activeBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;">No active requests.</td></tr>';
+          activeBody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;">No active requests.</td></tr>';
         } else {
           active.forEach(r => activeBody.appendChild(renderRow(r)));
         }
 
         if (archived.length === 0) {
-          archivedBody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:20px;">No archived requests.</td></tr>';
+          archivedBody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;">No archived requests.</td></tr>';
         } else {
           archived.forEach(r => archivedBody.appendChild(renderRow(r)));
         }
@@ -339,7 +374,11 @@
         body: JSON.stringify({ status }),
       })
         .then(res => { if (!res.ok) throw new Error('Failed to update status'); })
-        .then(() => showDashStatus('Status updated.', false))
+        .then(() => {
+          showDashStatus('Status updated.', false);
+          // refresh rows so tracking input enables when shipped
+          loadRequests();
+        })
         .catch(err => showDashStatus('Error updating status: ' + err.message, true));
     }
 
@@ -363,6 +402,75 @@
         .catch(err => showDashStatus('Error updating fulfilled by: ' + err.message, true));
     }
 
+    function handleAdminNotesChange(e) {
+      const ta = e.target.closest('.admin-notes');
+      if (!ta) return;
+
+      const id = ta.dataset.id;
+      const adminNotes = ta.value || '';
+
+      showDashStatus('Saving admin notes...', false);
+
+      fetch(`/api/requests/${id}/admin_notes`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminNotes }),
+      })
+        .then(res => { if (!res.ok) throw new Error('Failed to save admin notes'); })
+        .then(() => showDashStatus('Admin notes saved.', false))
+        .catch(err => showDashStatus('Error saving notes: ' + err.message, true));
+    }
+
+    function handleTrackingChange(e) {
+      const input = e.target.closest('.tracking-input');
+      if (!input) return;
+
+      const id = input.dataset.id;
+      const trackingNumber = (input.value || '').trim();
+      const toEmail = input.dataset.email || '';
+      const name = input.dataset.name || '';
+
+      if (!trackingNumber) return;
+
+      // Open a window synchronously (avoids popup blockers), then navigate it after save.
+      // Only do the email-open behavior if the input is enabled (i.e., status is shipped).
+      const shouldOpenEmail = !input.disabled && !!toEmail;
+      const popup = shouldOpenEmail ? window.open('about:blank', '_blank') : null;
+
+      showDashStatus('Saving tracking number...', false);
+
+      fetch(`/api/requests/${id}/tracking`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackingNumber }),
+      })
+        .then(async res => {
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}));
+            throw new Error(data.error || 'Failed to save tracking number');
+          }
+        })
+        .then(() => {
+          showDashStatus('Tracking number saved.', false);
+
+          if (shouldOpenEmail && popup) {
+            const subject = `Your LM3DPTFY order has shipped (Tracking: ${trackingNumber})`;
+            const body =
+              `Hi ${name || ''},\n\n` +
+              `Good news — your LM3DPTFY print has shipped!\n\n` +
+              `Tracking number: ${trackingNumber}\n\n` +
+              `Thanks,\nLM3DPTFY`;
+            popup.location = buildGmailUrl(toEmail, subject, body);
+          }
+        })
+        .catch(err => {
+          showDashStatus('Error saving tracking: ' + err.message, true);
+          if (popup) popup.close();
+        });
+    }
+
     function handleArchiveChange(e) {
       const checkbox = e.target.closest('.archive-checkbox');
       if (!checkbox) return;
@@ -379,7 +487,10 @@
         body: JSON.stringify({ archived }),
       })
         .then(res => { if (!res.ok) throw new Error('Failed to update archive state'); })
-        .then(() => { showDashStatus(archived ? 'Request archived.' : 'Request unarchived.', false); loadRequests(); })
+        .then(() => {
+          showDashStatus(archived ? 'Request archived.' : 'Request unarchived.', false);
+          loadRequests();
+        })
         .catch(err => showDashStatus('Error updating archive: ' + err.message, true));
     }
 
@@ -404,10 +515,19 @@
 
     activeBody.addEventListener('change', handleStatusChange);
     archivedBody.addEventListener('change', handleStatusChange);
+
     activeBody.addEventListener('change', handleFulfilledChange);
     archivedBody.addEventListener('change', handleFulfilledChange);
+
+    activeBody.addEventListener('change', handleAdminNotesChange);
+    archivedBody.addEventListener('change', handleAdminNotesChange);
+
+    activeBody.addEventListener('change', handleTrackingChange);
+    archivedBody.addEventListener('change', handleTrackingChange);
+
     activeBody.addEventListener('change', handleArchiveChange);
     archivedBody.addEventListener('change', handleArchiveChange);
+
     activeBody.addEventListener('click', handleReplyClick);
     archivedBody.addEventListener('click', handleReplyClick);
 
