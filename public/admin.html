@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin | Let Me 3D Print That For You</title>
+  <title>Admin | LM3DPTFY Requests</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div class="page-shell">
     <main class="page-main">
-      <div class="main-inner">
+      <div class="main-inner admin-main-inner">
         <!-- Login section -->
         <div id="loginCard">
           <div class="logo-wrap">
@@ -33,35 +34,29 @@
               <input type="password" id="adminPassword" class="field-input" required />
             </div>
             <button type="submit" class="btn-primary">Log in</button>
-            <p id="loginStatus" class="status-text" style="display:none;"></p>
+            <p id="loginStatus" class="status-message" style="display:none;"></p>
           </form>
         </div>
 
         <!-- Dashboard section -->
-        <div id="dashboardCard" class="admin-main-inner" style="display:none;">
-          <div class="logo-wrap" style="margin-bottom:24px;">
-            <img
-              src="/lm3dptfy-logo-tp-cropped.png"
-              alt="Let Me 3D Print That For You"
-              class="main-logo"
-            />
-          </div>
-
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:16px; flex-wrap:wrap;">
-            <div>
-              <h1 class="admin-header-text">Quote requests</h1>
-              <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
+        <div id="dashboardCard" style="display:none; width:100%;">
+          <div class="top-util-bar">
+            <div class="logo-link" style="gap:10px;">
+              <span class="brand-mark">LM3DPTFY Admin</span>
             </div>
-            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
               <button id="reloadSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Refresh from Sheets</button>
               <button id="syncSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Sync to Sheets</button>
-              <a href="/api/export/csv" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export CSV</a>
-              <a href="/api/export/json" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export JSON</a>
+              <a href="/api/export/csv" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none;">Export CSV</a>
+              <a href="/api/export/json" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none;">Export JSON</a>
               <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
             </div>
           </div>
 
-          <p id="dashboardStatus" class="status-text" style="display:none;"></p>
+          <h1 class="admin-header-text">Quote requests</h1>
+          <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
+
+          <p id="dashboardStatus" class="status-message" style="display:none;"></p>
 
           <div class="table-wrapper">
             <h2 class="info-title">Active</h2>
@@ -71,9 +66,9 @@
                   <th>Created</th>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>STL link</th>
-                  <th>Notes</th>
-                  <th>Admin notes</th>
+                  <th>STL</th>
+                  <th>Customer Notes</th>
+                  <th>Admin Notes</th>
                   <th>Status</th>
                   <th>Fulfilled By</th>
                   <th>Tracking #</th>
@@ -82,11 +77,10 @@
                 </tr>
               </thead>
               <tbody id="activeBody">
-                <tr>
-                  <td colspan="11" style="text-align:center;padding:20px;">Loading…</td>
-                </tr>
+                <tr><td colspan="11" style="text-align:center;padding:20px;">Loading…</td></tr>
               </tbody>
             </table>
+            <p class="small-note" style="margin-top:8px;">Tip: Set status to <strong>Shipped</strong> to enable Tracking #.</p>
           </div>
 
           <div class="table-wrapper">
@@ -97,9 +91,9 @@
                   <th>Created</th>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>STL link</th>
-                  <th>Notes</th>
-                  <th>Admin notes</th>
+                  <th>STL</th>
+                  <th>Customer Notes</th>
+                  <th>Admin Notes</th>
                   <th>Status</th>
                   <th>Fulfilled By</th>
                   <th>Tracking #</th>
@@ -108,9 +102,7 @@
                 </tr>
               </thead>
               <tbody id="archivedBody">
-                <tr>
-                  <td colspan="11" style="text-align:center;padding:20px;">No archived requests.</td>
-                </tr>
+                <tr><td colspan="11" style="text-align:center;padding:20px;">No archived requests.</td></tr>
               </tbody>
             </table>
           </div>
@@ -119,7 +111,7 @@
     </main>
 
     <footer class="site-footer">
-      Admin · Keep this page private.
+      LM3DPTFY Admin · Keep this page private.
     </footer>
   </div>
 
@@ -169,9 +161,7 @@
       dashboardStatus.style.display = 'block';
       dashboardStatus.classList.toggle('status-error', !!isError);
       dashboardStatus.classList.toggle('status-success', !isError);
-      if (!isError) {
-        setTimeout(() => { dashboardStatus.style.display = 'none'; }, 4500);
-      }
+      if (!isError) setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
     }
 
     function renderRow(r) {
@@ -200,24 +190,24 @@
         a.href = r.stlLink;
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
-        a.textContent = 'View STL';
+        a.textContent = 'View';
         stlTd.appendChild(a);
       }
       tr.appendChild(stlTd);
 
-      const notesTd = document.createElement('td');
-      notesTd.textContent = r.details || '';
-      tr.appendChild(notesTd);
+      const custNotesTd = document.createElement('td');
+      custNotesTd.textContent = r.details || '';
+      tr.appendChild(custNotesTd);
 
-      // Admin notes (editable textarea)
+      // Admin notes (NEW)
       const adminNotesTd = document.createElement('td');
-      const adminNotesArea = document.createElement('textarea');
-      adminNotesArea.className = 'table-textarea admin-notes';
-      adminNotesArea.dataset.id = r.id;
-      adminNotesArea.value = r.adminNotes || '';
-      adminNotesArea.rows = 2;
-      adminNotesArea.placeholder = 'What did we email? Pricing? ETA? Questions?';
-      adminNotesTd.appendChild(adminNotesArea);
+      const adminNotes = document.createElement('textarea');
+      adminNotes.className = 'field-input admin-notes';
+      adminNotes.rows = 2;
+      adminNotes.placeholder = 'What did we email?';
+      adminNotes.dataset.id = r.id;
+      adminNotes.value = r.adminNotes || '';
+      adminNotesTd.appendChild(adminNotes);
       tr.appendChild(adminNotesTd);
 
       const statusTd = document.createElement('td');
@@ -248,19 +238,20 @@
       fulfilledTd.appendChild(fulfilledSelect);
       tr.appendChild(fulfilledTd);
 
-      // Tracking (enabled only when status=shipped)
-      const trackingTd = document.createElement('td');
-      const trackingInput = document.createElement('input');
-      trackingInput.type = 'text';
-      trackingInput.className = 'table-input tracking-input';
-      trackingInput.dataset.id = r.id;
-      trackingInput.dataset.email = r.email || '';
-      trackingInput.dataset.name = r.name || '';
-      trackingInput.value = r.trackingNumber || '';
-      trackingInput.placeholder = (r.status === 'shipped') ? 'Paste tracking…' : 'Set status to Shipped';
-      trackingInput.disabled = (r.status !== 'shipped');
-      trackingTd.appendChild(trackingInput);
-      tr.appendChild(trackingTd);
+      // Tracking (NEW)
+      const trackTd = document.createElement('td');
+      const trackInput = document.createElement('input');
+      trackInput.type = 'text';
+      trackInput.className = 'field-input tracking-input';
+      trackInput.placeholder = (r.status === 'shipped') ? 'Paste tracking' : 'Set to Shipped';
+      trackInput.dataset.id = r.id;
+      trackInput.dataset.email = r.email || '';
+      trackInput.dataset.name = r.name || '';
+      trackInput.dataset.prev = (r.trackingNumber || '');
+      trackInput.value = (r.trackingNumber || '');
+      trackInput.disabled = (r.status !== 'shipped');
+      trackTd.appendChild(trackInput);
+      tr.appendChild(trackTd);
 
       const replyTd = document.createElement('td');
       const replyBtn = document.createElement('button');
@@ -343,51 +334,42 @@
 
         await loadRequests();
       } catch (err) {
-        console.error('Login error:', err);
         loginStatus.textContent = err.message;
         loginStatus.classList.add('status-error');
       }
     });
 
     logoutBtn.addEventListener('click', async () => {
-      try {
-        await fetch('/api/logout', { method: 'POST', credentials: 'include' });
-      } catch (e) { /* ignore */ }
+      try { await fetch('/api/logout', { method: 'POST', credentials: 'include' }); } catch (e) {}
       loginCard.style.display = 'block';
       dashboardCard.style.display = 'none';
       loginForm.reset();
     });
 
-    if (reloadBtn) {
-      reloadBtn.addEventListener('click', async () => {
-        showDashStatus('Refreshing from Google Sheets...', false);
-        try {
-          const res = await fetch('/api/sheets/reload', { method: 'POST', credentials: 'include' });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || 'Reload failed');
-          showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
-          loadRequests();
-        } catch (err) {
-          console.error('Reload error:', err);
-          showDashStatus('Reload failed: ' + err.message, true);
-        }
-      });
-    }
+    reloadBtn.addEventListener('click', async () => {
+      showDashStatus('Refreshing from Google Sheets...', false);
+      try {
+        const res = await fetch('/api/sheets/reload', { method: 'POST', credentials: 'include' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Reload failed');
+        showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
+        loadRequests();
+      } catch (err) {
+        showDashStatus('Reload failed: ' + err.message, true);
+      }
+    });
 
-    if (syncBtn) {
-      syncBtn.addEventListener('click', async () => {
-        showDashStatus('Syncing to Google Sheets...', false);
-        try {
-          const res = await fetch('/api/sheets/sync', { method: 'POST', credentials: 'include' });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || 'Sync failed');
-          showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
-        } catch (err) {
-          console.error('Sync error:', err);
-          showDashStatus('Sync failed: ' + err.message, true);
-        }
-      });
-    }
+    syncBtn.addEventListener('click', async () => {
+      showDashStatus('Syncing to Google Sheets...', false);
+      try {
+        const res = await fetch('/api/sheets/sync', { method: 'POST', credentials: 'include' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Sync failed');
+        showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
+      } catch (err) {
+        showDashStatus('Sync failed: ' + err.message, true);
+      }
+    });
 
     function handleStatusChange(e) {
       const select = e.target.closest('.status-select');
@@ -397,6 +379,7 @@
       const status = select.value;
 
       showDashStatus('Updating status...', false);
+
       fetch(`/api/requests/${id}/status`, {
         method: 'POST',
         credentials: 'include',
@@ -409,13 +392,9 @@
         })
         .then(() => {
           showDashStatus('Status updated.', false);
-          // reload so tracking field enables/disables correctly
-          loadRequests();
+          loadRequests(); // refresh so Tracking input enables/disables correctly
         })
-        .catch(err => {
-          console.error('Status update error:', err);
-          showDashStatus('Error updating status: ' + err.message, true);
-        });
+        .catch(err => showDashStatus('Error updating status: ' + err.message, true));
     }
 
     function handleFulfilledChange(e) {
@@ -426,6 +405,7 @@
       const fulfilledBy = select.value;
 
       showDashStatus('Updating fulfilled by...', false);
+
       fetch(`/api/requests/${id}/fulfilled`, {
         method: 'POST',
         credentials: 'include',
@@ -437,78 +417,7 @@
           return res.json();
         })
         .then(() => showDashStatus('Fulfilled by updated.', false))
-        .catch(err => {
-          console.error('Fulfilled update error:', err);
-          showDashStatus('Error updating fulfilled by: ' + err.message, true);
-        });
-    }
-
-    function handleAdminNotesChange(e) {
-      const area = e.target.closest('.admin-notes');
-      if (!area) return;
-
-      const id = area.dataset.id;
-      const adminNotes = area.value || '';
-
-      showDashStatus('Saving admin notes...', false);
-      fetch(`/api/requests/${id}/notes`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ adminNotes }),
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to save admin notes');
-          return res.json();
-        })
-        .then(() => showDashStatus('Admin notes saved.', false))
-        .catch(err => {
-          console.error('Admin notes update error:', err);
-          showDashStatus('Error saving notes: ' + err.message, true);
-        });
-    }
-
-    function handleTrackingChange(e) {
-      const input = e.target.closest('.tracking-input');
-      if (!input) return;
-
-      const id = input.dataset.id;
-      const trackingNumber = (input.value || '').trim();
-      const toEmail = input.dataset.email || '';
-      const name = input.dataset.name || '';
-
-      if (!trackingNumber) return;
-
-      showDashStatus('Saving tracking number...', false);
-      fetch(`/api/requests/${id}/tracking`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ trackingNumber }),
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to save tracking number');
-          return res.json();
-        })
-        .then(() => {
-          showDashStatus('Tracking number saved. Opening email…', false);
-
-          if (toEmail) {
-            const subject = 'Your LM3DPTFY shipment tracking';
-            const body =
-              'Hi ' + (name || 'there') + ',\n\n' +
-              'Your order has shipped!\n\n' +
-              'Tracking number:\n' +
-              trackingNumber + '\n\n' +
-              'If you have any questions, just reply to this email.\n\n' +
-              '— Let Me 3D Print That For You';
-            window.open(buildGmailUrl(toEmail, subject, body), '_blank');
-          }
-        })
-        .catch(err => {
-          console.error('Tracking update error:', err);
-          showDashStatus('Error saving tracking: ' + err.message, true);
-        });
+        .catch(err => showDashStatus('Error updating fulfilled by: ' + err.message, true));
     }
 
     function handleArchiveChange(e) {
@@ -519,6 +428,7 @@
       const archived = checkbox.checked;
 
       showDashStatus(archived ? 'Archiving request...' : 'Unarchiving request...', false);
+
       fetch(`/api/requests/${id}/archive`, {
         method: 'POST',
         credentials: 'include',
@@ -533,10 +443,7 @@
           showDashStatus(archived ? 'Request archived.' : 'Request unarchived.', false);
           loadRequests();
         })
-        .catch(err => {
-          console.error('Archive update error:', err);
-          showDashStatus('Error updating archive: ' + err.message, true);
-        });
+        .catch(err => showDashStatus('Error updating archive: ' + err.message, true));
     }
 
     function handleReplyClick(e) {
@@ -554,7 +461,91 @@
         'Thanks for your quote request for:\n' +
         stl + '\n\n' +
         '— Let Me 3D Print That For You';
+
       window.open(buildGmailUrl(email, subject, body), '_blank');
+    }
+
+    // Save admin notes (debounced)
+    let notesTimer = null;
+    function handleAdminNotesInput(e) {
+      const ta = e.target.closest('.admin-notes');
+      if (!ta) return;
+
+      const id = ta.dataset.id;
+      const adminNotes = ta.value;
+
+      clearTimeout(notesTimer);
+      notesTimer = setTimeout(() => {
+        fetch(`/api/requests/${id}/admin-notes`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ adminNotes }),
+        })
+          .then(res => {
+            if (!res.ok) throw new Error('Failed to save admin notes');
+            return res.json();
+          })
+          .then(() => showDashStatus('Admin notes saved.', false))
+          .catch(err => showDashStatus('Admin notes error: ' + err.message, true));
+      }, 500);
+    }
+
+    // Save tracking and auto-open email
+    function saveTrackingAndEmail(input) {
+      const id = input.dataset.id;
+      const trackingNumber = (input.value || '').trim();
+      const prev = (input.dataset.prev || '').trim();
+
+      if (trackingNumber === prev) return; // no change
+      input.dataset.prev = trackingNumber;
+
+      showDashStatus('Saving tracking #...', false);
+
+      fetch(`/api/requests/${id}/tracking`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trackingNumber }),
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to save tracking #');
+          return res.json();
+        })
+        .then(() => {
+          showDashStatus('Tracking # saved.', false);
+
+          // Only open email if they actually pasted something
+          if (trackingNumber) {
+            const email = input.dataset.email || '';
+            const name = input.dataset.name || '';
+            const subject = 'Your LM3DPTFY order has shipped';
+            const body =
+              'Hi ' + name + ',\n\n' +
+              'Your order has shipped!\n\n' +
+              'Tracking number: ' + trackingNumber + '\n\n' +
+              'Thanks!\n' +
+              '— Let Me 3D Print That For You';
+
+            window.open(buildGmailUrl(email, subject, body), '_blank');
+          }
+        })
+        .catch(err => showDashStatus('Tracking error: ' + err.message, true));
+    }
+
+    function handleTrackingKeydown(e) {
+      const input = e.target.closest('.tracking-input');
+      if (!input) return;
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        input.blur();
+      }
+    }
+
+    function handleTrackingBlur(e) {
+      const input = e.target.closest('.tracking-input');
+      if (!input || input.disabled) return;
+      saveTrackingAndEmail(input);
     }
 
     activeBody.addEventListener('change', handleStatusChange);
@@ -563,18 +554,20 @@
     activeBody.addEventListener('change', handleFulfilledChange);
     archivedBody.addEventListener('change', handleFulfilledChange);
 
-    // Save notes/tracking on change (paste + click out)
-    activeBody.addEventListener('change', handleAdminNotesChange);
-    archivedBody.addEventListener('change', handleAdminNotesChange);
-
-    activeBody.addEventListener('change', handleTrackingChange);
-    archivedBody.addEventListener('change', handleTrackingChange);
-
     activeBody.addEventListener('change', handleArchiveChange);
     archivedBody.addEventListener('change', handleArchiveChange);
 
     activeBody.addEventListener('click', handleReplyClick);
     archivedBody.addEventListener('click', handleReplyClick);
+
+    activeBody.addEventListener('input', handleAdminNotesInput);
+    archivedBody.addEventListener('input', handleAdminNotesInput);
+
+    activeBody.addEventListener('keydown', handleTrackingKeydown);
+    archivedBody.addEventListener('keydown', handleTrackingKeydown);
+
+    activeBody.addEventListener('blur', handleTrackingBlur, true);
+    archivedBody.addEventListener('blur', handleTrackingBlur, true);
 
     loadRequests();
   </script>
