@@ -32,6 +32,14 @@ const GOOGLE_SHEET_ID =
 const ACTIVE_SHEET_NAME = process.env.GOOGLE_ACTIVE_SHEET || 'Active';
 const ARCHIVED_SHEET_NAME = process.env.GOOGLE_ARCHIVED_SHEET || 'Archived';
 
+/**
+ * New columns added:
+ * - Admin Notes
+ * - Tracking Number
+ *
+ * Order (A-K):
+ * ID, Created, Name, Email, STL Link, Details, Admin Notes, Status, Fulfilled By, Tracking Number, Archived
+ */
 const SHEET_HEADER = [
   'ID',
   'Created',
@@ -39,8 +47,10 @@ const SHEET_HEADER = [
   'Email',
   'STL Link',
   'Details',
+  'Admin Notes',
   'Status',
   'Fulfilled By',
+  'Tracking Number',
   'Archived',
 ];
 
@@ -116,7 +126,6 @@ async function sendNotificationEmail(newRequest) {
   }
 
   const { name, email, stlLink, details } = newRequest;
-
   const subject = `New LM3DPTFY quote request from ${name}`;
   const baseUrl = process.env.BACKEND_URL || 'https://www.lm3dptfy.online';
 
@@ -205,6 +214,7 @@ function parseCreatedToIso(created) {
 }
 
 function mapRowToRequest(row) {
+  // Support older rows that may be missing new columns.
   const [
     id,
     created,
@@ -212,17 +222,20 @@ function mapRowToRequest(row) {
     email,
     stlLink,
     details,
+    adminNotes,
     statusRaw,
     fulfilledBy,
+    trackingNumber,
     archivedText,
   ] = row;
 
   if (!id) return null;
 
   const createdAt = parseCreatedToIso(created);
+
   const archived =
-    String(archivedText).trim().toLowerCase() === 'yes' ||
-    String(archivedText).trim().toLowerCase() === 'true';
+    String(archivedText || '').trim().toLowerCase() === 'yes' ||
+    String(archivedText || '').trim().toLowerCase() === 'true';
 
   const status = sheetToStatus(statusRaw);
 
@@ -232,8 +245,10 @@ function mapRowToRequest(row) {
     email: email || '',
     stlLink: stlLink || '',
     details: details || '',
+    adminNotes: adminNotes || '',
     status,
     fulfilledBy: fulfilledBy || '',
+    trackingNumber: trackingNumber || '',
     archived,
     createdAt,
     updatedAt: new Date().toISOString(),
@@ -253,8 +268,10 @@ function requestToRow(reqObj) {
     reqObj.email || '',
     reqObj.stlLink || '',
     reqObj.details || '',
+    reqObj.adminNotes || '',
     statusToSheet(reqObj.status || 'new'),
     reqObj.fulfilledBy || '',
+    reqObj.trackingNumber || '',
     reqObj.archived ? 'Yes' : 'No',
   ];
 }
@@ -264,17 +281,29 @@ function requestToRow(reqObj) {
 async function ensureHeader(sheetName) {
   const existing = await sheetsClient.spreadsheets.values.get({
     spreadsheetId: GOOGLE_SHEET_ID,
-    range: `${sheetName}!A1:I1`,
+    range: `${sheetName}!A1:K1`,
   });
   const values = existing.data.values || [];
-  if (!values.length || values[0].join('') === '') {
+
+  const current = values[0] || [];
+  const needsInit = !values.length || current.join('') === '';
+  const needsUpgrade =
+    !needsInit &&
+    (current.length !== SHEET_HEADER.length ||
+      current.some((v, i) => String(v || '').trim() !== String(SHEET_HEADER[i] || '').trim()));
+
+  if (needsInit || needsUpgrade) {
     await sheetsClient.spreadsheets.values.update({
       spreadsheetId: GOOGLE_SHEET_ID,
       range: `${sheetName}!A1`,
       valueInputOption: 'RAW',
       requestBody: { values: [SHEET_HEADER] },
     });
-    console.log(`Initialized header row on sheet "${sheetName}".`);
+    console.log(
+      needsInit
+        ? `Initialized header row on sheet "${sheetName}".`
+        : `Upgraded header row on sheet "${sheetName}" to include new columns.`
+    );
   }
 }
 
@@ -291,11 +320,11 @@ async function loadRequestsFromSheet() {
     const [activeRes, archivedRes] = await Promise.all([
       sheetsClient.spreadsheets.values.get({
         spreadsheetId: GOOGLE_SHEET_ID,
-        range: `${ACTIVE_SHEET_NAME}!A1:I10000`,
+        range: `${ACTIVE_SHEET_NAME}!A1:K10000`,
       }),
       sheetsClient.spreadsheets.values.get({
         spreadsheetId: GOOGLE_SHEET_ID,
-        range: `${ARCHIVED_SHEET_NAME}!A1:I10000`,
+        range: `${ARCHIVED_SHEET_NAME}!A1:K10000`,
       }),
     ]);
 
@@ -322,6 +351,7 @@ async function loadRequestsFromSheet() {
     });
 
     requests = merged;
+
     console.log(
       `Loaded ${requests.length} requests from Sheets (${activeRequests.length} active, ${archivedRequests.length} archived).`
     );
@@ -346,11 +376,11 @@ async function writeAllRequestsToSheet() {
   await Promise.all([
     sheetsClient.spreadsheets.values.clear({
       spreadsheetId: GOOGLE_SHEET_ID,
-      range: `${ACTIVE_SHEET_NAME}!A2:I10000`,
+      range: `${ACTIVE_SHEET_NAME}!A2:K10000`,
     }),
     sheetsClient.spreadsheets.values.clear({
       spreadsheetId: GOOGLE_SHEET_ID,
-      range: `${ARCHIVED_SHEET_NAME}!A2:I10000`,
+      range: `${ARCHIVED_SHEET_NAME}!A2:K10000`,
     }),
   ]);
 
@@ -487,7 +517,6 @@ function adminLoginHtml() {
         });
 
         if (!res.ok) throw new Error('Invalid credentials');
-
         location.replace('/admin');
       } catch (e) {
         err.textContent = 'Login failed. Check your email/password.';
@@ -507,10 +536,9 @@ app.use((req, res, next) => {
 
   const p = req.path;
 
-  // Let /admin.html safely redirect to /admin (login page is still protected)
+  // Let /admin.html redirect to /admin
   if (p === '/admin.html') return next();
 
-  // If you later add separate admin assets, keep them private too
   const isAdminAsset =
     p === '/admin.js' ||
     p === '/admin.css' ||
@@ -532,7 +560,7 @@ app.get('/admin', (req, res) => {
   return res.sendFile(ADMIN_DASHBOARD_FILE);
 });
 
-// Back-compat: /admin.html -> /admin
+// Back-compat
 app.get('/admin.html', (req, res) => res.redirect('/admin'));
 
 // ========== ROUTES ===============================================
@@ -563,6 +591,8 @@ app.post('/api/requests', async (req, res) => {
     name,
     email,
     details: details || '',
+    adminNotes: '',
+    trackingNumber: '',
     status: 'new',
     createdAt: nowIso,
     updatedAt: nowIso,
@@ -580,7 +610,6 @@ app.post('/api/requests', async (req, res) => {
   }
 
   sendNotificationEmail(newRequest).catch(() => {});
-
   res.status(201).json({ ok: true, id: newRequest.id });
 });
 
@@ -654,6 +683,46 @@ app.post('/api/requests/:id/fulfilled', requireAdmin, async (req, res) => {
   }
 });
 
+// Update admin notes
+app.post('/api/requests/:id/admin_notes', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { adminNotes } = req.body;
+
+  const r = requests.find(x => x.id === id);
+  if (!r) return res.status(404).json({ error: 'Request not found' });
+
+  r.adminNotes = String(adminNotes || '');
+  r.updatedAt = new Date().toISOString();
+
+  res.json({ ok: true, request: r });
+
+  if (sheetsClient) {
+    writeAllRequestsToSheet().catch(err =>
+      console.error('Sheets sync failed (admin notes update):', err)
+    );
+  }
+});
+
+// Update tracking number
+app.post('/api/requests/:id/tracking', requireAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { trackingNumber } = req.body;
+
+  const r = requests.find(x => x.id === id);
+  if (!r) return res.status(404).json({ error: 'Request not found' });
+
+  r.trackingNumber = String(trackingNumber || '');
+  r.updatedAt = new Date().toISOString();
+
+  res.json({ ok: true, request: r });
+
+  if (sheetsClient) {
+    writeAllRequestsToSheet().catch(err =>
+      console.error('Sheets sync failed (tracking update):', err)
+    );
+  }
+});
+
 // Archive / unarchive
 app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
   const { id } = req.params;
@@ -686,7 +755,9 @@ app.get('/api/export/csv', requireAdmin, (req, res) => {
 
     const csv = [
       headers.join(','),
-      ...rows.map(r => r.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')),
+      ...rows.map(r =>
+        r.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')
+      ),
     ].join('\n');
 
     res.setHeader('Content-Type', 'text/csv');
