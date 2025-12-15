@@ -34,19 +34,19 @@ const GOOGLE_SHEET_ID =
 const ACTIVE_SHEET_NAME = process.env.GOOGLE_ACTIVE_SHEET || 'Active';
 const ARCHIVED_SHEET_NAME = process.env.GOOGLE_ARCHIVED_SHEET || 'Archived';
 
-// NEW: Added Admin Notes + Tracking #
+// Original 9 columns + appended 2 columns (safe — no shifting)
 const SHEET_HEADER = [
   'ID',
   'Created',
   'Name',
   'Email',
   'STL Link',
-  'Customer Notes',
-  'Admin Notes',
+  'Details',
   'Status',
   'Fulfilled By',
-  'Tracking #',
   'Archived',
+  'Admin Notes',
+  'Tracking #',
 ];
 
 // internal status codes
@@ -79,10 +79,7 @@ function statusToSheet(status) {
 
 function sheetToStatus(value) {
   if (!value) return 'new';
-  const norm = String(value)
-    .trim()
-    .toLowerCase()
-    .replace(/[_\s]+/g, '_');
+  const norm = String(value).trim().toLowerCase().replace(/[_\s]+/g, '_');
   return VALID_STATUSES.includes(norm) ? norm : 'new';
 }
 
@@ -133,7 +130,6 @@ async function sendNotificationEmail(newRequest) {
   `;
 
   try {
-    console.log('Attempting to send admin notification email via Resend to:', NOTIFY_EMAIL);
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -181,12 +177,14 @@ app.use(
   })
 );
 
-// IMPORTANT FIX #1: Force homepage to be index.html (prevents admin-as-root)
+// IMPORTANT: force homepage to index.html (prevents admin becoming root)
 app.get('/', (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
-// Static files (CSS/JS/images) MUST be served correctly
+// optional nice alias
+app.get('/admin', (req, res) => res.redirect('/admin.html'));
+
 app.use(express.static(PUBLIC_DIR));
 
 // ========== HELPERS ==============================================
@@ -209,25 +207,27 @@ function parseCreatedToIso(created) {
   return new Date(parsed).toISOString();
 }
 
-// Row format now supports old (9 cols) and new (11 cols)
 function mapRowToRequest(row) {
-  const [
-    id,
-    created,
-    name,
-    email,
-    stlLink,
-    customerNotes,
-    adminNotes,
-    statusRaw,
-    fulfilledBy,
-    trackingNumber,
-    archivedText,
-  ] = row;
-
+  // Old layout (9 cols): A..I
+  // New layout (11 cols): A..K where:
+  // J = Admin Notes, K = Tracking #
+  const id = row[0];
   if (!id) return null;
 
+  const created = row[1];
+  const name = row[2];
+  const email = row[3];
+  const stlLink = row[4];
+  const details = row[5];
+  const statusRaw = row[6];
+  const fulfilledBy = row[7];
+  const archivedText = row[8];
+
+  const adminNotes = row[9] || '';
+  const trackingNumber = row[10] || '';
+
   const createdAt = parseCreatedToIso(created);
+
   const archived =
     String(archivedText).trim().toLowerCase() === 'yes' ||
     String(archivedText).trim().toLowerCase() === 'true';
@@ -239,12 +239,12 @@ function mapRowToRequest(row) {
     name: name || '',
     email: email || '',
     stlLink: stlLink || '',
-    details: customerNotes || '',      // customer notes
-    adminNotes: adminNotes || '',      // NEW
-    trackingNumber: trackingNumber || '', // NEW
+    details: details || '',
     status,
     fulfilledBy: fulfilledBy || '',
     archived,
+    adminNotes: adminNotes || '',
+    trackingNumber: trackingNumber || '',
     createdAt,
     updatedAt: new Date().toISOString(),
   };
@@ -263,11 +263,11 @@ function requestToRow(reqObj) {
     reqObj.email || '',
     reqObj.stlLink || '',
     reqObj.details || '',
-    reqObj.adminNotes || '',
     statusToSheet(reqObj.status || 'new'),
     reqObj.fulfilledBy || '',
-    reqObj.trackingNumber || '',
     reqObj.archived ? 'Yes' : 'No',
+    reqObj.adminNotes || '',
+    reqObj.trackingNumber || '',
   ];
 }
 
@@ -278,23 +278,24 @@ async function ensureHeader(sheetName) {
     spreadsheetId: GOOGLE_SHEET_ID,
     range: `${sheetName}!A1:K1`,
   });
-  const values = existing.data.values || [];
-  const current = values[0] || [];
 
-  // If blank or missing required cols, write the new header
-  const needsInit =
-    !current.length ||
-    current.join('') === '' ||
-    current.length < SHEET_HEADER.length;
+  const current = (existing.data.values && existing.data.values[0]) ? existing.data.values[0] : [];
 
-  if (needsInit) {
+  // If header is empty or shorter than expected, write/extend it
+  if (!current.length || current.join('') === '' || current.length < SHEET_HEADER.length) {
+    const merged = [...current];
+    for (let i = 0; i < SHEET_HEADER.length; i++) {
+      if (!merged[i]) merged[i] = SHEET_HEADER[i];
+    }
+
     await sheetsClient.spreadsheets.values.update({
       spreadsheetId: GOOGLE_SHEET_ID,
       range: `${sheetName}!A1`,
       valueInputOption: 'RAW',
-      requestBody: { values: [SHEET_HEADER] },
+      requestBody: { values: [merged] },
     });
-    console.log(`Initialized/updated header row on sheet "${sheetName}".`);
+
+    console.log(`Initialized/extended header row on sheet "${sheetName}".`);
   }
 }
 
@@ -325,26 +326,16 @@ async function loadRequestsFromSheet() {
     const activeRows = activeValues.slice(1);
     const archivedRows = archivedValues.slice(1);
 
-    const activeRequests = activeRows
-      .map(mapRowToRequest)
-      .filter(Boolean)
-      .map(r => ({ ...r, archived: false }));
+    const activeRequests = activeRows.map(mapRowToRequest).filter(Boolean).map(r => ({ ...r, archived: false }));
+    const archivedRequests = archivedRows.map(mapRowToRequest).filter(Boolean).map(r => ({ ...r, archived: true }));
 
-    const archivedRequests = archivedRows
-      .map(mapRowToRequest)
-      .filter(Boolean)
-      .map(r => ({ ...r, archived: true }));
-
-    const merged = [...activeRequests, ...archivedRequests].sort((a, b) => {
+    requests = [...activeRequests, ...archivedRequests].sort((a, b) => {
       const ta = Date.parse(a.createdAt) || 0;
       const tb = Date.parse(b.createdAt) || 0;
       return tb - ta;
     });
 
-    requests = merged;
-    console.log(
-      `Loaded ${requests.length} requests from Sheets (${activeRequests.length} active, ${archivedRequests.length} archived).`
-    );
+    console.log(`Loaded ${requests.length} requests from Sheets.`);
   } catch (err) {
     console.error('Error loading requests from Google Sheets:', err);
     requests = [];
@@ -352,10 +343,7 @@ async function loadRequestsFromSheet() {
 }
 
 async function writeAllRequestsToSheet() {
-  if (!sheetsClient) {
-    console.warn('Google Sheets client not initialized; cannot sync to Sheets.');
-    return;
-  }
+  if (!sheetsClient) return;
 
   const active = requests.filter(r => !r.archived);
   const archived = requests.filter(r => r.archived);
@@ -401,8 +389,6 @@ app.get('/api/health', (req, res) => {
     adminEmail: ADMIN_EMAIL,
     notifyEmail: NOTIFY_EMAIL,
     sheetId: GOOGLE_SHEET_ID,
-    activeSheet: ACTIVE_SHEET_NAME,
-    archivedSheet: ARCHIVED_SHEET_NAME,
     emailEnabled: EMAIL_ENABLED,
   });
 });
@@ -423,24 +409,20 @@ app.post('/api/requests', async (req, res) => {
     name,
     email,
     details: details || '',
-    adminNotes: '',
-    trackingNumber: '',
     status: 'new',
     createdAt: nowIso,
     updatedAt: nowIso,
     fulfilledBy: '',
     archived: false,
+    adminNotes: '',
+    trackingNumber: '',
   };
 
   requests.unshift(newRequest);
 
-  if (sheetsClient) {
-    writeAllRequestsToSheet().catch(err =>
-      console.error('Sheets sync failed (new request):', err)
-    );
-  }
-
+  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
   sendNotificationEmail(newRequest).catch(() => {});
+
   res.status(201).json({ ok: true, id: newRequest.id });
 });
 
@@ -455,22 +437,13 @@ app.post('/api/login', (req, res) => {
 });
 
 app.post('/api/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.json({ ok: true });
-  });
+  req.session.destroy(() => res.json({ ok: true }));
 });
 
-app.get('/api/me', (req, res) => {
-  if (req.session && req.session.admin) return res.json({ admin: req.session.admin });
-  res.json({ admin: null });
-});
-
-// Admin: get all requests
 app.get('/api/requests', requireAdmin, (req, res) => {
   res.json(requests);
 });
 
-// Update status
 app.post('/api/requests/:id/status', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
@@ -484,11 +457,9 @@ app.post('/api/requests/:id/status', requireAdmin, (req, res) => {
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
-
-  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
+  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
 });
 
-// Update fulfilledBy
 app.post('/api/requests/:id/fulfilled', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { fulfilledBy } = req.body;
@@ -500,11 +471,10 @@ app.post('/api/requests/:id/fulfilled', requireAdmin, (req, res) => {
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
-
-  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
+  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
 });
 
-// NEW: Update admin notes
+// NEW: Admin notes
 app.post('/api/requests/:id/admin-notes', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { adminNotes } = req.body;
@@ -516,11 +486,10 @@ app.post('/api/requests/:id/admin-notes', requireAdmin, (req, res) => {
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
-
-  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
+  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
 });
 
-// NEW: Update tracking number
+// NEW: Tracking number
 app.post('/api/requests/:id/tracking', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { trackingNumber } = req.body;
@@ -532,11 +501,9 @@ app.post('/api/requests/:id/tracking', requireAdmin, (req, res) => {
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
-
-  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
+  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
 });
 
-// Archive / unarchive
 app.post('/api/requests/:id/archive', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { archived } = req.body;
@@ -550,41 +517,14 @@ app.post('/api/requests/:id/archive', requireAdmin, (req, res) => {
   r.updatedAt = new Date().toISOString();
 
   res.json({ ok: true, request: r });
-
-  if (sheetsClient) writeAllRequestsToSheet().catch(err => console.error('Sheets sync failed:', err));
+  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
 });
 
-// Export CSV
-app.get('/api/export/csv', requireAdmin, (req, res) => {
-  const headers = SHEET_HEADER;
-  const rows = requests.map(requestToRow);
-
-  const csv = [
-    headers.join(','),
-    ...rows.map(r =>
-      r.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')
-    ),
-  ].join('\n');
-
-  res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', `attachment; filename="lm3dptfy-requests-${Date.now()}.csv"`);
-  res.send(csv);
-});
-
-// Export JSON
-app.get('/api/export/json', requireAdmin, (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Content-Disposition', `attachment; filename="lm3dptfy-requests-${Date.now()}.json"`);
-  res.send(JSON.stringify(requests, null, 2));
-});
-
-// Manual reload from Sheets
 app.post('/api/sheets/reload', requireAdmin, async (req, res) => {
   await loadRequestsFromSheet();
   res.json({ ok: true, count: requests.length });
 });
 
-// Manual sync to Sheets
 app.post('/api/sheets/sync', requireAdmin, async (req, res) => {
   await writeAllRequestsToSheet();
   res.json({ ok: true, count: requests.length });
@@ -594,13 +534,5 @@ app.post('/api/sheets/sync', requireAdmin, async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
-  console.log(`Homepage: http://localhost:${PORT}/`);
-  console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-
-  if (sheetsClient) {
-    loadRequestsFromSheet().catch(err =>
-      console.error('Initial load from Sheets failed:', err)
-    );
-  }
+  if (sheetsClient) loadRequestsFromSheet().catch(console.error);
 });
