@@ -2,67 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Let Me 3D Print That For You · Admin</title>
+  <title>Admin | Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div class="page-shell">
+    <main class="page-main">
+      <div class="main-inner">
+        <!-- Login section -->
+        <div id="loginCard">
+          <div class="logo-wrap">
+            <img
+              src="/lm3dptfy-logo-tp-cropped.png"
+              alt="Let Me 3D Print That For You"
+              class="main-logo"
+            />
+          </div>
 
-    <header class="site-header">
-      <div class="header-inner">
-        <a class="brand" href="/">
-          <img class="brand-logo" src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
-          <span class="brand-text">
-            <span class="brand-title">Let Me 3D Print That For You</span>
-            <span class="brand-subtitle">Admin dashboard • Private</span>
-          </span>
-        </a>
+          <h1 class="request-title">Admin login</h1>
+          <p class="request-subtitle">Sign in to see and manage quote requests.</p>
 
-        <nav class="nav-links">
-          <a class="nav-link" href="/">Home</a>
-          <button id="logoutBtnTop" class="nav-link" style="border:none;background:none;cursor:pointer;">
-            Log out
-          </button>
-        </nav>
-      </div>
-    </header>
+          <form id="loginForm" class="stl-form">
+            <div class="field-group">
+              <label for="adminEmail" class="field-label">Admin email</label>
+              <input type="email" id="adminEmail" class="field-input" required />
+            </div>
+            <div class="field-group">
+              <label for="adminPassword" class="field-label">Password</label>
+              <input type="password" id="adminPassword" class="field-input" required />
+            </div>
+            <button type="submit" class="btn-primary">Log in</button>
+            <p id="loginStatus" class="status-text" style="display:none;"></p>
+          </form>
+        </div>
 
-    <main class="page-main page-main--top">
-      <div class="main-inner admin-main-inner">
+        <!-- Dashboard section -->
+        <div id="dashboardCard" class="admin-main-inner" style="display:none;">
+          <div class="logo-wrap" style="margin-bottom:24px;">
+            <img
+              src="/lm3dptfy-logo-tp-cropped.png"
+              alt="Let Me 3D Print That For You"
+              class="main-logo"
+            />
+          </div>
 
-        <div class="card hero-card" style="max-width:1100px;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:16px; flex-wrap:wrap;">
             <div>
               <h1 class="admin-header-text">Quote requests</h1>
               <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
             </div>
-
-            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-              <button id="reloadSheetsBtn" class="btn-primary is-inline" style="padding:10px 12px; font-size:0.9rem;">
-                Refresh from Sheets
-              </button>
-              <button id="syncSheetsBtn" class="btn-primary is-inline" style="padding:10px 12px; font-size:0.9rem;">
-                Sync to Sheets
-              </button>
-              <a href="/api/export/csv" class="btn-primary is-inline" style="padding:10px 12px; font-size:0.9rem; text-decoration:none; display:inline-block;">
-                Export CSV
-              </a>
-              <a href="/api/export/json" class="btn-primary is-inline" style="padding:10px 12px; font-size:0.9rem; text-decoration:none; display:inline-block;">
-                Export JSON
-              </a>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <button id="reloadSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Refresh from Sheets</button>
+              <button id="syncSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Sync to Sheets</button>
+              <a href="/api/export/csv" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export CSV</a>
+              <a href="/api/export/json" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export JSON</a>
+              <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
             </div>
           </div>
 
-          <p id="dashboardStatus" class="status-message" style="display:none;"></p>
-        </div>
+          <p id="dashboardStatus" class="status-text" style="display:none;"></p>
 
-        <!-- ACTIVE -->
-        <div class="card" style="max-width:1100px;">
-          <div class="card-pad">
-            <h2 class="info-title" style="margin:0;">Active</h2>
-          </div>
-          <div class="table-wrapper" style="margin-top:0; border-left:0; border-right:0; border-bottom:0; border-radius:0 0 22px 22px;">
+          <div class="table-wrapper">
+            <h2 class="info-title">Active</h2>
             <table class="request-table">
               <thead>
                 <tr>
@@ -70,8 +72,8 @@
                   <th>Name</th>
                   <th>Email</th>
                   <th>STL link</th>
-                  <th>Customer Notes</th>
-                  <th>Admin Notes</th>
+                  <th>Notes</th>
+                  <th>Admin notes</th>
                   <th>Status</th>
                   <th>Fulfilled By</th>
                   <th>Tracking #</th>
@@ -86,14 +88,9 @@
               </tbody>
             </table>
           </div>
-        </div>
 
-        <!-- ARCHIVED -->
-        <div class="card" style="max-width:1100px;">
-          <div class="card-pad">
-            <h2 class="info-title" style="margin:0;">Archived</h2>
-          </div>
-          <div class="table-wrapper" style="margin-top:0; border-left:0; border-right:0; border-bottom:0; border-radius:0 0 22px 22px;">
+          <div class="table-wrapper">
+            <h2 class="info-title">Archived</h2>
             <table class="request-table">
               <thead>
                 <tr>
@@ -101,8 +98,8 @@
                   <th>Name</th>
                   <th>Email</th>
                   <th>STL link</th>
-                  <th>Customer Notes</th>
-                  <th>Admin Notes</th>
+                  <th>Notes</th>
+                  <th>Admin notes</th>
                   <th>Status</th>
                   <th>Fulfilled By</th>
                   <th>Tracking #</th>
@@ -118,24 +115,23 @@
             </table>
           </div>
         </div>
-
-        <p class="small-note" style="max-width:1100px;">
-          Tip: Bookmark <b>/admin</b>. Tracking email opens automatically after you paste a tracking number (when Status is Shipped).
-        </p>
-
       </div>
     </main>
 
     <footer class="site-footer">
-      Let Me 3D Print That For You · Admin (Private)
+      Admin · Keep this page private.
     </footer>
   </div>
 
   <script>
+    const loginForm = document.getElementById('loginForm');
+    const loginStatus = document.getElementById('loginStatus');
+    const loginCard = document.getElementById('loginCard');
+    const dashboardCard = document.getElementById('dashboardCard');
     const activeBody = document.getElementById('activeBody');
     const archivedBody = document.getElementById('archivedBody');
     const dashboardStatus = document.getElementById('dashboardStatus');
-    const logoutBtnTop = document.getElementById('logoutBtnTop');
+    const logoutBtn = document.getElementById('logoutBtn');
     const reloadBtn = document.getElementById('reloadSheetsBtn');
     const syncBtn = document.getElementById('syncSheetsBtn');
 
@@ -173,7 +169,9 @@
       dashboardStatus.style.display = 'block';
       dashboardStatus.classList.toggle('status-error', !!isError);
       dashboardStatus.classList.toggle('status-success', !isError);
-      if (!isError) setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
+      if (!isError) {
+        setTimeout(() => { dashboardStatus.style.display = 'none'; }, 4500);
+      }
     }
 
     function renderRow(r) {
@@ -207,22 +205,21 @@
       }
       tr.appendChild(stlTd);
 
-      // Customer notes
       const notesTd = document.createElement('td');
       notesTd.textContent = r.details || '';
       tr.appendChild(notesTd);
 
-      // Admin notes (editable)
+      // Admin notes (editable textarea)
       const adminNotesTd = document.createElement('td');
-      const adminNotes = document.createElement('textarea');
-      adminNotes.className = 'table-textarea admin-notes';
-      adminNotes.dataset.id = r.id;
-      adminNotes.value = r.adminNotes || '';
-      adminNotes.placeholder = 'What did we email them?';
-      adminNotesTd.appendChild(adminNotes);
+      const adminNotesArea = document.createElement('textarea');
+      adminNotesArea.className = 'table-textarea admin-notes';
+      adminNotesArea.dataset.id = r.id;
+      adminNotesArea.value = r.adminNotes || '';
+      adminNotesArea.rows = 2;
+      adminNotesArea.placeholder = 'What did we email? Pricing? ETA? Questions?';
+      adminNotesTd.appendChild(adminNotesArea);
       tr.appendChild(adminNotesTd);
 
-      // Status
       const statusTd = document.createElement('td');
       const statusSelect = document.createElement('select');
       statusSelect.className = 'status-select';
@@ -237,7 +234,6 @@
       statusTd.appendChild(statusSelect);
       tr.appendChild(statusTd);
 
-      // Fulfilled by
       const fulfilledTd = document.createElement('td');
       const fulfilledSelect = document.createElement('select');
       fulfilledSelect.className = 'status-select fulfilled-select';
@@ -252,7 +248,7 @@
       fulfilledTd.appendChild(fulfilledSelect);
       tr.appendChild(fulfilledTd);
 
-      // Tracking # (editable; enabled only if shipped)
+      // Tracking (enabled only when status=shipped)
       const trackingTd = document.createElement('td');
       const trackingInput = document.createElement('input');
       trackingInput.type = 'text';
@@ -261,12 +257,11 @@
       trackingInput.dataset.email = r.email || '';
       trackingInput.dataset.name = r.name || '';
       trackingInput.value = r.trackingNumber || '';
-      trackingInput.placeholder = 'Paste tracking…';
+      trackingInput.placeholder = (r.status === 'shipped') ? 'Paste tracking…' : 'Set status to Shipped';
       trackingInput.disabled = (r.status !== 'shipped');
       trackingTd.appendChild(trackingInput);
       tr.appendChild(trackingTd);
 
-      // Reply button (manual)
       const replyTd = document.createElement('td');
       const replyBtn = document.createElement('button');
       replyBtn.className = 'link-btn reply-btn';
@@ -277,7 +272,6 @@
       replyTd.appendChild(replyBtn);
       tr.appendChild(replyTd);
 
-      // Archive
       const archiveTd = document.createElement('td');
       const archiveCheckbox = document.createElement('input');
       archiveCheckbox.type = 'checkbox';
@@ -294,10 +288,10 @@
       try {
         const res = await fetch('/api/requests', { credentials: 'include' });
         if (res.status === 401) {
-          window.location.replace('/admin');
+          loginCard.style.display = 'block';
+          dashboardCard.style.display = 'none';
           return;
         }
-
         const data = await res.json();
         const active = data.filter(r => !r.archived);
         const archived = data.filter(r => r.archived);
@@ -317,6 +311,8 @@
           archived.forEach(r => archivedBody.appendChild(renderRow(r)));
         }
 
+        loginCard.style.display = 'none';
+        dashboardCard.style.display = 'block';
         showDashStatus('Loaded ' + data.length + ' request(s).', false);
       } catch (err) {
         console.error('Error loading requests:', err);
@@ -324,39 +320,74 @@
       }
     }
 
-    async function logout() {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginStatus.style.display = 'block';
+      loginStatus.textContent = 'Signing in...';
+      loginStatus.classList.remove('status-error', 'status-success');
+
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value;
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (!res.ok) throw new Error('Invalid email or password');
+
+        loginStatus.textContent = 'Login successful. Loading dashboard...';
+        loginStatus.classList.add('status-success');
+
+        await loadRequests();
+      } catch (err) {
+        console.error('Login error:', err);
+        loginStatus.textContent = err.message;
+        loginStatus.classList.add('status-error');
+      }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
       try {
         await fetch('/api/logout', { method: 'POST', credentials: 'include' });
-      } catch (e) {}
-      window.location.replace('/admin');
+      } catch (e) { /* ignore */ }
+      loginCard.style.display = 'block';
+      dashboardCard.style.display = 'none';
+      loginForm.reset();
+    });
+
+    if (reloadBtn) {
+      reloadBtn.addEventListener('click', async () => {
+        showDashStatus('Refreshing from Google Sheets...', false);
+        try {
+          const res = await fetch('/api/sheets/reload', { method: 'POST', credentials: 'include' });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || 'Reload failed');
+          showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
+          loadRequests();
+        } catch (err) {
+          console.error('Reload error:', err);
+          showDashStatus('Reload failed: ' + err.message, true);
+        }
+      });
     }
 
-    logoutBtnTop.addEventListener('click', logout);
-
-    reloadBtn.addEventListener('click', async () => {
-      showDashStatus('Refreshing from Google Sheets...', false);
-      try {
-        const res = await fetch('/api/sheets/reload', { method: 'POST', credentials: 'include' });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Reload failed');
-        showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
-        loadRequests();
-      } catch (err) {
-        showDashStatus('Reload failed: ' + err.message, true);
-      }
-    });
-
-    syncBtn.addEventListener('click', async () => {
-      showDashStatus('Syncing to Google Sheets...', false);
-      try {
-        const res = await fetch('/api/sheets/sync', { method: 'POST', credentials: 'include' });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Sync failed');
-        showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
-      } catch (err) {
-        showDashStatus('Sync failed: ' + err.message, true);
-      }
-    });
+    if (syncBtn) {
+      syncBtn.addEventListener('click', async () => {
+        showDashStatus('Syncing to Google Sheets...', false);
+        try {
+          const res = await fetch('/api/sheets/sync', { method: 'POST', credentials: 'include' });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || 'Sync failed');
+          showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
+        } catch (err) {
+          console.error('Sync error:', err);
+          showDashStatus('Sync failed: ' + err.message, true);
+        }
+      });
+    }
 
     function handleStatusChange(e) {
       const select = e.target.closest('.status-select');
@@ -366,20 +397,25 @@
       const status = select.value;
 
       showDashStatus('Updating status...', false);
-
       fetch(`/api/requests/${id}/status`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       })
-        .then(res => { if (!res.ok) throw new Error('Failed to update status'); })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to update status');
+          return res.json();
+        })
         .then(() => {
           showDashStatus('Status updated.', false);
-          // refresh rows so tracking input enables when shipped
+          // reload so tracking field enables/disables correctly
           loadRequests();
         })
-        .catch(err => showDashStatus('Error updating status: ' + err.message, true));
+        .catch(err => {
+          console.error('Status update error:', err);
+          showDashStatus('Error updating status: ' + err.message, true);
+        });
     }
 
     function handleFulfilledChange(e) {
@@ -390,36 +426,46 @@
       const fulfilledBy = select.value;
 
       showDashStatus('Updating fulfilled by...', false);
-
       fetch(`/api/requests/${id}/fulfilled`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fulfilledBy }),
       })
-        .then(res => { if (!res.ok) throw new Error('Failed to update fulfilled by'); })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to update fulfilled by');
+          return res.json();
+        })
         .then(() => showDashStatus('Fulfilled by updated.', false))
-        .catch(err => showDashStatus('Error updating fulfilled by: ' + err.message, true));
+        .catch(err => {
+          console.error('Fulfilled update error:', err);
+          showDashStatus('Error updating fulfilled by: ' + err.message, true);
+        });
     }
 
     function handleAdminNotesChange(e) {
-      const ta = e.target.closest('.admin-notes');
-      if (!ta) return;
+      const area = e.target.closest('.admin-notes');
+      if (!area) return;
 
-      const id = ta.dataset.id;
-      const adminNotes = ta.value || '';
+      const id = area.dataset.id;
+      const adminNotes = area.value || '';
 
       showDashStatus('Saving admin notes...', false);
-
-      fetch(`/api/requests/${id}/admin_notes`, {
+      fetch(`/api/requests/${id}/notes`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ adminNotes }),
       })
-        .then(res => { if (!res.ok) throw new Error('Failed to save admin notes'); })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to save admin notes');
+          return res.json();
+        })
         .then(() => showDashStatus('Admin notes saved.', false))
-        .catch(err => showDashStatus('Error saving notes: ' + err.message, true));
+        .catch(err => {
+          console.error('Admin notes update error:', err);
+          showDashStatus('Error saving notes: ' + err.message, true);
+        });
     }
 
     function handleTrackingChange(e) {
@@ -433,41 +479,35 @@
 
       if (!trackingNumber) return;
 
-      // Open a window synchronously (avoids popup blockers), then navigate it after save.
-      // Only do the email-open behavior if the input is enabled (i.e., status is shipped).
-      const shouldOpenEmail = !input.disabled && !!toEmail;
-      const popup = shouldOpenEmail ? window.open('about:blank', '_blank') : null;
-
       showDashStatus('Saving tracking number...', false);
-
       fetch(`/api/requests/${id}/tracking`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ trackingNumber }),
       })
-        .then(async res => {
-          if (!res.ok) {
-            const data = await res.json().catch(() => ({}));
-            throw new Error(data.error || 'Failed to save tracking number');
-          }
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to save tracking number');
+          return res.json();
         })
         .then(() => {
-          showDashStatus('Tracking number saved.', false);
+          showDashStatus('Tracking number saved. Opening email…', false);
 
-          if (shouldOpenEmail && popup) {
-            const subject = `Your LM3DPTFY order has shipped (Tracking: ${trackingNumber})`;
+          if (toEmail) {
+            const subject = 'Your LM3DPTFY shipment tracking';
             const body =
-              `Hi ${name || ''},\n\n` +
-              `Good news — your LM3DPTFY print has shipped!\n\n` +
-              `Tracking number: ${trackingNumber}\n\n` +
-              `Thanks,\nLM3DPTFY`;
-            popup.location = buildGmailUrl(toEmail, subject, body);
+              'Hi ' + (name || 'there') + ',\n\n' +
+              'Your order has shipped!\n\n' +
+              'Tracking number:\n' +
+              trackingNumber + '\n\n' +
+              'If you have any questions, just reply to this email.\n\n' +
+              '— Let Me 3D Print That For You';
+            window.open(buildGmailUrl(toEmail, subject, body), '_blank');
           }
         })
         .catch(err => {
+          console.error('Tracking update error:', err);
           showDashStatus('Error saving tracking: ' + err.message, true);
-          if (popup) popup.close();
         });
     }
 
@@ -479,19 +519,24 @@
       const archived = checkbox.checked;
 
       showDashStatus(archived ? 'Archiving request...' : 'Unarchiving request...', false);
-
       fetch(`/api/requests/${id}/archive`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ archived }),
       })
-        .then(res => { if (!res.ok) throw new Error('Failed to update archive state'); })
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to update archive state');
+          return res.json();
+        })
         .then(() => {
           showDashStatus(archived ? 'Request archived.' : 'Request unarchived.', false);
           loadRequests();
         })
-        .catch(err => showDashStatus('Error updating archive: ' + err.message, true));
+        .catch(err => {
+          console.error('Archive update error:', err);
+          showDashStatus('Error updating archive: ' + err.message, true);
+        });
     }
 
     function handleReplyClick(e) {
@@ -508,8 +553,7 @@
         'Hi ' + name + ',\n\n' +
         'Thanks for your quote request for:\n' +
         stl + '\n\n' +
-        '— LM3DPTFY';
-
+        '— Let Me 3D Print That For You';
       window.open(buildGmailUrl(email, subject, body), '_blank');
     }
 
@@ -519,6 +563,7 @@
     activeBody.addEventListener('change', handleFulfilledChange);
     archivedBody.addEventListener('change', handleFulfilledChange);
 
+    // Save notes/tracking on change (paste + click out)
     activeBody.addEventListener('change', handleAdminNotesChange);
     archivedBody.addEventListener('change', handleAdminNotesChange);
 
