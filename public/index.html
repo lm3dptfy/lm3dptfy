@@ -5,93 +5,83 @@
   <title>Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Paste an STLFlix model link and get a custom 3D printing quote by email." />
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/style.css?v=20251215" />
 </head>
 <body>
   <div class="page-shell">
-
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="/">
-          <img class="brand-logo" src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
-          <span class="brand-text">
-            <span class="brand-title">Let Me 3D Print That For You</span>
-            <span class="brand-subtitle">Fast quotes • Clear ETA • No spam</span>
-          </span>
+        <a class="brand" href="/" style="text-decoration:none;">
+          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY" />
+          <div class="brand-text">
+            <div class="brand-title">Let Me 3D Print That For You</div>
+            <div class="brand-sub">Fast quotes • Clear ETA • No spam</div>
+          </div>
         </a>
-
-        <nav class="nav-links">
-          <a class="nav-link" href="#how-it-works">How it works</a>
-        </nav>
+        <div class="header-actions">
+          <span class="pill">STLFlix → Quote → Print</span>
+        </div>
       </div>
     </header>
 
     <main class="page-main">
-      <div class="main-inner">
+      <div class="container grid grid-hero">
+        <section class="card card-pad-lg">
+          <div class="kicker">⚡ Quick quote workflow</div>
+          <h1 class="hero-title">Turn STL files into real prints.</h1>
+          <p class="hero-subtitle">
+            Paste a public STLFlix link. I’ll email pricing, ETA, and any quick questions before printing.
+          </p>
 
-        <h1 class="hero-title">Turn STL files into real prints.</h1>
-        <p class="hero-subtitle">
-          Paste a public <strong>STL File</strong> link. I’ll email you pricing, ETA, and any quick questions before printing.
-        </p>
-
-        <div class="card hero-card">
-          <form class="stl-form" action="/request.html" method="GET">
-            <div class="field-group">
-              <label for="stlLink" class="field-label">
-                <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
-                  STLFlix model link
-                </a>
-              </label>
+          <form class="form" action="request.html" method="GET">
+            <div class="field">
+              <div class="label">
+                <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">STLFlix model link</a>
+              </div>
               <input
+                class="input"
                 type="url"
                 id="stlLink"
                 name="link"
-                class="field-input big-input"
                 placeholder="https://stlflix.com/..."
                 required
               />
             </div>
 
-            <button type="submit" class="btn-primary">Get Quote</button>
+            <button class="btn" type="submit">Get Quote</button>
+
+            <div class="note">
+              Need a model? Click “STLFlix model link” to browse.
+              I won’t print weapons, illegal items, or obviously infringing IP.
+            </div>
           </form>
+        </section>
 
-          <p class="small-note" style="margin:12px 0 0;">
-            Need a model? Click “STLFlix model link” above to browse files.
-          </p>
-        </div>
-
-        <div id="how-it-works" class="info-stack">
-          <h2 class="info-title">How this works</h2>
-          <ol class="info-list-ol">
-            <li>Find a model on STLFlix and copy the link.</li>
-            <li>Paste it here, then add your name/email on the next step.</li>
-            <li>I’ll reply with a quote + ETA (and any questions) before printing.</li>
-          </ol>
-
-          <div class="info-cards">
-            <div class="info-card">
-              <h3 class="info-card-title">Quote</h3>
-              <p class="info-card-text">Price based on material, size, and print time — no guessing.</p>
+        <aside class="card card-pad">
+          <div class="badge">What you’ll get</div>
+          <div class="grid feature-grid" style="grid-template-columns:1fr; margin-top:12px;">
+            <div class="feature">
+              <h3>Quote</h3>
+              <p>Price based on material, size, and print time — no guessing.</p>
             </div>
-            <div class="info-card">
-              <h3 class="info-card-title">Timeline</h3>
-              <p class="info-card-text">Clear status from “sent to printer” to “shipped”.</p>
+            <div class="feature">
+              <h3>Timeline</h3>
+              <p>Clear status from “sent to printer” to “shipped”.</p>
             </div>
-            <div class="info-card">
-              <h3 class="info-card-title">Next steps</h3>
-              <p class="info-card-text">Approve, tweak, or ask questions — quick and simple.</p>
+            <div class="feature">
+              <h3>Next steps</h3>
+              <p>Approve, tweak, or ask questions — quick and simple.</p>
             </div>
           </div>
 
-          <p class="small-note">
-            I won’t print weapons, illegal items, or obviously infringing IP.
-          </p>
-        </div>
-
+          <div class="note" style="margin-top:14px;">
+            Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+          </div>
+        </aside>
       </div>
     </main>
 
-    <footer class="site-footer">
+    <footer class="footer">
       Let Me 3D Print That For You · LM3DPTFY.online ·
       Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
     </footer>
