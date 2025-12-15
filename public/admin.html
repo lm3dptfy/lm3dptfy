@@ -2,71 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin | LM3DPTFY Requests</title>
+  <title>Let Me 3D Print That For You · Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div class="page-shell">
-    <main class="page-main">
-      <div class="main-inner">
-        <!-- Login section -->
-        <div id="loginCard">
-          <div class="logo-wrap">
-            <img
-              src="lm3dptfy-logo-tp-cropped.png"
-              alt="LM3DPTFY.online - Let Me 3D Print That For You"
-              class="main-logo"
-            />
-          </div>
 
-          <h1 class="request-title">Admin login</h1>
-          <p class="request-subtitle">Sign in to see and manage quote requests.</p>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/">
+          <img class="brand-logo" src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
+          <span class="brand-text">
+            <span class="brand-title">Let Me 3D Print That For You</span>
+            <span class="brand-subtitle">Admin dashboard • Private</span>
+          </span>
+        </a>
 
-          <form id="loginForm" class="stl-form">
-            <div class="field-group">
-              <label for="adminEmail" class="field-label">Admin email</label>
-              <input type="email" id="adminEmail" class="field-input" required />
-            </div>
-            <div class="field-group">
-              <label for="adminPassword" class="field-label">Password</label>
-              <input type="password" id="adminPassword" class="field-input" required />
-            </div>
-            <!-- CHANGE IS HERE: use btn-primary so it matches "Get Quote" -->
-            <button type="submit" class="btn-primary">Log in</button>
-            <p id="loginStatus" class="status-text" style="display:none;"></p>
-          </form>
-        </div>
+        <nav class="nav-links">
+          <a class="nav-link" href="/">Home</a>
+          <button id="logoutBtnTop" class="nav-link" style="border:none;background:none;cursor:pointer;">
+            Log out
+          </button>
+        </nav>
+      </div>
+    </header>
 
-        <!-- Dashboard section -->
-        <div id="dashboardCard" class="admin-main-inner" style="display:none;">
-          <div class="logo-wrap" style="margin-bottom:24px;">
-            <!-- Centered logo, NOT clickable -->
-            <img
-              src="lm3dptfy-logo-tp-cropped.png"
-              alt="LM3DPTFY.online - Let Me 3D Print That For You"
-              class="main-logo"
-            />
-          </div>
+    <main class="page-main page-main--top">
+      <div class="main-inner admin-main-inner">
 
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; gap:16px; flex-wrap:wrap;">
+        <div class="card hero-card" style="max-width:1100px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap;">
             <div>
               <h1 class="admin-header-text">Quote requests</h1>
               <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
             </div>
-            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-              <button id="reloadSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Refresh from Sheets</button>
-              <button id="syncSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Sync to Sheets</button>
-              <a href="/api/export/csv" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export CSV</a>
-              <a href="/api/export/json" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none; display:inline-block;">Export JSON</a>
-              <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
+
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <button id="reloadSheetsBtn" class="btn-primary is-inline" style="padding:10px 12px; font-size:0.9rem;">
+                Refresh from Sheets
+              </button>
+              <button id="syncSheetsBtn" class="btn-primary is-inline" style="padding:10px 12px; font-size:0.9rem;">
+                Sync to Sheets
+              </button>
+              <a href="/api/export/csv" class="btn-primary is-inline" style="padding:10px 12px; font-size:0.9rem; text-decoration:none; display:inline-block;">
+                Export CSV
+              </a>
+              <a href="/api/export/json" class="btn-primary is-inline" style="padding:10px 12px; font-size:0.9rem; text-decoration:none; display:inline-block;">
+                Export JSON
+              </a>
             </div>
           </div>
 
-          <p id="dashboardStatus" class="status-text" style="display:none;"></p>
+          <p id="dashboardStatus" class="status-message" style="display:none;"></p>
+        </div>
 
-          <div class="table-wrapper">
-            <h2 class="info-title">Active</h2>
+        <div class="card" style="max-width:1100px;">
+          <div class="card-pad">
+            <h2 class="info-title" style="margin:0;">Active</h2>
+          </div>
+          <div class="table-wrapper" style="margin-top:0; border-left:0; border-right:0; border-bottom:0; border-radius:0 0 22px 22px;">
             <table class="request-table">
               <thead>
                 <tr>
@@ -88,9 +83,13 @@
               </tbody>
             </table>
           </div>
+        </div>
 
-          <div class="table-wrapper">
-            <h2 class="info-title">Archived</h2>
+        <div class="card" style="max-width:1100px;">
+          <div class="card-pad">
+            <h2 class="info-title" style="margin:0;">Archived</h2>
+          </div>
+          <div class="table-wrapper" style="margin-top:0; border-left:0; border-right:0; border-bottom:0; border-radius:0 0 22px 22px;">
             <table class="request-table">
               <thead>
                 <tr>
@@ -113,23 +112,24 @@
             </table>
           </div>
         </div>
+
+        <p class="small-note" style="max-width:1100px;">
+          Tip: Bookmark <b>/admin</b>. This page is meant to stay private.
+        </p>
+
       </div>
     </main>
 
     <footer class="site-footer">
-      LM3DPTFY Admin · Keep this page private.
+      Let Me 3D Print That For You · Admin (Private)
     </footer>
   </div>
 
   <script>
-    const loginForm = document.getElementById('loginForm');
-    const loginStatus = document.getElementById('loginStatus');
-    const loginCard = document.getElementById('loginCard');
-    const dashboardCard = document.getElementById('dashboardCard');
     const activeBody = document.getElementById('activeBody');
     const archivedBody = document.getElementById('archivedBody');
     const dashboardStatus = document.getElementById('dashboardStatus');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutBtnTop = document.getElementById('logoutBtnTop');
     const reloadBtn = document.getElementById('reloadSheetsBtn');
     const syncBtn = document.getElementById('syncSheetsBtn');
 
@@ -160,6 +160,14 @@
       url += '&su=' + encodeURIComponent(subject);
       url += '&body=' + encodeURIComponent(body);
       return url;
+    }
+
+    function showDashStatus(msg, isError) {
+      dashboardStatus.textContent = msg;
+      dashboardStatus.style.display = 'block';
+      dashboardStatus.classList.toggle('status-error', !!isError);
+      dashboardStatus.classList.toggle('status-success', !isError);
+      if (!isError) setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
     }
 
     function renderRow(r) {
@@ -247,24 +255,14 @@
       return tr;
     }
 
-    function showDashStatus(msg, isError) {
-      dashboardStatus.textContent = msg;
-      dashboardStatus.style.display = 'block';
-      dashboardStatus.classList.toggle('status-error', !!isError);
-      dashboardStatus.classList.toggle('status-success', !isError);
-      if (!isError) {
-        setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
-      }
-    }
-
     async function loadRequests() {
       try {
         const res = await fetch('/api/requests', { credentials: 'include' });
         if (res.status === 401) {
-          loginCard.style.display = 'block';
-          dashboardCard.style.display = 'none';
+          window.location.replace('/admin');
           return;
         }
+
         const data = await res.json();
         const active = data.filter(r => !r.archived);
         const archived = data.filter(r => r.archived);
@@ -284,8 +282,6 @@
           archived.forEach(r => archivedBody.appendChild(renderRow(r)));
         }
 
-        loginCard.style.display = 'none';
-        dashboardCard.style.display = 'block';
         showDashStatus('Loaded ' + data.length + ' request(s).', false);
       } catch (err) {
         console.error('Error loading requests:', err);
@@ -293,152 +289,107 @@
       }
     }
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      loginStatus.style.display = 'block';
-      loginStatus.textContent = 'Signing in...';
-      loginStatus.classList.remove('status-error', 'status-success');
-
-      const email = document.getElementById('adminEmail').value.trim();
-      const password = document.getElementById('adminPassword').value;
-
+    async function logout() {
       try {
-        const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
+        await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+      } catch (e) {}
+      window.location.replace('/admin');
+    }
 
-        if (!res.ok) throw new Error('Invalid email or password');
+    logoutBtnTop.addEventListener('click', logout);
 
-        loginStatus.textContent = 'Login successful. Loading dashboard...';
-        loginStatus.classList.add('status-success');
-
-        await loadRequests();
+    reloadBtn.addEventListener('click', async () => {
+      showDashStatus('Refreshing from Google Sheets...', false);
+      try {
+        const res = await fetch('/api/sheets/reload', { method: 'POST', credentials: 'include' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Reload failed');
+        showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
+        loadRequests();
       } catch (err) {
-        console.error('Login error:', err);
-        loginStatus.textContent = err.message;
-        loginStatus.classList.add('status-error');
+        showDashStatus('Reload failed: ' + err.message, true);
       }
     });
 
-    logoutBtn.addEventListener('click', async () => {
+    syncBtn.addEventListener('click', async () => {
+      showDashStatus('Syncing to Google Sheets...', false);
       try {
-        await fetch('/api/logout', { method: 'POST', credentials: 'include' });
-      } catch (e) { /* ignore */ }
-      loginCard.style.display = 'block';
-      dashboardCard.style.display = 'none';
-      loginForm.reset();
+        const res = await fetch('/api/sheets/sync', { method: 'POST', credentials: 'include' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Sync failed');
+        showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
+      } catch (err) {
+        showDashStatus('Sync failed: ' + err.message, true);
+      }
     });
-
-    if (reloadBtn) {
-      reloadBtn.addEventListener('click', async () => {
-        showDashStatus('Refreshing from Google Sheets...', false);
-        try {
-          const res = await fetch('/api/sheets/reload', { method: 'POST', credentials: 'include' });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || 'Reload failed');
-          showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
-          loadRequests();
-        } catch (err) {
-          console.error('Reload error:', err);
-          showDashStatus('Reload failed: ' + err.message, true);
-        }
-      });
-    }
-
-    if (syncBtn) {
-      syncBtn.addEventListener('click', async () => {
-        showDashStatus('Syncing to Google Sheets...', false);
-        try {
-          const res = await fetch('/api/sheets/sync', { method: 'POST', credentials: 'include' });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || 'Sync failed');
-          showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
-        } catch (err) {
-          console.error('Sync error:', err);
-          showDashStatus('Sync failed: ' + err.message, true);
-        }
-      });
-    }
 
     function handleStatusChange(e) {
       const select = e.target.closest('.status-select');
       if (!select || select.classList.contains('fulfilled-select')) return;
+
       const id = select.dataset.id;
       const status = select.value;
+
       showDashStatus('Updating status...', false);
+
       fetch(`/api/requests/${id}/status`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to update status');
-          return res.json();
-        })
+        .then(res => { if (!res.ok) throw new Error('Failed to update status'); })
         .then(() => showDashStatus('Status updated.', false))
-        .catch(err => {
-          console.error('Status update error:', err);
-          showDashStatus('Error updating status: ' + err.message, true);
-        });
+        .catch(err => showDashStatus('Error updating status: ' + err.message, true));
     }
 
     function handleFulfilledChange(e) {
       const select = e.target.closest('.fulfilled-select');
       if (!select) return;
+
       const id = select.dataset.id;
       const fulfilledBy = select.value;
+
       showDashStatus('Updating fulfilled by...', false);
+
       fetch(`/api/requests/${id}/fulfilled`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fulfilledBy }),
       })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to update fulfilled by');
-          return res.json();
-        })
+        .then(res => { if (!res.ok) throw new Error('Failed to update fulfilled by'); })
         .then(() => showDashStatus('Fulfilled by updated.', false))
-        .catch(err => {
-          console.error('Fulfilled update error:', err);
-          showDashStatus('Error updating fulfilled by: ' + err.message, true);
-        });
+        .catch(err => showDashStatus('Error updating fulfilled by: ' + err.message, true));
     }
 
     function handleArchiveChange(e) {
       const checkbox = e.target.closest('.archive-checkbox');
       if (!checkbox) return;
+
       const id = checkbox.dataset.id;
       const archived = checkbox.checked;
+
       showDashStatus(archived ? 'Archiving request...' : 'Unarchiving request...', false);
+
       fetch(`/api/requests/${id}/archive`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ archived }),
       })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to update archive state');
-          return res.json();
-        })
-        .then(() => {
-          showDashStatus(archived ? 'Request archived.' : 'Request unarchived.', false);
-          loadRequests();
-        })
-        .catch(err => {
-          console.error('Archive update error:', err);
-          showDashStatus('Error updating archive: ' + err.message, true);
-        });
+        .then(res => { if (!res.ok) throw new Error('Failed to update archive state'); })
+        .then(() => { showDashStatus(archived ? 'Request archived.' : 'Request unarchived.', false); loadRequests(); })
+        .catch(err => showDashStatus('Error updating archive: ' + err.message, true));
     }
 
     function handleReplyClick(e) {
       const btn = e.target.closest('.reply-btn');
       if (!btn) return;
+
       const email = btn.dataset.email;
       if (!email) return;
+
       const name = btn.dataset.name || '';
       const stl = btn.dataset.stl || '';
       const subject = 'LM3DPTFY Quote Reply';
@@ -447,6 +398,7 @@
         'Thanks for your quote request for:\n' +
         stl + '\n\n' +
         '— LM3DPTFY';
+
       window.open(buildGmailUrl(email, subject, body), '_blank');
     }
 
@@ -459,7 +411,6 @@
     activeBody.addEventListener('click', handleReplyClick);
     archivedBody.addEventListener('click', handleReplyClick);
 
-    // Initial load (will show dashboard only if already logged in)
     loadRequests();
   </script>
 </body>
