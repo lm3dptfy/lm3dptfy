@@ -64,6 +64,7 @@ a{ color:inherit; }
   align-items:center;
   gap:12px;
   text-decoration:none;
+  min-width: 0;
 }
 
 .brand img{
@@ -74,22 +75,30 @@ a{ color:inherit; }
   box-shadow: 0 10px 24px rgba(15,23,42,.12);
   background:#fff;
   border: 1px solid var(--border);
+  flex: 0 0 auto;
 }
 
 .brand-title{
   display:flex;
   flex-direction:column;
   line-height:1.1;
+  min-width: 0;
 }
 
 .brand-title strong{
   font-size:.95rem;
   letter-spacing:.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .brand-title span{
   font-size:.78rem;
   color:var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-right{
@@ -128,10 +137,10 @@ a{ color:inherit; }
 
 .main-inner{
   width:100%;
-  max-width: 980px; /* default */
+  max-width: 980px;
 }
 
-/* Admin pages get more width to avoid horizontal scrolling */
+/* Admin pages get more width */
 body.admin-page .main-inner{
   max-width: 1220px;
 }
@@ -180,11 +189,8 @@ body.admin-page .topbar-inner{
   border-radius: 999px;
 }
 
-.btn-ghost{
-  background: rgba(255,255,255,.65);
-  border: 1px solid var(--border);
-  color: var(--text);
-  box-shadow: none;
+.btn-block{
+  width: 100%;
 }
 
 .field-label{
@@ -208,7 +214,7 @@ body.admin-page .topbar-inner{
   font: inherit;
   outline:none;
   transition: box-shadow var(--transition), border-color var(--transition);
-  min-width: 0; /* IMPORTANT: prevents table inputs from forcing overflow */
+  min-width: 0;
 }
 
 .field-input:focus{
@@ -243,11 +249,11 @@ textarea.field-input{
   line-height: 1.45;
 }
 
-/* ✅ FIX #1: make the main form card the SAME width as the bottom boxes */
+/* ✅ card width now matches the bottom section width */
 .form-card{
   margin: 18px auto 18px;
   width: 100%;
-  max-width: 980px; /* was smaller before */
+  max-width: none;           /* key fix */
   padding: 20px;
 }
 
@@ -351,6 +357,14 @@ textarea.field-input{
   background: rgba(255,255,255,.55);
 }
 
+.site-footer a{
+  color: var(--accent);
+  text-decoration:none;
+}
+.site-footer a:hover{
+  text-decoration:underline;
+}
+
 /* =========================
    ADMIN TABLE (NO HORIZONTAL SCROLL)
 ========================= */
@@ -388,13 +402,12 @@ textarea.field-input{
 }
 
 .table-wrapper{
-  /* ✅ FIX #2: remove the forced horizontal scrollbar on desktop */
   overflow-x: hidden;
 }
 
 .request-table{
   width: 100%;
-  table-layout: fixed; /* IMPORTANT: prevents overflow */
+  table-layout: fixed;
   border-collapse: collapse;
 }
 
@@ -454,6 +467,7 @@ textarea.field-input{
   padding: 9px 10px;
   background: #fff;
   font: inherit;
+  font-size: .88rem;
 }
 
 .reply-link{
@@ -461,26 +475,26 @@ textarea.field-input{
   font-weight: 700;
 }
 
+/* ✅ Admin column widths updated so STATUS shows full text */
+col.col-created{ width: 11%; }
+col.col-name{ width: 7%; }
+col.col-email{ width: 13%; }
+col.col-stl{ width: 4%; }
+col.col-notes{ width: 12%; }
+col.col-adminnotes{ width: 18%; }
+col.col-status{ width: 13%; }     /* widened */
+col.col-fulfilled{ width: 8%; }   /* slightly smaller */
+col.col-tracking{ width: 9%; }
+col.col-reply{ width: 3%; }
+col.col-archive{ width: 2%; }
+
 .tip{
   margin: 10px 0 0;
   color: var(--muted);
   font-size: .85rem;
 }
 
-/* Column widths (must match <colgroup>) */
-col.col-created{ width: 10%; }
-col.col-name{ width: 7%; }
-col.col-email{ width: 13%; }
-col.col-stl{ width: 5%; }
-col.col-notes{ width: 11%; }
-col.col-adminnotes{ width: 17%; }
-col.col-status{ width: 10%; }
-col.col-fulfilled{ width: 10%; }
-col.col-tracking{ width: 10%; }
-col.col-reply{ width: 4%; }
-col.col-archive{ width: 3%; }
-
-/* Responsive: on smaller screens, allow scroll instead of cutting off */
+/* Responsive: allow scroll only on smaller screens */
 @media (max-width: 1100px){
   .table-wrapper{ overflow-x: auto; }
 }
