@@ -2,69 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Request a 3D Print Quote | LM3DPTFY</title>
+  <title>Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div class="page-shell">
+
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/">
+          <img class="brand-logo" src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
+          <span class="brand-text">
+            <span class="brand-title">Let Me 3D Print That For You</span>
+            <span class="brand-subtitle">Fast quotes • Clear ETA • No spam</span>
+          </span>
+        </a>
+
+        <nav class="nav-links">
+          <a class="nav-link" href="/#how-it-works">How it works</a>
+        </nav>
+      </div>
+    </header>
+
     <main class="page-main">
       <div class="main-inner">
-        <div class="logo-wrap">
-          <a href="/" class="logo-link">
-            <img
-              src="lm3dptfy-logo-tp-cropped.png"
-              alt="LM3DPTFY.online - Let Me 3D Print That For You"
-              class="main-logo"
-            />
-          </a>
+
+        <div class="card hero-card">
+          <h1 class="request-title">Where should I send your quote?</h1>
+          <p class="request-subtitle">
+            I'll review your STLFlix model, estimate material and print time, then email you a quote.
+          </p>
+
+          <form id="quoteForm" class="stl-form" novalidate>
+            <input type="hidden" id="stlLinkHidden" name="stlLink" />
+
+            <div class="field-row">
+              <div class="field-group">
+                <label for="name" class="field-label">Your name</label>
+                <input type="text" id="name" name="name" class="field-input" autocomplete="name" required />
+              </div>
+
+              <div class="field-group">
+                <label for="email" class="field-label">Email</label>
+                <input type="email" id="email" name="email" class="field-input" autocomplete="email" required />
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="details" class="field-label">Notes about this print (optional)</label>
+              <textarea
+                id="details"
+                name="details"
+                rows="4"
+                class="field-input"
+                placeholder="Size, color preference, deadline, what it will be used for…"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">Submit request</button>
+
+            <p id="statusMessage" class="status-message" style="display:none;"></p>
+          </form>
+
+          <p class="small-note">
+            Typical replies in &lt;24h • If I have questions about wall thickness, orientation, or supports, I'll ask before printing.
+          </p>
         </div>
 
-        <h1 class="request-title">Where should I send your quote?</h1>
-        <p class="request-subtitle">
-          I'll review your STLFlix model, estimate material and print time, then email you a quote.
-        </p>
-
-        <form id="quoteForm" class="stl-form">
-          <!-- Hidden field to store the STL link -->
-          <input type="hidden" id="stlLinkHidden" name="stlLink" />
-
-          <div class="field-row">
-            <div class="field-group">
-              <label for="name" class="field-label">Your name</label>
-              <input type="text" id="name" name="name" class="field-input" required />
-            </div>
-
-            <div class="field-group">
-              <label for="email" class="field-label">Email</label>
-              <input type="email" id="email" name="email" class="field-input" required />
-            </div>
-          </div>
-
-          <div class="field-group">
-            <label for="details" class="field-label">
-              Notes about this print (optional)
-            </label>
-            <textarea
-              id="details"
-              name="details"
-              rows="4"
-              class="field-input"
-              placeholder="Size, color preference, deadline, what it will be used for…"
-            ></textarea>
-          </div>
-
-          <button type="submit" class="btn-primary" style="width:100%;">
-            Submit request
-          </button>
-
-          <p id="statusMessage" class="status-message" style="display:none;"></p>
-        </form>
-
-        <p class="small-note">
-          I usually respond within one business day. If I have questions about wall thickness,
-          print orientation, or supports, I'll ask before printing.
-        </p>
       </div>
     </main>
 
@@ -75,14 +80,10 @@
   </div>
 
   <script>
-    // Get the STL link from URL when page loads
     const urlParams = new URLSearchParams(window.location.search);
     const stlLink = urlParams.get('link') || '';
-    
-    // Store it in hidden field
     document.getElementById('stlLinkHidden').value = stlLink;
 
-    // If no link provided, show warning
     if (!stlLink) {
       const statusMessage = document.getElementById('statusMessage');
       statusMessage.textContent = '⚠ No STL link provided. Please go back to the homepage and paste a link.';
@@ -90,14 +91,12 @@
       statusMessage.style.display = 'block';
     }
 
-    // Handle form submission
     document.getElementById('quoteForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      
+
       const statusMessage = document.getElementById('statusMessage');
       const submitButton = e.target.querySelector('button[type="submit"]');
-      
-      // Show loading state
+
       statusMessage.textContent = 'Sending your request...';
       statusMessage.style.display = 'block';
       statusMessage.classList.remove('status-success', 'status-error');
@@ -111,7 +110,6 @@
         details: document.getElementById('details').value
       };
 
-      // Validate we have a link
       if (!payload.stlLink || payload.stlLink.trim() === '') {
         statusMessage.textContent = '✗ Error: No STL link provided. Please go back to the homepage.';
         statusMessage.classList.add('status-error');
@@ -123,7 +121,7 @@
       try {
         const response = await fetch('/api/requests', {
           method: 'POST',
-          headers: { 
+          headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
@@ -133,21 +131,16 @@
 
         const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to submit request');
-        }
+        if (!response.ok) throw new Error(data.error || 'Failed to submit request');
 
-        // Success!
         statusMessage.textContent = '✓ Request sent successfully! Redirecting to homepage...';
         statusMessage.classList.add('status-success');
-        
-        // Redirect to homepage after 1.5 seconds
+
         setTimeout(function() {
           window.location.href = '/';
         }, 1500);
 
       } catch (error) {
-        // Error
         statusMessage.textContent = '✗ Error: ' + error.message + '. Please email me at lm3dptfy@gmail.com';
         statusMessage.classList.add('status-error');
         submitButton.disabled = false;
