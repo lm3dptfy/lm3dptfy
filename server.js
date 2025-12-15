@@ -118,17 +118,20 @@ async function sendNotificationEmail(newRequest) {
   const { name, email, stlLink, details } = newRequest;
 
   const subject = `New LM3DPTFY quote request from ${name}`;
+  const baseUrl = process.env.BACKEND_URL || 'https://www.lm3dptfy.online';
+
   const html = `
     <h2>New Quote Request</h2>
     <p><strong>Name:</strong> ${name}</p>
     <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
     <p><strong>STLFlix link:</strong> <a href="${stlLink}">${stlLink}</a></p>
     <p><strong>Details:</strong> ${details || '(none)'}</p>
-    <p><a href="${process.env.BACKEND_URL || 'https://www.lm3dptfy.online'}/admin.html">View in Admin Panel</a></p>
+    <p><a href="${baseUrl}/admin">Open Admin Panel</a></p>
   `;
 
   try {
     console.log('Attempting to send admin notification email via Resend to:', NOTIFY_EMAIL);
+
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -137,8 +140,7 @@ async function sendNotificationEmail(newRequest) {
       },
       body: JSON.stringify({
         from: EMAIL_FROM,
-        // IMPORTANT: single string, not array
-        to: NOTIFY_EMAIL,
+        to: NOTIFY_EMAIL, // IMPORTANT: single string
         subject,
         html,
       }),
@@ -161,6 +163,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Needed for secure cookies behind Render/NGINX proxies
+app.set('trust proxy', 1);
+
 const SESSION_SECRET = process.env.SESSION_SECRET || 'change_this_in_production';
 
 app.use(
@@ -169,7 +174,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: (process.env.NODE_ENV || '').toLowerCase() === 'production',
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: 'lax',
@@ -177,14 +182,14 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, 'public')));
-
 // ========== HELPERS ==============================================
 
+function isAdminAuthed(req) {
+  return !!(req.session && req.session.admin && req.session.admin.email === ADMIN_EMAIL);
+}
+
 function requireAdmin(req, res, next) {
-  if (req.session && req.session.admin && req.session.admin.email === ADMIN_EMAIL) {
-    return next();
-  }
+  if (isAdminAuthed(req)) return next();
   res.status(401).json({ error: 'Unauthorized' });
 }
 
@@ -248,7 +253,7 @@ function requestToRow(reqObj) {
     reqObj.email || '',
     reqObj.stlLink || '',
     reqObj.details || '',
-    statusToSheet(reqObj.status || 'new'), // pretty, capitalized in Sheets
+    statusToSheet(reqObj.status || 'new'),
     reqObj.fulfilledBy || '',
     reqObj.archived ? 'Yes' : 'No',
   ];
@@ -281,11 +286,7 @@ async function loadRequestsFromSheet() {
   }
 
   try {
-    // Ensure headers
-    await Promise.all([
-      ensureHeader(ACTIVE_SHEET_NAME),
-      ensureHeader(ARCHIVED_SHEET_NAME),
-    ]);
+    await Promise.all([ensureHeader(ACTIVE_SHEET_NAME), ensureHeader(ARCHIVED_SHEET_NAME)]);
 
     const [activeRes, archivedRes] = await Promise.all([
       sheetsClient.spreadsheets.values.get({
@@ -342,7 +343,6 @@ async function writeAllRequestsToSheet() {
   const activeValues = [SHEET_HEADER, ...active.map(requestToRow)];
   const archivedValues = [SHEET_HEADER, ...archived.map(requestToRow)];
 
-  // Clear old rows under header so nothing lingers
   await Promise.all([
     sheetsClient.spreadsheets.values.clear({
       spreadsheetId: GOOGLE_SHEET_ID,
@@ -376,6 +376,165 @@ async function writeAllRequestsToSheet() {
   );
 }
 
+// ========== ADMIN PAGE GATE (HIDE FROM PUBLIC) ====================
+
+const PUBLIC_DIR = path.join(__dirname, 'public');
+const ADMIN_DASHBOARD_FILE = path.join(PUBLIC_DIR, 'admin.html');
+
+function adminLoginHtml() {
+  const logoPath = process.env.LOGO_PATH || '/lm3dptfy-logo-tp-cropped.png';
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Login · Let Me 3D Print That For You</title>
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1000px 600px at 50% -10%, rgba(37,99,235,.12), transparent 60%),
+                  radial-gradient(900px 500px at 10% 20%, rgba(0,0,0,.06), transparent 55%),
+                  #f6f7fb;
+      padding: 24px;
+    }
+    .card {
+      width: 100%; max-width: 520px; background: rgba(255,255,255,.85);
+      border: 1px solid rgba(0,0,0,.08); border-radius: 22px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.08);
+      backdrop-filter: blur(10px);
+      padding: 22px;
+    }
+    .top { display:flex; align-items:center; gap:12px; margin-bottom: 14px; }
+    .logo {
+      width: 40px; height: 40px; border-radius: 14px; background: #fff;
+      display:grid; place-items:center; border: 1px solid rgba(0,0,0,.08);
+      overflow:hidden;
+    }
+    .logo img { width: 100%; height: 100%; object-fit: contain; }
+    h1 { font-size: 22px; margin: 0; }
+    p { margin: 10px 0 18px; color: rgba(0,0,0,.68); line-height: 1.35; }
+    label { display:block; font-size: 13px; margin: 10px 0 6px; color: rgba(0,0,0,.72); }
+    input {
+      width: 100%; height: 46px; border-radius: 14px; border: 1px solid rgba(0,0,0,.14);
+      padding: 0 14px; font-size: 15px; outline: none; background: #fff;
+    }
+    input:focus { border-color: rgba(37,99,235,.55); box-shadow: 0 0 0 4px rgba(37,99,235,.12); }
+    button {
+      width: 100%; height: 48px; border-radius: 14px; border: none; cursor: pointer;
+      background: linear-gradient(180deg, #3b82f6, #2563eb);
+      color: #fff; font-size: 16px; font-weight: 700; margin-top: 14px;
+    }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+    .err { margin-top: 12px; color: #b91c1c; font-size: 14px; display:none; }
+    .hint { margin-top: 14px; font-size: 12px; color: rgba(0,0,0,.55); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      <div class="logo"><img src="${logoPath}" alt="LM3DPTFY logo" onerror="this.style.display='none'"/></div>
+      <div>
+        <h1>Admin Login</h1>
+        <div style="font-size:12px;color:rgba(0,0,0,.55)">Let Me 3D Print That For You</div>
+      </div>
+    </div>
+    <p>Sign in to view and manage quote requests.</p>
+
+    <form id="f">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="username" placeholder="lm3dptfy+admin@gmail.com" required />
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required />
+
+      <button id="btn" type="submit">Sign in</button>
+      <div class="err" id="err"></div>
+      <div class="hint">Tip: Bookmark <b>/admin</b>. The dashboard is not linked publicly.</div>
+    </form>
+  </div>
+
+  <script>
+    (async function(){
+      try {
+        const me = await fetch('/api/me');
+        const data = await me.json();
+        if (data && data.admin) location.replace('/admin');
+      } catch(e){}
+    })();
+
+    const f = document.getElementById('f');
+    const btn = document.getElementById('btn');
+    const err = document.getElementById('err');
+
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.style.display = 'none';
+      btn.disabled = true;
+
+      const payload = {
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value
+      };
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) throw new Error('Invalid credentials');
+
+        location.replace('/admin');
+      } catch (e) {
+        err.textContent = 'Login failed. Check your email/password.';
+        err.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>`;
+}
+
+// Block direct public access to admin static assets (dashboard stays behind /admin)
+app.use((req, res, next) => {
+  if (req.method !== 'GET') return next();
+
+  const p = req.path;
+
+  // Let /admin.html safely redirect to /admin (login page is still protected)
+  if (p === '/admin.html') return next();
+
+  // If you later add separate admin assets, keep them private too
+  const isAdminAsset =
+    p === '/admin.js' ||
+    p === '/admin.css' ||
+    /^\/admin.*\.(map|js|css)$/i.test(p);
+
+  if (isAdminAsset && !isAdminAuthed(req)) {
+    return res.status(404).send('Not found');
+  }
+
+  return next();
+});
+
+// Serve public assets
+app.use(express.static(PUBLIC_DIR));
+
+// Admin route (private)
+app.get('/admin', (req, res) => {
+  if (!isAdminAuthed(req)) return res.status(200).send(adminLoginHtml());
+  return res.sendFile(ADMIN_DASHBOARD_FILE);
+});
+
+// Back-compat: /admin.html -> /admin
+app.get('/admin.html', (req, res) => res.redirect('/admin'));
+
 // ========== ROUTES ===============================================
 
 // Health check
@@ -383,12 +542,8 @@ app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
     env: process.env.NODE_ENV || 'development',
-    adminEmail: ADMIN_EMAIL,
-    notifyEmail: NOTIFY_EMAIL,
-    sheetId: GOOGLE_SHEET_ID,
-    activeSheet: ACTIVE_SHEET_NAME,
-    archivedSheet: ARCHIVED_SHEET_NAME,
     emailEnabled: EMAIL_ENABLED,
+    sheetsEnabled: !!sheetsClient,
   });
 });
 
@@ -418,14 +573,12 @@ app.post('/api/requests', async (req, res) => {
   requests.unshift(newRequest);
   console.log('New request created:', newRequest);
 
-  // Persist to Sheets (this will put it on Active tab)
   if (sheetsClient) {
     writeAllRequestsToSheet().catch(err =>
       console.error('Sheets sync failed (new request):', err)
     );
   }
 
-  // Fire-and-forget notification
   sendNotificationEmail(newRequest).catch(() => {});
 
   res.status(201).json({ ok: true, id: newRequest.id });
@@ -435,6 +588,7 @@ app.post('/api/requests', async (req, res) => {
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
   console.log('Login attempt for:', email);
+
   if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
     req.session.admin = { email };
     return res.json({ ok: true });
@@ -443,15 +597,11 @@ app.post('/api/login', (req, res) => {
 });
 
 app.post('/api/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.json({ ok: true });
-  });
+  req.session.destroy(() => res.json({ ok: true }));
 });
 
 app.get('/api/me', (req, res) => {
-  if (req.session && req.session.admin) {
-    return res.json({ admin: req.session.admin });
-  }
+  if (req.session && req.session.admin) return res.json({ admin: req.session.admin });
   res.json({ admin: null });
 });
 
@@ -470,9 +620,7 @@ app.post('/api/requests/:id/status', requireAdmin, async (req, res) => {
   }
 
   const r = requests.find(x => x.id === id);
-  if (!r) {
-    return res.status(404).json({ error: 'Request not found' });
-  }
+  if (!r) return res.status(404).json({ error: 'Request not found' });
 
   r.status = status;
   r.updatedAt = new Date().toISOString();
@@ -492,9 +640,7 @@ app.post('/api/requests/:id/fulfilled', requireAdmin, async (req, res) => {
   const { fulfilledBy } = req.body;
 
   const r = requests.find(x => x.id === id);
-  if (!r) {
-    return res.status(404).json({ error: 'Request not found' });
-  }
+  if (!r) return res.status(404).json({ error: 'Request not found' });
 
   r.fulfilledBy = fulfilledBy || '';
   r.updatedAt = new Date().toISOString();
@@ -508,7 +654,7 @@ app.post('/api/requests/:id/fulfilled', requireAdmin, async (req, res) => {
   }
 });
 
-// Archive / unarchive (moves between tabs)
+// Archive / unarchive
 app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
   const { id } = req.params;
   const { archived } = req.body;
@@ -518,9 +664,7 @@ app.post('/api/requests/:id/archive', requireAdmin, async (req, res) => {
   }
 
   const r = requests.find(x => x.id === id);
-  if (!r) {
-    return res.status(404).json({ error: 'Request not found' });
-  }
+  if (!r) return res.status(404).json({ error: 'Request not found' });
 
   r.archived = archived;
   r.updatedAt = new Date().toISOString();
@@ -542,18 +686,11 @@ app.get('/api/export/csv', requireAdmin, (req, res) => {
 
     const csv = [
       headers.join(','),
-      ...rows.map(r =>
-        r
-          .map(field => `"${String(field).replace(/"/g, '""')}"`)
-          .join(',')
-      ),
+      ...rows.map(r => r.map(field => `"${String(field).replace(/"/g, '""')}"`).join(',')),
     ].join('\n');
 
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="lm3dptfy-requests-${Date.now()}.csv"`
-    );
+    res.setHeader('Content-Disposition', `attachment; filename="lm3dptfy-requests-${Date.now()}.csv"`);
     res.send(csv);
   } catch (err) {
     console.error('Export CSV error:', err);
@@ -565,10 +702,7 @@ app.get('/api/export/csv', requireAdmin, (req, res) => {
 app.get('/api/export/json', requireAdmin, (req, res) => {
   try {
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="lm3dptfy-requests-${Date.now()}.json"`
-    );
+    res.setHeader('Content-Disposition', `attachment; filename="lm3dptfy-requests-${Date.now()}.json"`);
     res.send(JSON.stringify(requests, null, 2));
   } catch (err) {
     console.error('Export JSON error:', err);
@@ -602,7 +736,7 @@ app.post('/api/sheets/sync', requireAdmin, async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
-  console.log(`Admin panel: http://localhost:${PORT}/admin.html`);
+  console.log(`Admin panel: http://localhost:${PORT}/admin`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Admin login email: ${ADMIN_EMAIL}`);
   console.log(`Notification email target: ${NOTIFY_EMAIL}`);
