@@ -2,431 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin | Let Me 3D Print That For You</title>
+  <title>Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/style.css?v=20251215" />
+  <meta name="description" content="Paste an STL File link and get a custom 3D printing quote by email." />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div class="page-shell">
-    <header class="site-header">
-      <div class="header-inner">
-        <a class="brand" href="/" style="text-decoration:none;">
-          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY" />
-          <div class="brand-text">
-            <div class="brand-title">Let Me 3D Print That For You</div>
-            <div class="brand-sub">Admin</div>
-          </div>
-        </a>
-        <div class="header-actions">
-          <button id="logoutBtn" class="pill" style="cursor:pointer;">Log out</button>
-        </div>
-      </div>
-    </header>
-
     <main class="page-main">
-      <div class="container">
-        <!-- Login -->
-        <section id="loginCard" class="card card-pad-lg" style="max-width:520px; margin:0 auto;">
-          <div class="kicker">🔒 Admin login</div>
-          <h1 class="hero-title" style="margin-top:0;">Sign in</h1>
-          <p class="hero-subtitle">Manage quote requests, statuses, notes, and tracking.</p>
+      <div class="main-inner">
+        <div class="logo-wrap">
+          <img
+            src="/lm3dptfy-logo-tp-cropped.png"
+            alt="Let Me 3D Print That For You"
+            class="main-logo"
+          />
+        </div>
 
-          <form id="loginForm" class="form">
-            <div class="field">
-              <label class="label" for="adminEmail">Admin email</label>
-              <input class="input" type="email" id="adminEmail" required />
-            </div>
-            <div class="field">
-              <label class="label" for="adminPassword">Password</label>
-              <input class="input" type="password" id="adminPassword" required />
-            </div>
-            <button type="submit" class="btn">Log in</button>
-            <div id="loginStatus" class="status"></div>
-          </form>
-        </section>
+        <p class="hero-subtitle">
+          Paste a public <strong>STL File</strong> link and I'll email you a quote for printing it.
+        </p>
 
-        <!-- Dashboard -->
-        <section id="dashboardCard" class="card card-pad-lg" style="display:none; margin-top:14px;">
-          <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;">
-            <div>
-              <div class="badge">Quote requests</div>
-              <div class="note" style="margin-top:8px;">Active + archived requests from lm3dptfy.online</div>
-            </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-              <button id="reloadSheetsBtn" class="pill" style="cursor:pointer;">Refresh from Sheets</button>
-              <button id="syncSheetsBtn" class="pill" style="cursor:pointer;">Sync to Sheets</button>
-              <a class="pill" href="/api/export/csv">Export CSV</a>
-              <a class="pill" href="/api/export/json">Export JSON</a>
-            </div>
-          </div>
+        <form class="stl-form" action="request.html" method="GET">
+          <label for="stlLink" class="field-label">
+            <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
+               STLFlix model link
+            </a>
+          </label>
+          <input
+            type="url"
+            id="stlLink"
+            name="link"
+            class="field-input big-input"
+            placeholder="https://stlflix.com/..."
+            required
+          />
+          <button type="submit" class="btn-primary">Get Quote</button>
+        </form>
 
-          <div id="dashboardStatus" class="status" style="margin-top:12px;"></div>
+        <div class="info-stack">
+          <h2 class="info-title">How this works</h2>
+          <ol class="info-list-ol">
+            <li>Find a model on STLFlix or other site and copy the link.</li>
+            <li>Paste it here and tell me what you have in mind.</li>
+            <li>I'll email your quote, ETA, and any questions.</li>
+          </ol>
 
-          <div class="table-wrap" style="margin-top:14px;">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Created</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>STL</th>
-                  <th>Customer Notes</th>
-                  <th>Admin Notes</th>
-                  <th>Status</th>
-                  <th>Fulfilled By</th>
-                  <th>Tracking #</th>
-                  <th>Reply</th>
-                  <th>Archive</th>
-                </tr>
-              </thead>
-              <tbody id="rowsBody">
-                <tr><td colspan="11" style="padding:16px;">Loading…</td></tr>
-              </tbody>
-            </table>
-          </div>
+          <h2 class="info-title" style="margin-top:8px;">What I'll send you</h2>
+          <ul class="info-list">
+            <li>Pricing based on material, size, and print time.</li>
+            <li>A clear timeline from "sent to printer" to "shipped".</li>
+            <li>Simple next steps to approve or tweak your order.</li>
+          </ul>
+        </div>
 
-          <div class="note" style="margin-top:12px;">Tip: Set status to <b>Shipped</b> to enable Tracking #.</div>
-        </section>
+        <p class="small-note">
+          Need a model? Click "STLFlix model link" above to browse files on STLFlix.
+        </p>
+        <p class="small-note">
+          I won't print weapons, illegal items, or obviously infringing IP.
+        </p>
       </div>
     </main>
 
-    <footer class="footer">Admin · Keep this page private.</footer>
+    <footer class="site-footer">
+      Let Me 3D Print That For You · LM3DPTFY.online ·
+      Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+    </footer>
   </div>
-
-  <script>
-    const loginForm = document.getElementById('loginForm');
-    const loginCard = document.getElementById('loginCard');
-    const dashboardCard = document.getElementById('dashboardCard');
-    const loginStatus = document.getElementById('loginStatus');
-    const dashboardStatus = document.getElementById('dashboardStatus');
-    const rowsBody = document.getElementById('rowsBody');
-
-    const logoutBtn = document.getElementById('logoutBtn');
-    const reloadBtn = document.getElementById('reloadSheetsBtn');
-    const syncBtn = document.getElementById('syncSheetsBtn');
-
-    const STATUS_OPTIONS = [
-      { value: 'new', label: 'New' },
-      { value: 'responded', label: 'Responded' },
-      { value: 'quote_approved', label: 'Quote approved' },
-      { value: 'sent_to_printer', label: 'Sent to printer' },
-      { value: 'print_complete', label: 'Print complete' },
-      { value: 'qc_complete', label: 'QC complete' },
-      { value: 'shipped', label: 'Shipped' },
-      { value: 'paid', label: 'Paid' },
-    ];
-
-    const FULFILLED_BY_OPTIONS = [
-      { value: '', label: '-- None --' },
-      { value: 'Jared', label: 'Jared' },
-      { value: 'Robert', label: 'Robert' },
-      { value: 'Terence', label: 'Terence' },
-    ];
-
-    const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
-
-    function setStatus(el, type, msg){
-      el.className = 'status ' + (type === 'ok' ? 'ok' : 'err');
-      el.textContent = msg;
-    }
-
-    function buildGmailUrl(toEmail, subject, body) {
-      let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
-      url += '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER);
-      url += '&to=' + encodeURIComponent(toEmail);
-      url += '&su=' + encodeURIComponent(subject);
-      url += '&body=' + encodeURIComponent(body);
-      return url;
-    }
-
-    function renderRow(r){
-      const tr = document.createElement('tr');
-
-      const tdCreated = document.createElement('td');
-      tdCreated.textContent = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
-      tr.appendChild(tdCreated);
-
-      const tdName = document.createElement('td');
-      tdName.textContent = r.name || '';
-      tr.appendChild(tdName);
-
-      const tdEmail = document.createElement('td');
-      if (r.email){
-        const a = document.createElement('a');
-        a.href = 'mailto:' + r.email;
-        a.textContent = r.email;
-        tdEmail.appendChild(a);
-      }
-      tr.appendChild(tdEmail);
-
-      const tdStl = document.createElement('td');
-      if (r.stlLink){
-        const a = document.createElement('a');
-        a.href = r.stlLink;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.textContent = 'View';
-        tdStl.appendChild(a);
-      }
-      tr.appendChild(tdStl);
-
-      const tdCustNotes = document.createElement('td');
-      tdCustNotes.textContent = r.details || '';
-      tr.appendChild(tdCustNotes);
-
-      const tdAdminNotes = document.createElement('td');
-      const ta = document.createElement('textarea');
-      ta.className = 'table-textarea admin-notes';
-      ta.dataset.id = r.id;
-      ta.value = r.adminNotes || '';
-      ta.placeholder = 'What did we email? Pricing/ETA/questions…';
-      tdAdminNotes.appendChild(ta);
-      tr.appendChild(tdAdminNotes);
-
-      const tdStatus = document.createElement('td');
-      const selStatus = document.createElement('select');
-      selStatus.className = 'table-select status-select';
-      selStatus.dataset.id = r.id;
-      STATUS_OPTIONS.forEach(opt=>{
-        const o=document.createElement('option');
-        o.value=opt.value;
-        o.textContent=opt.label;
-        if ((r.status||'new')===opt.value) o.selected=true;
-        selStatus.appendChild(o);
-      });
-      tdStatus.appendChild(selStatus);
-      tr.appendChild(tdStatus);
-
-      const tdFulfilled = document.createElement('td');
-      const selFul = document.createElement('select');
-      selFul.className = 'table-select fulfilled-select';
-      selFul.dataset.id = r.id;
-      FULFILLED_BY_OPTIONS.forEach(opt=>{
-        const o=document.createElement('option');
-        o.value=opt.value;
-        o.textContent=opt.label;
-        if ((r.fulfilledBy||'')===opt.value) o.selected=true;
-        selFul.appendChild(o);
-      });
-      tdFulfilled.appendChild(selFul);
-      tr.appendChild(tdFulfilled);
-
-      const tdTracking = document.createElement('td');
-      const inp = document.createElement('input');
-      inp.type = 'text';
-      inp.className = 'table-input tracking-input';
-      inp.dataset.id = r.id;
-      inp.dataset.email = r.email || '';
-      inp.dataset.name = r.name || '';
-      inp.value = r.trackingNumber || '';
-      inp.disabled = (r.status !== 'shipped');
-      inp.placeholder = (r.status === 'shipped') ? 'Paste tracking…' : 'Set to Shipped';
-      tdTracking.appendChild(inp);
-      tr.appendChild(tdTracking);
-
-      const tdReply = document.createElement('td');
-      const btnReply = document.createElement('button');
-      btnReply.className = 'link-btn reply-btn';
-      btnReply.dataset.email = r.email || '';
-      btnReply.dataset.name = r.name || '';
-      btnReply.dataset.stl = r.stlLink || '';
-      btnReply.textContent = 'Reply';
-      tdReply.appendChild(btnReply);
-      tr.appendChild(tdReply);
-
-      const tdArch = document.createElement('td');
-      const cb = document.createElement('input');
-      cb.type = 'checkbox';
-      cb.className = 'archive-checkbox';
-      cb.dataset.id = r.id;
-      cb.checked = !!r.archived;
-      tdArch.appendChild(cb);
-      tr.appendChild(tdArch);
-
-      return tr;
-    }
-
-    async function loadRequests(){
-      const res = await fetch('/api/requests', { credentials:'include' });
-      if (res.status === 401){
-        loginCard.style.display = 'block';
-        dashboardCard.style.display = 'none';
-        return;
-      }
-      const data = await res.json();
-      rowsBody.innerHTML = '';
-      data.forEach(r => rowsBody.appendChild(renderRow(r)));
-
-      loginCard.style.display = 'none';
-      dashboardCard.style.display = 'block';
-      setStatus(dashboardStatus,'ok','Loaded ' + data.length + ' request(s).');
-    }
-
-    loginForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      setStatus(loginStatus,'ok','Signing in…');
-
-      const email = document.getElementById('adminEmail').value.trim();
-      const password = document.getElementById('adminPassword').value;
-
-      const res = await fetch('/api/login', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ email, password })
-      });
-
-      if (!res.ok){
-        setStatus(loginStatus,'err','Invalid email or password.');
-        return;
-      }
-
-      setStatus(loginStatus,'ok','Login successful. Loading…');
-      await loadRequests();
-    });
-
-    logoutBtn.addEventListener('click', async ()=>{
-      try { await fetch('/api/logout', { method:'POST', credentials:'include' }); } catch(e){}
-      loginCard.style.display='block';
-      dashboardCard.style.display='none';
-      rowsBody.innerHTML = '';
-    });
-
-    reloadBtn.addEventListener('click', async ()=>{
-      setStatus(dashboardStatus,'ok','Refreshing from Google Sheets…');
-      const res = await fetch('/api/sheets/reload', { method:'POST', credentials:'include' });
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok) return setStatus(dashboardStatus,'err', data.error || 'Reload failed');
-      setStatus(dashboardStatus,'ok','Reloaded ' + (data.count||0) + ' request(s).');
-      loadRequests();
-    });
-
-    syncBtn.addEventListener('click', async ()=>{
-      setStatus(dashboardStatus,'ok','Syncing to Google Sheets…');
-      const res = await fetch('/api/sheets/sync', { method:'POST', credentials:'include' });
-      const data = await res.json().catch(()=>({}));
-      if (!res.ok) return setStatus(dashboardStatus,'err', data.error || 'Sync failed');
-      setStatus(dashboardStatus,'ok','Synced ' + (data.count||0) + ' request(s).');
-    });
-
-    rowsBody.addEventListener('change', (e)=>{
-      const t = e.target;
-
-      // Status change
-      if (t.classList.contains('status-select')){
-        const id = t.dataset.id;
-        const status = t.value;
-        setStatus(dashboardStatus,'ok','Updating status…');
-        fetch(`/api/requests/${id}/status`, {
-          method:'POST', credentials:'include',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ status })
-        })
-        .then(r=>{ if(!r.ok) throw new Error('Failed'); })
-        .then(()=>{ setStatus(dashboardStatus,'ok','Status updated.'); loadRequests(); })
-        .catch(()=> setStatus(dashboardStatus,'err','Status update failed.'));
-      }
-
-      // Fulfilled change
-      if (t.classList.contains('fulfilled-select')){
-        const id = t.dataset.id;
-        const fulfilledBy = t.value;
-        setStatus(dashboardStatus,'ok','Updating fulfilled by…');
-        fetch(`/api/requests/${id}/fulfilled`, {
-          method:'POST', credentials:'include',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ fulfilledBy })
-        })
-        .then(r=>{ if(!r.ok) throw new Error('Failed'); })
-        .then(()=> setStatus(dashboardStatus,'ok','Fulfilled by updated.'))
-        .catch(()=> setStatus(dashboardStatus,'err','Fulfilled by update failed.'));
-      }
-
-      // Admin notes save (on blur/change)
-      if (t.classList.contains('admin-notes')){
-        const id = t.dataset.id;
-        const adminNotes = t.value || '';
-        setStatus(dashboardStatus,'ok','Saving admin notes…');
-        fetch(`/api/requests/${id}/notes`, {
-          method:'POST', credentials:'include',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ adminNotes })
-        })
-        .then(r=>{ if(!r.ok) throw new Error('Failed'); })
-        .then(()=> setStatus(dashboardStatus,'ok','Admin notes saved.'))
-        .catch(()=> setStatus(dashboardStatus,'err','Saving notes failed.'));
-      }
-
-      // Tracking save + open email
-      if (t.classList.contains('tracking-input')){
-        const id = t.dataset.id;
-        const trackingNumber = (t.value || '').trim();
-        const toEmail = t.dataset.email || '';
-        const name = t.dataset.name || '';
-
-        if (!trackingNumber) return;
-
-        // open compose immediately (avoids popup blockers), then save
-        let win = null;
-        if (toEmail){
-          const subject = 'Your LM3DPTFY shipment tracking';
-          const body =
-            'Hi ' + (name || 'there') + ',\n\n' +
-            'Your order has shipped!\n\n' +
-            'Tracking number:\n' +
-            trackingNumber + '\n\n' +
-            'If you have any questions, just reply to this email.\n\n' +
-            '— Let Me 3D Print That For You';
-          win = window.open(buildGmailUrl(toEmail, subject, body), '_blank');
-        }
-
-        setStatus(dashboardStatus,'ok','Saving tracking number…');
-        fetch(`/api/requests/${id}/tracking`, {
-          method:'POST', credentials:'include',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ trackingNumber })
-        })
-        .then(r=>{ if(!r.ok) throw new Error('Failed'); })
-        .then(()=> setStatus(dashboardStatus,'ok','Tracking saved.'))
-        .catch(()=> {
-          setStatus(dashboardStatus,'err','Saving tracking failed.');
-          if (win && !win.closed) win.close();
-        });
-      }
-
-      // Archive toggle
-      if (t.classList.contains('archive-checkbox')){
-        const id = t.dataset.id;
-        const archived = t.checked;
-        setStatus(dashboardStatus,'ok', archived ? 'Archiving…' : 'Unarchiving…');
-        fetch(`/api/requests/${id}/archive`, {
-          method:'POST', credentials:'include',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ archived })
-        })
-        .then(r=>{ if(!r.ok) throw new Error('Failed'); })
-        .then(()=>{ setStatus(dashboardStatus,'ok','Updated.'); loadRequests(); })
-        .catch(()=> setStatus(dashboardStatus,'err','Archive update failed.'));
-      }
-    });
-
-    rowsBody.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.reply-btn');
-      if (!btn) return;
-      const email = btn.dataset.email || '';
-      if (!email) return;
-      const name = btn.dataset.name || '';
-      const stl = btn.dataset.stl || '';
-      const subject = 'LM3DPTFY Quote Reply';
-      const body =
-        'Hi ' + name + ',\n\n' +
-        'Thanks for your quote request for:\n' +
-        stl + '\n\n' +
-        '— Let Me 3D Print That For You';
-      window.open(buildGmailUrl(email, subject, body), '_blank');
-    });
-
-    // Initial
-    loadRequests();
-  </script>
 </body>
 </html>
