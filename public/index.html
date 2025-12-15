@@ -4,70 +4,77 @@
   <meta charset="UTF-8" />
   <title>Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Paste an STL File link and get a custom 3D printing quote by email." />
-  <link rel="stylesheet" href="/style.css" />
+  <meta name="description" content="Paste an STLFlix model link and get a custom 3D printing quote by email." />
+  <link rel="stylesheet" href="/style.css?v=modern2" />
 </head>
 <body>
   <div class="page-shell">
+    <header class="header">
+      <div class="header-inner">
+        <a class="brand" href="/" style="text-decoration:none;">
+          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY" />
+          <div class="brand-text">
+            <div class="brand-title">Let Me 3D Print That For You</div>
+            <div class="brand-sub">Fast quotes • Clear ETA • No spam</div>
+          </div>
+        </a>
+        <nav class="nav">
+          <a href="#how">How it works</a>
+        </nav>
+      </div>
+    </header>
+
     <main class="page-main">
-      <div class="main-inner">
-        <div class="logo-wrap">
-          <img
-            src="/lm3dptfy-logo-tp-cropped.png"
-            alt="Let Me 3D Print That For You"
-            class="main-logo"
-          />
-        </div>
+      <div class="container">
+        <section class="hero">
+          <h1>Turn STLFlix models into real prints.</h1>
+          <p>Paste a public <b>STLFlix</b> link. I’ll email you pricing, ETA, and any quick questions before printing.</p>
+        </section>
 
-        <p class="hero-subtitle">
-          Paste a public <strong>STL File</strong> link and I'll email you a quote for printing it.
-        </p>
+        <section class="card form-card">
+          <form action="request.html" method="GET">
+            <label class="field-label" for="stlLink">
+              <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">STLFlix model link</a>
+            </label>
+            <input class="field-input" type="url" id="stlLink" name="link" placeholder="https://stlflix.com/..." required />
+            <button class="btn-primary" type="submit">Get Quote</button>
+            <div class="small-note">Need a model? Click “STLFlix model link” above to browse files.</div>
+          </form>
+        </section>
 
-        <form class="stl-form" action="request.html" method="GET">
-          <label for="stlLink" class="field-label">
-            <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
-               STLFlix model link
-            </a>
-          </label>
-          <input
-            type="url"
-            id="stlLink"
-            name="link"
-            class="field-input big-input"
-            placeholder="https://stlflix.com/..."
-            required
-          />
-          <button type="submit" class="btn-primary">Get Quote</button>
-        </form>
-
-        <div class="info-stack">
-          <h2 class="info-title">How this works</h2>
-          <ol class="info-list-ol">
-            <li>Find a model on STLFlix or other site and copy the link.</li>
-            <li>Paste it here and tell me what you have in mind.</li>
-            <li>I'll email your quote, ETA, and any questions.</li>
+        <section id="how">
+          <div class="section-title">How this works</div>
+          <ol class="ol">
+            <li>Find a model on STLFlix and copy the link.</li>
+            <li>Paste it here, then add your name/email on the next step.</li>
+            <li>I’ll reply with a quote + ETA (and any questions) before printing.</li>
           </ol>
 
-          <h2 class="info-title" style="margin-top:8px;">What I'll send you</h2>
-          <ul class="info-list">
-            <li>Pricing based on material, size, and print time.</li>
-            <li>A clear timeline from "sent to printer" to "shipped".</li>
-            <li>Simple next steps to approve or tweak your order.</li>
-          </ul>
-        </div>
+          <div class="features">
+            <div class="feature">
+              <h3>Quote</h3>
+              <p>Price based on material, size, and print time — no guessing.</p>
+            </div>
+            <div class="feature">
+              <h3>Timeline</h3>
+              <p>Clear status from “sent to printer” to “shipped”.</p>
+            </div>
+            <div class="feature">
+              <h3>Next steps</h3>
+              <p>Approve, tweak, or ask questions — quick and simple.</p>
+            </div>
+          </div>
 
-        <p class="small-note">
-          Need a model? Click "STLFlix model link" above to browse files on STLFlix.
-        </p>
-        <p class="small-note">
-          I won't print weapons, illegal items, or obviously infringing IP.
-        </p>
+          <div class="small-note" style="margin-top:14px;">
+            I won’t print weapons, illegal items, or obviously infringing IP.
+          </div>
+        </section>
       </div>
     </main>
 
-    <footer class="site-footer">
-      Let Me 3D Print That For You · LM3DPTFY.online ·
-      Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+    <footer class="footer">
+      Let Me 3D Print That For You · LM3DPTFY.online · Questions? Email
+      <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
     </footer>
   </div>
 </body>
