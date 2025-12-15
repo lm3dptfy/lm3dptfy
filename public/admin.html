@@ -2,72 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin | LM3DPTFY Requests</title>
+  <title>Admin | Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/style.css?v=modern2" />
 </head>
 <body>
   <div class="page-shell">
+    <header class="header">
+      <div class="header-inner">
+        <a class="brand" href="/" style="text-decoration:none;">
+          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY" />
+          <div class="brand-text">
+            <div class="brand-title">Let Me 3D Print That For You</div>
+            <div class="brand-sub">Admin dashboard • Private</div>
+          </div>
+        </a>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a href="#" id="logoutLink">Log out</a>
+        </nav>
+      </div>
+    </header>
+
     <main class="page-main">
-      <div class="main-inner admin-main-inner">
-        <!-- Login section -->
-        <div id="loginCard">
-          <div class="logo-wrap">
-            <img
-              src="/lm3dptfy-logo-tp-cropped.png"
-              alt="Let Me 3D Print That For You"
-              class="main-logo"
-            />
+      <div class="admin-wrap">
+        <!-- LOGIN -->
+        <section class="card admin-card" id="loginCard">
+          <div class="admin-top">
+            <div>
+              <h2>Admin login</h2>
+              <p>Sign in to see and manage quote requests.</p>
+            </div>
           </div>
 
-          <h1 class="request-title">Admin login</h1>
-          <p class="request-subtitle">Sign in to see and manage quote requests.</p>
+          <form id="loginForm" style="max-width:520px; margin-top:12px;">
+            <label class="field-label" for="adminEmail">Admin email</label>
+            <input class="field-input" type="email" id="adminEmail" required />
 
-          <form id="loginForm" class="stl-form">
-            <div class="field-group">
-              <label for="adminEmail" class="field-label">Admin email</label>
-              <input type="email" id="adminEmail" class="field-input" required />
-            </div>
-            <div class="field-group">
-              <label for="adminPassword" class="field-label">Password</label>
-              <input type="password" id="adminPassword" class="field-input" required />
-            </div>
-            <button type="submit" class="btn-primary">Log in</button>
-            <p id="loginStatus" class="status-message" style="display:none;"></p>
+            <div style="height:10px;"></div>
+
+            <label class="field-label" for="adminPassword">Password</label>
+            <input class="field-input" type="password" id="adminPassword" required />
+
+            <button class="btn-primary" type="submit" style="max-width:520px;">Log in</button>
+            <div id="loginStatus" class="status-message"></div>
           </form>
-        </div>
+        </section>
 
-        <!-- Dashboard section -->
-        <div id="dashboardCard" style="display:none; width:100%;">
-          <div class="top-util-bar">
-            <div class="logo-link" style="gap:10px;">
-              <span class="brand-mark">LM3DPTFY Admin</span>
+        <!-- DASHBOARD -->
+        <section class="card admin-card" id="dashboardCard" style="display:none;">
+          <div class="admin-top">
+            <div>
+              <h2>Quote requests</h2>
+              <p>Active and archived requests from lm3dptfy.online.</p>
             </div>
-            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-              <button id="reloadSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Refresh from Sheets</button>
-              <button id="syncSheetsBtn" class="btn-primary" style="padding:6px 12px; font-size:0.8rem;">Sync to Sheets</button>
-              <a href="/api/export/csv" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none;">Export CSV</a>
-              <a href="/api/export/json" class="btn-primary" style="padding:6px 12px; font-size:0.8rem; text-decoration:none;">Export JSON</a>
-              <button id="logoutBtn" class="link-btn logout-btn">Log out</button>
+            <div class="actions">
+              <button class="btn-small" id="reloadSheetsBtn" type="button">Refresh from Sheets</button>
+              <button class="btn-small" id="syncSheetsBtn" type="button">Sync to Sheets</button>
+              <a class="btn-small" href="/api/export/csv" style="display:inline-block;">Export CSV</a>
+              <a class="btn-small" href="/api/export/json" style="display:inline-block;">Export JSON</a>
             </div>
           </div>
 
-          <h1 class="admin-header-text">Quote requests</h1>
-          <p class="admin-subtitle">Active and archived requests from lm3dptfy.online.</p>
+          <div id="dashboardStatus" class="status-message" style="margin-top:10px;"></div>
 
-          <p id="dashboardStatus" class="status-message" style="display:none;"></p>
-
-          <div class="table-wrapper">
-            <h2 class="info-title">Active</h2>
-            <table class="request-table">
+          <div style="margin-top:14px; font-weight:900;">Active</div>
+          <div class="table-wrap">
+            <table class="table">
               <thead>
                 <tr>
                   <th>Created</th>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>STL</th>
-                  <th>Customer Notes</th>
+                  <th>STL link</th>
+                  <th>Notes</th>
                   <th>Admin Notes</th>
                   <th>Status</th>
                   <th>Fulfilled By</th>
@@ -77,22 +86,25 @@
                 </tr>
               </thead>
               <tbody id="activeBody">
-                <tr><td colspan="11" style="text-align:center;padding:20px;">Loading…</td></tr>
+                <tr><td colspan="11" style="padding:16px;">Loading…</td></tr>
               </tbody>
             </table>
-            <p class="small-note" style="margin-top:8px;">Tip: Set status to <strong>Shipped</strong> to enable Tracking #.</p>
           </div>
 
-          <div class="table-wrapper">
-            <h2 class="info-title">Archived</h2>
-            <table class="request-table">
+          <div class="small-note" style="text-align:left; margin-top:10px;">
+            Tip: Set status to <b>Shipped</b> to enable Tracking #. When you paste tracking, an email draft opens automatically.
+          </div>
+
+          <div style="margin-top:18px; font-weight:900;">Archived</div>
+          <div class="table-wrap">
+            <table class="table">
               <thead>
                 <tr>
                   <th>Created</th>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>STL</th>
-                  <th>Customer Notes</th>
+                  <th>STL link</th>
+                  <th>Notes</th>
                   <th>Admin Notes</th>
                   <th>Status</th>
                   <th>Fulfilled By</th>
@@ -102,30 +114,33 @@
                 </tr>
               </thead>
               <tbody id="archivedBody">
-                <tr><td colspan="11" style="text-align:center;padding:20px;">No archived requests.</td></tr>
+                <tr><td colspan="11" style="padding:16px;">No archived requests.</td></tr>
               </tbody>
             </table>
           </div>
-        </div>
+
+          <div class="small-note" style="text-align:left; margin-top:12px;">
+            Tip: Bookmark <b>/admin</b> or <b>/admin.html</b>. This page is meant to stay private.
+          </div>
+        </section>
       </div>
     </main>
 
-    <footer class="site-footer">
-      LM3DPTFY Admin · Keep this page private.
-    </footer>
+    <footer class="footer">LM3DPTFY Admin · Keep this page private.</footer>
   </div>
 
   <script>
     const loginForm = document.getElementById('loginForm');
-    const loginStatus = document.getElementById('loginStatus');
     const loginCard = document.getElementById('loginCard');
     const dashboardCard = document.getElementById('dashboardCard');
+    const loginStatus = document.getElementById('loginStatus');
+    const dashboardStatus = document.getElementById('dashboardStatus');
     const activeBody = document.getElementById('activeBody');
     const archivedBody = document.getElementById('archivedBody');
-    const dashboardStatus = document.getElementById('dashboardStatus');
-    const logoutBtn = document.getElementById('logoutBtn');
+
     const reloadBtn = document.getElementById('reloadSheetsBtn');
     const syncBtn = document.getElementById('syncSheetsBtn');
+    const logoutLink = document.getElementById('logoutLink');
 
     const STATUS_OPTIONS = [
       { value: 'new', label: 'New' },
@@ -142,7 +157,7 @@
       { value: '', label: '-- None --' },
       { value: 'Jared', label: 'Jared' },
       { value: 'Robert', label: 'Robert' },
-      { value: 'Terence', label: 'Terence' }
+      { value: 'Terence', label: 'Terence' },
     ];
 
     const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
@@ -156,305 +171,247 @@
       return url;
     }
 
-    function showDashStatus(msg, isError) {
-      dashboardStatus.textContent = msg;
-      dashboardStatus.style.display = 'block';
-      dashboardStatus.classList.toggle('status-error', !!isError);
-      dashboardStatus.classList.toggle('status-success', !isError);
-      if (!isError) setTimeout(() => { dashboardStatus.style.display = 'none'; }, 5000);
+    function setMsg(el, msg, ok=true){
+      el.textContent = msg;
+      el.style.display = 'block';
+      el.classList.toggle('status-success', ok);
+      el.classList.toggle('status-error', !ok);
     }
 
-    function renderRow(r) {
+    function renderRow(r){
       const tr = document.createElement('tr');
 
-      const createdTd = document.createElement('td');
-      createdTd.textContent = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
-      tr.appendChild(createdTd);
+      const tdCreated = document.createElement('td');
+      tdCreated.textContent = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
+      tr.appendChild(tdCreated);
 
-      const nameTd = document.createElement('td');
-      nameTd.textContent = r.name || '';
-      tr.appendChild(nameTd);
+      const tdName = document.createElement('td');
+      tdName.textContent = r.name || '';
+      tr.appendChild(tdName);
 
-      const emailTd = document.createElement('td');
-      if (r.email) {
+      const tdEmail = document.createElement('td');
+      if (r.email){
         const a = document.createElement('a');
         a.href = 'mailto:' + r.email;
         a.textContent = r.email;
-        emailTd.appendChild(a);
+        tdEmail.appendChild(a);
       }
-      tr.appendChild(emailTd);
+      tr.appendChild(tdEmail);
 
-      const stlTd = document.createElement('td');
-      if (r.stlLink) {
+      const tdStl = document.createElement('td');
+      if (r.stlLink){
         const a = document.createElement('a');
         a.href = r.stlLink;
         a.target = '_blank';
         a.rel = 'noopener noreferrer';
-        a.textContent = 'View';
-        stlTd.appendChild(a);
+        a.textContent = 'View STL';
+        tdStl.appendChild(a);
       }
-      tr.appendChild(stlTd);
+      tr.appendChild(tdStl);
 
-      const custNotesTd = document.createElement('td');
-      custNotesTd.textContent = r.details || '';
-      tr.appendChild(custNotesTd);
+      const tdNotes = document.createElement('td');
+      tdNotes.textContent = r.details || '';
+      tr.appendChild(tdNotes);
 
-      // Admin notes (NEW)
-      const adminNotesTd = document.createElement('td');
-      const adminNotes = document.createElement('textarea');
-      adminNotes.className = 'field-input admin-notes';
-      adminNotes.rows = 2;
-      adminNotes.placeholder = 'What did we email?';
-      adminNotes.dataset.id = r.id;
-      adminNotes.value = r.adminNotes || '';
-      adminNotesTd.appendChild(adminNotes);
-      tr.appendChild(adminNotesTd);
+      // Admin Notes (saved to Sheets)
+      const tdAdminNotes = document.createElement('td');
+      const ta = document.createElement('textarea');
+      ta.className = 'cell-input cell-textarea admin-notes';
+      ta.placeholder = 'What did we email the user?';
+      ta.dataset.id = r.id;
+      ta.value = r.adminNotes || '';
+      tdAdminNotes.appendChild(ta);
+      tr.appendChild(tdAdminNotes);
 
-      const statusTd = document.createElement('td');
-      const statusSelect = document.createElement('select');
-      statusSelect.className = 'status-select';
-      statusSelect.dataset.id = r.id;
-      STATUS_OPTIONS.forEach(opt => {
+      const tdStatus = document.createElement('td');
+      const selStatus = document.createElement('select');
+      selStatus.className = 'select status-select';
+      selStatus.dataset.id = r.id;
+      STATUS_OPTIONS.forEach(opt=>{
         const o = document.createElement('option');
         o.value = opt.value;
         o.textContent = opt.label;
-        if ((r.status || 'new') === opt.value) o.selected = true;
-        statusSelect.appendChild(o);
+        if ((r.status||'new') === opt.value) o.selected = true;
+        selStatus.appendChild(o);
       });
-      statusTd.appendChild(statusSelect);
-      tr.appendChild(statusTd);
+      tdStatus.appendChild(selStatus);
+      tr.appendChild(tdStatus);
 
-      const fulfilledTd = document.createElement('td');
-      const fulfilledSelect = document.createElement('select');
-      fulfilledSelect.className = 'status-select fulfilled-select';
-      fulfilledSelect.dataset.id = r.id;
-      FULFILLED_BY_OPTIONS.forEach(opt => {
+      const tdFul = document.createElement('td');
+      const selFul = document.createElement('select');
+      selFul.className = 'select fulfilled-select';
+      selFul.dataset.id = r.id;
+      FULFILLED_BY_OPTIONS.forEach(opt=>{
         const o = document.createElement('option');
         o.value = opt.value;
         o.textContent = opt.label;
-        if ((r.fulfilledBy || '') === opt.value) o.selected = true;
-        fulfilledSelect.appendChild(o);
+        if ((r.fulfilledBy||'') === opt.value) o.selected = true;
+        selFul.appendChild(o);
       });
-      fulfilledTd.appendChild(fulfilledSelect);
-      tr.appendChild(fulfilledTd);
+      tdFul.appendChild(selFul);
+      tr.appendChild(tdFul);
 
-      // Tracking (NEW)
-      const trackTd = document.createElement('td');
-      const trackInput = document.createElement('input');
-      trackInput.type = 'text';
-      trackInput.className = 'field-input tracking-input';
-      trackInput.placeholder = (r.status === 'shipped') ? 'Paste tracking' : 'Set to Shipped';
-      trackInput.dataset.id = r.id;
-      trackInput.dataset.email = r.email || '';
-      trackInput.dataset.name = r.name || '';
-      trackInput.dataset.prev = (r.trackingNumber || '');
-      trackInput.value = (r.trackingNumber || '');
-      trackInput.disabled = (r.status !== 'shipped');
-      trackTd.appendChild(trackInput);
-      tr.appendChild(trackTd);
+      // Tracking (enabled only if shipped)
+      const tdTrack = document.createElement('td');
+      const track = document.createElement('input');
+      track.type = 'text';
+      track.className = 'cell-input tracking-input';
+      track.placeholder = (r.status === 'shipped') ? 'Paste tracking' : 'Set to Shipped';
+      track.disabled = (r.status !== 'shipped');
+      track.dataset.id = r.id;
+      track.dataset.email = r.email || '';
+      track.dataset.name = r.name || '';
+      track.dataset.prev = (r.trackingNumber || '');
+      track.value = (r.trackingNumber || '');
+      tdTrack.appendChild(track);
+      tr.appendChild(tdTrack);
 
-      const replyTd = document.createElement('td');
-      const replyBtn = document.createElement('button');
-      replyBtn.className = 'link-btn reply-btn';
-      replyBtn.dataset.email = r.email || '';
-      replyBtn.dataset.name = r.name || '';
-      replyBtn.dataset.stl = r.stlLink || '';
-      replyBtn.textContent = 'Reply';
-      replyTd.appendChild(replyBtn);
-      tr.appendChild(replyTd);
+      const tdReply = document.createElement('td');
+      const btn = document.createElement('button');
+      btn.className = 'link-btn reply-btn';
+      btn.dataset.email = r.email || '';
+      btn.dataset.name = r.name || '';
+      btn.dataset.stl = r.stlLink || '';
+      btn.textContent = 'Reply';
+      tdReply.appendChild(btn);
+      tr.appendChild(tdReply);
 
-      const archiveTd = document.createElement('td');
-      const archiveCheckbox = document.createElement('input');
-      archiveCheckbox.type = 'checkbox';
-      archiveCheckbox.className = 'archive-checkbox';
-      archiveCheckbox.dataset.id = r.id;
-      archiveCheckbox.checked = !!r.archived;
-      archiveTd.appendChild(archiveCheckbox);
-      tr.appendChild(archiveTd);
+      const tdArch = document.createElement('td');
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.className = 'archive-checkbox';
+      cb.dataset.id = r.id;
+      cb.checked = !!r.archived;
+      tdArch.appendChild(cb);
+      tr.appendChild(tdArch);
 
       return tr;
     }
 
-    async function loadRequests() {
-      try {
-        const res = await fetch('/api/requests', { credentials: 'include' });
-        if (res.status === 401) {
-          loginCard.style.display = 'block';
-          dashboardCard.style.display = 'none';
-          return;
-        }
-        const data = await res.json();
-        const active = data.filter(r => !r.archived);
-        const archived = data.filter(r => r.archived);
-
-        activeBody.innerHTML = '';
-        archivedBody.innerHTML = '';
-
-        if (active.length === 0) {
-          activeBody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;">No active requests.</td></tr>';
-        } else {
-          active.forEach(r => activeBody.appendChild(renderRow(r)));
-        }
-
-        if (archived.length === 0) {
-          archivedBody.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;">No archived requests.</td></tr>';
-        } else {
-          archived.forEach(r => archivedBody.appendChild(renderRow(r)));
-        }
-
-        loginCard.style.display = 'none';
-        dashboardCard.style.display = 'block';
-        showDashStatus('Loaded ' + data.length + ' request(s).', false);
-      } catch (err) {
-        console.error('Error loading requests:', err);
-        showDashStatus('Error loading requests: ' + err.message, true);
+    async function loadRequests(){
+      const res = await fetch('/api/requests', { credentials:'include' });
+      if (res.status === 401){
+        loginCard.style.display = 'block';
+        dashboardCard.style.display = 'none';
+        return;
       }
+
+      const data = await res.json();
+      const active = data.filter(r => !r.archived);
+      const archived = data.filter(r => r.archived);
+
+      activeBody.innerHTML = '';
+      archivedBody.innerHTML = '';
+
+      if (!active.length) activeBody.innerHTML = '<tr><td colspan="11" style="padding:16px;">No active requests.</td></tr>';
+      else active.forEach(r => activeBody.appendChild(renderRow(r)));
+
+      if (!archived.length) archivedBody.innerHTML = '<tr><td colspan="11" style="padding:16px;">No archived requests.</td></tr>';
+      else archived.forEach(r => archivedBody.appendChild(renderRow(r)));
+
+      loginCard.style.display = 'none';
+      dashboardCard.style.display = 'block';
+      setMsg(dashboardStatus, 'Loaded ' + data.length + ' request(s).', true);
     }
 
-    loginForm.addEventListener('submit', async (e) => {
+    // LOGIN
+    loginForm.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      loginStatus.style.display = 'block';
-      loginStatus.textContent = 'Signing in...';
-      loginStatus.classList.remove('status-error', 'status-success');
+      setMsg(loginStatus, 'Signing in...', true);
 
       const email = document.getElementById('adminEmail').value.trim();
       const password = document.getElementById('adminPassword').value;
 
-      try {
-        const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
+      const res = await fetch('/api/login', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ email, password })
+      });
 
-        if (!res.ok) throw new Error('Invalid email or password');
-
-        loginStatus.textContent = 'Login successful. Loading dashboard...';
-        loginStatus.classList.add('status-success');
-
-        await loadRequests();
-      } catch (err) {
-        loginStatus.textContent = err.message;
-        loginStatus.classList.add('status-error');
+      if (!res.ok){
+        setMsg(loginStatus, 'Invalid email or password', false);
+        return;
       }
+
+      setMsg(loginStatus, 'Login successful. Loading dashboard...', true);
+      loadRequests();
     });
 
-    logoutBtn.addEventListener('click', async () => {
-      try { await fetch('/api/logout', { method: 'POST', credentials: 'include' }); } catch (e) {}
+    // LOGOUT
+    logoutLink.addEventListener('click', async (e)=>{
+      e.preventDefault();
+      try{ await fetch('/api/logout', { method:'POST', credentials:'include' }); } catch(_){}
       loginCard.style.display = 'block';
       dashboardCard.style.display = 'none';
-      loginForm.reset();
     });
 
-    reloadBtn.addEventListener('click', async () => {
-      showDashStatus('Refreshing from Google Sheets...', false);
-      try {
-        const res = await fetch('/api/sheets/reload', { method: 'POST', credentials: 'include' });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Reload failed');
-        showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
-        loadRequests();
-      } catch (err) {
-        showDashStatus('Reload failed: ' + err.message, true);
-      }
+    // SHEETS BUTTONS
+    reloadBtn.addEventListener('click', async ()=>{
+      setMsg(dashboardStatus, 'Refreshing from Google Sheets...', true);
+      const res = await fetch('/api/sheets/reload', { method:'POST', credentials:'include' });
+      const data = await res.json().catch(()=>({}));
+      if (!res.ok) return setMsg(dashboardStatus, data.error || 'Reload failed', false);
+      setMsg(dashboardStatus, 'Reloaded ' + (data.count || 0) + ' requests from Sheets.', true);
+      loadRequests();
     });
 
-    syncBtn.addEventListener('click', async () => {
-      showDashStatus('Syncing to Google Sheets...', false);
-      try {
-        const res = await fetch('/api/sheets/sync', { method: 'POST', credentials: 'include' });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Sync failed');
-        showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
-      } catch (err) {
-        showDashStatus('Sync failed: ' + err.message, true);
-      }
+    syncBtn.addEventListener('click', async ()=>{
+      setMsg(dashboardStatus, 'Syncing to Google Sheets...', true);
+      const res = await fetch('/api/sheets/sync', { method:'POST', credentials:'include' });
+      const data = await res.json().catch(()=>({}));
+      if (!res.ok) return setMsg(dashboardStatus, data.error || 'Sync failed', false);
+      setMsg(dashboardStatus, 'Synced ' + (data.count || 0) + ' requests to Sheets.', true);
     });
 
-    function handleStatusChange(e) {
-      const select = e.target.closest('.status-select');
-      if (!select || select.classList.contains('fulfilled-select')) return;
-
-      const id = select.dataset.id;
-      const status = select.value;
-
-      showDashStatus('Updating status...', false);
-
-      fetch(`/api/requests/${id}/status`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to update status');
-          return res.json();
-        })
-        .then(() => {
-          showDashStatus('Status updated.', false);
-          loadRequests(); // refresh so Tracking input enables/disables correctly
-        })
-        .catch(err => showDashStatus('Error updating status: ' + err.message, true));
+    // Updates
+    async function updateStatus(id, status){
+      await fetch(`/api/requests/${id}/status`, {
+        method:'POST', credentials:'include',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ status })
+      });
     }
 
-    function handleFulfilledChange(e) {
-      const select = e.target.closest('.fulfilled-select');
-      if (!select) return;
-
-      const id = select.dataset.id;
-      const fulfilledBy = select.value;
-
-      showDashStatus('Updating fulfilled by...', false);
-
-      fetch(`/api/requests/${id}/fulfilled`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fulfilledBy }),
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to update fulfilled by');
-          return res.json();
-        })
-        .then(() => showDashStatus('Fulfilled by updated.', false))
-        .catch(err => showDashStatus('Error updating fulfilled by: ' + err.message, true));
+    async function updateFulfilled(id, fulfilledBy){
+      await fetch(`/api/requests/${id}/fulfilled`, {
+        method:'POST', credentials:'include',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ fulfilledBy })
+      });
     }
 
-    function handleArchiveChange(e) {
-      const checkbox = e.target.closest('.archive-checkbox');
-      if (!checkbox) return;
-
-      const id = checkbox.dataset.id;
-      const archived = checkbox.checked;
-
-      showDashStatus(archived ? 'Archiving request...' : 'Unarchiving request...', false);
-
-      fetch(`/api/requests/${id}/archive`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ archived }),
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to update archive state');
-          return res.json();
-        })
-        .then(() => {
-          showDashStatus(archived ? 'Request archived.' : 'Request unarchived.', false);
-          loadRequests();
-        })
-        .catch(err => showDashStatus('Error updating archive: ' + err.message, true));
+    async function updateArchive(id, archived){
+      await fetch(`/api/requests/${id}/archive`, {
+        method:'POST', credentials:'include',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ archived })
+      });
     }
 
-    function handleReplyClick(e) {
+    async function saveAdminNotes(id, adminNotes){
+      await fetch(`/api/requests/${id}/admin-notes`, {
+        method:'POST', credentials:'include',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ adminNotes })
+      });
+    }
+
+    async function saveTracking(id, trackingNumber){
+      await fetch(`/api/requests/${id}/tracking`, {
+        method:'POST', credentials:'include',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ trackingNumber })
+      });
+    }
+
+    function onClick(e){
       const btn = e.target.closest('.reply-btn');
       if (!btn) return;
 
-      const email = btn.dataset.email;
-      if (!email) return;
-
+      const email = btn.dataset.email || '';
       const name = btn.dataset.name || '';
       const stl = btn.dataset.stl || '';
+
       const subject = 'LM3DPTFY Quote Reply';
       const body =
         'Hi ' + name + ',\n\n' +
@@ -465,109 +422,113 @@
       window.open(buildGmailUrl(email, subject, body), '_blank');
     }
 
-    // Save admin notes (debounced)
+    // Debounced admin notes save
     let notesTimer = null;
-    function handleAdminNotesInput(e) {
+    function onInput(e){
       const ta = e.target.closest('.admin-notes');
       if (!ta) return;
-
       const id = ta.dataset.id;
-      const adminNotes = ta.value;
+      const val = ta.value;
 
       clearTimeout(notesTimer);
-      notesTimer = setTimeout(() => {
-        fetch(`/api/requests/${id}/admin-notes`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ adminNotes }),
-        })
-          .then(res => {
-            if (!res.ok) throw new Error('Failed to save admin notes');
-            return res.json();
-          })
-          .then(() => showDashStatus('Admin notes saved.', false))
-          .catch(err => showDashStatus('Admin notes error: ' + err.message, true));
+      notesTimer = setTimeout(async () => {
+        try{
+          await saveAdminNotes(id, val);
+          setMsg(dashboardStatus, 'Admin notes saved.', true);
+        }catch(err){
+          setMsg(dashboardStatus, 'Failed to save admin notes.', false);
+        }
       }, 500);
     }
 
-    // Save tracking and auto-open email
-    function saveTrackingAndEmail(input) {
+    // Tracking save + open email
+    async function maybeSaveTrackingAndEmail(input){
       const id = input.dataset.id;
-      const trackingNumber = (input.value || '').trim();
+      const tracking = (input.value || '').trim();
       const prev = (input.dataset.prev || '').trim();
 
-      if (trackingNumber === prev) return; // no change
-      input.dataset.prev = trackingNumber;
+      if (tracking === prev) return;
+      input.dataset.prev = tracking;
 
-      showDashStatus('Saving tracking #...', false);
+      try{
+        await saveTracking(id, tracking);
+        setMsg(dashboardStatus, 'Tracking # saved.', true);
 
-      fetch(`/api/requests/${id}/tracking`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ trackingNumber }),
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('Failed to save tracking #');
-          return res.json();
-        })
-        .then(() => {
-          showDashStatus('Tracking # saved.', false);
+        if (tracking){
+          const email = input.dataset.email || '';
+          const name = input.dataset.name || '';
+          const subject = 'Your LM3DPTFY order has shipped';
+          const body =
+            'Hi ' + name + ',\n\n' +
+            'Your order has shipped!\n\n' +
+            'Tracking number: ' + tracking + '\n\n' +
+            'Thanks!\n' +
+            '— Let Me 3D Print That For You';
 
-          // Only open email if they actually pasted something
-          if (trackingNumber) {
-            const email = input.dataset.email || '';
-            const name = input.dataset.name || '';
-            const subject = 'Your LM3DPTFY order has shipped';
-            const body =
-              'Hi ' + name + ',\n\n' +
-              'Your order has shipped!\n\n' +
-              'Tracking number: ' + trackingNumber + '\n\n' +
-              'Thanks!\n' +
-              '— Let Me 3D Print That For You';
-
-            window.open(buildGmailUrl(email, subject, body), '_blank');
-          }
-        })
-        .catch(err => showDashStatus('Tracking error: ' + err.message, true));
+          window.open(buildGmailUrl(email, subject, body), '_blank');
+        }
+      }catch(err){
+        setMsg(dashboardStatus, 'Failed to save tracking #.', false);
+      }
     }
 
-    function handleTrackingKeydown(e) {
+    function onBlur(e){
+      const input = e.target.closest('.tracking-input');
+      if (!input || input.disabled) return;
+      maybeSaveTrackingAndEmail(input);
+    }
+
+    function onKeydown(e){
       const input = e.target.closest('.tracking-input');
       if (!input) return;
-      if (e.key === 'Enter') {
+      if (e.key === 'Enter'){
         e.preventDefault();
         input.blur();
       }
     }
 
-    function handleTrackingBlur(e) {
-      const input = e.target.closest('.tracking-input');
-      if (!input || input.disabled) return;
-      saveTrackingAndEmail(input);
+    async function onChange(e){
+      const t = e.target;
+
+      try{
+        if (t.classList.contains('status-select')){
+          await updateStatus(t.dataset.id, t.value);
+          setMsg(dashboardStatus, 'Status updated.', true);
+          // Re-render so tracking enables when shipped
+          loadRequests();
+          return;
+        }
+
+        if (t.classList.contains('fulfilled-select')){
+          await updateFulfilled(t.dataset.id, t.value);
+          setMsg(dashboardStatus, 'Fulfilled by updated.', true);
+          return;
+        }
+
+        if (t.classList.contains('archive-checkbox')){
+          await updateArchive(t.dataset.id, t.checked);
+          loadRequests();
+          return;
+        }
+      }catch(err){
+        setMsg(dashboardStatus, 'Update failed.', false);
+      }
     }
 
-    activeBody.addEventListener('change', handleStatusChange);
-    archivedBody.addEventListener('change', handleStatusChange);
+    activeBody.addEventListener('click', onClick);
+    archivedBody.addEventListener('click', onClick);
 
-    activeBody.addEventListener('change', handleFulfilledChange);
-    archivedBody.addEventListener('change', handleFulfilledChange);
+    activeBody.addEventListener('input', onInput);
+    archivedBody.addEventListener('input', onInput);
 
-    activeBody.addEventListener('change', handleArchiveChange);
-    archivedBody.addEventListener('change', handleArchiveChange);
+    activeBody.addEventListener('change', onChange);
+    archivedBody.addEventListener('change', onChange);
 
-    activeBody.addEventListener('click', handleReplyClick);
-    archivedBody.addEventListener('click', handleReplyClick);
+    activeBody.addEventListener('blur', onBlur, true);
+    archivedBody.addEventListener('blur', onBlur, true);
 
-    activeBody.addEventListener('input', handleAdminNotesInput);
-    archivedBody.addEventListener('input', handleAdminNotesInput);
-
-    activeBody.addEventListener('keydown', handleTrackingKeydown);
-    archivedBody.addEventListener('keydown', handleTrackingKeydown);
-
-    activeBody.addEventListener('blur', handleTrackingBlur, true);
-    archivedBody.addEventListener('blur', handleTrackingBlur, true);
+    activeBody.addEventListener('keydown', onKeydown);
+    archivedBody.addEventListener('keydown', onKeydown);
 
     loadRequests();
   </script>
