@@ -7,19 +7,8 @@
   <meta name="description" content="Paste a public 3D model link and get a custom 3D printing quote by email." />
   <link rel="stylesheet" href="/style.css" />
 
-  <!-- Home-only layout: form + supported sites side-by-side on wide screens -->
+  <!-- Home-only styling for Supported Sites card -->
   <style>
-    .home-split{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 16px;
-      align-items: start;
-      margin-top: 18px;
-    }
-    @media (max-width: 900px){
-      .home-split{ grid-template-columns: 1fr; }
-    }
-
     .sites-card{ padding: 20px; }
     .sites-title{
       margin: 0 0 6px;
@@ -100,56 +89,49 @@
           </p>
         </section>
 
-        <!-- ✅ Split section: Form (left) + Supported Sites (right) -->
-        <section class="home-split">
+        <!-- ✅ Card 1: Get Quote (always full width) -->
+        <section class="card form-card" style="margin-top: 18px;">
+          <form class="stl-form" action="request.html" method="GET">
+            <label for="stlLink" class="field-label">Model link</label>
 
-          <!-- Form card -->
-          <section class="card form-card" style="margin:0;">
-            <form class="stl-form" action="request.html" method="GET">
-              <label for="stlLink" class="field-label">Model link</label>
+            <!-- ✅ No STLFlix default / no STLFlix placeholder -->
+            <input
+              type="url"
+              id="stlLink"
+              name="link"
+              class="field-input"
+              placeholder="https://..."
+              required
+            />
 
-              <!-- ✅ No STLFlix default / no STLFlix placeholder -->
-              <input
-                type="url"
-                id="stlLink"
-                name="link"
-                class="field-input"
-                placeholder="https://..."
-                required
-              />
+            <button type="submit" class="btn-primary btn-block">
+              Get Quote
+            </button>
 
-              <button type="submit" class="btn-primary btn-block">
-                Get Quote
-              </button>
-
-              <p class="small-note" style="margin-top:6px;">
-                Choose a supported site on the right to browse models, then paste the model link here.
-              </p>
-
-              <p class="small-note">
-                Don’t see your library yet? Paste the link anyway — I’ll confirm licensing/compatibility before printing.
-              </p>
-            </form>
-          </section>
-
-          <!-- Supported sites card -->
-          <aside class="card sites-card">
-            <h2 class="sites-title">Supported sites</h2>
-            <p class="sites-sub">
-              Browse supported model libraries (opens in a new tab). This list is managed from the Admin page.
+            <p class="small-note" style="margin-top:6px;">
+              Choose a supported site below to browse models, then paste the model link here.
             </p>
 
-            <div class="sites-list" id="sitesList">
-              <!-- populated by JS -->
-            </div>
+            <p class="small-note">
+              Don’t see your library yet? Paste the link anyway — I’ll confirm licensing/compatibility before printing.
+            </p>
+          </form>
+        </section>
 
-            <div class="site-empty" id="sitesEmpty" style="display:none;margin-top:12px;">
-              No supported sites have been added yet.
-              <br/>
-              Once you add them in <strong>Admin → Supported Sites</strong>, they’ll show up here automatically.
-            </div>
-          </aside>
+        <!-- ✅ Card 2: Supported Sites (always directly under Get Quote) -->
+        <section class="card sites-card">
+          <h2 class="sites-title">Supported sites</h2>
+          <p class="sites-sub">
+            Browse supported model libraries (opens in a new tab). This list is managed from the Admin page.
+          </p>
 
+          <div class="sites-list" id="sitesList"></div>
+
+          <div class="site-empty" id="sitesEmpty" style="display:none;margin-top:12px;">
+            No supported sites have been added yet.
+            <br/>
+            Once you add them in <strong>Admin → Supported Sites</strong>, they’ll show up here automatically.
+          </div>
         </section>
 
         <section class="how-grid" id="how">
@@ -209,7 +191,6 @@
           return;
         }
 
-        // Render each site as a pill (simple + clean)
         sites.forEach((s) => {
           const a = document.createElement('a');
           a.className = 'site-pill';
