@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Paste a public model link and get a custom 3D print quote by email." />
 
-  <!-- Bump CSS URL to avoid cache weirdness -->
-  <link rel="stylesheet" href="/style.css?v=home3" />
+  <!-- Cache-bust -->
+  <link rel="stylesheet" href="/style.css?v=home4" />
 </head>
 
 <body>
@@ -66,19 +66,19 @@
           </form>
         </section>
 
-        <!-- Supported Sites card (ONLY place this renders) -->
-        <section class="card" style="padding:16px; margin-top: 14px;">
+        <!-- Supported Sites card -->
+        <section class="card" style="padding:16px; margin-top:14px;">
           <h2 class="section-title" style="margin:0 0 6px;">Supported sites</h2>
           <p style="margin:0 0 12px; color:var(--muted); font-size:.95rem; line-height:1.45;">
-            Browse supported model libraries (opens in a new tab). This list is managed from the Admin page.
+            Browse supported model libraries (opens in a new tab).
           </p>
 
           <div id="sitesList" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
 
           <div id="sitesEmpty"
                style="display:none; margin-top:10px; padding:12px; border-radius:16px; border:1px dashed rgba(15,23,42,.20); background: rgba(255,255,255,.55); color:var(--muted); font-size:.92rem; line-height:1.45;">
-            No supported sites have been added yet.<br/>
-            Once you add them in <strong>Admin → Supported Sites</strong>, they’ll show up here automatically.
+            No supported sites are listed yet.<br/>
+            You can still paste your link above — I’ll confirm licensing/compatibility before printing.
           </div>
         </section>
 
