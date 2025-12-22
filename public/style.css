@@ -215,7 +215,7 @@ a{ color:inherit; }
   justify-content:center;
 }
 
-/* ✅ Slightly wider so full-screen doesn’t feel “tiny” */
+/* Wider so full-screen doesn’t feel tiny */
 .main-inner{
   width:100%;
   max-width: 1100px;
@@ -287,44 +287,6 @@ textarea.field-input{
   padding: 26px 10px 10px;
 }
 
-.steps{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap: 10px;
-  margin: 0 auto 12px;
-  flex-wrap: wrap;
-}
-
-.step{
-  display:flex;
-  align-items:center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.72);
-  color: var(--muted);
-  font-size: .85rem;
-}
-
-.step .dot{
-  width: 9px;
-  height: 9px;
-  border-radius: 999px;
-  background: rgba(100,116,139,.35);
-}
-
-.step.active{
-  color: var(--text);
-  border-color: rgba(0,144,176,.28);
-  background: linear-gradient(180deg, rgba(0,144,176,.10), rgba(255,255,255,.82));
-}
-
-.step.active .dot{
-  background: var(--accent2);
-}
-
 .hero h1{
   margin:0;
   font-size: clamp(1.9rem, 3.4vw, 3.0rem);
@@ -369,14 +331,12 @@ textarea.field-input{
 }
 
 /* =========================
-   ✅ THIS IS THE FIX
-   Always use “Image 1” layout:
-   - How card full width
-   - Feature cards in a row under it (3 → 2 → 1)
+   HOME “HOW + FEATURES”
+   (Image-1 layout always)
 ========================= */
 .how-grid{
   display:grid;
-  grid-template-columns: 1fr; /* ✅ always stacked, no desktop 2-column */
+  grid-template-columns: 1fr;
   gap: 16px;
   align-items:start;
   margin-top: 14px;
@@ -394,7 +354,6 @@ textarea.field-input{
   font-size: .95rem;
 }
 
-/* ✅ Default to 3 across (prevents “image 2” narrow stack on wide screens) */
 .feature-grid{
   display:grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -466,7 +425,10 @@ textarea.field-input{
 }
 
 /* =========================
-   ADMIN TABLE
+   ✅ ADMIN TABLE FIXES
+   - No forced wrapping
+   - Columns grow to content
+   - Horizontal scroll when needed (so nothing gets cut off)
 ========================= */
 .admin-head{
   display:flex;
@@ -501,44 +463,95 @@ textarea.field-input{
   margin-top: 14px;
 }
 
-.table-wrapper{
-  overflow-x: hidden;
+/* ✅ Always allow horizontal scroll on admin tables */
+body.admin-page .table-wrapper{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.request-table{
-  width: 100%;
-  table-layout: fixed;
+/* ✅ Let the table size itself to content */
+body.admin-page .request-table{
+  width: max-content;     /* expands to fit columns */
+  min-width: 100%;        /* but never smaller than container */
+  table-layout: auto;     /* critical: stops forced wrapping */
   border-collapse: collapse;
 }
 
-.request-table th{
+body.admin-page .request-table th,
+body.admin-page .request-table td{
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(15,23,42,.06);
+  vertical-align: top;
+  font-size: .88rem;
+
+  /* ✅ default: do NOT wrap (keeps email/name/reply/etc on one line) */
+  white-space: nowrap;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+body.admin-page .request-table th{
   text-align:left;
   font-size: .72rem;
   color: rgba(100,116,139,.95);
   letter-spacing: .10em;
   text-transform: uppercase;
-  padding: 10px 10px;
   border-bottom: 1px solid var(--border);
 }
 
-.request-table td{
-  padding: 10px 10px;
-  border-bottom: 1px solid rgba(15,23,42,.06);
-  vertical-align: top;
-  font-size: .88rem;
-  word-break: break-word;
+/* ✅ Allow wrapping ONLY in the two notes columns */
+body.admin-page .request-table td:nth-child(5),
+body.admin-page .request-table td:nth-child(6){
+  white-space: normal;
+  min-width: 260px; /* customer notes */
+  max-width: 520px;
 }
 
-.request-table a{
+/* Admin notes column slightly wider */
+body.admin-page .request-table td:nth-child(6){
+  min-width: 320px;
+  max-width: 640px;
+}
+
+/* ✅ Minimum widths so “Reply” & “Archive” never get clipped */
+body.admin-page .request-table th:nth-child(1),
+body.admin-page .request-table td:nth-child(1){ min-width: 170px; } /* created */
+
+body.admin-page .request-table th:nth-child(2),
+body.admin-page .request-table td:nth-child(2){ min-width: 120px; } /* name */
+
+body.admin-page .request-table th:nth-child(3),
+body.admin-page .request-table td:nth-child(3){ min-width: 220px; } /* email */
+
+body.admin-page .request-table th:nth-child(4),
+body.admin-page .request-table td:nth-child(4){ min-width: 70px; }  /* STL */
+
+body.admin-page .request-table th:nth-child(7),
+body.admin-page .request-table td:nth-child(7){ min-width: 180px; } /* status */
+
+body.admin-page .request-table th:nth-child(8),
+body.admin-page .request-table td:nth-child(8){ min-width: 150px; } /* fulfilled */
+
+body.admin-page .request-table th:nth-child(9),
+body.admin-page .request-table td:nth-child(9){ min-width: 180px; } /* tracking */
+
+body.admin-page .request-table th:nth-child(10),
+body.admin-page .request-table td:nth-child(10){ min-width: 90px; } /* reply */
+
+body.admin-page .request-table th:nth-child(11),
+body.admin-page .request-table td:nth-child(11){ min-width: 90px; } /* archive */
+
+/* Links */
+body.admin-page .request-table a{
   color: var(--accent2);
   text-decoration: none;
 }
-.request-table a:hover{ text-decoration: underline; }
+body.admin-page .request-table a:hover{ text-decoration: underline; }
 
+/* Inputs inside cells */
 .admin-notes-input{
   width: 100%;
-  min-width: 0;
-  max-width: 100%;
+  min-width: 300px;
   border-radius: 12px;
   border: 1px solid var(--border);
   padding: 10px 10px;
@@ -550,8 +563,7 @@ textarea.field-input{
 
 .tracking-input{
   width: 100%;
-  min-width: 0;
-  max-width: 100%;
+  min-width: 160px;
   border-radius: 999px;
   border: 1px solid var(--border);
   padding: 10px 10px;
@@ -561,7 +573,7 @@ textarea.field-input{
 
 .status-select{
   width: 100%;
-  min-width: 0;
+  min-width: 160px;
   border-radius: 999px;
   border: 1px solid var(--border);
   padding: 9px 10px;
@@ -575,28 +587,11 @@ textarea.field-input{
   font-weight: 700;
 }
 
-/* Column widths */
-col.col-created{ width: 11%; }
-col.col-name{ width: 7%; }
-col.col-email{ width: 13%; }
-col.col-stl{ width: 4%; }
-col.col-notes{ width: 12%; }
-col.col-adminnotes{ width: 18%; }
-col.col-status{ width: 13%; }
-col.col-fulfilled{ width: 8%; }
-col.col-tracking{ width: 9%; }
-col.col-reply{ width: 3%; }
-col.col-archive{ width: 2%; }
-
+/* Tip text */
 .tip{
   margin: 10px 0 0;
   color: var(--muted);
   font-size: .85rem;
-}
-
-/* Responsive: allow table scroll only on smaller screens */
-@media (max-width: 1100px){
-  .table-wrapper{ overflow-x: auto; }
 }
 
 /* Feature grid responsive 3 → 2 → 1 */
