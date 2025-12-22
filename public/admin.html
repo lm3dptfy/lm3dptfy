@@ -125,12 +125,11 @@
       { value: 'paid', label: 'Paid' },
     ];
 
-    const FULFILLED_BY_OPTIONS = [
-      { value: '', label: '—' },
-      { value: 'me', label: 'Me' },
-      { value: 'partner', label: 'Partner' },
-      { value: 'other', label: 'Other' },
-    ];
+    // ✅ Your preferred names (default list)
+    const DEFAULT_FULFILLERS = ['Robert', 'Jared', 'Terence'];
+
+    // ✅ Will be built from DEFAULT_FULFILLERS + any names already in your data
+    let FULFILLER_OPTIONS = [...DEFAULT_FULFILLERS];
 
     function showDashStatus(msg, isError) {
       dashboardStatus.style.display = 'block';
@@ -169,6 +168,32 @@
       v.appendChild(valueNode);
       wrap.appendChild(v);
       return wrap;
+    }
+
+    function buildFulfilledSelect(currentValue, id) {
+      const fulfilledSelect = document.createElement('select');
+      fulfilledSelect.className = 'status-select fulfilled-select';
+      fulfilledSelect.dataset.id = id;
+
+      // placeholder
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = '—';
+      fulfilledSelect.appendChild(placeholder);
+
+      // ensure current value is present even if it's not in the list
+      const list = [...FULFILLER_OPTIONS];
+      if (currentValue && !list.includes(currentValue)) list.unshift(currentValue);
+
+      list.forEach(name => {
+        const o = document.createElement('option');
+        o.value = name;
+        o.textContent = name;
+        if ((currentValue || '') === name) o.selected = true;
+        fulfilledSelect.appendChild(o);
+      });
+
+      return fulfilledSelect;
     }
 
     function renderCard(r) {
@@ -239,7 +264,7 @@
       adminWrap.appendChild(adminTa);
       meta.appendChild(adminWrap);
 
-      // Controls grid (the block from your image 2)
+      // Controls grid
       const controls = el('div', 'request-controls');
 
       // Status
@@ -257,19 +282,10 @@
       });
       statusBlock.appendChild(statusSelect);
 
-      // Fulfilled by
+      // Fulfilled by ✅ now uses names list
       const fulfilledBlock = el('div', 'control');
       fulfilledBlock.appendChild(el('div', 'control-label', 'Fulfilled by'));
-      const fulfilledSelect = document.createElement('select');
-      fulfilledSelect.className = 'status-select fulfilled-select';
-      fulfilledSelect.dataset.id = r.id;
-      FULFILLED_BY_OPTIONS.forEach(opt => {
-        const o = document.createElement('option');
-        o.value = opt.value;
-        o.textContent = opt.label;
-        if ((r.fulfilledBy || '') === opt.value) o.selected = true;
-        fulfilledSelect.appendChild(o);
-      });
+      const fulfilledSelect = buildFulfilledSelect((r.fulfilledBy || ''), r.id);
       fulfilledBlock.appendChild(fulfilledSelect);
 
       // Tracking
@@ -317,6 +333,20 @@
       return card;
     }
 
+    function buildFulfillerOptionsFromData(data) {
+      const seen = new Set(DEFAULT_FULFILLERS);
+      data.forEach(r => {
+        const v = (r.fulfilledBy || '').trim();
+        if (v) seen.add(v);
+      });
+
+      const extras = Array.from(seen)
+        .filter(n => !DEFAULT_FULFILLERS.includes(n))
+        .sort((a,b) => a.localeCompare(b));
+
+      FULFILLER_OPTIONS = [...DEFAULT_FULFILLERS, ...extras];
+    }
+
     async function loadRequests() {
       try {
         const res = await fetch('/api/requests', { credentials: 'include' });
@@ -327,6 +357,9 @@
         }
 
         const data = await res.json();
+
+        // ✅ Build fulfilled-by names list from your existing data
+        buildFulfillerOptionsFromData(data);
 
         const active = data.filter(r => !r.archived);
         const archived = data.filter(r => r.archived);
@@ -508,7 +541,6 @@
     function handleChange(e) {
       const t = e.target;
 
-      // Status
       if (t.classList.contains('status-select-main')) {
         const id = t.dataset.id;
         const status = t.value;
@@ -519,10 +551,9 @@
           .catch(err => showDashStatus('Error updating status: ' + err.message, true));
       }
 
-      // Fulfilled by
       if (t.classList.contains('fulfilled-select')) {
         const id = t.dataset.id;
-        const fulfilledBy = t.value;
+        const fulfilledBy = t.value; // names now
         showDashStatus('Updating fulfilled by...', false);
 
         updateFulfilled(id, fulfilledBy)
@@ -530,7 +561,6 @@
           .catch(err => showDashStatus('Error updating fulfilled by: ' + err.message, true));
       }
 
-      // Archive
       if (t.classList.contains('archive-checkbox')) {
         const id = t.dataset.id;
         const archived = t.checked;
