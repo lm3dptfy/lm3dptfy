@@ -8,25 +8,38 @@
 
   <!-- Small badge styling scoped to this page -->
   <style>
-    .source-row{
+    .link-summary{
       display:flex;
       align-items:center;
-      gap:10px;
+      justify-content:space-between;
+      gap: 12px;
       flex-wrap:wrap;
-      margin-top: 10px;
-      padding: 10px 12px;
+      padding: 12px 14px;
       border: 1px solid var(--border);
       border-radius: 14px;
       background: rgba(255,255,255,.65);
     }
-    .source-row .label{
+    .link-summary-left{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      min-width: 240px;
+    }
+    .link-summary-title{
       font-size: .78rem;
       font-weight: 800;
       letter-spacing: .10em;
       text-transform: uppercase;
       color: rgba(100,116,139,.95);
+      margin: 0;
     }
-    .source-badge{
+    .badge-row{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
+    .pill{
       display:inline-flex;
       align-items:center;
       justify-content:center;
@@ -39,13 +52,19 @@
       box-shadow: 0 12px 26px rgba(0,144,176,.18);
       white-space: nowrap;
     }
-    .source-link{
-      color: var(--accent2);
-      text-decoration:none;
-      font-weight: 700;
-      font-size: .92rem;
+    .pill-neutral{
+      color: rgba(15,23,42,.85);
+      background: rgba(255,255,255,.85);
+      border: 1px solid var(--border);
+      box-shadow: none;
+      font-weight: 800;
     }
-    .source-link:hover{ text-decoration: underline; }
+    .link-hint{
+      margin: 0;
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.35;
+    }
   </style>
 </head>
 
@@ -82,29 +101,21 @@
             <!-- keep payload compatible with server.js -->
             <input type="hidden" id="stlLinkHidden" name="stlLink" />
 
-            <!-- Link (editable) -->
-            <div>
-              <label class="field-label" for="stlLinkDisplay">Model link</label>
-              <input
-                class="field-input"
-                type="url"
-                id="stlLinkDisplay"
-                placeholder="https://..."
-                required
-              />
+            <!-- Hidden link summary + source badge (NO URL displayed) -->
+            <div id="linkSummaryWrap" style="display:none;">
+              <div class="link-summary">
+                <div class="link-summary-left">
+                  <p class="link-summary-title">Model link</p>
+                  <div class="badge-row">
+                    <span class="pill pill-neutral" id="linkReceivedPill">Link received</span>
+                    <span class="pill" id="sourceBadge">Unknown source</span>
+                  </div>
+                </div>
 
-              <!-- Detected Source -->
-              <div class="source-row" id="sourceRow" style="display:none;">
-                <span class="label">Detected source</span>
-                <span class="source-badge" id="sourceBadge">Unknown</span>
-                <a class="source-link" id="sourceSiteLink" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">
-                  Visit source
-                </a>
+                <p class="link-hint">
+                  Need to change it? Click <strong>Home</strong> and submit a new link.
+                </p>
               </div>
-
-              <p class="small-note" style="margin:10px 0 0;">
-                This should be a <strong>public</strong> link from a supported model library.
-              </p>
             </div>
 
             <div>
@@ -149,99 +160,69 @@
     const incomingLink = urlParams.get('link') || '';
 
     const stlHidden = document.getElementById('stlLinkHidden');
-    const stlDisplay = document.getElementById('stlLinkDisplay');
-
     const statusEl = document.getElementById('statusMessage');
     const btn = document.getElementById('submitBtn');
 
-    const sourceRow = document.getElementById('sourceRow');
+    const linkSummaryWrap = document.getElementById('linkSummaryWrap');
     const sourceBadge = document.getElementById('sourceBadge');
-    const sourceSiteLink = document.getElementById('sourceSiteLink');
 
-    // Prefill from homepage
+    // Store the link (hidden)
     stlHidden.value = incomingLink;
-    stlDisplay.value = incomingLink;
 
     function detectSource(urlStr) {
       const clean = (urlStr || '').trim();
-      if (!clean) return { name: 'Unknown', site: null };
+      if (!clean) return 'Unknown source';
 
       let u;
-      try {
-        u = new URL(clean);
-      } catch (e) {
-        return { name: 'Unknown', site: null };
-      }
+      try { u = new URL(clean); }
+      catch { return 'Unknown source'; }
 
       const host = (u.hostname || '').toLowerCase().replace(/^www\./, '');
 
-      const rules = [
-        { match: ['stlflix.com', 'platform.stlflix.com'], name: 'STLFlix', site: 'https://platform.stlflix.com/explore' },
-        { match: ['printables.com'], name: 'Printables', site: 'https://www.printables.com' },
-        { match: ['thingiverse.com'], name: 'Thingiverse', site: 'https://www.thingiverse.com' },
-        { match: ['myminifactory.com'], name: 'MyMiniFactory', site: 'https://www.myminifactory.com' },
-        { match: ['cults3d.com'], name: 'Cults3D', site: 'https://cults3d.com' },
-        { match: ['thangs.com'], name: 'Thangs', site: 'https://thangs.com' },
-        { match: ['makerworld.com'], name: 'MakerWorld', site: 'https://makerworld.com' },
-        { match: ['cgtrader.com'], name: 'CGTrader', site: 'https://www.cgtrader.com' },
-        { match: ['sketchfab.com'], name: 'Sketchfab', site: 'https://sketchfab.com' }
+      const map = [
+        { hosts: ['stlflix.com', 'platform.stlflix.com'], name: 'STLFlix' },
+        { hosts: ['printables.com'], name: 'Printables' },
+        { hosts: ['thingiverse.com'], name: 'Thingiverse' },
+        { hosts: ['myminifactory.com'], name: 'MyMiniFactory' },
+        { hosts: ['cults3d.com'], name: 'Cults3D' },
+        { hosts: ['thangs.com'], name: 'Thangs' },
+        { hosts: ['makerworld.com'], name: 'MakerWorld' },
+        { hosts: ['cgtrader.com'], name: 'CGTrader' },
+        { hosts: ['sketchfab.com'], name: 'Sketchfab' }
       ];
 
-      for (const r of rules) {
-        if (r.match.includes(host)) return { name: r.name, site: r.site };
+      for (const r of map) {
+        if (r.hosts.includes(host)) return r.name;
       }
 
-      // Some sites use subdomains; catch those
-      if (host.endsWith('.printables.com')) return { name: 'Printables', site: 'https://www.printables.com' };
-      if (host.endsWith('.thingiverse.com')) return { name: 'Thingiverse', site: 'https://www.thingiverse.com' };
-      if (host.endsWith('.myminifactory.com')) return { name: 'MyMiniFactory', site: 'https://www.myminifactory.com' };
-      if (host.endsWith('.cults3d.com')) return { name: 'Cults3D', site: 'https://cults3d.com' };
-      if (host.endsWith('.thangs.com')) return { name: 'Thangs', site: 'https://thangs.com' };
-      if (host.endsWith('.makerworld.com')) return { name: 'MakerWorld', site: 'https://makerworld.com' };
-      if (host.endsWith('.cgtrader.com')) return { name: 'CGTrader', site: 'https://www.cgtrader.com' };
-      if (host.endsWith('.sketchfab.com')) return { name: 'Sketchfab', site: 'https://sketchfab.com' };
+      // subdomain catch-all
+      if (host.endsWith('.printables.com')) return 'Printables';
+      if (host.endsWith('.thingiverse.com')) return 'Thingiverse';
+      if (host.endsWith('.myminifactory.com')) return 'MyMiniFactory';
+      if (host.endsWith('.cults3d.com')) return 'Cults3D';
+      if (host.endsWith('.thangs.com')) return 'Thangs';
+      if (host.endsWith('.makerworld.com')) return 'MakerWorld';
+      if (host.endsWith('.cgtrader.com')) return 'CGTrader';
+      if (host.endsWith('.sketchfab.com')) return 'Sketchfab';
 
-      return { name: 'Unknown', site: null };
+      return 'Unknown source';
     }
 
-    function updateSourceUI() {
-      const linkVal = (stlDisplay.value || '').trim();
-      const src = detectSource(linkVal);
-
-      sourceRow.style.display = linkVal ? 'flex' : 'none';
-      sourceBadge.textContent = src.name;
-
-      if (src.site) {
-        sourceSiteLink.style.display = 'inline';
-        sourceSiteLink.href = src.site;
-      } else {
-        sourceSiteLink.style.display = 'none';
-        sourceSiteLink.href = '#';
-      }
-    }
-
-    // Initial state
-    if (!incomingLink) {
+    // Show summary if we got a link
+    if (incomingLink) {
+      linkSummaryWrap.style.display = 'block';
+      sourceBadge.textContent = detectSource(incomingLink);
+    } else {
       statusEl.style.display = 'block';
-      statusEl.textContent = '⚠ No link provided. Please go back to the homepage and paste a link.';
+      statusEl.textContent = '⚠ No link provided. Please click Home and paste your model link first.';
       statusEl.className = 'status-message status-error';
     }
-
-    updateSourceUI();
-
-    // Live update source when link changes
-    stlDisplay.addEventListener('input', updateSourceUI);
-    stlDisplay.addEventListener('change', updateSourceUI);
 
     document.getElementById('quoteForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Allow user to correct the link on this page
-      const linkVal = (stlDisplay.value || '').trim();
-      stlHidden.value = linkVal;
-
       const payload = {
-        stlLink: linkVal,
+        stlLink: (stlHidden.value || '').trim(),
         name: document.getElementById('name').value.trim(),
         email: document.getElementById('email').value.trim(),
         details: document.getElementById('details').value.trim()
@@ -249,7 +230,7 @@
 
       if (!payload.stlLink) {
         statusEl.style.display = 'block';
-        statusEl.textContent = '✗ Error: No link provided. Please go back to the homepage.';
+        statusEl.textContent = '✗ Error: No link provided. Please click Home and paste your model link first.';
         statusEl.className = 'status-message status-error';
         return;
       }
