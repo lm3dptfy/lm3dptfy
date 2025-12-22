@@ -622,3 +622,41 @@ textarea.field-input{
     grid-template-columns: 1fr;
   }
 }
+/* =========================
+   UNSUPPORTED SOURCE (Admin)
+========================= */
+
+:root{
+  --danger:#e11d48;      /* rose-600 */
+  --danger2:#fb7185;     /* rose-400 */
+}
+
+.source-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.7);
+  color: var(--muted);
+  font-size:.85rem;
+  font-weight: 650;
+}
+
+.source-pill.is-unsupported{
+  color: var(--danger);
+  border-color: rgba(225,29,72,.28);
+  background: rgba(225,29,72,.08);
+}
+
+/* Red button variant (for unsupported links only) */
+.btn-danger{
+  background: linear-gradient(180deg, var(--danger2), var(--danger)) !important;
+  box-shadow: 0 14px 34px rgba(225,29,72,.22) !important;
+}
+
+.btn-danger:hover{
+  box-shadow: 0 18px 44px rgba(225,29,72,.28) !important;
+  filter: brightness(1.02);
+}
