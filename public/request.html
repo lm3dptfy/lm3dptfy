@@ -5,6 +5,48 @@
   <title>Quote request | Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/style.css" />
+
+  <!-- Small badge styling scoped to this page -->
+  <style>
+    .source-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,.65);
+    }
+    .source-row .label{
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      color: rgba(100,116,139,.95);
+    }
+    .source-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: .88rem;
+      color: #fff;
+      background: linear-gradient(180deg, var(--accent2), var(--accent));
+      box-shadow: 0 12px 26px rgba(0,144,176,.18);
+      white-space: nowrap;
+    }
+    .source-link{
+      color: var(--accent2);
+      text-decoration:none;
+      font-weight: 700;
+      font-size: .92rem;
+    }
+    .source-link:hover{ text-decoration: underline; }
+  </style>
 </head>
 
 <body>
@@ -40,7 +82,7 @@
             <!-- keep payload compatible with server.js -->
             <input type="hidden" id="stlLinkHidden" name="stlLink" />
 
-            <!-- Show link (editable) -->
+            <!-- Link (editable) -->
             <div>
               <label class="field-label" for="stlLinkDisplay">Model link</label>
               <input
@@ -50,6 +92,16 @@
                 placeholder="https://..."
                 required
               />
+
+              <!-- Detected Source -->
+              <div class="source-row" id="sourceRow" style="display:none;">
+                <span class="label">Detected source</span>
+                <span class="source-badge" id="sourceBadge">Unknown</span>
+                <a class="source-link" id="sourceSiteLink" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">
+                  Visit source
+                </a>
+              </div>
+
               <p class="small-note" style="margin:10px 0 0;">
                 This should be a <strong>public</strong> link from a supported model library.
               </p>
@@ -98,18 +150,88 @@
 
     const stlHidden = document.getElementById('stlLinkHidden');
     const stlDisplay = document.getElementById('stlLinkDisplay');
+
     const statusEl = document.getElementById('statusMessage');
     const btn = document.getElementById('submitBtn');
+
+    const sourceRow = document.getElementById('sourceRow');
+    const sourceBadge = document.getElementById('sourceBadge');
+    const sourceSiteLink = document.getElementById('sourceSiteLink');
 
     // Prefill from homepage
     stlHidden.value = incomingLink;
     stlDisplay.value = incomingLink;
 
+    function detectSource(urlStr) {
+      const clean = (urlStr || '').trim();
+      if (!clean) return { name: 'Unknown', site: null };
+
+      let u;
+      try {
+        u = new URL(clean);
+      } catch (e) {
+        return { name: 'Unknown', site: null };
+      }
+
+      const host = (u.hostname || '').toLowerCase().replace(/^www\./, '');
+
+      const rules = [
+        { match: ['stlflix.com', 'platform.stlflix.com'], name: 'STLFlix', site: 'https://platform.stlflix.com/explore' },
+        { match: ['printables.com'], name: 'Printables', site: 'https://www.printables.com' },
+        { match: ['thingiverse.com'], name: 'Thingiverse', site: 'https://www.thingiverse.com' },
+        { match: ['myminifactory.com'], name: 'MyMiniFactory', site: 'https://www.myminifactory.com' },
+        { match: ['cults3d.com'], name: 'Cults3D', site: 'https://cults3d.com' },
+        { match: ['thangs.com'], name: 'Thangs', site: 'https://thangs.com' },
+        { match: ['makerworld.com'], name: 'MakerWorld', site: 'https://makerworld.com' },
+        { match: ['cgtrader.com'], name: 'CGTrader', site: 'https://www.cgtrader.com' },
+        { match: ['sketchfab.com'], name: 'Sketchfab', site: 'https://sketchfab.com' }
+      ];
+
+      for (const r of rules) {
+        if (r.match.includes(host)) return { name: r.name, site: r.site };
+      }
+
+      // Some sites use subdomains; catch those
+      if (host.endsWith('.printables.com')) return { name: 'Printables', site: 'https://www.printables.com' };
+      if (host.endsWith('.thingiverse.com')) return { name: 'Thingiverse', site: 'https://www.thingiverse.com' };
+      if (host.endsWith('.myminifactory.com')) return { name: 'MyMiniFactory', site: 'https://www.myminifactory.com' };
+      if (host.endsWith('.cults3d.com')) return { name: 'Cults3D', site: 'https://cults3d.com' };
+      if (host.endsWith('.thangs.com')) return { name: 'Thangs', site: 'https://thangs.com' };
+      if (host.endsWith('.makerworld.com')) return { name: 'MakerWorld', site: 'https://makerworld.com' };
+      if (host.endsWith('.cgtrader.com')) return { name: 'CGTrader', site: 'https://www.cgtrader.com' };
+      if (host.endsWith('.sketchfab.com')) return { name: 'Sketchfab', site: 'https://sketchfab.com' };
+
+      return { name: 'Unknown', site: null };
+    }
+
+    function updateSourceUI() {
+      const linkVal = (stlDisplay.value || '').trim();
+      const src = detectSource(linkVal);
+
+      sourceRow.style.display = linkVal ? 'flex' : 'none';
+      sourceBadge.textContent = src.name;
+
+      if (src.site) {
+        sourceSiteLink.style.display = 'inline';
+        sourceSiteLink.href = src.site;
+      } else {
+        sourceSiteLink.style.display = 'none';
+        sourceSiteLink.href = '#';
+      }
+    }
+
+    // Initial state
     if (!incomingLink) {
       statusEl.style.display = 'block';
       statusEl.textContent = '⚠ No link provided. Please go back to the homepage and paste a link.';
       statusEl.className = 'status-message status-error';
     }
+
+    updateSourceUI();
+
+    // Live update source when link changes
+    stlDisplay.addEventListener('input', updateSourceUI);
+    stlDisplay.addEventListener('change', updateSourceUI);
 
     document.getElementById('quoteForm').addEventListener('submit', async (e) => {
       e.preventDefault();
