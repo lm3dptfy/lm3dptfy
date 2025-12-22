@@ -7,7 +7,7 @@
   <meta name="description" content="Paste a public model link and get a custom 3D print quote by email." />
 
   <!-- Cache-bust -->
-  <link rel="stylesheet" href="/style.css?v=home4" />
+  <link rel="stylesheet" href="/style.css?v=home5" />
 </head>
 
 <body>
@@ -57,7 +57,7 @@
             </button>
 
             <p class="small-note">
-              Choose a supported site below to browse models, then paste the model link here.
+              Choose a supported library below to browse models, then paste the model link here.
             </p>
 
             <p class="small-note">
@@ -66,18 +66,18 @@
           </form>
         </section>
 
-        <!-- Supported Sites card -->
+        <!-- Browse supported libraries card -->
         <section class="card" style="padding:16px; margin-top:14px;">
-          <h2 class="section-title" style="margin:0 0 6px;">Supported sites</h2>
+          <h2 class="section-title" style="margin:0 0 6px;">Browse supported libraries</h2>
           <p style="margin:0 0 12px; color:var(--muted); font-size:.95rem; line-height:1.45;">
-            Browse supported model libraries (opens in a new tab).
+            Open a library in a new tab, find your model, then paste the link above.
           </p>
 
           <div id="sitesList" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
 
           <div id="sitesEmpty"
                style="display:none; margin-top:10px; padding:12px; border-radius:16px; border:1px dashed rgba(15,23,42,.20); background: rgba(255,255,255,.55); color:var(--muted); font-size:.92rem; line-height:1.45;">
-            No supported sites are listed yet.<br/>
+            No supported libraries are listed yet.<br/>
             You can still paste your link above — I’ll confirm licensing/compatibility before printing.
           </div>
         </section>
@@ -145,7 +145,7 @@
           a.target = '_blank';
           a.rel = 'noopener noreferrer';
           a.className = 'btn-primary btn-sm';
-          a.textContent = `Browse ${s.name || 'site'}`;
+          a.textContent = `Browse ${s.name || 'library'}`;
 
           if (!s.browseUrl){
             a.style.opacity = '0.6';
