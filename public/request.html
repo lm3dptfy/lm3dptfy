@@ -6,13 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Cache-bust -->
-  <link rel="stylesheet" href="/style.css?v=req4" />
+  <link rel="stylesheet" href="/style.css?v=req5" />
 </head>
 
 <body>
   <div class="page-shell">
 
-    <!-- Same topbar style as Home -->
     <header class="topbar">
       <div class="topbar-inner">
         <a class="brand" href="/" title="LM3DPTFY">
@@ -37,11 +36,10 @@
           <p>I’ll review your model link, estimate material and print time, then email you a quote.</p>
         </section>
 
-        <!-- Optional detected source + browse button (does NOT reveal their model link) -->
         <section class="card" style="max-width:720px; margin: 0 auto 14px; padding: 14px 16px;">
           <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
             <div style="color:var(--muted); font-size:.92rem;">
-              <strong style="color:var(--text);">Detected source:</strong>
+              <strong style="color:var(--text);">Detected library:</strong>
               <span id="sourceName">Checking…</span>
             </div>
             <a id="browseSourceBtn" class="btn-primary btn-sm" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">
@@ -128,7 +126,7 @@
         }
 
         if (match){
-          sourceNameEl.textContent = match.name || 'Supported site';
+          sourceNameEl.textContent = match.name || 'Supported library';
           if (match.browseUrl){
             browseBtn.style.display = 'inline-block';
             browseBtn.textContent = `Browse ${match.name}`;
@@ -187,7 +185,6 @@
         statusEl.textContent = '✓ Request sent successfully! Redirecting to homepage...';
         statusEl.className = 'status-message status-success';
 
-        // replace() prevents "back" restoring a cached homepage layout
         setTimeout(() => { window.location.replace('/'); }, 900);
       } catch (err) {
         statusEl.textContent = '✗ Error: ' + err.message + '. Please email lm3dptfy@gmail.com';
