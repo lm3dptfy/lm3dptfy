@@ -3,14 +3,18 @@ require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const session = require('express-session');
 const cors = require('cors');
 const { google } = require('googleapis');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const isProd = process.env.NODE_ENV === 'production';
 
-const PUBLIC_DIR = path.join(__dirname, 'public');
+// Prefer a /public folder if you have one, otherwise fall back to repo root (this repo ships HTML/CSS in root)
+const PUBLIC_DIR_PREFERRED = path.join(__dirname, 'public');
+const PUBLIC_DIR = fs.existsSync(PUBLIC_DIR_PREFERRED) ? PUBLIC_DIR_PREFERRED : __dirname;
 
 // ========== ADMIN / EMAIL CONFIG =================================
 
@@ -120,13 +124,14 @@ async function sendNotificationEmail(newRequest) {
   const { name, email, stlLink, details } = newRequest;
 
   const subject = `New LM3DPTFY quote request from ${name}`;
+  const adminUrlBase = process.env.BACKEND_URL || 'https://www.lm3dptfy.online';
   const html = `
     <h2>New Quote Request</h2>
     <p><strong>Name:</strong> ${name}</p>
     <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
     <p><strong>STLFlix link:</strong> <a href="${stlLink}">${stlLink}</a></p>
     <p><strong>Details:</strong> ${details || '(none)'}</p>
-    <p><a href="${process.env.BACKEND_URL || 'https://www.lm3dptfy.online'}/admin.html">View in Admin Panel</a></p>
+    <p><a href="${adminUrlBase}/admin.html">View in Admin Panel</a></p>
   `;
 
   try {
@@ -157,11 +162,19 @@ async function sendNotificationEmail(newRequest) {
 
 // ========== EXPRESS MIDDLEWARE ===================================
 
+if (isProd) {
+  // Render/most PaaS sit behind a proxy; this makes secure cookies work correctly
+  app.set('trust proxy', 1);
+}
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const SESSION_SECRET = process.env.SESSION_SECRET || 'change_this_in_production';
+if (isProd && SESSION_SECRET === 'change_this_in_production') {
+  console.warn('WARNING: SESSION_SECRET is using the default value. Set SESSION_SECRET in production.');
+}
 
 app.use(
   session({
@@ -169,13 +182,37 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: isProd, // ✅ secure cookies in production (https)
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'lax',
     },
   })
 );
+
+// If we fall back to serving static from repo root, block sensitive files from being served.
+const BLOCKED_STATIC_NAMES = new Set([
+  'server.js',
+  'package.json',
+  'package-lock.json',
+  '.env',
+  '.env.local',
+  '.env.production',
+]);
+
+app.use((req, res, next) => {
+  // Only applies to static-like GET/HEAD requests
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+
+  const pathname = (req.path || '').toLowerCase();
+  const base = path.basename(pathname);
+  const ext = path.extname(base);
+
+  if (BLOCKED_STATIC_NAMES.has(base)) return res.status(404).end();
+  if (ext === '.js' || ext === '.json' || ext === '.lock' || ext === '.map') return res.status(404).end();
+
+  next();
+});
 
 // IMPORTANT: force homepage to index.html (prevents admin becoming root)
 app.get('/', (req, res) => {
@@ -185,6 +222,7 @@ app.get('/', (req, res) => {
 // optional nice alias
 app.get('/admin', (req, res) => res.redirect('/admin.html'));
 
+// Static assets + pages
 app.use(express.static(PUBLIC_DIR));
 
 // ========== HELPERS ==============================================
@@ -474,7 +512,7 @@ app.post('/api/requests/:id/fulfilled', requireAdmin, (req, res) => {
   if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
 });
 
-// NEW: Admin notes
+// Admin notes
 app.post('/api/requests/:id/admin-notes', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { adminNotes } = req.body;
@@ -489,7 +527,7 @@ app.post('/api/requests/:id/admin-notes', requireAdmin, (req, res) => {
   if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
 });
 
-// NEW: Tracking number
+// Tracking number
 app.post('/api/requests/:id/tracking', requireAdmin, (req, res) => {
   const { id } = req.params;
   const { trackingNumber } = req.body;
@@ -528,6 +566,67 @@ app.post('/api/sheets/reload', requireAdmin, async (req, res) => {
 app.post('/api/sheets/sync', requireAdmin, async (req, res) => {
   await writeAllRequestsToSheet();
   res.json({ ok: true, count: requests.length });
+});
+
+// ====== Admin exports (these links already exist in admin.html) ======
+
+function csvEscape(v) {
+  const s = String(v ?? '');
+  if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+  return s;
+}
+
+app.get('/api/export/json', requireAdmin, (req, res) => {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="lm3dptfy-requests-${new Date().toISOString().replace(/[:.]/g, '-')}.json"`
+  );
+  res.send(JSON.stringify(requests, null, 2));
+});
+
+app.get('/api/export/csv', requireAdmin, (req, res) => {
+  const header = [
+    'id',
+    'createdAt',
+    'name',
+    'email',
+    'stlLink',
+    'details',
+    'status',
+    'fulfilledBy',
+    'archived',
+    'adminNotes',
+    'trackingNumber',
+    'updatedAt',
+  ];
+
+  const rows = requests.map(r => [
+    r.id,
+    r.createdAt,
+    r.name,
+    r.email,
+    r.stlLink,
+    r.details,
+    r.status,
+    r.fulfilledBy,
+    r.archived,
+    r.adminNotes,
+    r.trackingNumber,
+    r.updatedAt,
+  ]);
+
+  const csv = [
+    header.map(csvEscape).join(','),
+    ...rows.map(row => row.map(csvEscape).join(',')),
+  ].join('\n');
+
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="lm3dptfy-requests-${new Date().toISOString().replace(/[:.]/g, '-')}.csv"`
+  );
+  res.send(csv);
 });
 
 // ========== APP STARTUP ==========================================
