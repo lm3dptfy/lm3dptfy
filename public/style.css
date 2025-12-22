@@ -115,7 +115,7 @@ a{ color:inherit; }
 }
 
 /* =========================
-   BUTTONS (brand consistent everywhere)
+   BUTTONS
 ========================= */
 .btn-primary{
   border:0;
@@ -168,11 +168,9 @@ a{ color:inherit; }
   border-radius: 999px;
 }
 
-.btn-block{
-  width: 100%;
-}
+.btn-block{ width:100%; }
 
-/* Back-compat: pill-link styled like brand button */
+/* Back-compat */
 .pill-link{
   display:inline-flex;
   align-items:center;
@@ -215,25 +213,15 @@ a{ color:inherit; }
   justify-content:center;
 }
 
-/* Wider so full-screen doesn’t feel tiny */
 .main-inner{
   width:100%;
   max-width: 1100px;
 }
 
-/* For centered, narrower pages (like request.html) */
-.main-inner.narrow{
-  max-width: 760px;
-}
+.main-inner.narrow{ max-width: 760px; }
 
-/* Admin pages get more width */
-body.admin-page .main-inner{
-  max-width: 1220px;
-}
-
-body.admin-page .topbar-inner{
-  max-width: 1220px;
-}
+body.admin-page .main-inner{ max-width: 1220px; }
+body.admin-page .topbar-inner{ max-width: 1220px; }
 
 /* =========================
    CARDS + INPUTS
@@ -280,7 +268,7 @@ textarea.field-input{
 }
 
 /* =========================
-   HERO
+   HOME
 ========================= */
 .hero{
   text-align:center;
@@ -301,9 +289,6 @@ textarea.field-input{
   line-height: 1.45;
 }
 
-/* =========================
-   FORM CARD
-========================= */
 .form-card{
   margin: 18px auto 18px;
   width: 100%;
@@ -330,10 +315,7 @@ textarea.field-input{
   letter-spacing: -.01em;
 }
 
-/* =========================
-   HOME “HOW + FEATURES”
-   (Image-1 layout always)
-========================= */
+/* Home “How + Features” */
 .how-grid{
   display:grid;
   grid-template-columns: 1fr;
@@ -342,9 +324,7 @@ textarea.field-input{
   margin-top: 14px;
 }
 
-.list-card{
-  padding: 16px;
-}
+.list-card{ padding: 16px; }
 
 .list-card ol{
   margin: 0;
@@ -370,17 +350,8 @@ textarea.field-input{
   box-shadow: var(--shadowSoft);
 }
 
-.feature h3{
-  margin: 0 0 6px;
-  font-size: .98rem;
-}
-
-.feature p{
-  margin: 0;
-  color: var(--muted);
-  font-size: .92rem;
-  line-height: 1.45;
-}
+.feature h3{ margin: 0 0 6px; font-size: .98rem; }
+.feature p{ margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.45; }
 
 /* =========================
    STATUS / FOOTER
@@ -420,15 +391,10 @@ textarea.field-input{
   color: var(--accent2);
   text-decoration:none;
 }
-.site-footer a:hover{
-  text-decoration:underline;
-}
+.site-footer a:hover{ text-decoration:underline; }
 
 /* =========================
-   ✅ ADMIN TABLE FIXES
-   - No forced wrapping
-   - Columns grow to content
-   - Horizontal scroll when needed (so nothing gets cut off)
+   ADMIN (STACKED REQUEST CARDS)
 ========================= */
 .admin-head{
   display:flex;
@@ -463,135 +429,185 @@ textarea.field-input{
   margin-top: 14px;
 }
 
-/* ✅ Always allow horizontal scroll on admin tables */
-body.admin-page .table-wrapper{
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+.section-header{
+  display:flex;
+  flex-direction:column;
+  gap: 4px;
+  margin-bottom: 12px;
 }
 
-/* ✅ Let the table size itself to content */
-body.admin-page .request-table{
-  width: max-content;     /* expands to fit columns */
-  min-width: 100%;        /* but never smaller than container */
-  table-layout: auto;     /* critical: stops forced wrapping */
-  border-collapse: collapse;
+.tip{
+  margin: 0;
+  color: var(--muted);
+  font-size: .85rem;
 }
 
-body.admin-page .request-table th,
-body.admin-page .request-table td{
-  padding: 10px 10px;
-  border-bottom: 1px solid rgba(15,23,42,.06);
-  vertical-align: top;
-  font-size: .88rem;
-
-  /* ✅ default: do NOT wrap (keeps email/name/reply/etc on one line) */
-  white-space: nowrap;
-  word-break: normal;
-  overflow-wrap: normal;
+.empty-state{
+  padding: 14px;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  color: var(--muted);
+  background: rgba(255,255,255,.55);
 }
 
-body.admin-page .request-table th{
-  text-align:left;
+.request-list{
+  display:flex;
+  flex-direction:column;
+  gap: 12px;
+}
+
+.request-card{
+  border: 1px solid rgba(15,23,42,.10);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.70));
+  box-shadow: var(--shadowSoft);
+  padding: 14px;
+}
+
+.request-card-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+  flex-wrap:wrap;
+}
+
+.request-title{
+  display:flex;
+  flex-direction:column;
+  gap: 2px;
+  min-width: 240px;
+}
+
+.request-title-main{
+  font-weight: 800;
+  font-size: 1.02rem;
+  letter-spacing: -.01em;
+}
+
+.request-title-sub{
+  color: var(--muted);
+  font-size: .84rem;
+}
+
+.request-header-right{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+}
+
+.request-meta-grid{
+  margin-top: 12px;
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+}
+
+@media (min-width: 980px){
+  .request-meta-grid{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.meta-item{
+  min-width: 0;
+}
+
+.meta-label{
   font-size: .72rem;
-  color: rgba(100,116,139,.95);
   letter-spacing: .10em;
   text-transform: uppercase;
-  border-bottom: 1px solid var(--border);
+  color: rgba(100,116,139,.95);
+  margin-bottom: 4px;
 }
 
-/* ✅ Allow wrapping ONLY in the two notes columns */
-body.admin-page .request-table td:nth-child(5),
-body.admin-page .request-table td:nth-child(6){
-  white-space: normal;
-  min-width: 260px; /* customer notes */
-  max-width: 520px;
+.meta-value{
+  color: var(--text);
+  font-size: .92rem;
+  line-height: 1.35;
+  word-break: break-word;
 }
 
-/* Admin notes column slightly wider */
-body.admin-page .request-table td:nth-child(6){
-  min-width: 320px;
-  max-width: 640px;
-}
-
-/* ✅ Minimum widths so “Reply” & “Archive” never get clipped */
-body.admin-page .request-table th:nth-child(1),
-body.admin-page .request-table td:nth-child(1){ min-width: 170px; } /* created */
-
-body.admin-page .request-table th:nth-child(2),
-body.admin-page .request-table td:nth-child(2){ min-width: 120px; } /* name */
-
-body.admin-page .request-table th:nth-child(3),
-body.admin-page .request-table td:nth-child(3){ min-width: 220px; } /* email */
-
-body.admin-page .request-table th:nth-child(4),
-body.admin-page .request-table td:nth-child(4){ min-width: 70px; }  /* STL */
-
-body.admin-page .request-table th:nth-child(7),
-body.admin-page .request-table td:nth-child(7){ min-width: 180px; } /* status */
-
-body.admin-page .request-table th:nth-child(8),
-body.admin-page .request-table td:nth-child(8){ min-width: 150px; } /* fulfilled */
-
-body.admin-page .request-table th:nth-child(9),
-body.admin-page .request-table td:nth-child(9){ min-width: 180px; } /* tracking */
-
-body.admin-page .request-table th:nth-child(10),
-body.admin-page .request-table td:nth-child(10){ min-width: 90px; } /* reply */
-
-body.admin-page .request-table th:nth-child(11),
-body.admin-page .request-table td:nth-child(11){ min-width: 90px; } /* archive */
-
-/* Links */
-body.admin-page .request-table a{
+.meta-value a{
   color: var(--accent2);
   text-decoration: none;
 }
-body.admin-page .request-table a:hover{ text-decoration: underline; }
+.meta-value a:hover{ text-decoration: underline; }
 
-/* Inputs inside cells */
-.admin-notes-input{
-  width: 100%;
-  min-width: 300px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  padding: 10px 10px;
-  font: inherit;
-  outline: none;
-  resize: vertical;
-  min-height: 44px;
+.meta-span{
+  grid-column: 1 / -1;
 }
 
-.tracking-input{
-  width: 100%;
-  min-width: 160px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  padding: 10px 10px;
-  font: inherit;
-  outline: none;
+/* Controls block (your image 2) */
+.request-controls{
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(15,23,42,.08);
+
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (min-width: 980px){
+  .request-controls{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.control-label{
+  font-size: .72rem;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: rgba(100,116,139,.95);
+  margin-bottom: 6px;
 }
 
 .status-select{
   width: 100%;
-  min-width: 160px;
+  min-width: 0;
   border-radius: 999px;
   border: 1px solid var(--border);
   padding: 9px 10px;
   background: #fff;
   font: inherit;
-  font-size: .88rem;
+  font-size: .92rem;
 }
 
-.reply-link{
-  white-space: nowrap;
-  font-weight: 700;
+.tracking-input{
+  width: 100%;
+  min-width: 0;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  padding: 10px 10px;
+  font: inherit;
+  outline: none;
 }
 
-/* Tip text */
-.tip{
-  margin: 10px 0 0;
+.admin-notes-input{
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  padding: 10px 10px;
+  font: inherit;
+  outline: none;
+  resize: vertical;
+  min-height: 54px;
+}
+
+.archive-row{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.75);
+}
+
+.archive-text{
   color: var(--muted);
-  font-size: .85rem;
+  font-size: .92rem;
 }
 
 /* Feature grid responsive 3 → 2 → 1 */
