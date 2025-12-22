@@ -2,100 +2,140 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Request a 3D Print Quote | Let Me 3D Print That For You</title>
+  <title>Quote request | Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/style.css?v=modern2" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
+
 <body>
   <div class="page-shell">
-    <header class="header">
-      <div class="header-inner">
-        <a class="brand" href="/" style="text-decoration:none;">
-          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY" />
-          <div class="brand-text">
-            <div class="brand-title">Let Me 3D Print That For You</div>
-            <div class="brand-sub">Quote request</div>
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="/" title="LM3DPTFY">
+          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
+          <div class="brand-title">
+            <strong>Let Me 3D Print That For You</strong>
+            <span>Quote request</span>
           </div>
         </a>
-        <nav class="nav"><a href="/">Home</a></nav>
+
+        <div class="nav-right">
+          <a class="btn-primary btn-sm" href="/">Home</a>
+        </div>
       </div>
     </header>
 
     <main class="page-main">
-      <div class="container">
+      <div class="main-inner narrow">
+
         <section class="hero">
           <h1>Where should I send your quote?</h1>
-          <p>I’ll review your STLFlix model, estimate material and print time, then email you a quote.</p>
+          <p>I’ll review your link, estimate material and print time, then email you a quote.</p>
         </section>
 
-        <section class="card form-card" style="max-width:720px;">
-          <form id="quoteForm">
+        <section class="card form-card" style="padding:20px;">
+          <form id="quoteForm" class="stl-form">
+            <!-- keep payload compatible with server.js -->
             <input type="hidden" id="stlLinkHidden" name="stlLink" />
 
-            <label class="field-label" for="name">Your name</label>
-            <input class="field-input" type="text" id="name" required />
+            <!-- Show link (editable) -->
+            <div>
+              <label class="field-label" for="stlLinkDisplay">Model link</label>
+              <input
+                class="field-input"
+                type="url"
+                id="stlLinkDisplay"
+                placeholder="https://..."
+                required
+              />
+              <p class="small-note" style="margin:10px 0 0;">
+                This should be a <strong>public</strong> link from a supported model library.
+              </p>
+            </div>
 
-            <div style="height:10px;"></div>
+            <div>
+              <label class="field-label" for="name">Your name</label>
+              <input class="field-input" type="text" id="name" required />
+            </div>
 
-            <label class="field-label" for="email">Email</label>
-            <input class="field-input" type="email" id="email" required />
+            <div>
+              <label class="field-label" for="email">Email</label>
+              <input class="field-input" type="email" id="email" required />
+            </div>
 
-            <div style="height:10px;"></div>
+            <div>
+              <label class="field-label" for="details">Notes (optional)</label>
+              <textarea class="field-input" id="details" rows="4"></textarea>
+            </div>
 
-            <label class="field-label" for="details">Notes (optional)</label>
-            <textarea class="field-input" id="details" rows="4" style="border-radius:16px;"></textarea>
+            <button class="btn-primary btn-block" type="submit" id="submitBtn">
+              Submit request
+            </button>
 
-            <button class="btn-primary" type="submit" id="submitBtn">Submit request</button>
-            <div id="statusMessage" class="status-message"></div>
+            <p id="statusMessage" class="status-message" style="display:none;"></p>
 
-            <div class="small-note">
+            <p class="small-note" style="margin-top:6px;">
               I usually respond within one business day. If I have questions about wall thickness,
               print orientation, or supports, I’ll ask before printing.
-            </div>
+            </p>
           </form>
         </section>
+
       </div>
     </main>
 
-    <footer class="footer">
-      Let Me 3D Print That For You · LM3DPTFY.online · Questions? Email
-      <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+    <footer class="site-footer">
+      Let Me 3D Print That For You · LM3DPTFY.online ·
+      Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
     </footer>
   </div>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const stlLink = urlParams.get('link') || '';
-    document.getElementById('stlLinkHidden').value = stlLink;
+    const incomingLink = urlParams.get('link') || '';
 
+    const stlHidden = document.getElementById('stlLinkHidden');
+    const stlDisplay = document.getElementById('stlLinkDisplay');
     const statusEl = document.getElementById('statusMessage');
     const btn = document.getElementById('submitBtn');
 
-    if (!stlLink) {
-      statusEl.textContent = '⚠ No STL link provided. Please go back to the homepage and paste a link.';
-      statusEl.classList.add('status-error');
+    // Prefill from homepage
+    stlHidden.value = incomingLink;
+    stlDisplay.value = incomingLink;
+
+    if (!incomingLink) {
+      statusEl.style.display = 'block';
+      statusEl.textContent = '⚠ No link provided. Please go back to the homepage and paste a link.';
+      statusEl.className = 'status-message status-error';
     }
 
     document.getElementById('quoteForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      // Allow user to correct the link on this page
+      const linkVal = (stlDisplay.value || '').trim();
+      stlHidden.value = linkVal;
+
       const payload = {
-        stlLink: document.getElementById('stlLinkHidden').value,
+        stlLink: linkVal,
         name: document.getElementById('name').value.trim(),
         email: document.getElementById('email').value.trim(),
         details: document.getElementById('details').value.trim()
       };
 
       if (!payload.stlLink) {
-        statusEl.textContent = '✗ Error: No STL link provided. Please go back to the homepage.';
+        statusEl.style.display = 'block';
+        statusEl.textContent = '✗ Error: No link provided. Please go back to the homepage.';
         statusEl.className = 'status-message status-error';
         return;
       }
 
       btn.disabled = true;
+      statusEl.style.display = 'block';
       statusEl.textContent = 'Sending your request...';
       statusEl.className = 'status-message';
-      statusEl.style.display = 'block';
 
       try {
         const res = await fetch('/api/requests', {
