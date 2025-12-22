@@ -2,27 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Let Me 3D Print That For You</title>
+  <title>Request a 3D Print Quote | Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Paste a public 3D model link and get a custom 3D printing quote by email." />
-  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Bump CSS URL to avoid cache weirdness -->
+  <link rel="stylesheet" href="/style.css?v=req3" />
 </head>
 
 <body>
   <div class="page-shell">
 
-    <!-- Top bar -->
+    <!-- Same topbar style as Home -->
     <header class="topbar">
       <div class="topbar-inner">
         <a class="brand" href="/" title="LM3DPTFY">
           <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
           <div class="brand-title">
             <strong>Let Me 3D Print That For You</strong>
-            <span>Fast quotes • Clear ETA • No spam</span>
+            <span>Quote request</span>
           </div>
         </a>
 
-        <div class="nav-right"></div>
+        <div class="nav-right">
+          <a class="pill-link" href="/">Home</a>
+        </div>
       </div>
     </header>
 
@@ -30,130 +33,168 @@
       <div class="main-inner">
 
         <section class="hero">
-          <h1>Turn STL Files into real prints.</h1>
-          <p>
-            Paste a public link, from the options below, and I’ll email you pricing, ETA, and any quick questions before printing.
-          </p>
+          <h1>Where should I send your quote?</h1>
+          <p>I’ll review your model link, estimate material and print time, then email you a quote.</p>
         </section>
 
-        <section class="card form-card">
-          <form class="stl-form" action="request.html" method="GET">
-            <label for="stlLink" class="field-label">Model link</label>
-
-            <input
-              type="url"
-              id="stlLink"
-              name="link"
-              class="field-input"
-              placeholder="https://..."
-              required
-            />
-
-            <button type="submit" class="btn-primary btn-block">
-              Get Quote
-            </button>
-
-            <div id="siteOptionsWrap" style="margin-top:6px;">
-              <div style="text-align:center;color:var(--muted);font-size:.88rem;margin:10px 0 10px;">
-                Browse supported libraries (opens in a new tab):
-              </div>
-
-              <div id="siteOptions"
-                   style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
-                <!-- populated by JS -->
-              </div>
-
-              <p id="siteFallback"
-                 class="small-note"
-                 style="display:none;margin-top:12px;">
-                Supported sources will appear here once configured. You can still paste a public link above.
-              </p>
+        <!-- Optional detected source + browse button (does NOT reveal their model link) -->
+        <section class="card" style="max-width:720px; margin: 0 auto 14px; padding: 14px 16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div style="color:var(--muted); font-size:.92rem;">
+              <strong style="color:var(--text);">Detected source:</strong>
+              <span id="sourceName">Checking…</span>
             </div>
+            <a id="browseSourceBtn" class="btn-primary btn-sm" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">
+              Browse
+            </a>
+          </div>
+        </section>
 
-            <p class="small-note">
-              Don’t see your library yet? Paste the link anyway — I’ll confirm licensing/compatibility before printing.
-            </p>
+        <section class="card form-card" style="max-width:720px;">
+          <form id="quoteForm">
+            <input type="hidden" id="stlLinkHidden" name="stlLink" />
+
+            <label class="field-label" for="name">Your name</label>
+            <input class="field-input" type="text" id="name" required />
+
+            <div style="height:10px;"></div>
+
+            <label class="field-label" for="email">Email</label>
+            <input class="field-input" type="email" id="email" required />
+
+            <div style="height:10px;"></div>
+
+            <label class="field-label" for="details">Notes (optional)</label>
+            <textarea class="field-input" id="details" rows="4" style="border-radius:16px;"></textarea>
+
+            <button class="btn-primary btn-block" type="submit" id="submitBtn">Submit request</button>
+
+            <div id="statusMessage" class="status-message" style="display:none;"></div>
+
+            <div class="small-note">
+              I usually respond within one business day. If I have questions about wall thickness,
+              print orientation, or supports, I’ll ask before printing.
+            </div>
           </form>
         </section>
-
-        <section class="how-grid" id="how">
-          <div class="card list-card">
-            <h2 class="section-title" style="margin-top:0;">How this works</h2>
-            <ol>
-              <li>Find a model on an approved library (STLFlix to start) and copy the link.</li>
-              <li>Paste it here, then add your name/email on the next step.</li>
-              <li>I’ll reply with a quote + ETA (and any questions) before printing.</li>
-            </ol>
-          </div>
-
-          <div class="feature-grid">
-            <div class="feature">
-              <h3>Quote</h3>
-              <p>Price based on material, size, and print time — no guessing.</p>
-            </div>
-            <div class="feature">
-              <h3>Timeline</h3>
-              <p>Clear status from “sent to printer” to “shipped”.</p>
-            </div>
-            <div class="feature">
-              <h3>Next steps</h3>
-              <p>Approve, tweak, or ask questions — quick and simple.</p>
-            </div>
-          </div>
-        </section>
-
-        <p class="small-note" style="margin-top:18px;">
-          I won’t print weapons, illegal items, or obviously infringing IP.
-        </p>
 
       </div>
     </main>
 
     <footer class="site-footer">
-      Let Me 3D Print That For You · LM3DPTFY.online ·
-      Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+      Let Me 3D Print That For You · LM3DPTFY.online · Questions? Email
+      <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
     </footer>
+
   </div>
 
   <script>
-    async function loadSites() {
-      const wrap = document.getElementById('siteOptions');
-      const fallback = document.getElementById('siteFallback');
+    const urlParams = new URLSearchParams(window.location.search);
+    const stlLink = urlParams.get('link') || '';
+    document.getElementById('stlLinkHidden').value = stlLink;
 
-      try {
+    const statusEl = document.getElementById('statusMessage');
+    const btn = document.getElementById('submitBtn');
+
+    const sourceNameEl = document.getElementById('sourceName');
+    const browseBtn = document.getElementById('browseSourceBtn');
+
+    function normalizeHost(host){
+      return String(host || '').trim().toLowerCase().replace(/^www\./,'');
+    }
+
+    async function detectSource(){
+      if (!stlLink){
+        sourceNameEl.textContent = 'None (missing link)';
+        return;
+      }
+
+      let host = '';
+      try { host = normalizeHost(new URL(stlLink).hostname); } catch {}
+
+      try{
         const res = await fetch('/api/public/sites', { headers: { 'Accept': 'application/json' } });
         const data = await res.json().catch(() => ({}));
-        const sites = (data && data.sites) ? data.sites : [];
+        const sites = Array.isArray(data.sites) ? data.sites : [];
 
-        wrap.innerHTML = '';
-
-        if (!Array.isArray(sites) || sites.length === 0) {
-          fallback.style.display = 'block';
-          return;
-        }
-
-        fallback.style.display = 'none';
-
-        for (const s of sites) {
-          const a = document.createElement('a');
-          a.className = 'btn-primary btn-sm';
-          a.href = s.browseUrl || '#';
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          a.style.textDecoration = 'none';
-          a.textContent = s.name ? `Browse ${s.name}` : 'Browse';
-          if (!s.browseUrl) {
-            a.style.opacity = '0.6';
-            a.style.pointerEvents = 'none';
+        let match = null;
+        for (const s of sites){
+          const hosts = Array.isArray(s.hosts) ? s.hosts.map(normalizeHost) : [];
+          if (hosts.includes(host)) { match = s; break; }
+          for (const h of hosts){
+            if (h && host.endsWith('.' + h)) { match = s; break; }
           }
-          wrap.appendChild(a);
+          if (match) break;
         }
-      } catch (e) {
-        fallback.style.display = 'block';
+
+        if (match){
+          sourceNameEl.textContent = match.name || 'Supported site';
+          if (match.browseUrl){
+            browseBtn.style.display = 'inline-block';
+            browseBtn.textContent = `Browse ${match.name}`;
+            browseBtn.href = match.browseUrl;
+          }
+        } else {
+          sourceNameEl.textContent = 'Unknown (we’ll confirm licensing/compatibility)';
+        }
+      } catch (e){
+        sourceNameEl.textContent = 'Unknown (we’ll confirm licensing/compatibility)';
       }
     }
 
-    loadSites();
+    detectSource();
+
+    if (!stlLink) {
+      statusEl.style.display = 'block';
+      statusEl.textContent = '⚠ No model link provided. Please go back to the homepage and paste a link.';
+      statusEl.className = 'status-message status-error';
+      btn.disabled = true;
+    }
+
+    document.getElementById('quoteForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        stlLink: document.getElementById('stlLinkHidden').value,
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        details: document.getElementById('details').value.trim()
+      };
+
+      if (!payload.stlLink) {
+        statusEl.style.display = 'block';
+        statusEl.textContent = '✗ Error: No model link provided. Please go back to the homepage.';
+        statusEl.className = 'status-message status-error';
+        return;
+      }
+
+      btn.disabled = true;
+      statusEl.style.display = 'block';
+      statusEl.textContent = 'Sending your request...';
+      statusEl.className = 'status-message';
+
+      try {
+        const res = await fetch('/api/requests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Failed to submit request');
+
+        statusEl.textContent = '✓ Request sent successfully! Redirecting to homepage...';
+        statusEl.className = 'status-message status-success';
+
+        // replace() prevents "back" restoring a weird cached homepage layout
+        setTimeout(() => { window.location.replace('/'); }, 900);
+      } catch (err) {
+        statusEl.textContent = '✗ Error: ' + err.message + '. Please email lm3dptfy@gmail.com';
+        statusEl.className = 'status-message status-error';
+        btn.disabled = false;
+      }
+    });
   </script>
 </body>
 </html>
