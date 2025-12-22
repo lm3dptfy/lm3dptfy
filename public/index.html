@@ -4,61 +4,10 @@
   <meta charset="UTF-8" />
   <title>Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Paste a public 3D model link and get a custom 3D printing quote by email." />
-  <link rel="stylesheet" href="/style.css" />
+  <meta name="description" content="Paste a public model link and get a custom 3D print quote by email." />
 
-  <!-- Home-only styling for Supported Sites card -->
-  <style>
-    .sites-card{ padding: 20px; }
-    .sites-title{
-      margin: 0 0 6px;
-      font-size: 1.05rem;
-      letter-spacing: -.01em;
-    }
-    .sites-sub{
-      margin: 0 0 12px;
-      color: var(--muted);
-      font-size: .95rem;
-      line-height: 1.4;
-    }
-    .sites-list{
-      display:flex;
-      flex-wrap:wrap;
-      gap: 10px;
-    }
-
-    .site-pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.70);
-      color: var(--muted);
-      text-decoration:none;
-      font-weight: 750;
-      font-size: .9rem;
-      transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
-      white-space: nowrap;
-    }
-    .site-pill:hover{
-      transform: translateY(-1px);
-      background:#fff;
-      box-shadow: var(--shadowSoft);
-      color: var(--text);
-    }
-
-    .site-empty{
-      border: 1px dashed rgba(15,23,42,.20);
-      border-radius: 16px;
-      padding: 12px;
-      color: var(--muted);
-      font-size: .92rem;
-      line-height: 1.4;
-      background: rgba(255,255,255,.55);
-    }
-  </style>
+  <!-- Bump CSS URL to avoid cache weirdness -->
+  <link rel="stylesheet" href="/style.css?v=home3" />
 </head>
 
 <body>
@@ -89,12 +38,11 @@
           </p>
         </section>
 
-        <!-- ✅ Card 1: Get Quote (always full width) -->
-        <section class="card form-card" style="margin-top: 18px;">
-          <form class="stl-form" action="request.html" method="GET">
+        <!-- Get Quote card -->
+        <section class="card form-card">
+          <form class="stl-form" action="/request.html" method="GET">
             <label for="stlLink" class="field-label">Model link</label>
 
-            <!-- ✅ No STLFlix default / no STLFlix placeholder -->
             <input
               type="url"
               id="stlLink"
@@ -108,7 +56,7 @@
               Get Quote
             </button>
 
-            <p class="small-note" style="margin-top:6px;">
+            <p class="small-note">
               Choose a supported site below to browse models, then paste the model link here.
             </p>
 
@@ -118,18 +66,18 @@
           </form>
         </section>
 
-        <!-- ✅ Card 2: Supported Sites (always directly under Get Quote) -->
-        <section class="card sites-card">
-          <h2 class="sites-title">Supported sites</h2>
-          <p class="sites-sub">
+        <!-- Supported Sites card (ONLY place this renders) -->
+        <section class="card" style="padding:16px; margin-top: 14px;">
+          <h2 class="section-title" style="margin:0 0 6px;">Supported sites</h2>
+          <p style="margin:0 0 12px; color:var(--muted); font-size:.95rem; line-height:1.45;">
             Browse supported model libraries (opens in a new tab). This list is managed from the Admin page.
           </p>
 
-          <div class="sites-list" id="sitesList"></div>
+          <div id="sitesList" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
 
-          <div class="site-empty" id="sitesEmpty" style="display:none;margin-top:12px;">
-            No supported sites have been added yet.
-            <br/>
+          <div id="sitesEmpty"
+               style="display:none; margin-top:10px; padding:12px; border-radius:16px; border:1px dashed rgba(15,23,42,.20); background: rgba(255,255,255,.55); color:var(--muted); font-size:.92rem; line-height:1.45;">
+            No supported sites have been added yet.<br/>
             Once you add them in <strong>Admin → Supported Sites</strong>, they’ll show up here automatically.
           </div>
         </section>
@@ -193,14 +141,14 @@
 
         sites.forEach((s) => {
           const a = document.createElement('a');
-          a.className = 'site-pill';
           a.href = s.browseUrl || '#';
           a.target = '_blank';
           a.rel = 'noopener noreferrer';
-          a.textContent = s.name ? `Browse ${s.name}` : 'Browse';
+          a.className = 'btn-primary btn-sm';
+          a.textContent = `Browse ${s.name || 'site'}`;
 
           if (!s.browseUrl){
-            a.style.opacity = '0.55';
+            a.style.opacity = '0.6';
             a.style.pointerEvents = 'none';
           }
 
