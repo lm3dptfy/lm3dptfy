@@ -4,179 +4,267 @@
   <meta charset="UTF-8" />
   <title>Admin | LM3DPTFY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="/style.css" />
+
+  <!-- Cache-bust so you SEE the update immediately -->
+  <link rel="stylesheet" href="/style.css?v=admin6" />
 
   <style>
-    .admin-wrap{ display:flex; flex-direction:column; gap:16px; }
-    .admin-head{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap;
-    }
-    .admin-title{ margin:0; font-size:1.5rem; letter-spacing:-.02em; }
-    .admin-subtitle{ margin:6px 0 0; color:var(--muted); }
-    .admin-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+    /* Admin-only layout helpers (keeps everything stacked + clean) */
+    .admin-wrap { width:100%; max-width: 1220px; margin: 0 auto; }
 
-    .settings-card{ padding:16px; }
     .settings-grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 12px;
+      gap:14px;
+      margin: 14px 0 6px;
     }
-    @media (max-width: 860px){
+    @media (max-width: 980px){
       .settings-grid{ grid-template-columns: 1fr; }
     }
-    .settings-box{
+
+    .settings-card{
+      padding:16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .settings-card h3{
+      margin:0 0 4px;
+      font-size: 1.0rem;
+      letter-spacing:-.01em;
+    }
+    .settings-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.35;
+    }
+
+    .orders-section{
+      margin-top:14px;
+    }
+
+    .order-card{
+      padding:16px;
+      margin-top:12px;
+    }
+
+    .order-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .order-meta{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width: 240px;
+    }
+
+    .order-created{
+      font-size:.90rem;
+      color:var(--muted);
+    }
+
+    .order-name{
+      font-size:1.35rem;
+      font-weight:850;
+      letter-spacing:-.02em;
+      line-height:1.1;
+      margin:0;
+    }
+
+    .order-email a{
+      color: var(--accent);
+      text-decoration:none;
+      font-weight:650;
+    }
+    .order-email a:hover{ text-decoration:underline; }
+
+    /* Source pill */
+    :root{
+      --danger:#e11d48;
+      --danger2:#fb7185;
+    }
+
+    .source-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      width: fit-content;
+      padding:6px 10px;
+      border-radius:999px;
       border:1px solid var(--border);
+      background: rgba(255,255,255,.70);
+      color: var(--muted);
+      font-size:.85rem;
+      font-weight: 750;
+      letter-spacing:.01em;
+    }
+    .source-pill.is-unsupported{
+      color: var(--danger);
+      border-color: rgba(225,29,72,.30);
+      background: rgba(225,29,72,.08);
+    }
+
+    /* Red button variant for unsupported links */
+    .btn-danger{
+      background: linear-gradient(180deg, var(--danger2), var(--danger)) !important;
+      box-shadow: 0 14px 34px rgba(225,29,72,.22) !important;
+    }
+    .btn-danger:hover{
+      box-shadow: 0 18px 44px rgba(225,29,72,.28) !important;
+      filter: brightness(1.02);
+    }
+
+    .order-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .archive-wrap{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.65);
+      color: var(--muted);
+      font-size:.88rem;
+      font-weight:650;
+    }
+
+    .order-body{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .order-body{ grid-template-columns: 1fr; }
+    }
+
+    .order-box{
+      border:1px solid rgba(15,23,42,.08);
       border-radius: var(--radiusLG);
-      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.70));
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.72));
       box-shadow: var(--shadowSoft);
-      padding: 14px;
+      padding:14px;
+      min-width:0;
+    }
+
+    .order-box h4{
+      margin:0 0 10px;
+      font-size:.9rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color: rgba(100,116,139,.95);
+    }
+
+    .kv{
       display:flex;
       flex-direction:column;
       gap:10px;
     }
-    .settings-box h3{ margin:0; font-size:1rem; }
-    .settings-box p{ margin:0; color:var(--muted); font-size:.92rem; line-height:1.4; }
-    .settings-row{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
-    .settings-list{
-      display:flex; flex-wrap:wrap; gap:8px;
-    }
-    .tag{
-      padding:6px 10px; border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.75);
-      font-size:.85rem;
-      color: rgba(15,23,42,.85);
-      font-weight: 650;
-    }
 
-    .section-title{ margin:0 0 10px; }
-    .orders{ display:flex; flex-direction:column; gap:12px; }
-    .order{
-      border-radius: var(--radiusXL);
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.92);
-      box-shadow: var(--shadowSoft);
-      padding: 14px;
-    }
-    .order-top{
-      display:flex; justify-content:space-between; align-items:flex-start;
-      gap: 12px; flex-wrap:wrap;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(15,23,42,.06);
-      margin-bottom: 12px;
-    }
-    .order-meta{ min-width: 260px; }
-    .order-created{ color: var(--muted); font-size:.88rem; }
-    .order-name{ font-weight: 850; font-size: 1.05rem; margin-top: 2px; }
-    .order-email a{ color: var(--accent); text-decoration:none; font-weight: 700; }
-    .order-email a:hover{ text-decoration: underline; }
-    .order-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-
-    .order-grid{
+    .row{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      align-items:start;
+      grid-template-columns: 140px 1fr;
+      gap:10px;
+      align-items:center;
     }
-    @media (max-width: 860px){
-      .order-grid{ grid-template-columns: 1fr; }
-    }
-
-    .box{
-      border:1px solid var(--border);
-      border-radius: 14px;
-      background: rgba(255,255,255,.75);
-      padding: 12px;
-    }
-    .mini-label{
-      font-size:.78rem;
-      font-weight:800;
-      letter-spacing:.10em;
-      text-transform: uppercase;
-      color: rgba(100,116,139,.95);
-      margin:0 0 8px;
-    }
-    .box p{ margin:0; color: rgba(15,23,42,.90); line-height:1.45; }
-
-    .controls{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 12px;
-    }
-    @media (max-width: 860px){
-      .controls{ grid-template-columns: 1fr; }
+    @media (max-width: 520px){
+      .row{ grid-template-columns: 1fr; }
     }
 
-    .toggle{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.65);
+    .row label{
       color: var(--muted);
-      font-size:.85rem;
-      font-weight: 650;
+      font-weight:700;
+      font-size:.9rem;
+    }
+
+    .btn-ghost{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.7);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 800;
+      cursor:pointer;
     }
 
     /* Modal */
     .modal-backdrop{
-      position:fixed; inset:0; background: rgba(2,6,23,.55);
-      display:none; align-items:center; justify-content:center;
-      z-index: 999;
+      position:fixed;
+      inset:0;
+      background: rgba(15,23,42,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:200;
       padding: 18px;
     }
     .modal{
       width: min(860px, 100%);
       background: #fff;
       border-radius: var(--radiusXL);
-      border: 1px solid rgba(255,255,255,.16);
-      box-shadow: 0 30px 90px rgba(2,6,23,.55);
+      border:1px solid var(--border);
+      box-shadow: 0 28px 90px rgba(15,23,42,.25);
       overflow:hidden;
     }
     .modal-head{
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--border);
-      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      background: rgba(246,248,252,.9);
+      backdrop-filter: blur(10px);
+    }
+    .modal-head h3{
+      margin:0;
+      font-size:1.0rem;
+      letter-spacing:-.01em;
+    }
+    .modal-body{
+      padding:16px;
+    }
+    .modal-actions{
+      padding:14px 16px;
+      border-top:1px solid var(--border);
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
       background: rgba(246,248,252,.9);
     }
-    .modal-head h2{ margin:0; font-size: 1.05rem; }
-    .modal-head p{ margin:6px 0 0; color: var(--muted); font-size:.9rem; }
-    .modal-body{ padding: 16px; display:flex; flex-direction:column; gap:12px; }
-    .modal-foot{
-      padding: 14px 16px;
-      border-top: 1px solid var(--border);
-      display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;
-      background: rgba(246,248,252,.9);
-    }
-    .btn-ghost{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.75);
-      color: var(--muted);
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-weight: 800;
-      cursor:pointer;
-    }
-    .btn-ghost:hover{ background:#fff; }
 
-    .row{
+    .site-row{
       display:grid;
-      grid-template-columns: 1.2fr 1.2fr 1.8fr .8fr .4fr;
+      grid-template-columns: 1fr 1.2fr 1.4fr auto;
       gap:10px;
       align-items:center;
+      margin-bottom:10px;
     }
-    .row .field-input{ padding:10px 12px; border-radius: 12px; }
-    .row small{ color: var(--muted); }
     @media (max-width: 860px){
-      .row{ grid-template-columns: 1fr; }
+      .site-row{ grid-template-columns: 1fr; }
     }
+    .site-row .field-input{ padding:10px 12px; border-radius: 14px; }
   </style>
 </head>
 
 <body class="admin-page">
   <div class="page-shell">
+
+    <!-- Top bar -->
     <header class="topbar">
       <div class="topbar-inner">
         <a class="brand" href="/" title="Home">
@@ -195,7 +283,7 @@
     </header>
 
     <main class="page-main">
-      <div class="main-inner">
+      <div class="main-inner admin-wrap">
 
         <!-- Login -->
         <div id="loginCard" class="card" style="max-width:560px;margin:0 auto;padding:18px;">
@@ -218,74 +306,60 @@
 
         <!-- Dashboard -->
         <div id="dashboardCard" style="display:none;">
-          <div class="admin-wrap">
-
-            <div class="admin-head">
-              <div>
-                <h1 class="admin-title">Quote requests</h1>
-                <p class="admin-subtitle">Active + archived requests from lm3dptfy.online.</p>
-              </div>
-
-              <div class="admin-actions">
-                <button id="reloadSheetsBtn" class="btn-primary btn-sm" type="button">Refresh from Sheets</button>
-                <button id="syncSheetsBtn" class="btn-primary btn-sm" type="button">Sync to Sheets</button>
-                <a href="/api/export/csv" class="btn-primary btn-sm" style="text-decoration:none;">Export CSV</a>
-                <a href="/api/export/json" class="btn-primary btn-sm" style="text-decoration:none;">Export JSON</a>
-              </div>
+          <div class="admin-head">
+            <div>
+              <h1 class="admin-title">Quote requests</h1>
+              <p class="admin-subtitle">Active + archived requests from lm3dptfy.online.</p>
             </div>
 
-            <p id="dashboardStatus" class="status-message" style="display:none;"></p>
-
-            <!-- Settings -->
-            <section class="card settings-card">
-              <h2 class="section-title" style="margin:0;">Settings</h2>
-
-              <div class="settings-grid">
-                <div class="settings-box">
-                  <div class="settings-row">
-                    <div>
-                      <h3 style="margin:0;">Fulfilled by list</h3>
-                      <p style="margin-top:6px;">These names appear in the “Fulfilled by” dropdown on each order.</p>
-                    </div>
-                    <button id="editFulfillersBtn" class="btn-primary btn-sm" type="button">Edit</button>
-                  </div>
-                  <div class="settings-list" id="fulfillersPreview"></div>
-                </div>
-
-                <div class="settings-box">
-                  <div class="settings-row">
-                    <div>
-                      <h3 style="margin:0;">Supported sites</h3>
-                      <p style="margin-top:6px;">These sites appear on the Home page as options and power source detection on the Request page.</p>
-                    </div>
-                    <button id="editSitesBtn" class="btn-primary btn-sm" type="button">Edit</button>
-                  </div>
-                  <div class="settings-list" id="sitesPreview"></div>
-                </div>
-              </div>
-            </section>
-
-            <!-- Active -->
-            <section class="card" style="padding:16px;">
-              <h2 class="section-title" style="margin:0 0 10px;">Active</h2>
-              <div class="orders" id="activeList"></div>
-              <p class="tip" style="margin-top:12px;color:var(--muted);font-size:.9rem;">
-                Tip: Set status to <strong>Shipped</strong> to enable Tracking #. When you paste tracking, an email draft can open automatically.
-              </p>
-            </section>
-
-            <!-- Archived -->
-            <section class="card" style="padding:16px;">
-              <h2 class="section-title" style="margin:0 0 10px;">Archived</h2>
-              <div class="orders" id="archivedList"></div>
-              <p class="tip" style="margin-top:12px;color:var(--muted);font-size:.9rem;">
-                Tip: Bookmark <strong>/admin</strong>. This page is meant to stay private.
-              </p>
-            </section>
-
+            <div class="admin-actions">
+              <button id="reloadSheetsBtn" class="btn-primary btn-sm" type="button">Refresh from Sheets</button>
+              <button id="syncSheetsBtn" class="btn-primary btn-sm" type="button">Sync to Sheets</button>
+              <a href="/api/export/csv" class="btn-primary btn-sm" style="text-decoration:none;">Export CSV</a>
+              <a href="/api/export/json" class="btn-primary btn-sm" style="text-decoration:none;">Export JSON</a>
+            </div>
           </div>
-        </div>
 
+          <p id="dashboardStatus" class="status-message" style="display:none;"></p>
+
+          <!-- Settings -->
+          <section class="settings-grid">
+            <div class="card settings-card">
+              <div>
+                <h3>Fulfilled by list</h3>
+                <p>These names appear in the “Fulfilled by” dropdown on each order.</p>
+              </div>
+              <button id="editFulfilledBtn" class="btn-primary btn-sm" type="button">Edit</button>
+            </div>
+
+            <div class="card settings-card">
+              <div>
+                <h3>Supported sites</h3>
+                <p>These sites appear on the Home page and power source detection.</p>
+              </div>
+              <button id="editSitesBtn" class="btn-primary btn-sm" type="button">Edit</button>
+            </div>
+          </section>
+
+          <!-- Active -->
+          <section class="orders-section">
+            <div class="card" style="padding:16px;">
+              <h2 class="section-title" style="margin:0;">Active</h2>
+              <div id="activeList" style="margin-top:10px;"></div>
+              <p class="tip">Tip: Set status to <strong>Shipped</strong> to enable Tracking #. When you paste tracking, an email draft opens automatically.</p>
+            </div>
+          </section>
+
+          <!-- Archived -->
+          <section class="orders-section">
+            <div class="card" style="padding:16px;">
+              <h2 class="section-title" style="margin:0;">Archived</h2>
+              <div id="archivedList" style="margin-top:10px;"></div>
+              <p class="tip">Tip: Bookmark <strong>/admin</strong>. This page is meant to stay private.</p>
+            </div>
+          </section>
+
+        </div>
       </div>
     </main>
 
@@ -294,70 +368,89 @@
     </footer>
   </div>
 
-  <!-- Fulfillers Modal -->
-  <div class="modal-backdrop" id="fulfillersModal">
+  <!-- Modal: Fulfilled By -->
+  <div id="modalFulfilled" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Edit fulfilled by list">
     <div class="modal">
       <div class="modal-head">
-        <div>
-          <h2>Edit “Fulfilled by” names</h2>
-          <p>Add/remove names used in the Fulfilled By dropdown.</p>
-        </div>
-        <button class="btn-ghost" type="button" data-close="fulfillersModal">Close</button>
+        <h3>Edit “Fulfilled by” names</h3>
+        <button class="btn-ghost" type="button" data-close="modalFulfilled">Close</button>
       </div>
-      <div class="modal-body" id="fulfillersBody"></div>
-      <div class="modal-foot">
-        <button class="btn-ghost" type="button" id="addFulfillerRowBtn">+ Add name</button>
-        <button class="btn-primary" type="button" id="saveFulfillersBtn">Save</button>
+      <div class="modal-body">
+        <p style="margin:0 0 10px; color:var(--muted); font-size:.92rem; line-height:1.45;">
+          Enter one name per line.
+        </p>
+        <textarea id="fulfilledTextarea" class="field-input" rows="7" placeholder="Robert&#10;Jared&#10;Terence"></textarea>
+        <p id="fulfilledStatus" class="status-message" style="display:none;"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-ghost" type="button" data-close="modalFulfilled">Cancel</button>
+        <button id="saveFulfilledBtn" class="btn-primary" type="button">Save</button>
       </div>
     </div>
   </div>
 
-  <!-- Sites Modal -->
-  <div class="modal-backdrop" id="sitesModal">
+  <!-- Modal: Supported Sites -->
+  <div id="modalSites" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Edit supported sites">
     <div class="modal">
       <div class="modal-head">
-        <div>
-          <h2>Edit supported sites</h2>
-          <p>These enabled sites show on the Home page and power source detection.</p>
-        </div>
-        <button class="btn-ghost" type="button" data-close="sitesModal">Close</button>
+        <h3>Edit Supported Sites</h3>
+        <button class="btn-ghost" type="button" data-close="modalSites">Close</button>
       </div>
-      <div class="modal-body" id="sitesBody"></div>
-      <div class="modal-foot">
-        <button class="btn-ghost" type="button" id="addSiteRowBtn">+ Add site</button>
-        <button class="btn-primary" type="button" id="saveSitesBtn">Save</button>
+      <div class="modal-body">
+        <p style="margin:0 0 10px; color:var(--muted); font-size:.92rem; line-height:1.45;">
+          Add sites you support. “Hosts” should be comma-separated domains (ex: <strong>stlflix.com</strong>).
+        </p>
+
+        <div id="sitesEditor"></div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+          <button id="addSiteRowBtn" class="btn-ghost" type="button">+ Add site</button>
+        </div>
+
+        <p id="sitesStatus" class="status-message" style="display:none;"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-ghost" type="button" data-close="modalSites">Cancel</button>
+        <button id="saveSitesBtn" class="btn-primary" type="button">Save</button>
       </div>
     </div>
   </div>
 
   <script>
+    // =========================
+    // ELEMENTS
+    // =========================
     const loginForm = document.getElementById('loginForm');
     const loginStatus = document.getElementById('loginStatus');
     const loginCard = document.getElementById('loginCard');
     const dashboardCard = document.getElementById('dashboardCard');
     const dashboardStatus = document.getElementById('dashboardStatus');
 
-    const activeList = document.getElementById('activeList');
-    const archivedList = document.getElementById('archivedList');
-
     const reloadBtn = document.getElementById('reloadSheetsBtn');
     const syncBtn = document.getElementById('syncSheetsBtn');
     const logoutTopBtn = document.getElementById('logoutTopBtn');
 
-    const editFulfillersBtn = document.getElementById('editFulfillersBtn');
-    const editSitesBtn = document.getElementById('editSitesBtn');
-    const fulfillersPreview = document.getElementById('fulfillersPreview');
-    const sitesPreview = document.getElementById('sitesPreview');
+    const activeList = document.getElementById('activeList');
+    const archivedList = document.getElementById('archivedList');
 
-    const fulfillersModal = document.getElementById('fulfillersModal');
-    const sitesModal = document.getElementById('sitesModal');
-    const fulfillersBody = document.getElementById('fulfillersBody');
-    const sitesBody = document.getElementById('sitesBody');
-    const addFulfillerRowBtn = document.getElementById('addFulfillerRowBtn');
-    const saveFulfillersBtn = document.getElementById('saveFulfillersBtn');
+    const editFulfilledBtn = document.getElementById('editFulfilledBtn');
+    const editSitesBtn = document.getElementById('editSitesBtn');
+
+    const modalFulfilled = document.getElementById('modalFulfilled');
+    const modalSites = document.getElementById('modalSites');
+
+    const fulfilledTextarea = document.getElementById('fulfilledTextarea');
+    const saveFulfilledBtn = document.getElementById('saveFulfilledBtn');
+    const fulfilledStatus = document.getElementById('fulfilledStatus');
+
+    const sitesEditor = document.getElementById('sitesEditor');
     const addSiteRowBtn = document.getElementById('addSiteRowBtn');
     const saveSitesBtn = document.getElementById('saveSitesBtn');
+    const sitesStatus = document.getElementById('sitesStatus');
 
+    // =========================
+    // CONSTANTS
+    // =========================
     const STATUS_OPTIONS = [
       { value: 'new', label: 'New' },
       { value: 'responded', label: 'Responded' },
@@ -366,15 +459,21 @@
       { value: 'print_complete', label: 'Print complete' },
       { value: 'qc_complete', label: 'QC complete' },
       { value: 'shipped', label: 'Shipped' },
-      { value: 'paid', label: 'Paid' }
+      { value: 'paid', label: 'Paid' },
     ];
 
     const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
 
-    let SETTINGS = { fulfilledByNames: [], supportedSites: [] };
-    let REQUESTS = [];
+    // Settings state (loaded from server)
+    let fulfilledByNames = ['Jared', 'Robert', 'Terence'];
+    let supportedSites = [
+      { name: 'STLFlix', browseUrl: 'https://stlflix.com', hosts: ['stlflix.com'] }
+    ];
 
-    function showDashStatus(msg, isError) {
+    // =========================
+    // HELPERS
+    // =========================
+    function showDashStatus(msg, isError){
       dashboardStatus.textContent = msg;
       dashboardStatus.style.display = 'block';
       dashboardStatus.classList.toggle('status-error', !!isError);
@@ -382,7 +481,7 @@
       if (!isError) setTimeout(() => { dashboardStatus.style.display = 'none'; }, 4500);
     }
 
-    function buildGmailUrl(toEmail, subject, body) {
+    function buildGmailUrl(toEmail, subject, body){
       let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
       url += '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER);
       url += '&to=' + encodeURIComponent(toEmail);
@@ -391,210 +490,242 @@
       return url;
     }
 
-    function openModal(id) {
-      document.getElementById(id).style.display = 'flex';
-    }
-    function closeModal(id) {
-      document.getElementById(id).style.display = 'none';
-    }
+    function openModal(el){ el.style.display = 'flex'; }
+    function closeModal(el){ el.style.display = 'none'; }
 
     document.addEventListener('click', (e) => {
-      const closeId = e.target && e.target.getAttribute && e.target.getAttribute('data-close');
-      if (closeId) closeModal(closeId);
-      if (e.target === fulfillersModal) closeModal('fulfillersModal');
-      if (e.target === sitesModal) closeModal('sitesModal');
+      const btn = e.target.closest('[data-close]');
+      if (!btn) return;
+      const id = btn.getAttribute('data-close');
+      const el = document.getElementById(id);
+      if (el) closeModal(el);
     });
 
-    function normalizeHost(host) {
-      return String(host || '').trim().toLowerCase().replace(/^www\./, '');
+    function normalizeHost(host){
+      return String(host || '').trim().toLowerCase().replace(/^www\./,'');
     }
 
-    function renderSettingsPreviews() {
-      fulfillersPreview.innerHTML = '';
-      (SETTINGS.fulfilledByNames || []).forEach(n => {
-        const t = document.createElement('span');
-        t.className = 'tag';
-        t.textContent = n;
-        fulfillersPreview.appendChild(t);
-      });
-
-      sitesPreview.innerHTML = '';
-      (SETTINGS.supportedSites || []).forEach(s => {
-        const t = document.createElement('span');
-        t.className = 'tag';
-        t.textContent = `${s.enabled ? '✅' : '⛔'} ${s.name}`;
-        sitesPreview.appendChild(t);
-      });
-    }
-
-    function renderFulfillersModal() {
-      fulfillersBody.innerHTML = '';
-      const names = Array.isArray(SETTINGS.fulfilledByNames) ? SETTINGS.fulfilledByNames : [];
-
-      names.forEach((name, idx) => {
-        const row = document.createElement('div');
-        row.style.display = 'flex';
-        row.style.gap = '10px';
-        row.style.alignItems = 'center';
-
-        const input = document.createElement('input');
-        input.className = 'field-input';
-        input.value = name;
-        input.placeholder = 'Name';
-        input.setAttribute('data-idx', String(idx));
-        input.style.flex = '1';
-
-        const del = document.createElement('button');
-        del.className = 'btn-ghost';
-        del.type = 'button';
-        del.textContent = 'Remove';
-        del.onclick = () => {
-          SETTINGS.fulfilledByNames.splice(idx, 1);
-          renderFulfillersModal();
-        };
-
-        row.appendChild(input);
-        row.appendChild(del);
-        fulfillersBody.appendChild(row);
-      });
-
-      if (!names.length) {
-        const p = document.createElement('p');
-        p.style.color = 'var(--muted)';
-        p.style.margin = '0';
-        p.textContent = 'No names yet — add at least one.';
-        fulfillersBody.appendChild(p);
-      }
-    }
-
-    function renderSitesModal() {
-      sitesBody.innerHTML = '';
-      const sites = Array.isArray(SETTINGS.supportedSites) ? SETTINGS.supportedSites : [];
-
-      sites.forEach((s, idx) => {
-        const wrap = document.createElement('div');
-        wrap.className = 'box';
-
-        const grid = document.createElement('div');
-        grid.className = 'row';
-
-        const name = document.createElement('input');
-        name.className = 'field-input';
-        name.placeholder = 'Site name (e.g., STLFlix)';
-        name.value = s.name || '';
-        name.setAttribute('data-idx', idx);
-        name.setAttribute('data-field', 'name');
-
-        const hosts = document.createElement('input');
-        hosts.className = 'field-input';
-        hosts.placeholder = 'Domains (comma separated) e.g. stlflix.com, platform.stlflix.com';
-        hosts.value = (Array.isArray(s.hosts) ? s.hosts : []).join(', ');
-        hosts.setAttribute('data-idx', idx);
-        hosts.setAttribute('data-field', 'hosts');
-
-        const browse = document.createElement('input');
-        browse.className = 'field-input';
-        browse.placeholder = 'Browse URL (optional)';
-        browse.value = s.browseUrl || '';
-        browse.setAttribute('data-idx', idx);
-        browse.setAttribute('data-field', 'browseUrl');
-
-        const enabledWrap = document.createElement('label');
-        enabledWrap.className = 'toggle';
-        enabledWrap.style.justifyContent = 'center';
-        enabledWrap.style.width = 'fit-content';
-        const enabled = document.createElement('input');
-        enabled.type = 'checkbox';
-        enabled.checked = !!s.enabled;
-        enabled.setAttribute('data-idx', idx);
-        enabled.setAttribute('data-field', 'enabled');
-        enabledWrap.appendChild(enabled);
-        enabledWrap.appendChild(document.createTextNode(' Enabled'));
-
-        const del = document.createElement('button');
-        del.className = 'btn-ghost';
-        del.type = 'button';
-        del.textContent = 'Remove';
-        del.onclick = () => {
-          SETTINGS.supportedSites.splice(idx, 1);
-          renderSitesModal();
-        };
-
-        grid.appendChild(name);
-        grid.appendChild(hosts);
-        grid.appendChild(browse);
-        grid.appendChild(enabledWrap);
-        grid.appendChild(del);
-
-        const note = document.createElement('small');
-        note.textContent = 'Tip: Domains power detection. Enabled sites appear on the Home page.';
-        wrap.appendChild(grid);
-        wrap.appendChild(note);
-
-        sitesBody.appendChild(wrap);
-      });
-
-      if (!sites.length) {
-        const p = document.createElement('p');
-        p.style.color = 'var(--muted)';
-        p.style.margin = '0';
-        p.textContent = 'No sites yet — add at least one.';
-        sitesBody.appendChild(p);
-      }
-    }
-
-    function detectSourceName(stlLink) {
-      if (!stlLink) return 'Unknown';
-      let u;
-      try { u = new URL(stlLink); } catch { return 'Unknown'; }
-      const host = normalizeHost(u.hostname);
-
-      const allSites = Array.isArray(SETTINGS.supportedSites) ? SETTINGS.supportedSites : [];
-      for (const s of allSites) {
-        const hosts = Array.isArray(s.hosts) ? s.hosts.map(normalizeHost) : [];
-        if (hosts.includes(host)) return s.name || 'Unknown';
-        for (const h of hosts) {
-          if (h && host.endsWith('.' + h)) return s.name || 'Unknown';
+    function detectSourceForLink(stlLink){
+      try{
+        const host = normalizeHost(new URL(stlLink).hostname);
+        for (const s of supportedSites){
+          const hosts = Array.isArray(s.hosts) ? s.hosts.map(normalizeHost) : [];
+          if (hosts.includes(host)) return { name: s.name || 'Supported', supported: true };
+          for (const h of hosts){
+            if (h && host.endsWith('.' + h)) return { name: s.name || 'Supported', supported: true };
+          }
         }
-      }
-      return 'Unknown';
-    }
-
-    function renderOrders() {
-      const active = REQUESTS.filter(r => !r.archived);
-      const archived = REQUESTS.filter(r => r.archived);
-
-      activeList.innerHTML = '';
-      archivedList.innerHTML = '';
-
-      if (!active.length) {
-        const p = document.createElement('p');
-        p.style.color = 'var(--muted)';
-        p.style.margin = '0';
-        p.textContent = 'No active requests.';
-        activeList.appendChild(p);
-      } else {
-        active.forEach(r => activeList.appendChild(renderOrderCard(r)));
-      }
-
-      if (!archived.length) {
-        const p = document.createElement('p');
-        p.style.color = 'var(--muted)';
-        p.style.margin = '0';
-        p.textContent = 'No archived requests.';
-        archivedList.appendChild(p);
-      } else {
-        archived.forEach(r => archivedList.appendChild(renderOrderCard(r)));
+        return { name: 'Unknown', supported: false };
+      } catch {
+        return { name: 'Unknown', supported: false };
       }
     }
 
-    function renderOrderCard(r) {
-      const card = document.createElement('div');
-      card.className = 'order';
+    async function loadSettings(){
+      // Uses your newer endpoints if present. If not present, it safely falls back to defaults.
+      try{
+        const res = await fetch('/api/settings', { credentials: 'include' });
+        if (!res.ok) return;
+
+        const data = await res.json().catch(() => ({}));
+        if (Array.isArray(data.fulfilledByNames) && data.fulfilledByNames.length){
+          fulfilledByNames = data.fulfilledByNames.filter(Boolean).map(s => String(s).trim()).filter(Boolean);
+        }
+        if (Array.isArray(data.supportedSites)){
+          supportedSites = data.supportedSites.map(s => ({
+            name: String(s.name || '').trim(),
+            browseUrl: String(s.browseUrl || '').trim(),
+            hosts: Array.isArray(s.hosts) ? s.hosts.map(h => String(h).trim()).filter(Boolean) : [],
+          })).filter(s => s.name);
+        }
+      } catch {}
+    }
+
+    // =========================
+    // SETTINGS MODALS
+    // =========================
+    function openFulfilledEditor(){
+      fulfilledStatus.style.display = 'none';
+      fulfilledTextarea.value = fulfilledByNames.join('\n');
+      openModal(modalFulfilled);
+    }
+
+    function createSiteRow(site = { name:'', browseUrl:'', hosts:[] }){
+      const row = document.createElement('div');
+      row.className = 'site-row';
+
+      const name = document.createElement('input');
+      name.className = 'field-input';
+      name.placeholder = 'Site name (ex: STLFlix)';
+      name.value = site.name || '';
+
+      const url = document.createElement('input');
+      url.className = 'field-input';
+      url.placeholder = 'Browse URL (ex: https://stlflix.com)';
+      url.value = site.browseUrl || '';
+
+      const hosts = document.createElement('input');
+      hosts.className = 'field-input';
+      hosts.placeholder = 'Hosts (comma-separated, ex: stlflix.com)';
+      hosts.value = (Array.isArray(site.hosts) ? site.hosts : []).join(', ');
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'btn-ghost';
+      del.textContent = 'Remove';
+      del.addEventListener('click', () => row.remove());
+
+      row.appendChild(name);
+      row.appendChild(url);
+      row.appendChild(hosts);
+      row.appendChild(del);
+
+      return row;
+    }
+
+    function openSitesEditor(){
+      sitesStatus.style.display = 'none';
+      sitesEditor.innerHTML = '';
+      (supportedSites.length ? supportedSites : []).forEach(s => sitesEditor.appendChild(createSiteRow(s)));
+      if (!supportedSites.length) sitesEditor.appendChild(createSiteRow());
+      openModal(modalSites);
+    }
+
+    editFulfilledBtn.addEventListener('click', openFulfilledEditor);
+    editSitesBtn.addEventListener('click', openSitesEditor);
+
+    addSiteRowBtn.addEventListener('click', () => {
+      sitesEditor.appendChild(createSiteRow());
+    });
+
+    saveFulfilledBtn.addEventListener('click', async () => {
+      const names = fulfilledTextarea.value
+        .split('\n')
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      fulfilledStatus.style.display = 'block';
+      fulfilledStatus.textContent = 'Saving...';
+      fulfilledStatus.classList.remove('status-error', 'status-success');
+
+      try{
+        const res = await fetch('/api/settings/fulfilled-by', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type':'application/json' },
+          body: JSON.stringify({ names }),
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Request failed');
+
+        fulfilledByNames = names;
+        fulfilledStatus.textContent = '✓ Saved';
+        fulfilledStatus.classList.add('status-success');
+
+        setTimeout(() => closeModal(modalFulfilled), 450);
+        await loadRequests(); // refresh dropdowns
+      } catch(err){
+        fulfilledStatus.textContent = '✗ ' + err.message;
+        fulfilledStatus.classList.add('status-error');
+      }
+    });
+
+    saveSitesBtn.addEventListener('click', async () => {
+      const rows = Array.from(sitesEditor.querySelectorAll('.site-row'));
+      const sites = rows.map(r => {
+        const inputs = r.querySelectorAll('input');
+        const name = (inputs[0]?.value || '').trim();
+        const browseUrl = (inputs[1]?.value || '').trim();
+        const hosts = (inputs[2]?.value || '')
+          .split(',')
+          .map(s => s.trim())
+          .filter(Boolean);
+
+        return { name, browseUrl, hosts };
+      }).filter(s => s.name);
+
+      sitesStatus.style.display = 'block';
+      sitesStatus.textContent = 'Saving...';
+      sitesStatus.classList.remove('status-error', 'status-success');
+
+      try{
+        const res = await fetch('/api/settings/supported-sites', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type':'application/json' },
+          body: JSON.stringify({ sites }),
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Request failed');
+
+        supportedSites = sites;
+        sitesStatus.textContent = '✓ Saved';
+        sitesStatus.classList.add('status-success');
+
+        setTimeout(() => closeModal(modalSites), 450);
+        await loadRequests(); // refresh source detection
+      } catch(err){
+        sitesStatus.textContent = '✗ ' + err.message;
+        sitesStatus.classList.add('status-error');
+      }
+    });
+
+    // =========================
+    // ORDER RENDER
+    // =========================
+    function buildFulfilledOptions(selected){
+      const opts = [];
+      opts.push({ value:'', label:'-- None --' });
+      fulfilledByNames.forEach(n => opts.push({ value:n, label:n }));
+      return opts.map(o => {
+        const opt = document.createElement('option');
+        opt.value = o.value;
+        opt.textContent = o.label;
+        if ((selected || '') === o.value) opt.selected = true;
+        return opt;
+      });
+    }
+
+    function buildStatusOptions(selected){
+      return STATUS_OPTIONS.map(o => {
+        const opt = document.createElement('option');
+        opt.value = o.value;
+        opt.textContent = o.label;
+        if ((selected || 'new') === o.value) opt.selected = true;
+        return opt;
+      });
+    }
+
+    function renderOrderCard(r){
+      const wrap = document.createElement('div');
+      wrap.className = 'card order-card';
 
       const created = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
-      const sourceName = detectSourceName(r.stlLink);
+      const name = r.name || '';
+      const email = r.email || '';
+      const stlLink = r.stlLink || '';
+      const details = r.details || '';
+      const adminNotes = r.adminNotes || '';
+      const status = r.status || 'new';
+      const fulfilledBy = r.fulfilledBy || '';
+      const trackingNumber = r.trackingNumber || '';
+      const archived = !!r.archived;
 
+      // Source (prefer server if it provides it, else compute)
+      let sourceName = (r.sourceName || r.source || r.sourceLabel || '').trim();
+      let sourceSupported = (r.sourceSupported ?? r.isSourceSupported);
+
+      if (!sourceName){
+        const detected = detectSourceForLink(stlLink);
+        sourceName = detected.name;
+        sourceSupported = detected.supported;
+      }
+
+      const isUnsupported = (sourceSupported === false) || /unknown/i.test(sourceName);
+
+      // TOP
       const top = document.createElement('div');
       top.className = 'order-top';
 
@@ -605,434 +736,399 @@
       createdEl.className = 'order-created';
       createdEl.textContent = created;
 
-      const nameEl = document.createElement('div');
+      const nameEl = document.createElement('h3');
       nameEl.className = 'order-name';
-      nameEl.textContent = r.name || '';
+      nameEl.textContent = name;
 
       const emailEl = document.createElement('div');
       emailEl.className = 'order-email';
-      if (r.email) {
+      if (email){
         const a = document.createElement('a');
-        a.href = 'mailto:' + r.email;
-        a.textContent = r.email;
+        a.href = 'mailto:' + email;
+        a.textContent = email;
         emailEl.appendChild(a);
       }
 
-      const sourceTag = document.createElement('div');
-      sourceTag.style.marginTop = '6px';
-      const t = document.createElement('span');
-      t.className = 'tag';
-      t.textContent = `Source: ${sourceName}`;
-      sourceTag.appendChild(t);
+      const sourcePill = document.createElement('div');
+      sourcePill.className = 'source-pill' + (isUnsupported ? ' is-unsupported' : '');
+      sourcePill.textContent = 'Source: ' + (sourceName || 'Unknown');
 
       meta.appendChild(createdEl);
       meta.appendChild(nameEl);
       meta.appendChild(emailEl);
-      meta.appendChild(sourceTag);
+      meta.appendChild(sourcePill);
 
       const actions = document.createElement('div');
       actions.className = 'order-actions';
 
-      if (r.stlLink) {
-        const view = document.createElement('a');
-        view.className = 'pill-link';
-        view.href = r.stlLink;
-        view.target = '_blank';
-        view.rel = 'noopener noreferrer';
-        view.textContent = 'View model';
-        actions.appendChild(view);
+      const viewBtn = document.createElement('a');
+      viewBtn.href = stlLink || '#';
+      viewBtn.target = '_blank';
+      viewBtn.rel = 'noopener noreferrer';
+      viewBtn.className = 'btn-primary btn-sm' + (isUnsupported ? ' btn-danger' : '');
+      viewBtn.textContent = 'View model';
+      if (!stlLink){
+        viewBtn.style.opacity = '0.55';
+        viewBtn.style.pointerEvents = 'none';
       }
 
-      const replyBtn = document.createElement('a');
+      const replyBtn = document.createElement('button');
+      replyBtn.type = 'button';
       replyBtn.className = 'btn-primary btn-sm';
-      replyBtn.style.textDecoration = 'none';
       replyBtn.textContent = 'Reply';
-      replyBtn.href = buildGmailUrl(
-        r.email || '',
-        'LM3DPTFY Quote / Update',
-        `Hi ${r.name || ''},\n\nThanks for your request! Here’s the next step:\n\nModel link: ${r.stlLink || ''}\nStatus: ${r.status || 'new'}\n\n(Reply here with your quote/ETA/questions.)\n\n- LM3DPTFY`
-      );
-      replyBtn.target = '_blank';
-      replyBtn.rel = 'noopener noreferrer';
-      actions.appendChild(replyBtn);
+      replyBtn.addEventListener('click', () => {
+        if (!email) return;
+        const subject = 'LM3DPTFY Quote Reply';
+        const body =
+          'Hi ' + name + ',\n\n' +
+          'Thanks for your quote request.\n\n' +
+          (stlLink ? ('Model link:\n' + stlLink + '\n\n') : '') +
+          '— LM3DPTFY';
+        window.open(buildGmailUrl(email, subject, body), '_blank');
+      });
 
-      const archiveLabel = document.createElement('label');
-      archiveLabel.className = 'toggle';
-      archiveLabel.title = 'Archive / unarchive';
-
+      const archiveWrap = document.createElement('label');
+      archiveWrap.className = 'archive-wrap';
       const archiveCb = document.createElement('input');
       archiveCb.type = 'checkbox';
-      archiveCb.checked = !!r.archived;
-
-      archiveCb.onchange = async () => {
-        try {
-          await apiPost(`/api/requests/${r.id}/archive`, { archived: archiveCb.checked });
-          r.archived = archiveCb.checked;
-          showDashStatus('Saved archive change.', false);
-          renderOrders();
-        } catch (e) {
+      archiveCb.checked = archived;
+      archiveCb.addEventListener('change', async () => {
+        showDashStatus(archiveCb.checked ? 'Archiving...' : 'Unarchiving...', false);
+        try{
+          const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/archive`, {
+            method:'POST',
+            credentials:'include',
+            headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify({ archived: archiveCb.checked }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || 'Request failed');
+          await loadRequests();
+        } catch(err){
+          showDashStatus('Archive update failed: ' + err.message, true);
           archiveCb.checked = !archiveCb.checked;
-          showDashStatus(e.message || 'Failed to archive.', true);
         }
-      };
+      });
+      const archiveTxt = document.createElement('span');
+      archiveTxt.textContent = 'Archive';
+      archiveWrap.appendChild(archiveCb);
+      archiveWrap.appendChild(archiveTxt);
 
-      archiveLabel.appendChild(archiveCb);
-      archiveLabel.appendChild(document.createTextNode(' Archive'));
-      actions.appendChild(archiveLabel);
+      actions.appendChild(viewBtn);
+      actions.appendChild(replyBtn);
+      actions.appendChild(archiveWrap);
 
       top.appendChild(meta);
       top.appendChild(actions);
 
-      const grid = document.createElement('div');
-      grid.className = 'order-grid';
+      // BODY
+      const body = document.createElement('div');
+      body.className = 'order-body';
 
-      const customerBox = document.createElement('div');
-      customerBox.className = 'box';
-      customerBox.innerHTML = `<div class="mini-label">Customer notes</div><p>${escapeHtml(r.details || '') || '<span style="color:var(--muted);">None</span>'}</p>`;
+      const left = document.createElement('div');
+      left.className = 'order-box';
+      left.innerHTML = `<h4>Notes</h4>`;
+      const leftKv = document.createElement('div');
+      leftKv.className = 'kv';
 
-      const adminBox = document.createElement('div');
-      adminBox.className = 'box';
+      // Customer notes (read)
+      const custRow = document.createElement('div');
+      custRow.className = 'row';
+      const custLab = document.createElement('label');
+      custLab.textContent = 'Customer notes';
+      const custVal = document.createElement('div');
+      custVal.style.color = 'var(--text)';
+      custVal.style.lineHeight = '1.45';
+      custVal.style.whiteSpace = 'pre-wrap';
+      custVal.textContent = details || '(none)';
+      custRow.appendChild(custLab);
+      custRow.appendChild(custVal);
 
-      const adminLabel = document.createElement('div');
-      adminLabel.className = 'mini-label';
-      adminLabel.textContent = 'Admin notes';
+      // Admin notes (edit)
+      const adminRow = document.createElement('div');
+      adminRow.className = 'row';
+      const adminLab = document.createElement('label');
+      adminLab.textContent = 'Admin notes';
+      const adminInput = document.createElement('textarea');
+      adminInput.className = 'field-input';
+      adminInput.rows = 3;
+      adminInput.placeholder = 'What did we email the user?';
+      adminInput.value = adminNotes;
 
-      const adminNotes = document.createElement('textarea');
-      adminNotes.className = 'field-input';
-      adminNotes.rows = 3;
-      adminNotes.value = r.adminNotes || '';
-      adminNotes.placeholder = 'Internal notes…';
-
-      let notesTimer = null;
-      adminNotes.addEventListener('input', () => {
-        clearTimeout(notesTimer);
-        notesTimer = setTimeout(async () => {
-          try {
-            await apiPost(`/api/requests/${r.id}/admin-notes`, { adminNotes: adminNotes.value });
-            r.adminNotes = adminNotes.value;
-            showDashStatus('Saved admin notes.', false);
-          } catch (e) {
-            showDashStatus(e.message || 'Failed to save notes.', true);
-          }
-        }, 550);
+      adminInput.addEventListener('blur', async () => {
+        try{
+          await fetch(`/api/requests/${encodeURIComponent(r.id)}/admin-notes`, {
+            method:'POST',
+            credentials:'include',
+            headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify({ adminNotes: adminInput.value || '' }),
+          });
+        } catch {}
       });
 
-      adminBox.appendChild(adminLabel);
-      adminBox.appendChild(adminNotes);
+      adminRow.appendChild(adminLab);
+      adminRow.appendChild(adminInput);
 
-      grid.appendChild(customerBox);
-      grid.appendChild(adminBox);
+      leftKv.appendChild(custRow);
+      leftKv.appendChild(adminRow);
+      left.appendChild(leftKv);
 
-      const controls = document.createElement('div');
-      controls.className = 'controls';
+      const right = document.createElement('div');
+      right.className = 'order-box';
+      right.innerHTML = `<h4>Order</h4>`;
+      const rightKv = document.createElement('div');
+      rightKv.className = 'kv';
 
       // Status
-      const statusWrap = document.createElement('div');
-      statusWrap.innerHTML = `<div class="mini-label">Status</div>`;
+      const statusRow = document.createElement('div');
+      statusRow.className = 'row';
+      const statusLab = document.createElement('label');
+      statusLab.textContent = 'Status';
       const statusSel = document.createElement('select');
       statusSel.className = 'field-input';
-      STATUS_OPTIONS.forEach(o => {
-        const opt = document.createElement('option');
-        opt.value = o.value;
-        opt.textContent = o.label;
-        if (r.status === o.value) opt.selected = true;
-        statusSel.appendChild(opt);
-      });
+      buildStatusOptions(status).forEach(o => statusSel.appendChild(o));
+      statusSel.addEventListener('change', async () => {
+        showDashStatus('Updating status...', false);
+        try{
+          const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/status`, {
+            method:'POST',
+            credentials:'include',
+            headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify({ status: statusSel.value }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || 'Request failed');
 
-      statusSel.onchange = async () => {
-        try {
-          await apiPost(`/api/requests/${r.id}/status`, { status: statusSel.value });
-          r.status = statusSel.value;
-          showDashStatus('Saved status.', false);
-          // enable/disable tracking
-          trackingInput.disabled = !(r.status === 'shipped' || (r.trackingNumber || '').length > 0);
-        } catch (e) {
-          showDashStatus(e.message || 'Failed to save status.', true);
-          statusSel.value = r.status;
+          // enable/disable tracking in-place
+          const isShipped = statusSel.value === 'shipped';
+          trackingInput.disabled = !isShipped;
+          trackingInput.placeholder = isShipped ? 'Paste tracking' : 'Set status to Shipped';
+
+          showDashStatus('Status updated.', false);
+        } catch(err){
+          showDashStatus('Status update failed: ' + err.message, true);
         }
-      };
-
-      statusWrap.appendChild(statusSel);
+      });
+      statusRow.appendChild(statusLab);
+      statusRow.appendChild(statusSel);
 
       // Fulfilled by
-      const fulfilledWrap = document.createElement('div');
-      fulfilledWrap.innerHTML = `<div class="mini-label">Fulfilled by</div>`;
-      const fulfilledSel = document.createElement('select');
-      fulfilledSel.className = 'field-input';
-
-      const noneOpt = document.createElement('option');
-      noneOpt.value = '';
-      noneOpt.textContent = '-- None --';
-      fulfilledSel.appendChild(noneOpt);
-
-      (SETTINGS.fulfilledByNames || []).forEach(n => {
-        const opt = document.createElement('option');
-        opt.value = n;
-        opt.textContent = n;
-        if ((r.fulfilledBy || '') === n) opt.selected = true;
-        fulfilledSel.appendChild(opt);
-      });
-
-      fulfilledSel.onchange = async () => {
-        try {
-          await apiPost(`/api/requests/${r.id}/fulfilled`, { fulfilledBy: fulfilledSel.value });
-          r.fulfilledBy = fulfilledSel.value;
-          showDashStatus('Saved fulfilled by.', false);
-        } catch (e) {
-          showDashStatus(e.message || 'Failed to save fulfilled by.', true);
-          fulfilledSel.value = r.fulfilledBy || '';
+      const fulfillRow = document.createElement('div');
+      fulfillRow.className = 'row';
+      const fulfillLab = document.createElement('label');
+      fulfillLab.textContent = 'Fulfilled by';
+      const fulfillSel = document.createElement('select');
+      fulfillSel.className = 'field-input';
+      buildFulfilledOptions(fulfilledBy).forEach(o => fulfillSel.appendChild(o));
+      fulfillSel.addEventListener('change', async () => {
+        showDashStatus('Updating fulfilled by...', false);
+        try{
+          const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/fulfilled`, {
+            method:'POST',
+            credentials:'include',
+            headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify({ fulfilledBy: fulfillSel.value }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || 'Request failed');
+          showDashStatus('Fulfilled by updated.', false);
+        } catch(err){
+          showDashStatus('Fulfilled update failed: ' + err.message, true);
         }
-      };
+      });
+      fulfillRow.appendChild(fulfillLab);
+      fulfillRow.appendChild(fulfillSel);
 
-      fulfilledWrap.appendChild(fulfilledSel);
-
-      // Tracking #
-      const trackingWrap = document.createElement('div');
-      trackingWrap.innerHTML = `<div class="mini-label">Tracking #</div>`;
+      // Tracking
+      const trackingRow = document.createElement('div');
+      trackingRow.className = 'row';
+      const trackingLab = document.createElement('label');
+      trackingLab.textContent = 'Tracking #';
       const trackingInput = document.createElement('input');
       trackingInput.className = 'field-input';
-      trackingInput.type = 'text';
-      trackingInput.placeholder = (r.status === 'shipped') ? 'Paste tracking number' : 'Set status to Shipped';
-      trackingInput.value = r.trackingNumber || '';
-      trackingInput.disabled = !(r.status === 'shipped' || (r.trackingNumber || '').length > 0);
+      trackingInput.value = trackingNumber;
+      trackingInput.placeholder = (status === 'shipped') ? 'Paste tracking' : 'Set status to Shipped';
+      trackingInput.disabled = (status !== 'shipped');
 
-      let trackingTimer = null;
-      trackingInput.addEventListener('input', () => {
-        clearTimeout(trackingTimer);
-        trackingTimer = setTimeout(async () => {
-          try {
-            await apiPost(`/api/requests/${r.id}/tracking`, { trackingNumber: trackingInput.value });
-            const before = r.trackingNumber || '';
-            r.trackingNumber = trackingInput.value;
-
-            showDashStatus('Saved tracking #.', false);
-
-            // Optional: auto-open email draft when tracking is first added and shipped
-            if (r.status === 'shipped' && !before && (trackingInput.value || '').trim()) {
-              const subject = 'Your order has shipped — Tracking included';
-              const body = `Hi ${r.name || ''},\n\nYour order has shipped!\n\nTracking #: ${trackingInput.value.trim()}\n\nThanks!\n- LM3DPTFY`;
-              window.open(buildGmailUrl(r.email || '', subject, body), '_blank', 'noopener,noreferrer');
-            }
-          } catch (e) {
-            showDashStatus(e.message || 'Failed to save tracking.', true);
-          }
-        }, 650);
+      trackingInput.addEventListener('blur', async () => {
+        try{
+          await fetch(`/api/requests/${encodeURIComponent(r.id)}/tracking`, {
+            method:'POST',
+            credentials:'include',
+            headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify({ trackingNumber: trackingInput.value || '' }),
+          });
+        } catch {}
       });
 
-      trackingWrap.appendChild(trackingInput);
+      trackingInput.addEventListener('paste', () => {
+        if (trackingInput.disabled) return;
+        setTimeout(async () => {
+          const val = (trackingInput.value || '').trim();
+          if (!val) return;
 
-      controls.appendChild(statusWrap);
-      controls.appendChild(fulfilledWrap);
-      controls.appendChild(trackingWrap);
+          // Save then open email draft
+          try{
+            await fetch(`/api/requests/${encodeURIComponent(r.id)}/tracking`, {
+              method:'POST',
+              credentials:'include',
+              headers:{ 'Content-Type':'application/json' },
+              body: JSON.stringify({ trackingNumber: val }),
+            });
+          } catch {}
 
-      card.appendChild(top);
-      card.appendChild(grid);
-      card.appendChild(controls);
+          if (!email) return;
 
-      return card;
-    }
+          const subject = 'Your LM3DPTFY order has shipped — Tracking #' + ' ' + val;
+          const body =
+            'Hi ' + name + ',\n\n' +
+            'Great news — your print has shipped!\n\n' +
+            'Tracking number: ' + val + '\n\n' +
+            (stlLink ? ('Your model link: ' + stlLink + '\n\n') : '') +
+            'Thanks again!\n' +
+            '— LM3DPTFY';
 
-    function escapeHtml(s) {
-      return String(s || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;')
-        .replace(/\n/g, '<br/>');
-    }
-
-    async function apiPost(url, body) {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(body || {})
+          window.open(buildGmailUrl(email, subject, body), '_blank');
+        }, 10);
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || 'Request failed');
-      return data;
+
+      trackingRow.appendChild(trackingLab);
+      trackingRow.appendChild(trackingInput);
+
+      rightKv.appendChild(statusRow);
+      rightKv.appendChild(fulfillRow);
+      rightKv.appendChild(trackingRow);
+      right.appendChild(rightKv);
+
+      body.appendChild(left);
+      body.appendChild(right);
+
+      wrap.appendChild(top);
+      wrap.appendChild(body);
+
+      return wrap;
     }
 
-    async function apiPut(url, body) {
-      const res = await fetch(url, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(body || {})
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || 'Request failed');
-      return data;
+    // =========================
+    // LOAD REQUESTS
+    // =========================
+    async function loadRequests(){
+      try{
+        // load settings first so source detection + fulfilled list is accurate
+        await loadSettings();
+
+        const res = await fetch('/api/requests', { credentials:'include' });
+        if (res.status === 401){
+          loginCard.style.display = 'block';
+          dashboardCard.style.display = 'none';
+          return;
+        }
+
+        const data = await res.json();
+        const active = data.filter(r => !r.archived);
+        const archived = data.filter(r => r.archived);
+
+        activeList.innerHTML = '';
+        archivedList.innerHTML = '';
+
+        if (!active.length){
+          const empty = document.createElement('div');
+          empty.style.color = 'var(--muted)';
+          empty.style.padding = '10px 2px';
+          empty.textContent = 'No active requests.';
+          activeList.appendChild(empty);
+        } else {
+          active.forEach(r => activeList.appendChild(renderOrderCard(r)));
+        }
+
+        if (!archived.length){
+          const empty = document.createElement('div');
+          empty.style.color = 'var(--muted)';
+          empty.style.padding = '10px 2px';
+          empty.textContent = 'No archived requests.';
+          archivedList.appendChild(empty);
+        } else {
+          archived.forEach(r => archivedList.appendChild(renderOrderCard(r)));
+        }
+
+        loginCard.style.display = 'none';
+        dashboardCard.style.display = 'block';
+        showDashStatus('Loaded ' + data.length + ' request(s).', false);
+      } catch(err){
+        console.error(err);
+        showDashStatus('Error loading requests: ' + err.message, true);
+      }
     }
 
-    async function apiGet(url) {
-      const res = await fetch(url, { headers: { 'Accept': 'application/json' }, credentials: 'include' });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || 'Request failed');
-      return data;
-    }
-
-    async function loadAll() {
-      const s = await apiGet('/api/settings');
-      SETTINGS = s.settings || SETTINGS;
-      renderSettingsPreviews();
-
-      REQUESTS = await apiGet('/api/requests');
-      renderOrders();
-    }
-
-    // Login
+    // =========================
+    // AUTH
+    // =========================
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      loginStatus.style.display = 'none';
+      loginStatus.style.display = 'block';
+      loginStatus.textContent = 'Signing in...';
+      loginStatus.classList.remove('status-error', 'status-success');
 
       const email = document.getElementById('adminEmail').value.trim();
       const password = document.getElementById('adminPassword').value;
 
-      try {
+      try{
         const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ email, password })
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify({ email, password }),
         });
-
         const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Login failed');
+        if (!res.ok) throw new Error(data.error || 'Invalid email or password');
 
-        loginCard.style.display = 'none';
-        dashboardCard.style.display = 'block';
-        await loadAll();
-      } catch (err) {
-        loginStatus.style.display = 'block';
-        loginStatus.textContent = '✗ ' + (err.message || 'Login failed');
-        loginStatus.className = 'status-message status-error';
+        loginStatus.textContent = 'Login successful. Loading dashboard...';
+        loginStatus.classList.add('status-success');
+
+        await loadRequests();
+      } catch(err){
+        loginStatus.textContent = err.message;
+        loginStatus.classList.add('status-error');
       }
     });
 
-    // Attempt to load if already logged in (session cookie)
-    (async () => {
-      try {
-        REQUESTS = await apiGet('/api/requests');
-        loginCard.style.display = 'none';
-        dashboardCard.style.display = 'block';
-        const s = await apiGet('/api/settings');
-        SETTINGS = s.settings || SETTINGS;
-        renderSettingsPreviews();
-        renderOrders();
-      } catch {
-        // not logged in
-      }
-    })();
+    async function doLogout(){
+      try{ await fetch('/api/logout', { method:'POST', credentials:'include' }); } catch(e){}
+      loginCard.style.display = 'block';
+      dashboardCard.style.display = 'none';
+      loginForm.reset();
+    }
+    logoutTopBtn.addEventListener('click', doLogout);
 
-    // Logout
-    logoutTopBtn.addEventListener('click', async () => {
-      try {
-        await apiPost('/api/logout', {});
-      } catch {}
-      window.location.reload();
-    });
-
-    // Sheets actions
-    reloadBtn.addEventListener('click', async () => {
-      try {
-        await apiPost('/api/sheets/reload', {});
-        REQUESTS = await apiGet('/api/requests');
-        renderOrders();
-        showDashStatus('Reloaded from Sheets.', false);
-      } catch (e) {
-        showDashStatus(e.message || 'Failed to reload from Sheets.', true);
+    // =========================
+    // SHEETS ACTIONS
+    // =========================
+    reloadBtn?.addEventListener('click', async () => {
+      showDashStatus('Refreshing from Google Sheets...', false);
+      try{
+        const res = await fetch('/api/sheets/reload', { method:'POST', credentials:'include' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Reload failed');
+        showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
+        await loadRequests();
+      } catch(err){
+        showDashStatus('Reload failed: ' + err.message, true);
       }
     });
 
-    syncBtn.addEventListener('click', async () => {
-      try {
-        await apiPost('/api/sheets/sync', {});
-        showDashStatus('Synced to Sheets.', false);
-      } catch (e) {
-        showDashStatus(e.message || 'Failed to sync to Sheets.', true);
+    syncBtn?.addEventListener('click', async () => {
+      showDashStatus('Syncing to Google Sheets...', false);
+      try{
+        const res = await fetch('/api/sheets/sync', { method:'POST', credentials:'include' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Sync failed');
+        showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
+      } catch(err){
+        showDashStatus('Sync failed: ' + err.message, true);
       }
     });
 
-    // Settings: fulfillers modal
-    editFulfillersBtn.addEventListener('click', () => {
-      renderFulfillersModal();
-      openModal('fulfillersModal');
-    });
-
-    addFulfillerRowBtn.addEventListener('click', () => {
-      if (!Array.isArray(SETTINGS.fulfilledByNames)) SETTINGS.fulfilledByNames = [];
-      SETTINGS.fulfilledByNames.push('');
-      renderFulfillersModal();
-    });
-
-    saveFulfillersBtn.addEventListener('click', async () => {
-      // pull inputs
-      const inputs = fulfillersBody.querySelectorAll('input.field-input');
-      const names = Array.from(inputs).map(i => (i.value || '').trim()).filter(Boolean);
-
-      try {
-        const resp = await apiPut('/api/settings/fulfillers', { names });
-        SETTINGS.fulfilledByNames = resp.fulfilledByNames || names;
-        renderSettingsPreviews();
-        renderOrders();
-        closeModal('fulfillersModal');
-        showDashStatus('Saved fulfilled by list.', false);
-      } catch (e) {
-        showDashStatus(e.message || 'Failed to save fulfilled by list.', true);
-      }
-    });
-
-    // Settings: sites modal
-    editSitesBtn.addEventListener('click', () => {
-      renderSitesModal();
-      openModal('sitesModal');
-    });
-
-    addSiteRowBtn.addEventListener('click', () => {
-      if (!Array.isArray(SETTINGS.supportedSites)) SETTINGS.supportedSites = [];
-      SETTINGS.supportedSites.push({ name: '', hosts: [], browseUrl: '', enabled: true });
-      renderSitesModal();
-    });
-
-    saveSitesBtn.addEventListener('click', async () => {
-      const boxes = sitesBody.querySelectorAll('.box');
-      const sites = [];
-
-      boxes.forEach((box) => {
-        const inputs = box.querySelectorAll('input.field-input');
-        const enabled = box.querySelector('input[type="checkbox"]');
-
-        const name = inputs[0]?.value?.trim() || '';
-        const hostsRaw = inputs[1]?.value || '';
-        const browseUrl = inputs[2]?.value?.trim() || '';
-
-        const hosts = hostsRaw
-          .split(/[\n,]+/)
-          .map(x => normalizeHost(x))
-          .filter(Boolean);
-
-        if (!name) return;
-
-        sites.push({
-          name,
-          hosts,
-          browseUrl,
-          enabled: !!(enabled && enabled.checked)
-        });
-      });
-
-      try {
-        const resp = await apiPut('/api/settings/sites', { sites });
-        SETTINGS.supportedSites = resp.supportedSites || sites;
-        renderSettingsPreviews();
-        closeModal('sitesModal');
-        showDashStatus('Saved supported sites.', false);
-      } catch (e) {
-        showDashStatus(e.message || 'Failed to save supported sites.', true);
-      }
-    });
+    // Load on page open
+    loadRequests();
   </script>
 </body>
 </html>
