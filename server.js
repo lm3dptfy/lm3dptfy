@@ -1,637 +1,1078 @@
-// server.js
-require('dotenv').config();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin | LM3DPTFY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    /* Admin-only layout helpers (keeps rest of site unchanged) */
+    .settings-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+    @media (max-width: 980px){
+      .settings-grid{ grid-template-columns: 1fr; }
+    }
+    .settings-card{ padding: 16px; }
+    .settings-card h3{ margin:0 0 6px; font-size:1rem; }
+    .settings-card p{ margin:0; color: var(--muted); font-size:.92rem; line-height:1.4; }
+    .settings-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .chip-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top: 10px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.72);
+      font-weight: 750;
+      font-size: .86rem;
+      color: var(--text);
+    }
+    .chip small{ color: var(--muted); font-weight:650; }
+    .muted{ color: var(--muted); }
 
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
-const session = require('express-session');
-const cors = require('cors');
-const { google } = require('googleapis');
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-const isProd = process.env.NODE_ENV === 'production';
-
-// Prefer a /public folder if you have one, otherwise fall back to repo root (this repo ships HTML/CSS in root)
-const PUBLIC_DIR_PREFERRED = path.join(__dirname, 'public');
-const PUBLIC_DIR = fs.existsSync(PUBLIC_DIR_PREFERRED) ? PUBLIC_DIR_PREFERRED : __dirname;
-
-// ========== ADMIN / EMAIL CONFIG =================================
-
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lm3dptfy+admin@gmail.com';
-const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'lm3dptfy@gmail.com';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-
-if (!ADMIN_PASSWORD) {
-  console.error('ERROR: ADMIN_PASSWORD not set in environment variables!');
-  process.exit(1);
-}
-
-// Resend HTTP email API (no SMTP)
-const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const EMAIL_FROM = process.env.EMAIL_FROM || 'LM3DPTFY <no-reply@lm3dptfy.online>';
-const EMAIL_ENABLED = !!RESEND_API_KEY;
-
-// Sheets
-const GOOGLE_SHEET_ID =
-  process.env.GOOGLE_SHEET_ID || '1IAwz8OtfuwSOSQJDIyOuwB_PI_ugHlEzvGKE_uUo2HI';
-const ACTIVE_SHEET_NAME = process.env.GOOGLE_ACTIVE_SHEET || 'Active';
-const ARCHIVED_SHEET_NAME = process.env.GOOGLE_ARCHIVED_SHEET || 'Archived';
-
-// Original 9 columns + appended 2 columns (safe — no shifting)
-const SHEET_HEADER = [
-  'ID',
-  'Created',
-  'Name',
-  'Email',
-  'STL Link',
-  'Details',
-  'Status',
-  'Fulfilled By',
-  'Archived',
-  'Admin Notes',
-  'Tracking #',
-];
-
-// internal status codes
-const VALID_STATUSES = [
-  'new',
-  'responded',
-  'quote_approved',
-  'sent_to_printer',
-  'print_complete',
-  'qc_complete',
-  'shipped',
-  'paid',
-];
-
-// mapping internal → pretty-for-sheets
-const STATUS_LABELS = {
-  new: 'New',
-  responded: 'Responded',
-  quote_approved: 'Quote approved',
-  sent_to_printer: 'Sent to printer',
-  print_complete: 'Print complete',
-  qc_complete: 'QC complete',
-  shipped: 'Shipped',
-  paid: 'Paid',
-};
-
-function statusToSheet(status) {
-  return STATUS_LABELS[status] || STATUS_LABELS.new;
-}
-
-function sheetToStatus(value) {
-  if (!value) return 'new';
-  const norm = String(value).trim().toLowerCase().replace(/[_\s]+/g, '_');
-  return VALID_STATUSES.includes(norm) ? norm : 'new';
-}
-
-// ========== GLOBAL STATE =========================================
-
-let requests = []; // in-memory list, hydrated from Sheets
-
-// ========== GOOGLE SHEETS CLIENT =================================
-
-let sheetsClient = null;
-
-if (process.env.GOOGLE_SERVICE_ACCOUNT) {
-  try {
-    const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
-    const auth = new google.auth.JWT(
-      credentials.client_email,
-      null,
-      credentials.private_key,
-      ['https://www.googleapis.com/auth/spreadsheets']
-    );
-    sheetsClient = google.sheets({ version: 'v4', auth });
-    console.log('Google Sheets integration enabled.');
-  } catch (err) {
-    console.error('Failed to initialize Google Sheets client:', err);
-  }
-} else {
-  console.log('GOOGLE_SERVICE_ACCOUNT not set. Google Sheets integration disabled.');
-}
-
-// ========== EMAIL VIA RESEND =====================================
-
-async function sendNotificationEmail(newRequest) {
-  if (!EMAIL_ENABLED) {
-    console.warn('RESEND_API_KEY not set; skipping notification email.');
-    return;
-  }
-
-  const { name, email, stlLink, details } = newRequest;
-
-  const subject = `New LM3DPTFY quote request from ${name}`;
-  const adminUrlBase = process.env.BACKEND_URL || 'https://www.lm3dptfy.online';
-  const html = `
-    <h2>New Quote Request</h2>
-    <p><strong>Name:</strong> ${name}</p>
-    <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-    <p><strong>STLFlix link:</strong> <a href="${stlLink}">${stlLink}</a></p>
-    <p><strong>Details:</strong> ${details || '(none)'}</p>
-    <p><a href="${adminUrlBase}/admin.html">View in Admin Panel</a></p>
-  `;
-
-  try {
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: EMAIL_FROM,
-        to: NOTIFY_EMAIL,
-        subject,
-        html,
-      }),
-    });
-
-    if (!res.ok) {
-      const txt = await res.text();
-      throw new Error(`Resend error ${res.status}: ${txt}`);
+    .section-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 16px;
     }
 
-    console.log('Admin notification email sent successfully via Resend.');
-  } catch (err) {
-    console.error('Error sending admin notification email via Resend:', err);
-  }
-}
+    .order-wrap{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .order-card{
+      padding: 16px;
+      border-radius: var(--radiusXL);
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.70));
+      box-shadow: var(--shadowSoft);
+    }
+    .order-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .order-meta{
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+      min-width: 240px;
+    }
+    .order-meta .who{
+      font-size: 1.05rem;
+      font-weight: 850;
+      letter-spacing: -.01em;
+      margin:0;
+    }
+    .order-meta .when{
+      font-size: .86rem;
+      color: var(--muted);
+    }
+    .order-meta a{ color: var(--accent); text-decoration:none; }
+    .order-meta a:hover{ text-decoration:underline; }
 
-// ========== EXPRESS MIDDLEWARE ===================================
-
-if (isProd) {
-  // Render/most PaaS sit behind a proxy; this makes secure cookies work correctly
-  app.set('trust proxy', 1);
-}
-
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-const SESSION_SECRET = process.env.SESSION_SECRET || 'change_this_in_production';
-if (isProd && SESSION_SECRET === 'change_this_in_production') {
-  console.warn('WARNING: SESSION_SECRET is using the default value. Set SESSION_SECRET in production.');
-}
-
-app.use(
-  session({
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: isProd, // ✅ secure cookies in production (https)
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'lax',
-    },
-  })
-);
-
-// If we fall back to serving static from repo root, block sensitive files from being served.
-const BLOCKED_STATIC_NAMES = new Set([
-  'server.js',
-  'package.json',
-  'package-lock.json',
-  '.env',
-  '.env.local',
-  '.env.production',
-]);
-
-app.use((req, res, next) => {
-  // Only applies to static-like GET/HEAD requests
-  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
-
-  const pathname = (req.path || '').toLowerCase();
-  const base = path.basename(pathname);
-  const ext = path.extname(base);
-
-  if (BLOCKED_STATIC_NAMES.has(base)) return res.status(404).end();
-  if (ext === '.js' || ext === '.json' || ext === '.lock' || ext === '.map') return res.status(404).end();
-
-  next();
-});
-
-// IMPORTANT: force homepage to index.html (prevents admin becoming root)
-app.get('/', (req, res) => {
-  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
-});
-
-// optional nice alias
-app.get('/admin', (req, res) => res.redirect('/admin.html'));
-
-// Static assets + pages
-app.use(express.static(PUBLIC_DIR));
-
-// ========== HELPERS ==============================================
-
-function requireAdmin(req, res, next) {
-  if (req.session && req.session.admin && req.session.admin.email === ADMIN_EMAIL) {
-    return next();
-  }
-  res.status(401).json({ error: 'Unauthorized' });
-}
-
-function validateStatus(status) {
-  return VALID_STATUSES.includes(status);
-}
-
-function parseCreatedToIso(created) {
-  if (!created) return new Date().toISOString();
-  const parsed = Date.parse(created);
-  if (Number.isNaN(parsed)) return new Date().toISOString();
-  return new Date(parsed).toISOString();
-}
-
-function mapRowToRequest(row) {
-  // Old layout (9 cols): A..I
-  // New layout (11 cols): A..K where:
-  // J = Admin Notes, K = Tracking #
-  const id = row[0];
-  if (!id) return null;
-
-  const created = row[1];
-  const name = row[2];
-  const email = row[3];
-  const stlLink = row[4];
-  const details = row[5];
-  const statusRaw = row[6];
-  const fulfilledBy = row[7];
-  const archivedText = row[8];
-
-  const adminNotes = row[9] || '';
-  const trackingNumber = row[10] || '';
-
-  const createdAt = parseCreatedToIso(created);
-
-  const archived =
-    String(archivedText).trim().toLowerCase() === 'yes' ||
-    String(archivedText).trim().toLowerCase() === 'true';
-
-  const status = sheetToStatus(statusRaw);
-
-  return {
-    id: String(id),
-    name: name || '',
-    email: email || '',
-    stlLink: stlLink || '',
-    details: details || '',
-    status,
-    fulfilledBy: fulfilledBy || '',
-    archived,
-    adminNotes: adminNotes || '',
-    trackingNumber: trackingNumber || '',
-    createdAt,
-    updatedAt: new Date().toISOString(),
-  };
-}
-
-function requestToRow(reqObj) {
-  const createdDate = new Date(reqObj.createdAt);
-  const createdDisplay = Number.isNaN(createdDate.getTime())
-    ? reqObj.createdAt || ''
-    : createdDate.toLocaleString();
-
-  return [
-    reqObj.id,
-    createdDisplay,
-    reqObj.name || '',
-    reqObj.email || '',
-    reqObj.stlLink || '',
-    reqObj.details || '',
-    statusToSheet(reqObj.status || 'new'),
-    reqObj.fulfilledBy || '',
-    reqObj.archived ? 'Yes' : 'No',
-    reqObj.adminNotes || '',
-    reqObj.trackingNumber || '',
-  ];
-}
-
-// ========== SHEETS <-> MEMORY SYNC ===============================
-
-async function ensureHeader(sheetName) {
-  const existing = await sheetsClient.spreadsheets.values.get({
-    spreadsheetId: GOOGLE_SHEET_ID,
-    range: `${sheetName}!A1:K1`,
-  });
-
-  const current = (existing.data.values && existing.data.values[0]) ? existing.data.values[0] : [];
-
-  // If header is empty or shorter than expected, write/extend it
-  if (!current.length || current.join('') === '' || current.length < SHEET_HEADER.length) {
-    const merged = [...current];
-    for (let i = 0; i < SHEET_HEADER.length; i++) {
-      if (!merged[i]) merged[i] = SHEET_HEADER[i];
+    .order-actions{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
     }
 
-    await sheetsClient.spreadsheets.values.update({
-      spreadsheetId: GOOGLE_SHEET_ID,
-      range: `${sheetName}!A1`,
-      valueInputOption: 'RAW',
-      requestBody: { values: [merged] },
+    .order-grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 14px;
+      margin-top: 12px;
+      align-items: start;
+    }
+    @media (max-width: 980px){
+      .order-grid{ grid-template-columns: 1fr; }
+    }
+
+    .order-block{
+      border: 1px solid rgba(15,23,42,.08);
+      border-radius: var(--radiusLG);
+      padding: 12px;
+      background: rgba(255,255,255,.70);
+    }
+    .order-block h4{
+      margin:0 0 8px;
+      font-size: .92rem;
+      letter-spacing: -.01em;
+    }
+
+    .control-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 980px){
+      .control-row{ grid-template-columns: 1fr; }
+    }
+
+    .inline-help{
+      margin-top: 8px;
+      font-size: .85rem;
+      color: var(--muted);
+      line-height:1.4;
+    }
+
+    /* Modal */
+    .modal-backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 999;
+    }
+    .modal{
+      width: min(920px, 100%);
+      background: #fff;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.25);
+      box-shadow: 0 30px 90px rgba(2,6,23,.35);
+      overflow: hidden;
+    }
+    .modal-head{
+      padding: 14px 14px;
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .modal-head h3{ margin:0; font-size: 1.05rem; }
+    .modal-body{ padding: 14px; }
+    .modal-actions{
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      display:flex;
+      justify-content:flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-secondary{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.85);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 800;
+      cursor:pointer;
+    }
+    .btn-secondary:hover{
+      box-shadow: var(--shadowSoft);
+      transform: translateY(-1px);
+    }
+
+    .sites-editor{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .site-row{
+      border: 1px solid rgba(15,23,42,.10);
+      border-radius: 16px;
+      padding: 12px;
+      background: rgba(246,248,252,.65);
+    }
+    .site-row-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .site-row-top strong{ font-size: .95rem; }
+    .site-grid{
+      display:grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 10px;
+    }
+    @media (max-width: 860px){
+      .site-grid{ grid-template-columns: 1fr; }
+    }
+    .site-controls{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body class="admin-page">
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="/" title="Home">
+          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
+          <div class="brand-title">
+            <strong>Let Me 3D Print That For You</strong>
+            <span>Admin dashboard • Private</span>
+          </div>
+        </a>
+
+        <div class="nav-right">
+          <a class="pill-link" href="/">Home</a>
+          <button id="logoutTopBtn" class="pill-link" type="button">Log out</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-main">
+      <div class="main-inner">
+        <!-- Login -->
+        <div id="loginCard" class="card" style="max-width:560px;margin:0 auto;padding:18px;">
+          <h1 class="admin-title" style="font-size:1.25rem;margin:0 0 6px;">Admin login</h1>
+          <p class="admin-subtitle" style="margin:0 0 14px;">Sign in to see and manage quote requests.</p>
+
+          <form id="loginForm" class="stl-form">
+            <div>
+              <label for="adminEmail" class="field-label">Admin email</label>
+              <input type="email" id="adminEmail" class="field-input" required />
+            </div>
+            <div>
+              <label for="adminPassword" class="field-label">Password</label>
+              <input type="password" id="adminPassword" class="field-input" required />
+            </div>
+            <button type="submit" class="btn-primary">Log in</button>
+            <p id="loginStatus" class="status-message" style="display:none;"></p>
+          </form>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboardCard" style="display:none;">
+          <div class="admin-head">
+            <div>
+              <h1 class="admin-title">Quote requests</h1>
+              <p class="admin-subtitle">Active + archived requests from lm3dptfy.online.</p>
+            </div>
+
+            <div class="admin-actions">
+              <button id="reloadSheetsBtn" class="btn-primary btn-sm" type="button">Refresh from Sheets</button>
+              <button id="syncSheetsBtn" class="btn-primary btn-sm" type="button">Sync to Sheets</button>
+              <a href="/api/export/csv" class="btn-primary btn-sm" style="text-decoration:none;">Export CSV</a>
+              <a href="/api/export/json" class="btn-primary btn-sm" style="text-decoration:none;">Export JSON</a>
+            </div>
+          </div>
+
+          <p id="dashboardStatus" class="status-message" style="display:none;"></p>
+
+          <!-- Settings -->
+          <section class="card" style="padding:16px;margin-top:12px;">
+            <h2 class="section-title" style="margin:0;">Settings</h2>
+
+            <div class="settings-grid">
+              <div class="settings-card card" style="box-shadow:none;">
+                <div class="settings-row">
+                  <div>
+                    <h3>Fulfilled by list</h3>
+                    <p>These names appear in the “Fulfilled by” dropdown on each order.</p>
+                    <div id="fulfillerChips" class="chip-row"></div>
+                  </div>
+                  <button id="editFulfillersBtn" class="btn-primary btn-sm" type="button">Edit</button>
+                </div>
+              </div>
+
+              <div class="settings-card card" style="box-shadow:none;">
+                <div class="settings-row">
+                  <div>
+                    <h3>Supported sites</h3>
+                    <p>These sites appear on the Home page as options and power source detection on the Request page.</p>
+                    <div id="siteChips" class="chip-row"></div>
+                  </div>
+                  <button id="editSitesBtn" class="btn-primary btn-sm" type="button">Edit</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Active -->
+          <div class="section-head">
+            <h2 class="section-title" style="margin:0;">Active</h2>
+            <div class="muted" id="activeCount"></div>
+          </div>
+          <div id="activeWrap" class="order-wrap"></div>
+
+          <!-- Archived -->
+          <div class="section-head">
+            <h2 class="section-title" style="margin:0;">Archived</h2>
+            <div class="muted" id="archivedCount"></div>
+          </div>
+          <div id="archivedWrap" class="order-wrap"></div>
+
+          <p class="tip">Tip: Bookmark <strong>/admin</strong>. This page is meant to stay private.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      LM3DPTFY Admin · Keep this page private.
+    </footer>
+  </div>
+
+  <!-- Fulfillers Modal -->
+  <div id="fulfillersModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Edit “Fulfilled by” names</h3>
+        <button class="btn-secondary" type="button" data-close="fulfillersModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <p class="inline-help" style="margin-top:0;">
+          One name per line. These will appear in the “Fulfilled by” dropdown for every order.
+        </p>
+        <textarea id="fulfillersInput" class="field-input" style="min-height:180px;" placeholder="Robert&#10;Jared&#10;Terence"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" type="button" data-close="fulfillersModal">Cancel</button>
+        <button id="saveFulfillersBtn" class="btn-primary" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sites Modal -->
+  <div id="sitesModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Edit supported sites</h3>
+        <button class="btn-secondary" type="button" data-close="sitesModal">Close</button>
+      </div>
+      <div class="modal-body">
+        <p class="inline-help" style="margin-top:0;">
+          Hosts are used for detection (match domains). Browse URL is what opens from the Home page “Browse …” button.
+        </p>
+        <div class="sites-editor" id="sitesEditor"></div>
+        <div style="margin-top:10px;">
+          <button id="addSiteBtn" class="btn-secondary" type="button">+ Add site</button>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" type="button" data-close="sitesModal">Cancel</button>
+        <button id="saveSitesBtn" class="btn-primary" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- DOM ----------
+    const loginForm = document.getElementById('loginForm');
+    const loginStatus = document.getElementById('loginStatus');
+    const loginCard = document.getElementById('loginCard');
+    const dashboardCard = document.getElementById('dashboardCard');
+    const dashboardStatus = document.getElementById('dashboardStatus');
+
+    const reloadBtn = document.getElementById('reloadSheetsBtn');
+    const syncBtn = document.getElementById('syncSheetsBtn');
+    const logoutTopBtn = document.getElementById('logoutTopBtn');
+
+    const activeWrap = document.getElementById('activeWrap');
+    const archivedWrap = document.getElementById('archivedWrap');
+    const activeCount = document.getElementById('activeCount');
+    const archivedCount = document.getElementById('archivedCount');
+
+    const fulfillerChips = document.getElementById('fulfillerChips');
+    const siteChips = document.getElementById('siteChips');
+
+    const fulfillersModal = document.getElementById('fulfillersModal');
+    const sitesModal = document.getElementById('sitesModal');
+
+    const editFulfillersBtn = document.getElementById('editFulfillersBtn');
+    const editSitesBtn = document.getElementById('editSitesBtn');
+
+    const fulfillersInput = document.getElementById('fulfillersInput');
+    const saveFulfillersBtn = document.getElementById('saveFulfillersBtn');
+
+    const sitesEditor = document.getElementById('sitesEditor');
+    const addSiteBtn = document.getElementById('addSiteBtn');
+    const saveSitesBtn = document.getElementById('saveSitesBtn');
+
+    // ---------- STATE ----------
+    let SETTINGS = { fulfilledByNames: [], supportedSites: [] };
+    let REQUESTS = [];
+    let autoReloadedOnce = false;
+
+    const STATUS_OPTIONS = [
+      { value: 'new', label: 'New' },
+      { value: 'responded', label: 'Responded' },
+      { value: 'quote_approved', label: 'Quote approved' },
+      { value: 'sent_to_printer', label: 'Sent to printer' },
+      { value: 'print_complete', label: 'Print complete' },
+      { value: 'qc_complete', label: 'QC complete' },
+      { value: 'shipped', label: 'Shipped' },
+      { value: 'paid', label: 'Paid' },
+    ];
+
+    const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
+
+    function buildGmailUrl(toEmail, subject, body) {
+      let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
+      url += '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER);
+      url += '&to=' + encodeURIComponent(toEmail);
+      url += '&su=' + encodeURIComponent(subject);
+      url += '&body=' + encodeURIComponent(body);
+      return url;
+    }
+
+    function showLoginStatus(msg, isError) {
+      loginStatus.textContent = msg;
+      loginStatus.style.display = 'block';
+      loginStatus.classList.toggle('status-error', !!isError);
+      loginStatus.classList.toggle('status-success', !isError);
+    }
+
+    function showDashStatus(msg, isError) {
+      dashboardStatus.textContent = msg;
+      dashboardStatus.style.display = 'block';
+      dashboardStatus.classList.toggle('status-error', !!isError);
+      dashboardStatus.classList.toggle('status-success', !isError);
+      if (!isError) setTimeout(() => { dashboardStatus.style.display = 'none'; }, 4500);
+    }
+
+    // ---------- API (SURFACES REAL ERROR TEXT) ----------
+    async function api(url, opts = {}) {
+      const res = await fetch(url, {
+        credentials: 'include',
+        ...opts,
+        headers: {
+          'Accept': 'application/json',
+          ...(opts.body ? { 'Content-Type': 'application/json' } : {}),
+          ...(opts.headers || {})
+        }
+      });
+
+      const text = await res.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : null; } catch {}
+
+      if (!res.ok) {
+        const msg =
+          (data && data.error) ? data.error :
+          (text ? text.slice(0, 220) : `HTTP ${res.status}`);
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    // ---------- MODAL HELPERS ----------
+    function openModal(el){ el.style.display = 'flex'; }
+    function closeModal(el){ el.style.display = 'none'; }
+
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-close');
+        const el = document.getElementById(id);
+        closeModal(el);
+      });
     });
 
-    console.log(`Initialized/extended header row on sheet "${sheetName}".`);
-  }
-}
-
-async function loadRequestsFromSheet() {
-  if (!sheetsClient) {
-    console.warn('Google Sheets client not initialized; cannot load requests.');
-    requests = [];
-    return;
-  }
-
-  try {
-    await Promise.all([ensureHeader(ACTIVE_SHEET_NAME), ensureHeader(ARCHIVED_SHEET_NAME)]);
-
-    const [activeRes, archivedRes] = await Promise.all([
-      sheetsClient.spreadsheets.values.get({
-        spreadsheetId: GOOGLE_SHEET_ID,
-        range: `${ACTIVE_SHEET_NAME}!A1:K10000`,
-      }),
-      sheetsClient.spreadsheets.values.get({
-        spreadsheetId: GOOGLE_SHEET_ID,
-        range: `${ARCHIVED_SHEET_NAME}!A1:K10000`,
-      }),
-    ]);
-
-    const activeValues = activeRes.data.values || [];
-    const archivedValues = archivedRes.data.values || [];
-
-    const activeRows = activeValues.slice(1);
-    const archivedRows = archivedValues.slice(1);
-
-    const activeRequests = activeRows.map(mapRowToRequest).filter(Boolean).map(r => ({ ...r, archived: false }));
-    const archivedRequests = archivedRows.map(mapRowToRequest).filter(Boolean).map(r => ({ ...r, archived: true }));
-
-    requests = [...activeRequests, ...archivedRequests].sort((a, b) => {
-      const ta = Date.parse(a.createdAt) || 0;
-      const tb = Date.parse(b.createdAt) || 0;
-      return tb - ta;
+    // Close modals when clicking backdrop
+    [fulfillersModal, sitesModal].forEach(m => {
+      m.addEventListener('click', (e) => {
+        if (e.target === m) closeModal(m);
+      });
     });
 
-    console.log(`Loaded ${requests.length} requests from Sheets.`);
-  } catch (err) {
-    console.error('Error loading requests from Google Sheets:', err);
-    requests = [];
-  }
-}
+    // ---------- RENDER SETTINGS ----------
+    function renderSettingsChips(){
+      fulfillerChips.innerHTML = '';
+      siteChips.innerHTML = '';
 
-async function writeAllRequestsToSheet() {
-  if (!sheetsClient) return;
+      const names = Array.isArray(SETTINGS.fulfilledByNames) ? SETTINGS.fulfilledByNames : [];
+      if (!names.length) {
+        const span = document.createElement('span');
+        span.className = 'muted';
+        span.textContent = 'No names found.';
+        fulfillerChips.appendChild(span);
+      } else {
+        names.forEach(n => {
+          const c = document.createElement('span');
+          c.className = 'chip';
+          c.textContent = n;
+          fulfillerChips.appendChild(c);
+        });
+      }
 
-  const active = requests.filter(r => !r.archived);
-  const archived = requests.filter(r => r.archived);
+      const sites = Array.isArray(SETTINGS.supportedSites) ? SETTINGS.supportedSites : [];
+      const enabledSites = sites.filter(s => s && s.enabled !== false);
+      if (!enabledSites.length) {
+        const span = document.createElement('span');
+        span.className = 'muted';
+        span.textContent = 'No enabled sites.';
+        siteChips.appendChild(span);
+      } else {
+        enabledSites.slice(0, 8).forEach(s => {
+          const c = document.createElement('span');
+          c.className = 'chip';
+          c.innerHTML = `${escapeHtml(s.name || 'Site')} <small>${(s.hosts && s.hosts[0]) ? s.hosts[0] : ''}</small>`;
+          siteChips.appendChild(c);
+        });
+        if (enabledSites.length > 8) {
+          const more = document.createElement('span');
+          more.className = 'chip';
+          more.textContent = `+${enabledSites.length - 8} more`;
+          siteChips.appendChild(more);
+        }
+      }
+    }
 
-  const activeValues = [SHEET_HEADER, ...active.map(requestToRow)];
-  const archivedValues = [SHEET_HEADER, ...archived.map(requestToRow)];
+    // ---------- SITES EDITOR ----------
+    function getSitesDraft(){
+      const arr = Array.isArray(SETTINGS.supportedSites) ? SETTINGS.supportedSites : [];
+      return arr.map(s => ({
+        id: s.id || '',
+        name: s.name || '',
+        hosts: Array.isArray(s.hosts) ? s.hosts.join(', ') : '',
+        browseUrl: s.browseUrl || '',
+        enabled: s.enabled !== false
+      }));
+    }
 
-  await Promise.all([
-    sheetsClient.spreadsheets.values.clear({
-      spreadsheetId: GOOGLE_SHEET_ID,
-      range: `${ACTIVE_SHEET_NAME}!A2:K10000`,
-    }),
-    sheetsClient.spreadsheets.values.clear({
-      spreadsheetId: GOOGLE_SHEET_ID,
-      range: `${ARCHIVED_SHEET_NAME}!A2:K10000`,
-    }),
-  ]);
+    function renderSitesEditor(draft){
+      sitesEditor.innerHTML = '';
+      draft.forEach((s, idx) => {
+        const row = document.createElement('div');
+        row.className = 'site-row';
 
-  await Promise.all([
-    sheetsClient.spreadsheets.values.update({
-      spreadsheetId: GOOGLE_SHEET_ID,
-      range: `${ACTIVE_SHEET_NAME}!A1`,
-      valueInputOption: 'RAW',
-      requestBody: { values: activeValues },
-    }),
-    sheetsClient.spreadsheets.values.update({
-      spreadsheetId: GOOGLE_SHEET_ID,
-      range: `${ARCHIVED_SHEET_NAME}!A1`,
-      valueInputOption: 'RAW',
-      requestBody: { values: archivedValues },
-    }),
-  ]);
+        row.innerHTML = `
+          <div class="site-row-top">
+            <strong>Site ${idx + 1}</strong>
+            <button class="btn-secondary" type="button" data-remove="${idx}">Remove</button>
+          </div>
+          <div class="site-grid">
+            <div>
+              <label class="field-label">Name</label>
+              <input class="field-input" data-k="name" data-i="${idx}" value="${escapeAttr(s.name)}" placeholder="STLFlix" />
+            </div>
+            <div>
+              <label class="field-label">Browse URL (optional)</label>
+              <input class="field-input" data-k="browseUrl" data-i="${idx}" value="${escapeAttr(s.browseUrl)}" placeholder="https://..." />
+            </div>
+            <div style="grid-column:1/-1;">
+              <label class="field-label">Hosts (comma or new line)</label>
+              <textarea class="field-input" data-k="hosts" data-i="${idx}" style="min-height:90px;" placeholder="stlflix.com, platform.stlflix.com">${escapeHtml(s.hosts)}</textarea>
+            </div>
+          </div>
+          <div class="site-controls">
+            <label class="chip" style="cursor:pointer;">
+              <input type="checkbox" data-k="enabled" data-i="${idx}" ${s.enabled ? 'checked' : ''} style="margin-right:8px;" />
+              Enabled
+            </label>
+            <input type="hidden" data-k="id" data-i="${idx}" value="${escapeAttr(s.id)}" />
+          </div>
+        `;
 
-  console.log(`Synced to Sheets: ${active.length} active, ${archived.length} archived.`);
-}
+        sitesEditor.appendChild(row);
+      });
 
-// ========== ROUTES ===============================================
+      sitesEditor.querySelectorAll('[data-remove]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = Number(btn.getAttribute('data-remove'));
+          const current = readSitesDraftFromDom();
+          current.splice(i, 1);
+          renderSitesEditor(current);
+        });
+      });
+    }
 
-app.get('/api/health', (req, res) => {
-  res.json({
-    ok: true,
-    env: process.env.NODE_ENV || 'development',
-    adminEmail: ADMIN_EMAIL,
-    notifyEmail: NOTIFY_EMAIL,
-    sheetId: GOOGLE_SHEET_ID,
-    emailEnabled: EMAIL_ENABLED,
-  });
-});
+    function readSitesDraftFromDom(){
+      const rows = Array.from(sitesEditor.querySelectorAll('.site-row'));
+      const draft = [];
+      rows.forEach((row, idx) => {
+        const get = (k) => row.querySelector(`[data-k="${k}"][data-i="${idx}"]`);
+        const name = (get('name')?.value || '').trim();
+        const browseUrl = (get('browseUrl')?.value || '').trim();
+        const hostsRaw = (get('hosts')?.value || '').trim();
+        const enabled = !!get('enabled')?.checked;
+        const id = (get('id')?.value || '').trim();
 
-// Public: create new quote request
-app.post('/api/requests', async (req, res) => {
-  const { stlLink, name, email, details } = req.body;
+        draft.push({ id, name, browseUrl, hosts: hostsRaw, enabled });
+      });
+      return draft;
+    }
 
-  if (!stlLink || !name || !email) {
-    return res.status(400).json({ error: 'Missing required fields.' });
-  }
+    // ---------- ORDERS RENDER ----------
+    function escapeHtml(str){
+      return String(str ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+    function escapeAttr(str){ return escapeHtml(str).replaceAll('\n', ' '); }
 
-  const nowIso = new Date().toISOString();
+    function getFulfilledOptions(){
+      const names = Array.isArray(SETTINGS.fulfilledByNames) ? SETTINGS.fulfilledByNames : [];
+      const opts = [{ value: '', label: '-- None --' }, ...names.map(n => ({ value: n, label: n }))];
+      return opts;
+    }
 
-  const newRequest = {
-    id: Date.now().toString(),
-    stlLink,
-    name,
-    email,
-    details: details || '',
-    status: 'new',
-    createdAt: nowIso,
-    updatedAt: nowIso,
-    fulfilledBy: '',
-    archived: false,
-    adminNotes: '',
-    trackingNumber: '',
-  };
+    function detectSourceName(link){
+      const sites = Array.isArray(SETTINGS.supportedSites) ? SETTINGS.supportedSites : [];
+      try{
+        const u = new URL(link);
+        const host = u.hostname.replace(/^www\./,'').toLowerCase();
+        for (const s of sites){
+          const hosts = Array.isArray(s.hosts) ? s.hosts.map(h => String(h).toLowerCase().replace(/^www\./,'')) : [];
+          if (hosts.includes(host)) return s.name || 'Unknown';
+          for (const h of hosts){
+            if (h && host.endsWith('.' + h)) return s.name || 'Unknown';
+          }
+        }
+      }catch{}
+      return 'Unknown';
+    }
 
-  requests.unshift(newRequest);
+    function renderOrders(){
+      const active = REQUESTS.filter(r => !r.archived);
+      const archived = REQUESTS.filter(r => r.archived);
 
-  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
-  sendNotificationEmail(newRequest).catch(() => {});
+      activeCount.textContent = active.length ? `${active.length} order(s)` : '';
+      archivedCount.textContent = archived.length ? `${archived.length} order(s)` : '';
 
-  res.status(201).json({ ok: true, id: newRequest.id });
-});
+      activeWrap.innerHTML = '';
+      archivedWrap.innerHTML = '';
 
-// Admin auth
-app.post('/api/login', (req, res) => {
-  const { email, password } = req.body;
-  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-    req.session.admin = { email };
-    return res.json({ ok: true });
-  }
-  res.status(401).json({ error: 'Invalid credentials' });
-});
+      if (!active.length){
+        const empty = document.createElement('div');
+        empty.className = 'muted';
+        empty.textContent = 'No active requests.';
+        activeWrap.appendChild(empty);
+      } else {
+        active.forEach(r => activeWrap.appendChild(renderOrderCard(r)));
+      }
 
-app.post('/api/logout', (req, res) => {
-  req.session.destroy(() => res.json({ ok: true }));
-});
+      if (!archived.length){
+        const empty = document.createElement('div');
+        empty.className = 'muted';
+        empty.textContent = 'No archived requests.';
+        archivedWrap.appendChild(empty);
+      } else {
+        archived.forEach(r => archivedWrap.appendChild(renderOrderCard(r)));
+      }
+    }
 
-app.get('/api/requests', requireAdmin, (req, res) => {
-  res.json(requests);
-});
+    function renderOrderCard(r){
+      const card = document.createElement('div');
+      card.className = 'order-card';
 
-app.post('/api/requests/:id/status', requireAdmin, (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
+      const created = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
+      const sourceName = detectSourceName(r.stlLink || '');
 
-  if (!validateStatus(status)) return res.status(400).json({ error: 'Invalid status' });
+      const subject = `LM3DPTFY quote update`;
+      const body = [
+        `Hi ${r.name || ''},`,
+        ``,
+        `Thanks for your request!`,
+        ``,
+        `Order ID: ${r.id}`,
+        `Model link: ${r.stlLink || ''}`,
+        ``,
+        `— LM3DPTFY`,
+      ].join('\n');
 
-  const r = requests.find(x => x.id === id);
-  if (!r) return res.status(404).json({ error: 'Request not found' });
+      const fulfilledOpts = getFulfilledOptions();
 
-  r.status = status;
-  r.updatedAt = new Date().toISOString();
+      card.innerHTML = `
+        <div class="order-top">
+          <div class="order-meta">
+            <div class="when">${escapeHtml(created)} • <strong>Source:</strong> ${escapeHtml(sourceName)}</div>
+            <p class="who">${escapeHtml(r.name || '(No name)')}</p>
+            <div>
+              <a href="mailto:${escapeAttr(r.email || '')}">${escapeHtml(r.email || '')}</a>
+            </div>
+          </div>
 
-  res.json({ ok: true, request: r });
-  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
-});
+          <div class="order-actions">
+            <a class="btn-primary btn-sm" href="${escapeAttr(r.stlLink || '#')}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">View model</a>
+            <a class="btn-primary btn-sm" href="${escapeAttr(buildGmailUrl(r.email || '', subject, body))}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Reply</a>
+            <label class="chip" style="cursor:pointer;">
+              <input type="checkbox" class="archiveToggle" ${r.archived ? 'checked' : ''} style="margin-right:8px;" />
+              Archive
+            </label>
+          </div>
+        </div>
 
-app.post('/api/requests/:id/fulfilled', requireAdmin, (req, res) => {
-  const { id } = req.params;
-  const { fulfilledBy } = req.body;
+        <div class="order-grid">
+          <div class="order-block">
+            <h4>Customer notes</h4>
+            <div style="white-space:pre-wrap;line-height:1.45;color:var(--text);">${escapeHtml(r.details || '(none)')}</div>
+          </div>
 
-  const r = requests.find(x => x.id === id);
-  if (!r) return res.status(404).json({ error: 'Request not found' });
+          <div class="order-block">
+            <h4>Admin notes</h4>
+            <textarea class="field-input adminNotes" placeholder="Notes for you only...">${escapeHtml(r.adminNotes || '')}</textarea>
+            <div class="inline-help">Saved automatically.</div>
+          </div>
+        </div>
 
-  r.fulfilledBy = fulfilledBy || '';
-  r.updatedAt = new Date().toISOString();
+        <div class="control-row">
+          <div>
+            <label class="field-label">Status</label>
+            <select class="statusSelect status-select">
+              ${STATUS_OPTIONS.map(o => `<option value="${o.value}" ${o.value===r.status?'selected':''}>${o.label}</option>`).join('')}
+            </select>
+          </div>
 
-  res.json({ ok: true, request: r });
-  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
-});
+          <div>
+            <label class="field-label">Fulfilled by</label>
+            <select class="fulfilledSelect status-select">
+              ${fulfilledOpts.map(o => `<option value="${escapeAttr(o.value)}" ${o.value===(r.fulfilledBy||'')?'selected':''}>${escapeHtml(o.label)}</option>`).join('')}
+            </select>
+          </div>
 
-// Admin notes
-app.post('/api/requests/:id/admin-notes', requireAdmin, (req, res) => {
-  const { id } = req.params;
-  const { adminNotes } = req.body;
+          <div>
+            <label class="field-label">Tracking #</label>
+            <input class="field-input trackingInput" value="${escapeAttr(r.trackingNumber || '')}" placeholder="${r.status==='shipped' ? 'Paste tracking #' : 'Set status to Shipped'}" ${r.status==='shipped' ? '' : 'disabled'} />
+            <div class="inline-help">When status is <strong>Shipped</strong>, adding tracking will open a Gmail draft on blur.</div>
+          </div>
+        </div>
+      `;
 
-  const r = requests.find(x => x.id === id);
-  if (!r) return res.status(404).json({ error: 'Request not found' });
+      // Wire events
+      const statusSelect = card.querySelector('.statusSelect');
+      const fulfilledSelect = card.querySelector('.fulfilledSelect');
+      const adminNotesEl = card.querySelector('.adminNotes');
+      const trackingInput = card.querySelector('.trackingInput');
+      const archiveToggle = card.querySelector('.archiveToggle');
 
-  r.adminNotes = String(adminNotes || '');
-  r.updatedAt = new Date().toISOString();
+      statusSelect.addEventListener('change', async () => {
+        try{
+          const status = statusSelect.value;
+          await api(`/api/requests/${encodeURIComponent(r.id)}/status`, {
+            method: 'POST',
+            body: JSON.stringify({ status })
+          });
+          r.status = status;
+          // re-render this card for tracking enable/disable
+          saveCache();
+          renderOrders();
+        }catch(e){
+          showDashStatus(e.message || 'Failed to update status', true);
+        }
+      });
 
-  res.json({ ok: true, request: r });
-  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
-});
+      fulfilledSelect.addEventListener('change', async () => {
+        try{
+          const fulfilledBy = fulfilledSelect.value;
+          await api(`/api/requests/${encodeURIComponent(r.id)}/fulfilled`, {
+            method: 'POST',
+            body: JSON.stringify({ fulfilledBy })
+          });
+          r.fulfilledBy = fulfilledBy;
+          saveCache();
+        }catch(e){
+          showDashStatus(e.message || 'Failed to update fulfilled by', true);
+        }
+      });
 
-// Tracking number
-app.post('/api/requests/:id/tracking', requireAdmin, (req, res) => {
-  const { id } = req.params;
-  const { trackingNumber } = req.body;
+      let notesTimer = null;
+      adminNotesEl.addEventListener('input', () => {
+        clearTimeout(notesTimer);
+        notesTimer = setTimeout(async () => {
+          try{
+            const adminNotes = adminNotesEl.value;
+            await api(`/api/requests/${encodeURIComponent(r.id)}/admin-notes`, {
+              method: 'POST',
+              body: JSON.stringify({ adminNotes })
+            });
+            r.adminNotes = adminNotes;
+            saveCache();
+          }catch(e){
+            showDashStatus(e.message || 'Failed to save admin notes', true);
+          }
+        }, 500);
+      });
 
-  const r = requests.find(x => x.id === id);
-  if (!r) return res.status(404).json({ error: 'Request not found' });
+      trackingInput.addEventListener('blur', async () => {
+        if (trackingInput.disabled) return;
+        const val = trackingInput.value.trim();
 
-  r.trackingNumber = String(trackingNumber || '').trim();
-  r.updatedAt = new Date().toISOString();
+        try{
+          await api(`/api/requests/${encodeURIComponent(r.id)}/tracking`, {
+            method: 'POST',
+            body: JSON.stringify({ trackingNumber: val })
+          });
+          r.trackingNumber = val;
+          saveCache();
 
-  res.json({ ok: true, request: r });
-  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
-});
+          if (val && r.status === 'shipped') {
+            const sub = `Your order has shipped — tracking inside`;
+            const msg = [
+              `Hi ${r.name || ''},`,
+              ``,
+              `Your order has shipped!`,
+              `Tracking: ${val}`,
+              ``,
+              `Thanks again,`,
+              `LM3DPTFY`,
+            ].join('\n');
+            window.open(buildGmailUrl(r.email || '', sub, msg), '_blank', 'noopener,noreferrer');
+          }
+        }catch(e){
+          showDashStatus(e.message || 'Failed to save tracking', true);
+        }
+      });
 
-app.post('/api/requests/:id/archive', requireAdmin, (req, res) => {
-  const { id } = req.params;
-  const { archived } = req.body;
+      archiveToggle.addEventListener('change', async () => {
+        try{
+          const archived = !!archiveToggle.checked;
+          await api(`/api/requests/${encodeURIComponent(r.id)}/archive`, {
+            method: 'POST',
+            body: JSON.stringify({ archived })
+          });
+          r.archived = archived;
+          saveCache();
+          renderOrders();
+        }catch(e){
+          showDashStatus(e.message || 'Failed to archive/unarchive', true);
+        }
+      });
 
-  if (typeof archived !== 'boolean') return res.status(400).json({ error: 'archived must be boolean' });
+      return card;
+    }
 
-  const r = requests.find(x => x.id === id);
-  if (!r) return res.status(404).json({ error: 'Request not found' });
+    // ---------- CACHE (RETENTION ON REFRESH) ----------
+    const CACHE_KEY = 'lm3dptfy_admin_cache_v1';
+    function saveCache(){
+      try{
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          at: Date.now(),
+          settings: SETTINGS,
+          requests: REQUESTS
+        }));
+      }catch{}
+    }
 
-  r.archived = archived;
-  r.updatedAt = new Date().toISOString();
+    function loadCache(){
+      try{
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return false;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !Array.isArray(parsed.requests)) return false;
+        SETTINGS = parsed.settings || SETTINGS;
+        REQUESTS = parsed.requests || REQUESTS;
+        return true;
+      }catch{
+        return false;
+      }
+    }
 
-  res.json({ ok: true, request: r });
-  if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
-});
+    // ---------- LOADERS ----------
+    function showDashboard(){
+      loginCard.style.display = 'none';
+      dashboardCard.style.display = 'block';
+    }
 
-app.post('/api/sheets/reload', requireAdmin, async (req, res) => {
-  await loadRequestsFromSheet();
-  res.json({ ok: true, count: requests.length });
-});
+    function showLogin(){
+      dashboardCard.style.display = 'none';
+      loginCard.style.display = 'block';
+    }
 
-app.post('/api/sheets/sync', requireAdmin, async (req, res) => {
-  await writeAllRequestsToSheet();
-  res.json({ ok: true, count: requests.length });
-});
+    async function loadSettingsAndOrders({ allowAutoSheetsReload }){
+      // Settings
+      const s = await api('/api/settings');
+      SETTINGS = s.settings || { fulfilledByNames: [], supportedSites: [] };
+      renderSettingsChips();
 
-// ====== Admin exports (these links already exist in admin.html) ======
+      // Orders
+      REQUESTS = await api('/api/requests');
+      if (allowAutoSheetsReload && Array.isArray(REQUESTS) && REQUESTS.length === 0 && !autoReloadedOnce) {
+        autoReloadedOnce = true;
+        try{
+          showDashStatus('No orders in memory — auto refreshing from Sheets…', false);
+          await api('/api/sheets/reload', { method:'POST' });
+          REQUESTS = await api('/api/requests');
+        }catch(e){
+          // show error but still render empty state
+          showDashStatus(e.message || 'Auto refresh from Sheets failed', true);
+        }
+      }
 
-function csvEscape(v) {
-  const s = String(v ?? '');
-  if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
-  return s;
-}
+      saveCache();
+      renderOrders();
+    }
 
-app.get('/api/export/json', requireAdmin, (req, res) => {
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.setHeader(
-    'Content-Disposition',
-    `attachment; filename="lm3dptfy-requests-${new Date().toISOString().replace(/[:.]/g, '-')}.json"`
-  );
-  res.send(JSON.stringify(requests, null, 2));
-});
+    async function bootstrap(){
+      // draw cache immediately (so refresh never looks empty)
+      const hadCache = loadCache();
+      if (hadCache) {
+        renderSettingsChips();
+        renderOrders();
+      }
 
-app.get('/api/export/csv', requireAdmin, (req, res) => {
-  const header = [
-    'id',
-    'createdAt',
-    'name',
-    'email',
-    'stlLink',
-    'details',
-    'status',
-    'fulfilledBy',
-    'archived',
-    'adminNotes',
-    'trackingNumber',
-    'updatedAt',
-  ];
+      try{
+        await loadSettingsAndOrders({ allowAutoSheetsReload: true });
+        showDashboard();
+      }catch(e){
+        // Unauthorized or server error
+        showLogin();
+      }
+    }
 
-  const rows = requests.map(r => [
-    r.id,
-    r.createdAt,
-    r.name,
-    r.email,
-    r.stlLink,
-    r.details,
-    r.status,
-    r.fulfilledBy,
-    r.archived,
-    r.adminNotes,
-    r.trackingNumber,
-    r.updatedAt,
-  ]);
+    // ---------- EVENTS ----------
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showLoginStatus('Logging in…', false);
 
-  const csv = [
-    header.map(csvEscape).join(','),
-    ...rows.map(row => row.map(csvEscape).join(',')),
-  ].join('\n');
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value;
 
-  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-  res.setHeader(
-    'Content-Disposition',
-    `attachment; filename="lm3dptfy-requests-${new Date().toISOString().replace(/[:.]/g, '-')}.csv"`
-  );
-  res.send(csv);
-});
+      try{
+        await api('/api/login', {
+          method: 'POST',
+          body: JSON.stringify({ email, password })
+        });
 
-// ========== APP STARTUP ==========================================
+        showLoginStatus('Logged in!', false);
+        showDashboard();
+        await loadSettingsAndOrders({ allowAutoSheetsReload: true });
+      }catch(err){
+        showLoginStatus(err.message || 'Login failed', true);
+      }
+    });
 
-app.listen(PORT, () => {
-  console.log(`LM3DPTFY server running on http://localhost:${PORT}`);
-  if (sheetsClient) loadRequestsFromSheet().catch(console.error);
-});
+    logoutTopBtn.addEventListener('click', async () => {
+      try{
+        await api('/api/logout', { method:'POST' });
+      }catch{}
+      showLogin();
+    });
+
+    reloadBtn.addEventListener('click', async () => {
+      try{
+        showDashStatus('Refreshing from Sheets…', false);
+        await api('/api/sheets/reload', { method:'POST' });
+        REQUESTS = await api('/api/requests');
+        saveCache();
+        renderOrders();
+        showDashStatus('Refreshed from Sheets.', false);
+      }catch(e){
+        showDashStatus(e.message || 'Refresh failed', true);
+      }
+    });
+
+    syncBtn.addEventListener('click', async () => {
+      try{
+        showDashStatus('Syncing to Sheets…', false);
+        await api('/api/sheets/sync', { method:'POST' });
+        showDashStatus('Synced to Sheets.', false);
+      }catch(e){
+        showDashStatus(e.message || 'Sync failed', true);
+      }
+    });
+
+    editFulfillersBtn.addEventListener('click', () => {
+      const names = Array.isArray(SETTINGS.fulfilledByNames) ? SETTINGS.fulfilledByNames : [];
+      fulfillersInput.value = names.join('\n');
+      openModal(fulfillersModal);
+    });
+
+    saveFulfillersBtn.addEventListener('click', async () => {
+      const names = fulfillersInput.value
+        .split('\n')
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      try{
+        await api('/api/settings/fulfillers', {
+          method: 'PUT',
+          body: JSON.stringify({ names })
+        });
+
+        // reload settings from server
+        const s = await api('/api/settings');
+        SETTINGS = s.settings || SETTINGS;
+        renderSettingsChips();
+        saveCache();
+        closeModal(fulfillersModal);
+        // re-render orders so dropdowns update
+        renderOrders();
+        showDashStatus('Fulfilled by list updated.', false);
+      }catch(e){
+        showDashStatus(e.message || 'Failed to update fulfilled by list', true);
+      }
+    });
+
+    editSitesBtn.addEventListener('click', () => {
+      const draft = getSitesDraft();
+      renderSitesEditor(draft.length ? draft : [{ id:'', name:'', hosts:'', browseUrl:'', enabled:true }]);
+      openModal(sitesModal);
+    });
+
+    addSiteBtn.addEventListener('click', () => {
+      const current = readSitesDraftFromDom();
+      current.push({ id:'', name:'', hosts:'', browseUrl:'', enabled:true });
+      renderSitesEditor(current);
+    });
+
+    saveSitesBtn.addEventListener('click', async () => {
+      const draft = readSitesDraftFromDom();
+
+      const sites = draft.map(s => ({
+        id: (s.id || '').trim(),
+        name: (s.name || '').trim(),
+        hosts: (s.hosts || '')
+          .split(/[\n,]+/)
+          .map(x => x.trim())
+          .filter(Boolean),
+        browseUrl: (s.browseUrl || '').trim(),
+        enabled: !!s.enabled
+      })).filter(s => s.name);
+
+      try{
+        await api('/api/settings/sites', {
+          method: 'PUT',
+          body: JSON.stringify({ sites })
+        });
+
+        const s = await api('/api/settings');
+        SETTINGS = s.settings || SETTINGS;
+        renderSettingsChips();
+        saveCache();
+        closeModal(sitesModal);
+        renderOrders();
+        showDashStatus('Supported sites updated.', false);
+      }catch(e){
+        showDashStatus(e.message || 'Failed to update supported sites', true);
+      }
+    });
+
+    // ---------- START ----------
+    bootstrap();
+  </script>
+</body>
+</html>
