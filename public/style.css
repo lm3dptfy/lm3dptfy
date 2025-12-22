@@ -6,11 +6,10 @@
   --text:#0f172a;
   --muted:#64748b;
 
-  /* Brand colors (pulled from your logo) */
-  --brandNavy:#182940;  /* deep navy */
-  --brandTeal:#0090b0;  /* teal */
+  /* Brand colors (logo) */
+  --brandNavy:#182940;
+  --brandTeal:#0090b0;
 
-  /* Theme accents */
   --accent: var(--brandNavy);
   --accent2: var(--brandTeal);
 
@@ -115,22 +114,95 @@ a{ color:inherit; }
   flex-wrap:wrap;
 }
 
-.pill-link{
+/* =========================
+   BUTTONS (brand consistent everywhere)
+========================= */
+.btn-primary{
+  border:0;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
   text-decoration:none;
-  font-size:.85rem;
-  color:var(--accent);
-  padding:8px 12px;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
+
+  border-radius: 14px;
+  padding: 12px 14px;
+  font-weight: 700;
+  font-size: .98rem;
+  color:#fff;
+  background: linear-gradient(180deg, var(--accent2), var(--accent));
+  box-shadow: 0 14px 34px rgba(0,144,176,.24);
+  transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
+}
+
+.btn-primary:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 18px 44px rgba(0,144,176,.30);
+  filter: brightness(1.02);
+}
+
+.btn-primary:active{
+  transform: translateY(0);
+  box-shadow: 0 10px 26px rgba(0,144,176,.22);
+}
+
+.btn-primary:disabled{
+  cursor:not-allowed;
+  opacity: .62;
+  filter: grayscale(.15);
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary:focus-visible{
+  outline:none;
+  box-shadow: var(--focus);
+}
+
+.btn-sm{
+  padding: 10px 12px;
+  font-size: .86rem;
+  border-radius: 999px;
+}
+
+.btn-block{
+  width: 100%;
+}
+
+/* ✅ Back-compat: pill-link now looks like the same brand button */
+.pill-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-decoration:none;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
+
+  border:0;
+  cursor:pointer;
   border-radius:999px;
-  border:1px solid rgba(0,144,176,.22);
-  background: rgba(255,255,255,.65);
-  transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
+  padding:10px 12px;
+  font-weight:700;
+  font-size:.85rem;
+  color:#fff;
+  background: linear-gradient(180deg, var(--accent2), var(--accent));
+  box-shadow: 0 12px 26px rgba(0,144,176,.20);
+  transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
 }
 
 .pill-link:hover{
   transform: translateY(-1px);
-  background:#fff;
-  border-color: rgba(0,144,176,.34);
-  box-shadow: var(--shadowSoft);
+  box-shadow: 0 16px 36px rgba(0,144,176,.26);
+  filter: brightness(1.02);
+}
+
+.pill-link:focus-visible{
+  outline:none;
+  box-shadow: var(--focus);
 }
 
 /* =========================
@@ -163,55 +235,13 @@ body.admin-page .topbar-inner{
 }
 
 /* =========================
-   CARDS + BUTTONS + INPUTS
+   CARDS + INPUTS
 ========================= */
 .card{
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radiusXL);
   box-shadow: var(--shadow);
-}
-
-.btn-primary{
-  border:0;
-  cursor:pointer;
-  border-radius: 14px;
-  padding: 12px 14px;
-  font-weight: 700;
-  font-size: .98rem;
-  color:#fff;
-  background: linear-gradient(180deg, var(--accent2), var(--accent));
-  box-shadow: 0 14px 34px rgba(0,144,176,.24);
-  transition: transform var(--transition), box-shadow var(--transition), filter var(--transition);
-}
-
-.btn-primary:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 18px 44px rgba(0,144,176,.30);
-  filter: brightness(1.02);
-}
-
-.btn-primary:active{
-  transform: translateY(0);
-  box-shadow: 0 10px 26px rgba(0,144,176,.22);
-}
-
-.btn-primary:disabled{
-  cursor:not-allowed;
-  opacity: .62;
-  filter: grayscale(.15);
-  transform: none;
-  box-shadow: none;
-}
-
-.btn-sm{
-  padding: 10px 12px;
-  font-size: .86rem;
-  border-radius: 999px;
-}
-
-.btn-block{
-  width: 100%;
 }
 
 .field-label{
@@ -249,7 +279,7 @@ textarea.field-input{
 }
 
 /* =========================
-   HOME / REQUEST HERO
+   HERO
 ========================= */
 .hero{
   text-align:center;
@@ -308,11 +338,13 @@ textarea.field-input{
   line-height: 1.45;
 }
 
-/* ✅ card width now matches the bottom section width */
+/* =========================
+   FORM CARD
+========================= */
 .form-card{
   margin: 18px auto 18px;
   width: 100%;
-  max-width: none;           /* key fix */
+  max-width: none;
   padding: 20px;
 }
 
@@ -335,6 +367,11 @@ textarea.field-input{
   letter-spacing: -.01em;
 }
 
+/* =========================
+   ✅ FIXED “BOXES” SECTION
+   Desktop: left = how card, right = feature cards stacked
+   Tablet/phone: stacks cleanly, feature cards go 3→2→1
+========================= */
 .how-grid{
   display:grid;
   grid-template-columns: 1.2fr .8fr;
@@ -355,11 +392,13 @@ textarea.field-input{
   font-size: .95rem;
 }
 
+/* Desktop: stack feature cards so they’re wide + stable */
 .feature-grid{
   display:grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 14px;
-  margin-top: 14px;
+  margin-top: 0; /* ✅ removes the “lowered” right-side boxes */
+  min-width: 0;
 }
 
 .feature{
@@ -425,7 +464,7 @@ textarea.field-input{
 }
 
 /* =========================
-   ADMIN TABLE (NO HORIZONTAL SCROLL)
+   ADMIN TABLE
 ========================= */
 .admin-head{
   display:flex;
@@ -534,15 +573,15 @@ textarea.field-input{
   font-weight: 700;
 }
 
-/* ✅ Admin column widths updated so STATUS shows full text */
+/* Column widths */
 col.col-created{ width: 11%; }
 col.col-name{ width: 7%; }
 col.col-email{ width: 13%; }
 col.col-stl{ width: 4%; }
 col.col-notes{ width: 12%; }
 col.col-adminnotes{ width: 18%; }
-col.col-status{ width: 13%; }     /* widened */
-col.col-fulfilled{ width: 8%; }   /* slightly smaller */
+col.col-status{ width: 13%; }
+col.col-fulfilled{ width: 8%; }
 col.col-tracking{ width: 9%; }
 col.col-reply{ width: 3%; }
 col.col-archive{ width: 2%; }
@@ -553,16 +592,29 @@ col.col-archive{ width: 2%; }
   font-size: .85rem;
 }
 
-/* Responsive: allow scroll only on smaller screens */
+/* Responsive: allow table scroll only on smaller screens */
 @media (max-width: 1100px){
   .table-wrapper{ overflow-x: auto; }
 }
 
-/* Responsive layout */
-@media (max-width: 860px){
+/* ✅ Smooth responsive for the “boxes” section */
+@media (max-width: 980px){
   .how-grid{
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* stack */
   }
+  .feature-grid{
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* wide row under */
+    margin-top: 14px;
+  }
+}
+
+@media (max-width: 760px){
+  .feature-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px){
   .feature-grid{
     grid-template-columns: 1fr;
   }
