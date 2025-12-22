@@ -38,18 +38,14 @@
 
         <section class="card form-card">
           <form class="stl-form" action="request.html" method="GET">
-            <label for="stlLink" class="field-label">
-              <a href="https://platform.stlflix.com/explore" target="_blank" rel="noopener noreferrer">
-                STLFlix model link
-              </a>
-            </label>
+            <label for="stlLink" class="field-label">Model link</label>
 
             <input
               type="url"
               id="stlLink"
               name="link"
               class="field-input"
-              placeholder="https://stlflix.com/..."
+              placeholder="https://..."
               required
             />
 
@@ -57,8 +53,25 @@
               Get Quote
             </button>
 
+            <div id="siteOptionsWrap" style="margin-top:6px;">
+              <div style="text-align:center;color:var(--muted);font-size:.88rem;margin:10px 0 10px;">
+                Browse supported libraries (opens in a new tab):
+              </div>
+
+              <div id="siteOptions"
+                   style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+                <!-- populated by JS -->
+              </div>
+
+              <p id="siteFallback"
+                 class="small-note"
+                 style="display:none;margin-top:12px;">
+                Supported sources will appear here once configured. You can still paste a public link above.
+              </p>
+            </div>
+
             <p class="small-note">
-              Need a model? Click the source link above to browse files.
+              Don’t see your library yet? Paste the link anyway — I’ll confirm licensing/compatibility before printing.
             </p>
           </form>
         </section>
@@ -101,5 +114,46 @@
       Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
     </footer>
   </div>
+
+  <script>
+    async function loadSites() {
+      const wrap = document.getElementById('siteOptions');
+      const fallback = document.getElementById('siteFallback');
+
+      try {
+        const res = await fetch('/api/public/sites', { headers: { 'Accept': 'application/json' } });
+        const data = await res.json().catch(() => ({}));
+        const sites = (data && data.sites) ? data.sites : [];
+
+        wrap.innerHTML = '';
+
+        if (!Array.isArray(sites) || sites.length === 0) {
+          fallback.style.display = 'block';
+          return;
+        }
+
+        fallback.style.display = 'none';
+
+        for (const s of sites) {
+          const a = document.createElement('a');
+          a.className = 'btn-primary btn-sm';
+          a.href = s.browseUrl || '#';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.style.textDecoration = 'none';
+          a.textContent = s.name ? `Browse ${s.name}` : 'Browse';
+          if (!s.browseUrl) {
+            a.style.opacity = '0.6';
+            a.style.pointerEvents = 'none';
+          }
+          wrap.appendChild(a);
+        }
+      } catch (e) {
+        fallback.style.display = 'block';
+      }
+    }
+
+    loadSites();
+  </script>
 </body>
 </html>
