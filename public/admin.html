@@ -5,6 +5,105 @@
   <title>Admin | LM3DPTFY Requests</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/style.css" />
+
+  <!-- Modal styling kept here so you don't have to touch style.css -->
+  <style>
+    .modal-overlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(2,6,23,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 9999;
+    }
+    .modal{
+      width: min(720px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      padding: 16px;
+      border-radius: 18px;
+    }
+    .modal-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .modal-head h3{
+      margin:0;
+      font-size: 1.1rem;
+      letter-spacing: -.01em;
+    }
+    .modal-sub{
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.35;
+    }
+    .fulfiller-list{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .fulfiller-row{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items:center;
+    }
+    .btn-ghost{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.75);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 700;
+      cursor:pointer;
+    }
+    .btn-danger{
+      border: 1px solid rgba(225,29,72,.35);
+      background: rgba(225,29,72,.08);
+      color: #9f1239;
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 800;
+      cursor:pointer;
+      white-space: nowrap;
+    }
+    .modal-actions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(15,23,42,.08);
+      padding-top: 12px;
+      margin-top: 10px;
+    }
+    .modal-actions .left{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+    .modal-actions .right{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+    .inline-note{
+      color: var(--muted);
+      font-size: .85rem;
+      margin: 0;
+    }
+  </style>
 </head>
 
 <body class="admin-page">
@@ -60,8 +159,9 @@
             <div class="admin-actions">
               <button id="reloadSheetsBtn" class="btn-primary btn-sm" type="button">Refresh from Sheets</button>
               <button id="syncSheetsBtn" class="btn-primary btn-sm" type="button">Sync to Sheets</button>
-              <a href="/api/export/csv" class="btn-primary btn-sm">Export CSV</a>
-              <a href="/api/export/json" class="btn-primary btn-sm">Export JSON</a>
+              <button id="manageFulfillersBtn" class="btn-primary btn-sm" type="button">Manage Fulfilled By</button>
+              <a href="/api/export/csv" class="btn-primary btn-sm" style="text-decoration:none;">Export CSV</a>
+              <a href="/api/export/json" class="btn-primary btn-sm" style="text-decoration:none;">Export JSON</a>
             </div>
           </div>
 
@@ -98,6 +198,46 @@
     </footer>
   </div>
 
+  <!-- Fulfilled-by manager modal -->
+  <div id="fulfillerModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal card" role="dialog" aria-modal="true" aria-labelledby="fulfillerModalTitle">
+      <div class="modal-head">
+        <div>
+          <h3 id="fulfillerModalTitle">Manage “Fulfilled by” names</h3>
+          <p class="modal-sub">
+            Add, rename, or remove names shown in the <strong>Fulfilled by</strong> dropdown.
+            Saved in this browser (localStorage).
+          </p>
+        </div>
+        <button id="closeFulfillerModalBtn" class="btn-ghost" type="button">Close</button>
+      </div>
+
+      <p class="inline-note">
+        Tip: You can remove names from the list; existing orders using that name will still display it for that order.
+      </p>
+
+      <div id="fulfillerList" class="fulfiller-list"></div>
+
+      <div class="fulfiller-row" style="margin-top:10px;">
+        <input id="newFulfillerInput" class="field-input" type="text" placeholder="Add a new name (e.g., Scarlet)" />
+        <button id="addFulfillerBtn" class="btn-primary btn-sm" type="button">Add</button>
+      </div>
+
+      <div class="modal-actions">
+        <div class="left">
+          <label style="display:flex;align-items:center;gap:10px;">
+            <input id="autoImportToggle" type="checkbox" />
+            Auto-add names seen in orders
+          </label>
+        </div>
+        <div class="right">
+          <button id="resetFulfillersBtn" class="btn-ghost" type="button">Reset defaults</button>
+          <button id="saveFulfillersBtn" class="btn-primary btn-sm" type="button">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const loginCard = document.getElementById('loginCard');
     const dashboardCard = document.getElementById('dashboardCard');
@@ -114,6 +254,16 @@
     const syncBtn = document.getElementById('syncSheetsBtn');
     const logoutTopBtn = document.getElementById('logoutTopBtn');
 
+    const manageFulfillersBtn = document.getElementById('manageFulfillersBtn');
+    const fulfillerModal = document.getElementById('fulfillerModal');
+    const closeFulfillerModalBtn = document.getElementById('closeFulfillerModalBtn');
+    const fulfillerListEl = document.getElementById('fulfillerList');
+    const newFulfillerInput = document.getElementById('newFulfillerInput');
+    const addFulfillerBtn = document.getElementById('addFulfillerBtn');
+    const resetFulfillersBtn = document.getElementById('resetFulfillersBtn');
+    const saveFulfillersBtn = document.getElementById('saveFulfillersBtn');
+    const autoImportToggle = document.getElementById('autoImportToggle');
+
     const STATUS_OPTIONS = [
       { value: 'new', label: 'New' },
       { value: 'responded', label: 'Responded' },
@@ -125,11 +275,63 @@
       { value: 'paid', label: 'Paid' },
     ];
 
-    // ✅ Your preferred names (default list)
+    // Gmail account hint so it opens the right inbox
+    const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
+
+    // Defaults you wanted
     const DEFAULT_FULFILLERS = ['Robert', 'Jared', 'Terence'];
 
-    // ✅ Will be built from DEFAULT_FULFILLERS + any names already in your data
-    let FULFILLER_OPTIONS = [...DEFAULT_FULFILLERS];
+    // localStorage key
+    const FULFILLER_STORAGE_KEY = 'lm3dptfy_fulfillers_v1';
+
+    // In-memory state
+    let fulfillerState = {
+      names: [...DEFAULT_FULFILLERS],
+      autoImport: false
+    };
+
+    function normalizeName(name) {
+      return (name || '').trim().replace(/\s+/g, ' ');
+    }
+
+    function uniqueNames(names) {
+      const out = [];
+      const seen = new Set();
+      for (const raw of names) {
+        const n = normalizeName(raw);
+        if (!n) continue;
+        const key = n.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push(n);
+      }
+      return out;
+    }
+
+    function loadFulfillerState() {
+      try {
+        const raw = localStorage.getItem(FULFILLER_STORAGE_KEY);
+        if (!raw) return;
+
+        const parsed = JSON.parse(raw);
+        const names = Array.isArray(parsed.names) ? uniqueNames(parsed.names) : null;
+        const autoImport = !!parsed.autoImport;
+
+        if (names && names.length >= 0) {
+          fulfillerState.names = names.length ? names : [];
+          fulfillerState.autoImport = autoImport;
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    function saveFulfillerState() {
+      localStorage.setItem(FULFILLER_STORAGE_KEY, JSON.stringify({
+        names: fulfillerState.names,
+        autoImport: fulfillerState.autoImport
+      }));
+    }
 
     function showDashStatus(msg, isError) {
       dashboardStatus.style.display = 'block';
@@ -139,8 +341,9 @@
     }
 
     function buildGmailUrl(to, subject, body) {
-      const base = 'https://mail.google.com/mail/?view=cm&fs=1';
+      const base = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
       const params = new URLSearchParams();
+      params.set('authuser', GMAIL_AUTH_USER);
       params.set('to', to || '');
       params.set('su', subject || '');
       params.set('body', body || '');
@@ -170,19 +373,77 @@
       return wrap;
     }
 
+    function openFulfillerModal() {
+      autoImportToggle.checked = !!fulfillerState.autoImport;
+      renderFulfillerEditor();
+      fulfillerModal.style.display = 'flex';
+      fulfillerModal.setAttribute('aria-hidden', 'false');
+      newFulfillerInput.value = '';
+      setTimeout(() => newFulfillerInput.focus(), 0);
+    }
+
+    function closeFulfillerModal() {
+      fulfillerModal.style.display = 'none';
+      fulfillerModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function renderFulfillerEditor() {
+      fulfillerListEl.innerHTML = '';
+
+      const names = (fulfillerState.names && fulfillerState.names.length)
+        ? fulfillerState.names
+        : [];
+
+      if (!names.length) {
+        const empty = el('div', 'empty-state', 'No names in the list. Add one below.');
+        fulfillerListEl.appendChild(empty);
+        return;
+      }
+
+      names.forEach((name, idx) => {
+        const row = el('div', 'fulfiller-row');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'field-input fulfiller-name-input';
+        input.value = name;
+        input.dataset.index = String(idx);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn-danger';
+        removeBtn.textContent = 'Remove';
+        removeBtn.dataset.index = String(idx);
+
+        row.appendChild(input);
+        row.appendChild(removeBtn);
+        fulfillerListEl.appendChild(row);
+      });
+    }
+
+    function commitEditorToState() {
+      const inputs = Array.from(document.querySelectorAll('.fulfiller-name-input'));
+      const names = inputs.map(i => i.value);
+      fulfillerState.names = uniqueNames(names);
+      fulfillerState.autoImport = !!autoImportToggle.checked;
+      saveFulfillerState();
+    }
+
     function buildFulfilledSelect(currentValue, id) {
       const fulfilledSelect = document.createElement('select');
       fulfilledSelect.className = 'status-select fulfilled-select';
       fulfilledSelect.dataset.id = id;
 
-      // placeholder
       const placeholder = document.createElement('option');
       placeholder.value = '';
       placeholder.textContent = '—';
       fulfilledSelect.appendChild(placeholder);
 
-      // ensure current value is present even if it's not in the list
-      const list = [...FULFILLER_OPTIONS];
+      // Use managed list
+      const managed = Array.isArray(fulfillerState.names) ? fulfillerState.names : [];
+
+      // Ensure current value appears even if it’s not in the list (so old orders don’t break)
+      const list = [...managed];
       if (currentValue && !list.includes(currentValue)) list.unshift(currentValue);
 
       list.forEach(name => {
@@ -282,7 +543,7 @@
       });
       statusBlock.appendChild(statusSelect);
 
-      // Fulfilled by ✅ now uses names list
+      // Fulfilled by (managed names)
       const fulfilledBlock = el('div', 'control');
       fulfilledBlock.appendChild(el('div', 'control-label', 'Fulfilled by'));
       const fulfilledSelect = buildFulfilledSelect((r.fulfilledBy || ''), r.id);
@@ -333,20 +594,6 @@
       return card;
     }
 
-    function buildFulfillerOptionsFromData(data) {
-      const seen = new Set(DEFAULT_FULFILLERS);
-      data.forEach(r => {
-        const v = (r.fulfilledBy || '').trim();
-        if (v) seen.add(v);
-      });
-
-      const extras = Array.from(seen)
-        .filter(n => !DEFAULT_FULFILLERS.includes(n))
-        .sort((a,b) => a.localeCompare(b));
-
-      FULFILLER_OPTIONS = [...DEFAULT_FULFILLERS, ...extras];
-    }
-
     async function loadRequests() {
       try {
         const res = await fetch('/api/requests', { credentials: 'include' });
@@ -358,8 +605,17 @@
 
         const data = await res.json();
 
-        // ✅ Build fulfilled-by names list from your existing data
-        buildFulfillerOptionsFromData(data);
+        // Optional auto-import from data
+        if (fulfillerState.autoImport) {
+          const fromData = uniqueNames(
+            data.map(r => (r.fulfilledBy || '').trim()).filter(Boolean)
+          );
+          const merged = uniqueNames([...(fulfillerState.names || []), ...fromData]);
+          if (JSON.stringify(merged) !== JSON.stringify(fulfillerState.names || [])) {
+            fulfillerState.names = merged;
+            saveFulfillerState();
+          }
+        }
 
         const active = data.filter(r => !r.archived);
         const archived = data.filter(r => r.archived);
@@ -553,7 +809,7 @@
 
       if (t.classList.contains('fulfilled-select')) {
         const id = t.dataset.id;
-        const fulfilledBy = t.value; // names now
+        const fulfilledBy = t.value;
         showDashStatus('Updating fulfilled by...', false);
 
         updateFulfilled(id, fulfilledBy)
@@ -601,6 +857,54 @@
       }, 10);
     }
 
+    // Fulfilled-by modal events
+    manageFulfillersBtn.addEventListener('click', openFulfillerModal);
+    closeFulfillerModalBtn.addEventListener('click', closeFulfillerModal);
+
+    fulfillerModal.addEventListener('click', (e) => {
+      if (e.target === fulfillerModal) closeFulfillerModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && fulfillerModal.style.display === 'flex') closeFulfillerModal();
+    });
+
+    addFulfillerBtn.addEventListener('click', () => {
+      const name = normalizeName(newFulfillerInput.value);
+      if (!name) return;
+
+      fulfillerState.names = uniqueNames([...(fulfillerState.names || []), name]);
+      newFulfillerInput.value = '';
+      renderFulfillerEditor();
+      newFulfillerInput.focus();
+    });
+
+    fulfillerListEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button.btn-danger');
+      if (!btn) return;
+      const idx = Number(btn.dataset.index);
+      if (!Number.isFinite(idx)) return;
+
+      const names = [...(fulfillerState.names || [])];
+      names.splice(idx, 1);
+      fulfillerState.names = names;
+      renderFulfillerEditor();
+    });
+
+    resetFulfillersBtn.addEventListener('click', () => {
+      fulfillerState.names = [...DEFAULT_FULFILLERS];
+      fulfillerState.autoImport = false;
+      autoImportToggle.checked = false;
+      renderFulfillerEditor();
+    });
+
+    saveFulfillersBtn.addEventListener('click', () => {
+      commitEditorToState();
+      closeFulfillerModal();
+      loadRequests(); // refresh dropdowns immediately
+      showDashStatus('Updated “Fulfilled by” names.', false);
+    });
+
     activeList.addEventListener('change', handleChange);
     archivedList.addEventListener('change', handleChange);
     activeList.addEventListener('click', handleClick);
@@ -609,6 +913,8 @@
     document.addEventListener('focusout', handleFocusOutCapture, true);
     document.addEventListener('paste', handlePasteCapture, true);
 
+    // Init
+    loadFulfillerState();
     loadRequests();
   </script>
 </body>
