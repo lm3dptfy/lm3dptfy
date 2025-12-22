@@ -5,8 +5,8 @@
   <title>Request a 3D Print Quote | Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Bump CSS URL to avoid cache weirdness -->
-  <link rel="stylesheet" href="/style.css?v=req3" />
+  <!-- Cache-bust -->
+  <link rel="stylesheet" href="/style.css?v=req4" />
 </head>
 
 <body>
@@ -135,10 +135,10 @@
             browseBtn.href = match.browseUrl;
           }
         } else {
-          sourceNameEl.textContent = 'Unknown (we’ll confirm licensing/compatibility)';
+          sourceNameEl.textContent = 'Unknown (we’ll confirm compatibility)';
         }
       } catch (e){
-        sourceNameEl.textContent = 'Unknown (we’ll confirm licensing/compatibility)';
+        sourceNameEl.textContent = 'Unknown (we’ll confirm compatibility)';
       }
     }
 
@@ -187,7 +187,7 @@
         statusEl.textContent = '✓ Request sent successfully! Redirecting to homepage...';
         statusEl.className = 'status-message status-success';
 
-        // replace() prevents "back" restoring a weird cached homepage layout
+        // replace() prevents "back" restoring a cached homepage layout
         setTimeout(() => { window.location.replace('/'); }, 900);
       } catch (err) {
         statusEl.textContent = '✗ Error: ' + err.message + '. Please email lm3dptfy@gmail.com';
