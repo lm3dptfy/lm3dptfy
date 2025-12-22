@@ -2,70 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Quote request | Let Me 3D Print That For You</title>
+  <title>Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Paste a public 3D model link and get a custom 3D printing quote by email." />
   <link rel="stylesheet" href="/style.css" />
-
-  <!-- Small badge styling scoped to this page -->
-  <style>
-    .link-summary{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      flex-wrap:wrap;
-      padding: 12px 14px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: rgba(255,255,255,.65);
-    }
-    .link-summary-left{
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-      min-width: 240px;
-    }
-    .link-summary-title{
-      font-size: .78rem;
-      font-weight: 800;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-      color: rgba(100,116,139,.95);
-      margin: 0;
-    }
-    .badge-row{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      flex-wrap:wrap;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-weight: 800;
-      font-size: .88rem;
-      color: #fff;
-      background: linear-gradient(180deg, var(--accent2), var(--accent));
-      box-shadow: 0 12px 26px rgba(0,144,176,.18);
-      white-space: nowrap;
-    }
-    .pill-neutral{
-      color: rgba(15,23,42,.85);
-      background: rgba(255,255,255,.85);
-      border: 1px solid var(--border);
-      box-shadow: none;
-      font-weight: 800;
-    }
-    .link-hint{
-      margin: 0;
-      color: var(--muted);
-      font-size: .88rem;
-      line-height: 1.35;
-    }
-  </style>
 </head>
 
 <body>
@@ -78,73 +18,93 @@
           <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
           <div class="brand-title">
             <strong>Let Me 3D Print That For You</strong>
-            <span>Quote request</span>
+            <span>Fast quotes • Clear ETA • No spam</span>
           </div>
         </a>
 
-        <div class="nav-right">
-          <a class="btn-primary btn-sm" href="/">Home</a>
-        </div>
+        <div class="nav-right"></div>
       </div>
     </header>
 
     <main class="page-main">
-      <div class="main-inner narrow">
+      <div class="main-inner">
 
         <section class="hero">
-          <h1>Where should I send your quote?</h1>
-          <p>I’ll review your link, estimate material and print time, then email you a quote.</p>
+          <h1>Turn STL Files into real prints.</h1>
+          <p>
+            Paste a public link, from the options below, and I’ll email you pricing, ETA, and any quick questions before printing.
+          </p>
         </section>
 
-        <section class="card form-card" style="padding:20px;">
-          <form id="quoteForm" class="stl-form">
-            <!-- keep payload compatible with server.js -->
-            <input type="hidden" id="stlLinkHidden" name="stlLink" />
+        <section class="card form-card">
+          <form class="stl-form" action="request.html" method="GET">
+            <label for="stlLink" class="field-label">Model link</label>
 
-            <!-- Hidden link summary + source badge (NO URL displayed) -->
-            <div id="linkSummaryWrap" style="display:none;">
-              <div class="link-summary">
-                <div class="link-summary-left">
-                  <p class="link-summary-title">Model link</p>
-                  <div class="badge-row">
-                    <span class="pill pill-neutral" id="linkReceivedPill">Link received</span>
-                    <span class="pill" id="sourceBadge">Unknown source</span>
-                  </div>
-                </div>
+            <input
+              type="url"
+              id="stlLink"
+              name="link"
+              class="field-input"
+              placeholder="https://..."
+              required
+            />
 
-                <p class="link-hint">
-                  Need to change it? Click <strong>Home</strong> and submit a new link.
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <label class="field-label" for="name">Your name</label>
-              <input class="field-input" type="text" id="name" required />
-            </div>
-
-            <div>
-              <label class="field-label" for="email">Email</label>
-              <input class="field-input" type="email" id="email" required />
-            </div>
-
-            <div>
-              <label class="field-label" for="details">Notes (optional)</label>
-              <textarea class="field-input" id="details" rows="4"></textarea>
-            </div>
-
-            <button class="btn-primary btn-block" type="submit" id="submitBtn">
-              Submit request
+            <button type="submit" class="btn-primary btn-block">
+              Get Quote
             </button>
 
-            <p id="statusMessage" class="status-message" style="display:none;"></p>
+            <div id="siteOptionsWrap" style="margin-top:6px;">
+              <div style="text-align:center;color:var(--muted);font-size:.88rem;margin:10px 0 10px;">
+                Browse supported libraries (opens in a new tab):
+              </div>
 
-            <p class="small-note" style="margin-top:6px;">
-              I usually respond within one business day. If I have questions about wall thickness,
-              print orientation, or supports, I’ll ask before printing.
+              <div id="siteOptions"
+                   style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+                <!-- populated by JS -->
+              </div>
+
+              <p id="siteFallback"
+                 class="small-note"
+                 style="display:none;margin-top:12px;">
+                Supported sources will appear here once configured. You can still paste a public link above.
+              </p>
+            </div>
+
+            <p class="small-note">
+              Don’t see your library yet? Paste the link anyway — I’ll confirm licensing/compatibility before printing.
             </p>
           </form>
         </section>
+
+        <section class="how-grid" id="how">
+          <div class="card list-card">
+            <h2 class="section-title" style="margin-top:0;">How this works</h2>
+            <ol>
+              <li>Find a model on an approved library (STLFlix to start) and copy the link.</li>
+              <li>Paste it here, then add your name/email on the next step.</li>
+              <li>I’ll reply with a quote + ETA (and any questions) before printing.</li>
+            </ol>
+          </div>
+
+          <div class="feature-grid">
+            <div class="feature">
+              <h3>Quote</h3>
+              <p>Price based on material, size, and print time — no guessing.</p>
+            </div>
+            <div class="feature">
+              <h3>Timeline</h3>
+              <p>Clear status from “sent to printer” to “shipped”.</p>
+            </div>
+            <div class="feature">
+              <h3>Next steps</h3>
+              <p>Approve, tweak, or ask questions — quick and simple.</p>
+            </div>
+          </div>
+        </section>
+
+        <p class="small-note" style="margin-top:18px;">
+          I won’t print weapons, illegal items, or obviously infringing IP.
+        </p>
 
       </div>
     </main>
@@ -156,111 +116,44 @@
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const incomingLink = urlParams.get('link') || '';
-
-    const stlHidden = document.getElementById('stlLinkHidden');
-    const statusEl = document.getElementById('statusMessage');
-    const btn = document.getElementById('submitBtn');
-
-    const linkSummaryWrap = document.getElementById('linkSummaryWrap');
-    const sourceBadge = document.getElementById('sourceBadge');
-
-    // Store the link (hidden)
-    stlHidden.value = incomingLink;
-
-    function detectSource(urlStr) {
-      const clean = (urlStr || '').trim();
-      if (!clean) return 'Unknown source';
-
-      let u;
-      try { u = new URL(clean); }
-      catch { return 'Unknown source'; }
-
-      const host = (u.hostname || '').toLowerCase().replace(/^www\./, '');
-
-      const map = [
-        { hosts: ['stlflix.com', 'platform.stlflix.com'], name: 'STLFlix' },
-        { hosts: ['printables.com'], name: 'Printables' },
-        { hosts: ['thingiverse.com'], name: 'Thingiverse' },
-        { hosts: ['myminifactory.com'], name: 'MyMiniFactory' },
-        { hosts: ['cults3d.com'], name: 'Cults3D' },
-        { hosts: ['thangs.com'], name: 'Thangs' },
-        { hosts: ['makerworld.com'], name: 'MakerWorld' },
-        { hosts: ['cgtrader.com'], name: 'CGTrader' },
-        { hosts: ['sketchfab.com'], name: 'Sketchfab' }
-      ];
-
-      for (const r of map) {
-        if (r.hosts.includes(host)) return r.name;
-      }
-
-      // subdomain catch-all
-      if (host.endsWith('.printables.com')) return 'Printables';
-      if (host.endsWith('.thingiverse.com')) return 'Thingiverse';
-      if (host.endsWith('.myminifactory.com')) return 'MyMiniFactory';
-      if (host.endsWith('.cults3d.com')) return 'Cults3D';
-      if (host.endsWith('.thangs.com')) return 'Thangs';
-      if (host.endsWith('.makerworld.com')) return 'MakerWorld';
-      if (host.endsWith('.cgtrader.com')) return 'CGTrader';
-      if (host.endsWith('.sketchfab.com')) return 'Sketchfab';
-
-      return 'Unknown source';
-    }
-
-    // Show summary if we got a link
-    if (incomingLink) {
-      linkSummaryWrap.style.display = 'block';
-      sourceBadge.textContent = detectSource(incomingLink);
-    } else {
-      statusEl.style.display = 'block';
-      statusEl.textContent = '⚠ No link provided. Please click Home and paste your model link first.';
-      statusEl.className = 'status-message status-error';
-    }
-
-    document.getElementById('quoteForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const payload = {
-        stlLink: (stlHidden.value || '').trim(),
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        details: document.getElementById('details').value.trim()
-      };
-
-      if (!payload.stlLink) {
-        statusEl.style.display = 'block';
-        statusEl.textContent = '✗ Error: No link provided. Please click Home and paste your model link first.';
-        statusEl.className = 'status-message status-error';
-        return;
-      }
-
-      btn.disabled = true;
-      statusEl.style.display = 'block';
-      statusEl.textContent = 'Sending your request...';
-      statusEl.className = 'status-message';
+    async function loadSites() {
+      const wrap = document.getElementById('siteOptions');
+      const fallback = document.getElementById('siteFallback');
 
       try {
-        const res = await fetch('/api/requests', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(payload)
-        });
-
+        const res = await fetch('/api/public/sites', { headers: { 'Accept': 'application/json' } });
         const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Failed to submit request');
+        const sites = (data && data.sites) ? data.sites : [];
 
-        statusEl.textContent = '✓ Request sent successfully! Redirecting to homepage...';
-        statusEl.className = 'status-message status-success';
+        wrap.innerHTML = '';
 
-        setTimeout(() => { window.location.href = '/'; }, 1200);
-      } catch (err) {
-        statusEl.textContent = '✗ Error: ' + err.message + '. Please email lm3dptfy@gmail.com';
-        statusEl.className = 'status-message status-error';
-        btn.disabled = false;
+        if (!Array.isArray(sites) || sites.length === 0) {
+          fallback.style.display = 'block';
+          return;
+        }
+
+        fallback.style.display = 'none';
+
+        for (const s of sites) {
+          const a = document.createElement('a');
+          a.className = 'btn-primary btn-sm';
+          a.href = s.browseUrl || '#';
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.style.textDecoration = 'none';
+          a.textContent = s.name ? `Browse ${s.name}` : 'Browse';
+          if (!s.browseUrl) {
+            a.style.opacity = '0.6';
+            a.style.pointerEvents = 'none';
+          }
+          wrap.appendChild(a);
+        }
+      } catch (e) {
+        fallback.style.display = 'block';
       }
-    });
+    }
+
+    loadSites();
   </script>
 </body>
 </html>
