@@ -34,7 +34,7 @@ console.error(‘ERROR: ADMIN_PASSWORD not set in environment variables!’);
 process.exit(1);
 }
 
-// FIX (Security): Require a real SESSION_SECRET — no weak fallback allowed in production
+// FIX (Security): Require a real SESSION_SECRET – no weak fallback allowed in production
 if (!SESSION_SECRET || SESSION_SECRET === ‘change_this_in_production’) {
 console.error(‘ERROR: SESSION_SECRET is not set or is using the insecure default!’);
 process.exit(1);
@@ -45,7 +45,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY || ‘’;
 const EMAIL_FROM = process.env.EMAIL_FROM || ‘LM3DPTFY [no-reply@lm3dptfy.online](mailto:no-reply@lm3dptfy.online)’;
 const EMAIL_ENABLED = !!RESEND_API_KEY;
 
-// FIX (Security): Remove hardcoded Google Sheet ID — must be set via environment variable
+// FIX (Security): Remove hardcoded Google Sheet ID – must be set via environment variable
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID;
 if (!GOOGLE_SHEET_ID) {
 console.error(‘ERROR: GOOGLE_SHEET_ID not set in environment variables!’);
@@ -56,10 +56,10 @@ const ACTIVE_SHEET_NAME = process.env.GOOGLE_ACTIVE_SHEET || ‘Active’;
 const ARCHIVED_SHEET_NAME = process.env.GOOGLE_ARCHIVED_SHEET || ‘Archived’;
 const SETTINGS_SHEET_NAME = process.env.GOOGLE_SETTINGS_SHEET || ‘Settings’;
 
-// The allowed origin for CORS — must match your deployed frontend domain
+// The allowed origin for CORS – must match your deployed frontend domain
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || ‘https://www.lm3dptfy.online’;
 
-// Original 9 columns + appended 2 columns (safe — no shifting)
+// Original 9 columns + appended 2 columns (safe – no shifting)
 const SHEET_HEADER = [
 ‘ID’,
 ‘Created’,
@@ -86,7 +86,7 @@ const VALID_STATUSES = [
 ‘paid’,
 ];
 
-// mapping internal → pretty-for-sheets
+// mapping internal -> pretty-for-sheets
 const STATUS_LABELS = {
 new: ‘New’,
 responded: ‘Responded’,
@@ -413,7 +413,7 @@ sameSite: ‘lax’,
 })
 );
 
-// FIX (Security): Rate limit on login — max 10 attempts per 15 minutes per IP
+// FIX (Security): Rate limit on login – max 10 attempts per 15 minutes per IP
 const loginLimiter = rateLimit({
 windowMs: 15 * 60 * 1000,
 max: 10,
@@ -422,7 +422,7 @@ standardHeaders: true,
 legacyHeaders: false,
 });
 
-// FIX (Security): Rate limit on public quote submissions — max 15 per hour per IP
+// FIX (Security): Rate limit on public quote submissions – max 15 per hour per IP
 const requestLimiter = rateLimit({
 windowMs: 60 * 60 * 1000,
 max: 15,
@@ -813,7 +813,7 @@ return lines.join(’\n’);
 
 // ========== ROUTES ===============================================
 
-// FIX (Security): Health endpoint is now admin-only — no more public config leakage
+// FIX (Security): Health endpoint is now admin-only – no more public config leakage
 app.get(’/api/health’, requireAdmin, (req, res) => {
 res.json({
 ok: true,
@@ -881,7 +881,7 @@ sendNotificationEmail(newRequest).catch(() => {});
 res.status(201).json({ ok: true, id: newRequest.id });
 });
 
-// Admin auth — FIX (Security): Rate limited to prevent brute-force
+// Admin auth – FIX (Security): Rate limited to prevent brute-force
 app.post(’/api/login’, loginLimiter, (req, res) => {
 const { email, password } = req.body;
 if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
