@@ -525,7 +525,7 @@
     } catch(e) { showDashStatus('Sync failed: ' + e.message, true); }
   });
 
-  loadRequests();
+  loadRequests().catch(e => console.error('Auto-load failed:', e));
 </script>
 
 </body>
