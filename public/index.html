@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <title>LM3DPTFY — Let Me 3D Print That For You</title>
@@ -36,7 +36,7 @@
     <a class="nav-link" href="#how-it-works">How It Works</a>
     <a class="nav-link" href="#pricing">Pricing</a>
     <a class="nav-link" href="#faq">FAQ</a>
-    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"><span class="i-moon">🌙</span><span class="i-sun">☀️</span></button>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode"></button>
     <a class="nav-cta" href="/request.html">Get a Quote</a>
   </div>
 </nav>
@@ -394,9 +394,9 @@
   // Theme
   const html = document.documentElement;
   const saved = localStorage.getItem('lm3d-theme');
-  if (saved) html.setAttribute('data-theme', saved);
+  html.setAttribute('data-theme', saved || 'light');
   document.getElementById('themeBtn').addEventListener('click', () => {
-    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
     localStorage.setItem('lm3d-theme', next);
   });

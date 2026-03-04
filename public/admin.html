@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <title>Admin | LM3DPTFY</title>
@@ -22,7 +22,7 @@
     </div>
   </a>
   <div class="nav-links">
-    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"><span class="i-moon">🌙</span><span class="i-sun">☀️</span></button>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode"></button>
     <button class="btn btn-outline btn-sm" id="logoutTopBtn" style="display:none;">Sign Out</button>
   </div>
 </nav>
@@ -139,9 +139,9 @@
   // Theme
   const html  = document.documentElement;
   const saved = localStorage.getItem('lm3d-theme');
-  if (saved) html.setAttribute('data-theme', saved);
+  html.setAttribute('data-theme', saved || 'light');
   document.getElementById('themeBtn').addEventListener('click', () => {
-    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
     localStorage.setItem('lm3d-theme', next);
   });
