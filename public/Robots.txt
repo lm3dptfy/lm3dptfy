@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin.html
+Disallow: /admin
+Disallow: /api/
+
+Allow: /
+
+Sitemap: https://www.lm3dptfy.online/sitemap.xml
