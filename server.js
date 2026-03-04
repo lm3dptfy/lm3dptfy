@@ -38,7 +38,7 @@ process.exit(1);
 }
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY || ‘’;
-const EMAIL_FROM = process.env.EMAIL_FROM || ‘LM3DPTFY [no-reply@lm3dptfy.online](mailto:no-reply@lm3dptfy.online)’;
+const EMAIL_FROM = process.env.EMAIL_FROM || ‘LM3DPTFY <no-reply@lm3dptfy.online>’;
 const EMAIL_ENABLED = !!RESEND_API_KEY;
 
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID;
