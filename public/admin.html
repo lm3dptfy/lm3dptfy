@@ -1,1178 +1,532 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <title>Admin | LM3DPTFY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Robots: block search engines from indexing the admin page -->
   <meta name="robots" content="noindex, nofollow" />
-
   <link rel="icon" href="/favicon.ico" />
-  <link rel="stylesheet" href="/style.css?v=admin7" />
-
-  <style>
-    .admin-wrap { width:100%; max-width: 1220px; margin: 0 auto; }
-
-    .settings-grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-      margin: 14px 0 6px;
-    }
-    @media (max-width: 980px){
-      .settings-grid{ grid-template-columns: 1fr; }
-    }
-
-    .settings-card{
-      padding:16px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-    }
-    .settings-card h3{
-      margin:0 0 4px;
-      font-size: 1.0rem;
-      letter-spacing:-.01em;
-    }
-    .settings-card p{
-      margin:0;
-      color:var(--muted);
-      font-size:.92rem;
-      line-height:1.35;
-    }
-
-    .orders-section{
-      margin-top:14px;
-    }
-
-    .order-card{
-      padding:16px;
-      margin-top:12px;
-    }
-
-    .order-top{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
-    .order-meta{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-      min-width: 240px;
-    }
-
-    .order-created{
-      font-size:.90rem;
-      color:var(--muted);
-    }
-
-    .order-name{
-      font-size:1.35rem;
-      font-weight:850;
-      letter-spacing:-.02em;
-      line-height:1.1;
-      margin:0;
-    }
-
-    .order-email a{
-      color: var(--accent);
-      text-decoration:none;
-      font-weight:650;
-    }
-    .order-email a:hover{ text-decoration:underline; }
-
-    :root{
-      --danger:#e11d48;
-      --danger2:#fb7185;
-    }
-
-    .source-pill{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      width: fit-content;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.70);
-      color: var(--muted);
-      font-size:.85rem;
-      font-weight: 750;
-      letter-spacing:.01em;
-    }
-    .source-pill.is-unsupported{
-      color: var(--danger);
-      border-color: rgba(225,29,72,.30);
-      background: rgba(225,29,72,.08);
-    }
-
-    .btn-danger{
-      background: linear-gradient(180deg, var(--danger2), var(--danger)) !important;
-      box-shadow: 0 14px 34px rgba(225,29,72,.22) !important;
-    }
-    .btn-danger:hover{
-      box-shadow: 0 18px 44px rgba(225,29,72,.28) !important;
-      filter: brightness(1.02);
-    }
-
-    .order-actions{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .archive-wrap{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.65);
-      color: var(--muted);
-      font-size:.88rem;
-      font-weight:650;
-    }
-
-    .order-body{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap:14px;
-    }
-    @media (max-width: 980px){
-      .order-body{ grid-template-columns: 1fr; }
-    }
-
-    .order-box{
-      border:1px solid rgba(15,23,42,.08);
-      border-radius: var(--radiusLG);
-      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.72));
-      box-shadow: var(--shadowSoft);
-      padding:14px;
-      min-width:0;
-    }
-
-    .order-box h4{
-      margin:0 0 10px;
-      font-size:.9rem;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color: rgba(100,116,139,.95);
-    }
-
-    .kv{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns: 140px 1fr;
-      gap:10px;
-      align-items:center;
-    }
-    @media (max-width: 520px){
-      .row{ grid-template-columns: 1fr; }
-    }
-
-    .row label{
-      color: var(--muted);
-      font-weight:700;
-      font-size:.9rem;
-    }
-
-    .btn-ghost{
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.7);
-      color: var(--text);
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-weight: 800;
-      cursor:pointer;
-    }
-
-    .modal-backdrop{
-      position:fixed;
-      inset:0;
-      background: rgba(15,23,42,.45);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:200;
-      padding: 18px;
-    }
-    .modal{
-      width: min(860px, 100%);
-      background: #fff;
-      border-radius: var(--radiusXL);
-      border:1px solid var(--border);
-      box-shadow: 0 28px 90px rgba(15,23,42,.25);
-      overflow:hidden;
-    }
-    .modal-head{
-      padding:14px 16px;
-      border-bottom:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      background: rgba(246,248,252,.9);
-      backdrop-filter: blur(10px);
-    }
-    .modal-head h3{
-      margin:0;
-      font-size:1.0rem;
-      letter-spacing:-.01em;
-    }
-    .modal-body{
-      padding:16px;
-    }
-    .modal-actions{
-      padding:14px 16px;
-      border-top:1px solid var(--border);
-      display:flex;
-      justify-content:flex-end;
-      gap:10px;
-      flex-wrap:wrap;
-      background: rgba(246,248,252,.9);
-    }
-
-    .site-row{
-      display:grid;
-      grid-template-columns: 1fr 1.2fr 1.4fr auto;
-      gap:10px;
-      align-items:center;
-      margin-bottom:10px;
-    }
-    @media (max-width: 860px){
-      .site-row{ grid-template-columns: 1fr; }
-    }
-    .site-row .field-input{ padding:10px 12px; border-radius: 14px; }
-  </style>
-
+  <link rel="stylesheet" href="/style.css?v=3.0" />
 </head>
-
 <body class="admin-page">
-  <div class="page-shell">
+
+<!-- NAV -->
+
+<nav class="nav scrolled" id="mainNav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-lm3dptfy-wh.png" alt="LM3DPTFY logo" />
+    <div class="nav-logo-text">
+      <strong>LM3DPTFY</strong>
+      <span>Admin Dashboard</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"><span class="i-moon">🌙</span><span class="i-sun">☀️</span></button>
+    <button class="btn btn-outline btn-sm" id="logoutTopBtn" style="display:none;">Sign Out</button>
+  </div>
+</nav>
+
+<div class="admin-wrap">
+
+  <!-- LOGIN -->
+
+  <div id="loginCard" class="login-wrap">
+    <div class="login-card">
+      <span style="font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-light);display:block;margin-bottom:10px;">🔒 Admin Access</span>
+      <h1>Sign In</h1>
+      <p>Enter your credentials to access the dashboard.</p>
+      <div class="field">
+        <label class="label" for="adminEmail">Admin Email</label>
+        <input class="input" type="email" id="adminEmail" placeholder="admin@example.com" autocomplete="email" />
+      </div>
+      <div class="field" style="margin-top:16px;">
+        <label class="label" for="adminPassword">Password</label>
+        <input class="input" type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <button class="btn btn-solid btn-block" id="loginBtn" type="button" style="margin-top:20px;">Sign In →</button>
+      <div id="loginStatus" class="status" style="display:none;margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+
+  <div id="dashboardCard" style="display:none;">
+    <div class="dash-head">
+      <div>
+        <h1>Print Requests</h1>
+        <p>Manage incoming quote requests, statuses, and fulfillment.</p>
+      </div>
+      <div class="dash-actions">
+        <button class="btn btn-outline btn-sm" id="reloadBtn" type="button">↻ Reload Sheets</button>
+        <button class="btn btn-outline btn-sm" id="syncBtn"   type="button">⇅ Sync to Sheets</button>
+        <a href="/api/export/csv"  class="btn btn-outline btn-sm" style="text-decoration:none;">Export CSV</a>
+        <a href="/api/export/json" class="btn btn-outline btn-sm" style="text-decoration:none;">Export JSON</a>
+        <button class="btn btn-outline btn-sm" id="editFulfilledBtn" type="button">⚙ Fulfillers</button>
+        <button class="btn btn-outline btn-sm" id="editSitesBtn"     type="button">⚙ Libraries</button>
+      </div>
+    </div>
 
 ```
-<header class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="/" title="Home">
-      <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
-      <div class="brand-title">
-        <strong>Let Me 3D Print That For You</strong>
-        <span>Admin dashboard • Private</span>
-      </div>
-    </a>
+<div id="dashboardStatus" class="status" style="display:none;margin-bottom:16px;"></div>
 
-    <div class="nav-right">
-      <a class="pill-link" href="/">Home</a>
-      <button id="logoutTopBtn" class="pill-link" type="button">Log out</button>
-    </div>
-  </div>
-</header>
+<div class="panel">
+  <div class="panel-label">Active Requests</div>
+  <div class="panel-desc">New, quoted, confirmed, printing, and shipped orders. Archive when complete.</div>
+  <div id="activeList"></div>
+</div>
 
-<main class="page-main">
-  <div class="main-inner admin-wrap">
-
-    <!-- Login -->
-    <div id="loginCard" class="card" style="max-width:560px;margin:0 auto;padding:18px;">
-      <h1 class="admin-title" style="font-size:1.25rem;margin:0 0 6px;">Admin login</h1>
-      <p class="admin-subtitle" style="margin:0 0 14px;">Sign in to see and manage quote requests.</p>
-
-      <div class="stl-form">
-        <div>
-          <label for="adminEmail" class="field-label">Admin email</label>
-          <input type="email" id="adminEmail" class="field-input" required />
-        </div>
-        <div>
-          <label for="adminPassword" class="field-label">Password</label>
-          <input type="password" id="adminPassword" class="field-input" required />
-        </div>
-        <button type="button" id="loginBtn" class="btn-primary">Log in</button>
-        <p id="loginStatus" class="status-message" style="display:none;"></p>
-      </div>
-    </div>
-
-    <!-- Dashboard -->
-    <div id="dashboardCard" style="display:none;">
-      <div class="admin-head">
-        <div>
-          <h1 class="admin-title">Quote requests</h1>
-          <p class="admin-subtitle">Active + archived requests from lm3dptfy.online.</p>
-        </div>
-
-        <div class="admin-actions">
-          <button id="reloadSheetsBtn" class="btn-primary btn-sm" type="button">Refresh from Sheets</button>
-          <button id="syncSheetsBtn" class="btn-primary btn-sm" type="button">Sync to Sheets</button>
-          <a href="/api/export/csv" class="btn-primary btn-sm" style="text-decoration:none;">Export CSV</a>
-          <a href="/api/export/json" class="btn-primary btn-sm" style="text-decoration:none;">Export JSON</a>
-        </div>
-      </div>
-
-      <p id="dashboardStatus" class="status-message" style="display:none;"></p>
-
-      <!-- Settings -->
-      <section class="settings-grid">
-        <div class="card settings-card">
-          <div>
-            <h3>Fulfilled by list</h3>
-            <p>These names appear in the "Fulfilled by" dropdown on each order.</p>
-          </div>
-          <button id="editFulfilledBtn" class="btn-primary btn-sm" type="button">Edit</button>
-        </div>
-
-        <div class="card settings-card">
-          <div>
-            <h3>Supported sites</h3>
-            <p>These sites appear on the Home page and power source detection.</p>
-          </div>
-          <button id="editSitesBtn" class="btn-primary btn-sm" type="button">Edit</button>
-        </div>
-      </section>
-
-      <!-- Active -->
-      <section class="orders-section">
-        <div class="card" style="padding:16px;">
-          <h2 class="section-title" style="margin:0;">Active</h2>
-          <div id="activeList" style="margin-top:10px;"></div>
-          <p class="tip">Tip: Set status to <strong>Shipped</strong> to enable Tracking #. When you paste tracking, an email draft opens automatically.</p>
-        </div>
-      </section>
-
-      <!-- Archived -->
-      <section class="orders-section">
-        <div class="card" style="padding:16px;">
-          <h2 class="section-title" style="margin:0;">Archived</h2>
-          <div id="archivedList" style="margin-top:10px;"></div>
-          <p class="tip">Tip: Bookmark <strong>/admin</strong>. This page is meant to stay private.</p>
-        </div>
-      </section>
-
-    </div>
-  </div>
-</main>
-
-<footer class="site-footer">
-  LM3DPTFY Admin · Keep this page private.
-</footer>
-```
-
-  </div>
-
-  <!-- Modal: Fulfilled By -->
-
-  <div id="modalFulfilled" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Edit fulfilled by list">
-    <div class="modal">
-      <div class="modal-head">
-        <h3>Edit "Fulfilled by" names</h3>
-        <button class="btn-ghost" type="button" data-close="modalFulfilled">Close</button>
-      </div>
-      <div class="modal-body">
-        <p style="margin:0 0 10px; color:var(--muted); font-size:.92rem; line-height:1.45;">
-          Enter one name per line.
-        </p>
-        <textarea id="fulfilledTextarea" class="field-input" rows="7" placeholder="Robert&#10;Jared&#10;Terence"></textarea>
-        <p id="fulfilledStatus" class="status-message" style="display:none;"></p>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-ghost" type="button" data-close="modalFulfilled">Cancel</button>
-        <button id="saveFulfilledBtn" class="btn-primary" type="button">Save</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Supported Sites -->
-
-  <div id="modalSites" class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Edit supported sites">
-    <div class="modal">
-      <div class="modal-head">
-        <h3>Edit Supported Sites</h3>
-        <button class="btn-ghost" type="button" data-close="modalSites">Close</button>
-      </div>
-      <div class="modal-body">
-        <p style="margin:0 0 10px; color:var(--muted); font-size:.92rem; line-height:1.45;">
-          Add sites you support. "Hosts" should be comma-separated domains (ex: <strong>stlflix.com</strong>).
-        </p>
-
-```
-    <div id="sitesEditor"></div>
-
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-      <button id="addSiteRowBtn" class="btn-ghost" type="button">+ Add site</button>
-    </div>
-
-    <p id="sitesStatus" class="status-message" style="display:none;"></p>
-  </div>
-  <div class="modal-actions">
-    <button class="btn-ghost" type="button" data-close="modalSites">Cancel</button>
-    <button id="saveSitesBtn" class="btn-primary" type="button">Save</button>
-  </div>
+<div class="panel">
+  <div class="panel-label" style="color:var(--ink3);">Archived Requests</div>
+  <div class="panel-desc">Completed or dismissed orders.</div>
+  <div id="archivedList"></div>
 </div>
 ```
 
   </div>
 
-  <script>
-    // =========================
-    // ELEMENTS
-    // =========================
-    const loginBtn = document.getElementById('loginBtn');
-    const loginStatus = document.getElementById('loginStatus');
-    const loginCard = document.getElementById('loginCard');
-    const dashboardCard = document.getElementById('dashboardCard');
-    const dashboardStatus = document.getElementById('dashboardStatus');
+</div><!-- /.admin-wrap -->
 
-    const reloadBtn = document.getElementById('reloadSheetsBtn');
-    const syncBtn = document.getElementById('syncSheetsBtn');
-    const logoutTopBtn = document.getElementById('logoutTopBtn');
+<!-- MODAL: FULFILLED BY -->
 
-    const activeList = document.getElementById('activeList');
-    const archivedList = document.getElementById('archivedList');
+<div class="modal-backdrop" id="modalFulfilled">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Edit Fulfiller Names</h3>
+      <button class="btn btn-outline btn-sm" data-close="modalFulfilled">✕ Close</button>
+    </div>
+    <div class="modal-body">
+      <p>One name per line. These appear in the "Fulfilled by" dropdown on each order card.</p>
+      <label class="label" for="fulfilledTextarea" style="display:block;margin-bottom:8px;">Names (one per line)</label>
+      <textarea id="fulfilledTextarea" class="input" rows="7" placeholder="Jared&#10;Robert&#10;Terence"></textarea>
+      <div id="fulfilledStatus" class="status" style="display:none;margin-top:10px;"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" data-close="modalFulfilled">Cancel</button>
+      <button class="btn btn-solid btn-sm" id="saveFulfilledBtn">Save Names</button>
+    </div>
+  </div>
+</div>
 
-    const editFulfilledBtn = document.getElementById('editFulfilledBtn');
-    const editSitesBtn = document.getElementById('editSitesBtn');
+<!-- MODAL: SUPPORTED SITES -->
 
-    const modalFulfilled = document.getElementById('modalFulfilled');
-    const modalSites = document.getElementById('modalSites');
+<div class="modal-backdrop" id="modalSites">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Edit Supported Libraries</h3>
+      <button class="btn btn-outline btn-sm" data-close="modalSites">✕ Close</button>
+    </div>
+    <div class="modal-body">
+      <p>Manage supported model libraries. The Browse URL is linked on the homepage. Hosts are used to detect the source on incoming requests.</p>
+      <div style="display:grid;grid-template-columns:1fr 1.2fr 1.4fr auto;gap:8px;align-items:center;margin-bottom:8px;">
+        <span class="label">Name</span>
+        <span class="label">Browse URL</span>
+        <span class="label">Hostname(s)</span>
+        <span></span>
+      </div>
+      <div id="sitesEditor"></div>
+      <div id="sitesStatus" class="status" style="display:none;margin-top:10px;"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" id="addSiteRowBtn">+ Add Row</button>
+      <button class="btn btn-outline btn-sm" data-close="modalSites">Cancel</button>
+      <button class="btn btn-solid btn-sm" id="saveSitesBtn">Save Libraries</button>
+    </div>
+  </div>
+</div>
 
-    const fulfilledTextarea = document.getElementById('fulfilledTextarea');
-    const saveFulfilledBtn = document.getElementById('saveFulfilledBtn');
-    const fulfilledStatus = document.getElementById('fulfilledStatus');
+<script>
+  // Theme
+  const html  = document.documentElement;
+  const saved = localStorage.getItem('lm3d-theme');
+  if (saved) html.setAttribute('data-theme', saved);
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('lm3d-theme', next);
+  });
 
-    const sitesEditor = document.getElementById('sitesEditor');
-    const addSiteRowBtn = document.getElementById('addSiteRowBtn');
-    const saveSitesBtn = document.getElementById('saveSitesBtn');
-    const sitesStatus = document.getElementById('sitesStatus');
+  // Refs
+  const loginCard      = document.getElementById('loginCard');
+  const dashboardCard  = document.getElementById('dashboardCard');
+  const loginBtn       = document.getElementById('loginBtn');
+  const loginStatus    = document.getElementById('loginStatus');
+  const dashboardStatus= document.getElementById('dashboardStatus');
+  const activeList     = document.getElementById('activeList');
+  const archivedList   = document.getElementById('archivedList');
+  const logoutTopBtn   = document.getElementById('logoutTopBtn');
+  const reloadBtn      = document.getElementById('reloadBtn');
+  const syncBtn        = document.getElementById('syncBtn');
+  const editFulfilledBtn  = document.getElementById('editFulfilledBtn');
+  const editSitesBtn      = document.getElementById('editSitesBtn');
+  const modalFulfilled    = document.getElementById('modalFulfilled');
+  const modalSites        = document.getElementById('modalSites');
+  const fulfilledTextarea = document.getElementById('fulfilledTextarea');
+  const fulfilledStatus   = document.getElementById('fulfilledStatus');
+  const sitesEditor    = document.getElementById('sitesEditor');
+  const sitesStatus    = document.getElementById('sitesStatus');
+  const saveFulfilledBtn  = document.getElementById('saveFulfilledBtn');
+  const saveSitesBtn      = document.getElementById('saveSitesBtn');
+  const addSiteRowBtn     = document.getElementById('addSiteRowBtn');
 
-    // =========================
-    // CONSTANTS
-    // =========================
-    const STATUS_OPTIONS = [
-      { value: 'new', label: 'New' },
-      { value: 'responded', label: 'Responded' },
-      { value: 'quote_approved', label: 'Quote approved' },
-      { value: 'sent_to_printer', label: 'Sent to printer' },
-      { value: 'print_complete', label: 'Print complete' },
-      { value: 'qc_complete', label: 'QC complete' },
-      { value: 'shipped', label: 'Shipped' },
-      { value: 'paid', label: 'Paid' },
-    ];
+  const STATUS_OPTIONS = [
+    { value:'new',       label:'🆕 New' },
+    { value:'quoted',    label:'📋 Quoted' },
+    { value:'confirmed', label:'✅ Confirmed' },
+    { value:'printing',  label:'🖨 Printing' },
+    { value:'shipped',   label:'📦 Shipped' },
+    { value:'cancelled', label:'❌ Cancelled' },
+  ];
 
-    const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
+  const GMAIL_AUTH_USER = 'lm3dptfy@gmail.com';
+  let fulfilledByNames = ['Jared', 'Robert', 'Terence'];
+  let supportedSites   = [{ name: 'STLFlix', browseUrl: 'https://stlflix.com', hosts: ['stlflix.com'] }];
 
-    // Settings state (loaded from server)
-    let fulfilledByNames = ['Jared', 'Robert', 'Terence'];
-    let supportedSites = [
-      { name: 'STLFlix', browseUrl: 'https://stlflix.com', hosts: ['stlflix.com'] }
-    ];
+  // Helpers
+  function showDashStatus(msg, isError) {
+    dashboardStatus.textContent = msg;
+    dashboardStatus.style.display = 'block';
+    dashboardStatus.className = 'status ' + (isError ? 'status-err' : 'status-ok');
+    if (!isError) setTimeout(() => { dashboardStatus.style.display = 'none'; }, 4500);
+  }
 
-    // =========================
-    // HELPERS
-    // =========================
-    function showDashStatus(msg, isError){
-      dashboardStatus.textContent = msg;
-      dashboardStatus.style.display = 'block';
-      dashboardStatus.classList.toggle('status-error', !!isError);
-      dashboardStatus.classList.toggle('status-success', !isError);
-      if (!isError) setTimeout(() => { dashboardStatus.style.display = 'none'; }, 4500);
-    }
+  function buildGmailUrl(toEmail, subject, body) {
+    return 'https://mail.google.com/mail/?view=cm&fs=1&tf=1'
+      + '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER)
+      + '&to=' + encodeURIComponent(toEmail)
+      + '&su=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(body);
+  }
 
-    function buildGmailUrl(toEmail, subject, body){
-      let url = 'https://mail.google.com/mail/?view=cm&fs=1&tf=1';
-      url += '&authuser=' + encodeURIComponent(GMAIL_AUTH_USER);
-      url += '&to=' + encodeURIComponent(toEmail);
-      url += '&su=' + encodeURIComponent(subject);
-      url += '&body=' + encodeURIComponent(body);
-      return url;
-    }
+  function openModal(el)  { el.style.display = 'flex'; }
+  function closeModal(el) { el.style.display = 'none'; }
 
-    function openModal(el){ el.style.display = 'flex'; }
-    function closeModal(el){ el.style.display = 'none'; }
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-close]');
+    if (!btn) return;
+    const el = document.getElementById(btn.getAttribute('data-close'));
+    if (el) closeModal(el);
+  });
 
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-close]');
-      if (!btn) return;
-      const id = btn.getAttribute('data-close');
-      const el = document.getElementById(id);
-      if (el) closeModal(el);
-    });
+  function normalizeHost(host) {
+    return String(host || '').trim().toLowerCase().replace(/^www\./, '');
+  }
 
-    function normalizeHost(host){
-      return String(host || '').trim().toLowerCase().replace(/^www\./,'');
-    }
-
-    function detectSourceForLink(stlLink){
-      try{
-        const host = normalizeHost(new URL(stlLink).hostname);
-        for (const s of supportedSites){
-          const hosts = Array.isArray(s.hosts) ? s.hosts.map(normalizeHost) : [];
-          if (hosts.includes(host)) return { name: s.name || 'Supported', supported: true };
-          for (const h of hosts){
-            if (h && host.endsWith('.' + h)) return { name: s.name || 'Supported', supported: true };
-          }
+  function detectSourceForLink(stlLink) {
+    try {
+      const host = normalizeHost(new URL(stlLink).hostname);
+      for (const s of supportedSites) {
+        const hosts = Array.isArray(s.hosts) ? s.hosts.map(normalizeHost) : [];
+        if (hosts.includes(host)) return { name: s.name || 'Supported', supported: true };
+        for (const h of hosts) {
+          if (h && host.endsWith('.' + h)) return { name: s.name || 'Supported', supported: true };
         }
-        return { name: 'Unknown', supported: false };
-      } catch {
-        return { name: 'Unknown', supported: false };
       }
-    }
+    } catch {}
+    return { name: 'Unknown', supported: false };
+  }
 
-    // FIX (Bug 2): Read from data.settings.* instead of data.* — the server wraps
-    // settings inside a "settings" key: { ok: true, settings: { fulfilledByNames, supportedSites } }
-    async function loadSettings(){
-      try{
-        const res = await fetch('/api/settings', { credentials: 'include' });
-        if (!res.ok) return;
+  async function loadSettings() {
+    try {
+      const res  = await fetch('/api/settings', { credentials: 'include' });
+      if (!res.ok) return;
+      const data = await res.json().catch(() => ({}));
+      const s    = data.settings || {};
+      if (Array.isArray(s.fulfilledByNames) && s.fulfilledByNames.length)
+        fulfilledByNames = s.fulfilledByNames.filter(Boolean).map(n => String(n).trim()).filter(Boolean);
+      if (Array.isArray(s.supportedSites))
+        supportedSites = s.supportedSites.map(x => ({
+          name: String(x.name||'').trim(),
+          browseUrl: String(x.browseUrl||'').trim(),
+          hosts: Array.isArray(x.hosts) ? x.hosts.map(h => String(h).trim()).filter(Boolean) : [],
+        })).filter(x => x.name);
+    } catch(e) { console.error('loadSettings:', e); }
+  }
 
-        const data = await res.json().catch(() => ({}));
+  function openFulfilledEditor() {
+    fulfilledStatus.style.display = 'none';
+    fulfilledTextarea.value = fulfilledByNames.join('\n');
+    openModal(modalFulfilled);
+  }
 
-        // Correctly read nested settings object
-        const s = data.settings || {};
+  function createSiteRow(site = {}) {
+    const row = document.createElement('div'); row.className = 'site-row';
+    const nm  = document.createElement('input'); nm.className  = 'input'; nm.placeholder = 'Site name'; nm.value = site.name || '';
+    const url = document.createElement('input'); url.className = 'input'; url.placeholder = 'Browse URL'; url.value = site.browseUrl || '';
+    const hst = document.createElement('input'); hst.className = 'input'; hst.placeholder = 'Hosts (comma-sep)'; hst.value = (site.hosts||[]).join(', ');
+    const del = document.createElement('button'); del.type = 'button'; del.className = 'btn btn-outline btn-sm'; del.textContent = 'Remove';
+    del.addEventListener('click', () => row.remove());
+    row.appendChild(nm); row.appendChild(url); row.appendChild(hst); row.appendChild(del);
+    return row;
+  }
 
-        if (Array.isArray(s.fulfilledByNames) && s.fulfilledByNames.length){
-          fulfilledByNames = s.fulfilledByNames.filter(Boolean).map(str => String(str).trim()).filter(Boolean);
-        }
-        if (Array.isArray(s.supportedSites)){
-          supportedSites = s.supportedSites.map(site => ({
-            name: String(site.name || '').trim(),
-            browseUrl: String(site.browseUrl || '').trim(),
-            hosts: Array.isArray(site.hosts) ? site.hosts.map(h => String(h).trim()).filter(Boolean) : [],
-          })).filter(site => site.name);
-        }
-      } catch(err) {
-        console.error('Failed to load settings:', err);
-      }
-    }
+  function openSitesEditor() {
+    sitesStatus.style.display = 'none';
+    sitesEditor.innerHTML = '';
+    (supportedSites.length ? supportedSites : [{}]).forEach(s => sitesEditor.appendChild(createSiteRow(s)));
+    openModal(modalSites);
+  }
 
-    // =========================
-    // SETTINGS MODALS
-    // =========================
-    function openFulfilledEditor(){
-      fulfilledStatus.style.display = 'none';
-      fulfilledTextarea.value = fulfilledByNames.join('\n');
-      openModal(modalFulfilled);
-    }
+  editFulfilledBtn.addEventListener('click', openFulfilledEditor);
+  editSitesBtn.addEventListener('click', openSitesEditor);
+  addSiteRowBtn.addEventListener('click', () => sitesEditor.appendChild(createSiteRow()));
 
-    function createSiteRow(site = { name:'', browseUrl:'', hosts:[] }){
-      const row = document.createElement('div');
-      row.className = 'site-row';
+  saveFulfilledBtn.addEventListener('click', async () => {
+    const names = fulfilledTextarea.value.split('\n').map(s => s.trim()).filter(Boolean);
+    fulfilledStatus.style.display = 'block';
+    fulfilledStatus.textContent = 'Saving…';
+    fulfilledStatus.className = 'status';
+    try {
+      const res = await fetch('/api/settings/fulfillers', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ names }) });
+      const d   = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(d.error || 'Request failed');
+      fulfilledByNames = names;
+      fulfilledStatus.textContent = '✓ Saved'; fulfilledStatus.className = 'status status-ok';
+      setTimeout(() => closeModal(modalFulfilled), 450);
+      await loadRequests();
+    } catch(e) { fulfilledStatus.textContent = '✗ ' + e.message; fulfilledStatus.className = 'status status-err'; }
+  });
 
-      const name = document.createElement('input');
-      name.className = 'field-input';
-      name.placeholder = 'Site name (ex: STLFlix)';
-      name.value = site.name || '';
+  saveSitesBtn.addEventListener('click', async () => {
+    const rows  = Array.from(sitesEditor.querySelectorAll('.site-row'));
+    const sites = rows.map(r => {
+      const inp = r.querySelectorAll('input');
+      return { name:(inp[0]?.value||'').trim(), browseUrl:(inp[1]?.value||'').trim(), hosts:(inp[2]?.value||'').split(',').map(s=>s.trim()).filter(Boolean) };
+    }).filter(s => s.name);
+    sitesStatus.style.display = 'block'; sitesStatus.textContent = 'Saving…'; sitesStatus.className = 'status';
+    try {
+      const res = await fetch('/api/settings/sites', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sites }) });
+      const d   = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(d.error || 'Request failed');
+      supportedSites = sites;
+      sitesStatus.textContent = '✓ Saved'; sitesStatus.className = 'status status-ok';
+      setTimeout(() => closeModal(modalSites), 450);
+      await loadRequests();
+    } catch(e) { sitesStatus.textContent = '✗ ' + e.message; sitesStatus.className = 'status status-err'; }
+  });
 
-      const url = document.createElement('input');
-      url.className = 'field-input';
-      url.placeholder = 'Browse URL (ex: https://stlflix.com)';
-      url.value = site.browseUrl || '';
-
-      const hosts = document.createElement('input');
-      hosts.className = 'field-input';
-      hosts.placeholder = 'Hosts (comma-separated, ex: stlflix.com)';
-      hosts.value = (Array.isArray(site.hosts) ? site.hosts : []).join(', ');
-
-      const del = document.createElement('button');
-      del.type = 'button';
-      del.className = 'btn-ghost';
-      del.textContent = 'Remove';
-      del.addEventListener('click', () => row.remove());
-
-      row.appendChild(name);
-      row.appendChild(url);
-      row.appendChild(hosts);
-      row.appendChild(del);
-
-      return row;
-    }
-
-    function openSitesEditor(){
-      sitesStatus.style.display = 'none';
-      sitesEditor.innerHTML = '';
-      (supportedSites.length ? supportedSites : []).forEach(s => sitesEditor.appendChild(createSiteRow(s)));
-      if (!supportedSites.length) sitesEditor.appendChild(createSiteRow());
-      openModal(modalSites);
-    }
-
-    editFulfilledBtn.addEventListener('click', openFulfilledEditor);
-    editSitesBtn.addEventListener('click', openSitesEditor);
-
-    addSiteRowBtn.addEventListener('click', () => {
-      sitesEditor.appendChild(createSiteRow());
+  // Order render
+  function buildFulfilledOptions(selected) {
+    return [{ value:'', label:'-- None --' }, ...fulfilledByNames.map(n => ({ value:n, label:n }))].map(o => {
+      const opt = document.createElement('option'); opt.value = o.value; opt.textContent = o.label;
+      if ((selected||'') === o.value) opt.selected = true; return opt;
     });
+  }
 
-    saveFulfilledBtn.addEventListener('click', async () => {
-      const names = fulfilledTextarea.value
-        .split('\n')
-        .map(s => s.trim())
-        .filter(Boolean);
+  function buildStatusOptions(selected) {
+    return STATUS_OPTIONS.map(o => {
+      const opt = document.createElement('option'); opt.value = o.value; opt.textContent = o.label;
+      if ((selected||'new') === o.value) opt.selected = true; return opt;
+    });
+  }
 
-      fulfilledStatus.style.display = 'block';
-      fulfilledStatus.textContent = 'Saving...';
-      fulfilledStatus.classList.remove('status-error', 'status-success');
+  function renderOrderCard(r) {
+    const wrap = document.createElement('div'); wrap.className = 'order-card';
+    const created = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
+    const name = r.name||''; const email = r.email||''; const stlLink = r.stlLink||'';
+    const details = r.details||''; const adminNotes = r.adminNotes||'';
+    const status = r.status||'new'; const fulfilledBy = r.fulfilledBy||'';
+    const trackingNumber = r.trackingNumber||''; const archived = !!r.archived;
+    let sourceName = (r.sourceName||r.source||r.sourceLabel||'').trim();
+    let sourceSupported = (r.sourceSupported??r.isSourceSupported);
+    if (!sourceName) { const d = detectSourceForLink(stlLink); sourceName = d.name; sourceSupported = d.supported; }
+    const isUnsupported = sourceSupported === false || /unknown/i.test(sourceName);
 
-      try{
-        // FIX (Bug 1): Corrected endpoint from /api/settings/fulfilled-by → /api/settings/fulfillers
-        const res = await fetch('/api/settings/fulfillers', {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify({ names }),
-        });
+    const top  = document.createElement('div'); top.className = 'order-top';
+    const meta = document.createElement('div'); meta.className = 'order-meta';
+    const createdEl = document.createElement('div'); createdEl.className = 'order-created'; createdEl.textContent = created;
+    const nameEl = document.createElement('div'); nameEl.className = 'order-name'; nameEl.textContent = name;
+    const emailEl = document.createElement('div'); emailEl.className = 'order-email';
+    if (email) { const a = document.createElement('a'); a.href = 'mailto:' + email; a.textContent = email; emailEl.appendChild(a); }
+    const pill = document.createElement('div'); pill.className = 'source-pill' + (isUnsupported ? ' is-unsupported' : '');
+    pill.textContent = 'Source: ' + (sourceName || 'Unknown');
+    meta.appendChild(createdEl); meta.appendChild(nameEl); meta.appendChild(emailEl); meta.appendChild(pill);
 
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Request failed');
-
-        fulfilledByNames = names;
-        fulfilledStatus.textContent = '✓ Saved';
-        fulfilledStatus.classList.add('status-success');
-
-        setTimeout(() => closeModal(modalFulfilled), 450);
+    const acts = document.createElement('div'); acts.className = 'order-actions';
+    const viewBtn = document.createElement('a'); viewBtn.href = stlLink||'#'; viewBtn.target = '_blank'; viewBtn.rel = 'noopener noreferrer';
+    viewBtn.className = 'btn btn-solid btn-sm' + (isUnsupported ? ' btn-danger' : ''); viewBtn.textContent = 'View model';
+    if (!stlLink) { viewBtn.style.opacity = '0.5'; viewBtn.style.pointerEvents = 'none'; }
+    const replyBtn = document.createElement('button'); replyBtn.type = 'button'; replyBtn.className = 'btn btn-outline btn-sm'; replyBtn.textContent = 'Reply';
+    replyBtn.addEventListener('click', () => {
+      if (!email) return;
+      window.open(buildGmailUrl(email, 'LM3DPTFY Quote Reply',
+        'Hi ' + name + ',\n\nThanks for your quote request.\n\n' + (stlLink ? 'Model link:\n' + stlLink + '\n\n' : '') + '— LM3DPTFY'), '_blank');
+    });
+    const archWrap = document.createElement('label'); archWrap.className = 'archive-wrap';
+    const archCb   = document.createElement('input'); archCb.type = 'checkbox'; archCb.checked = archived;
+    archCb.addEventListener('change', async () => {
+      showDashStatus(archCb.checked ? 'Archiving…' : 'Unarchiving…', false);
+      try {
+        const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/archive`, { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ archived: archCb.checked }) });
+        const d   = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(d.error || 'Request failed');
         await loadRequests();
-      } catch(err){
-        // FIX (Code quality): Show actual error message to admin instead of swallowing it
-        fulfilledStatus.textContent = '✗ ' + err.message;
-        fulfilledStatus.classList.add('status-error');
-        console.error('Failed to save fulfilled-by names:', err);
-      }
+      } catch(e) { showDashStatus('Archive update failed: ' + e.message, true); archCb.checked = !archCb.checked; }
     });
+    const archTxt = document.createElement('span'); archTxt.textContent = 'Archive';
+    archWrap.appendChild(archCb); archWrap.appendChild(archTxt);
+    acts.appendChild(viewBtn); acts.appendChild(replyBtn); acts.appendChild(archWrap);
+    top.appendChild(meta); top.appendChild(acts);
 
-    saveSitesBtn.addEventListener('click', async () => {
-      const rows = Array.from(sitesEditor.querySelectorAll('.site-row'));
-      const sites = rows.map(r => {
-        const inputs = r.querySelectorAll('input');
-        const name = (inputs[0]?.value || '').trim();
-        const browseUrl = (inputs[1]?.value || '').trim();
-        const hosts = (inputs[2]?.value || '')
-          .split(',')
-          .map(s => s.trim())
-          .filter(Boolean);
-
-        return { name, browseUrl, hosts };
-      }).filter(s => s.name);
-
-      sitesStatus.style.display = 'block';
-      sitesStatus.textContent = 'Saving...';
-      sitesStatus.classList.remove('status-error', 'status-success');
-
-      try{
-        // FIX (Bug 1): Corrected endpoint from /api/settings/supported-sites → /api/settings/sites
-        const res = await fetch('/api/settings/sites', {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type':'application/json' },
-          body: JSON.stringify({ sites }),
-        });
-
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Request failed');
-
-        supportedSites = sites;
-        sitesStatus.textContent = '✓ Saved';
-        sitesStatus.classList.add('status-success');
-
-        setTimeout(() => closeModal(modalSites), 450);
-        await loadRequests();
-      } catch(err){
-        // FIX (Code quality): Show actual error message to admin instead of swallowing it
-        sitesStatus.textContent = '✗ ' + err.message;
-        sitesStatus.classList.add('status-error');
-        console.error('Failed to save supported sites:', err);
-      }
+    const body = document.createElement('div'); body.className = 'order-body';
+    const left = document.createElement('div'); left.className = 'order-box';
+    left.innerHTML = '<h4>Notes</h4>';
+    const leftKv = document.createElement('div'); leftKv.className = 'kv';
+    const cRow = document.createElement('div'); cRow.className = 'row';
+    const cLab = document.createElement('label'); cLab.textContent = 'Customer notes';
+    const cVal = document.createElement('div'); cVal.style.cssText = 'color:var(--ink);line-height:1.5;white-space:pre-wrap;font-size:.88rem;';
+    cVal.textContent = details || '(none)';
+    cRow.appendChild(cLab); cRow.appendChild(cVal);
+    const aRow = document.createElement('div'); aRow.className = 'row';
+    const aLab = document.createElement('label'); aLab.textContent = 'Admin notes';
+    const aInput = document.createElement('textarea'); aInput.className = 'input'; aInput.rows = 3; aInput.placeholder = 'What did we email the user?'; aInput.value = adminNotes;
+    aInput.addEventListener('blur', async () => {
+      try {
+        const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/admin-notes`, { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ adminNotes: aInput.value||'' }) });
+        if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error||'Save failed'); }
+      } catch(e) { showDashStatus('Failed to save admin notes: ' + e.message, true); }
     });
+    aRow.appendChild(aLab); aRow.appendChild(aInput);
+    leftKv.appendChild(cRow); leftKv.appendChild(aRow); left.appendChild(leftKv);
 
-    // =========================
-    // ORDER RENDER
-    // =========================
-    function buildFulfilledOptions(selected){
-      const opts = [];
-      opts.push({ value:'', label:'-- None --' });
-      fulfilledByNames.forEach(n => opts.push({ value:n, label:n }));
-      return opts.map(o => {
-        const opt = document.createElement('option');
-        opt.value = o.value;
-        opt.textContent = o.label;
-        if ((selected || '') === o.value) opt.selected = true;
-        return opt;
-      });
-    }
+    const right = document.createElement('div'); right.className = 'order-box';
+    right.innerHTML = '<h4>Order</h4>';
+    const rightKv = document.createElement('div'); rightKv.className = 'kv';
 
-    function buildStatusOptions(selected){
-      return STATUS_OPTIONS.map(o => {
-        const opt = document.createElement('option');
-        opt.value = o.value;
-        opt.textContent = o.label;
-        if ((selected || 'new') === o.value) opt.selected = true;
-        return opt;
-      });
-    }
+    const stRow = document.createElement('div'); stRow.className = 'row';
+    const stLab = document.createElement('label'); stLab.textContent = 'Status';
+    const stSel = document.createElement('select'); stSel.className = 'input';
+    buildStatusOptions(status).forEach(o => stSel.appendChild(o));
+    stSel.addEventListener('change', async () => {
+      showDashStatus('Updating status…', false);
+      try {
+        const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/status`, { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ status: stSel.value }) });
+        const d   = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(d.error||'Failed');
+        const isShip = stSel.value === 'shipped';
+        trackInput.disabled = !isShip;
+        trackInput.placeholder = isShip ? 'Paste tracking number' : 'Set status to Shipped first';
+        showDashStatus('Status updated.', false);
+      } catch(e) { showDashStatus('Status update failed: ' + e.message, true); }
+    });
+    stRow.appendChild(stLab); stRow.appendChild(stSel);
 
-    function renderOrderCard(r){
-      const wrap = document.createElement('div');
-      wrap.className = 'card order-card';
+    const fuRow = document.createElement('div'); fuRow.className = 'row';
+    const fuLab = document.createElement('label'); fuLab.textContent = 'Fulfilled by';
+    const fuSel = document.createElement('select'); fuSel.className = 'input';
+    buildFulfilledOptions(fulfilledBy).forEach(o => fuSel.appendChild(o));
+    fuSel.addEventListener('change', async () => {
+      showDashStatus('Updating…', false);
+      try {
+        const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/fulfilled`, { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ fulfilledBy: fuSel.value }) });
+        const d   = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(d.error||'Failed');
+        showDashStatus('Fulfilled by updated.', false);
+      } catch(e) { showDashStatus('Fulfilled update failed: ' + e.message, true); }
+    });
+    fuRow.appendChild(fuLab); fuRow.appendChild(fuSel);
 
-      const created = r.createdAt ? new Date(r.createdAt).toLocaleString() : '';
-      const name = r.name || '';
-      const email = r.email || '';
-      const stlLink = r.stlLink || '';
-      const details = r.details || '';
-      const adminNotes = r.adminNotes || '';
-      const status = r.status || 'new';
-      const fulfilledBy = r.fulfilledBy || '';
-      const trackingNumber = r.trackingNumber || '';
-      const archived = !!r.archived;
-
-      let sourceName = (r.sourceName || r.source || r.sourceLabel || '').trim();
-      let sourceSupported = (r.sourceSupported ?? r.isSourceSupported);
-
-      if (!sourceName){
-        const detected = detectSourceForLink(stlLink);
-        sourceName = detected.name;
-        sourceSupported = detected.supported;
-      }
-
-      const isUnsupported = (sourceSupported === false) || /unknown/i.test(sourceName);
-
-      // TOP
-      const top = document.createElement('div');
-      top.className = 'order-top';
-
-      const meta = document.createElement('div');
-      meta.className = 'order-meta';
-
-      const createdEl = document.createElement('div');
-      createdEl.className = 'order-created';
-      createdEl.textContent = created;
-
-      const nameEl = document.createElement('h3');
-      nameEl.className = 'order-name';
-      nameEl.textContent = name;
-
-      const emailEl = document.createElement('div');
-      emailEl.className = 'order-email';
-      if (email){
-        const a = document.createElement('a');
-        a.href = 'mailto:' + email;
-        a.textContent = email;
-        emailEl.appendChild(a);
-      }
-
-      const sourcePill = document.createElement('div');
-      sourcePill.className = 'source-pill' + (isUnsupported ? ' is-unsupported' : '');
-      sourcePill.textContent = 'Source: ' + (sourceName || 'Unknown');
-
-      meta.appendChild(createdEl);
-      meta.appendChild(nameEl);
-      meta.appendChild(emailEl);
-      meta.appendChild(sourcePill);
-
-      const actions = document.createElement('div');
-      actions.className = 'order-actions';
-
-      const viewBtn = document.createElement('a');
-      viewBtn.href = stlLink || '#';
-      viewBtn.target = '_blank';
-      viewBtn.rel = 'noopener noreferrer';
-      viewBtn.className = 'btn-primary btn-sm' + (isUnsupported ? ' btn-danger' : '');
-      viewBtn.textContent = 'View model';
-      if (!stlLink){
-        viewBtn.style.opacity = '0.55';
-        viewBtn.style.pointerEvents = 'none';
-      }
-
-      const replyBtn = document.createElement('button');
-      replyBtn.type = 'button';
-      replyBtn.className = 'btn-primary btn-sm';
-      replyBtn.textContent = 'Reply';
-      replyBtn.addEventListener('click', () => {
+    const trRow = document.createElement('div'); trRow.className = 'row';
+    const trLab = document.createElement('label'); trLab.textContent = 'Tracking #';
+    const trackInput = document.createElement('input'); trackInput.className = 'input';
+    trackInput.value = trackingNumber;
+    trackInput.placeholder = status === 'shipped' ? 'Paste tracking number' : 'Set status to Shipped first';
+    trackInput.disabled = status !== 'shipped';
+    trackInput.addEventListener('blur', async () => {
+      try {
+        const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/tracking`, { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ trackingNumber: trackInput.value||'' }) });
+        if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error||'Save failed'); }
+      } catch(e) { showDashStatus('Tracking save failed: ' + e.message, true); }
+    });
+    trackInput.addEventListener('paste', () => {
+      if (trackInput.disabled) return;
+      setTimeout(async () => {
+        const val = (trackInput.value||'').trim(); if (!val) return;
+        try {
+          const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/tracking`, { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ trackingNumber: val }) });
+          if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error||'Save failed'); }
+        } catch(e) { showDashStatus('Tracking save failed: ' + e.message, true); return; }
         if (!email) return;
-        const subject = 'LM3DPTFY Quote Reply';
-        const body =
-          'Hi ' + name + ',\n\n' +
-          'Thanks for your quote request.\n\n' +
-          (stlLink ? ('Model link:\n' + stlLink + '\n\n') : '') +
-          '— LM3DPTFY';
-        window.open(buildGmailUrl(email, subject, body), '_blank');
-      });
-
-      const archiveWrap = document.createElement('label');
-      archiveWrap.className = 'archive-wrap';
-      const archiveCb = document.createElement('input');
-      archiveCb.type = 'checkbox';
-      archiveCb.checked = archived;
-      archiveCb.addEventListener('change', async () => {
-        showDashStatus(archiveCb.checked ? 'Archiving...' : 'Unarchiving...', false);
-        try{
-          const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/archive`, {
-            method:'POST',
-            credentials:'include',
-            headers:{ 'Content-Type':'application/json' },
-            body: JSON.stringify({ archived: archiveCb.checked }),
-          });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || 'Request failed');
-          await loadRequests();
-        } catch(err){
-          showDashStatus('Archive update failed: ' + err.message, true);
-          archiveCb.checked = !archiveCb.checked;
-        }
-      });
-      const archiveTxt = document.createElement('span');
-      archiveTxt.textContent = 'Archive';
-      archiveWrap.appendChild(archiveCb);
-      archiveWrap.appendChild(archiveTxt);
-
-      actions.appendChild(viewBtn);
-      actions.appendChild(replyBtn);
-      actions.appendChild(archiveWrap);
-
-      top.appendChild(meta);
-      top.appendChild(actions);
-
-      // BODY
-      const body = document.createElement('div');
-      body.className = 'order-body';
-
-      const left = document.createElement('div');
-      left.className = 'order-box';
-      left.innerHTML = `<h4>Notes</h4>`;
-      const leftKv = document.createElement('div');
-      leftKv.className = 'kv';
-
-      const custRow = document.createElement('div');
-      custRow.className = 'row';
-      const custLab = document.createElement('label');
-      custLab.textContent = 'Customer notes';
-      const custVal = document.createElement('div');
-      custVal.style.color = 'var(--text)';
-      custVal.style.lineHeight = '1.45';
-      custVal.style.whiteSpace = 'pre-wrap';
-      custVal.textContent = details || '(none)';
-      custRow.appendChild(custLab);
-      custRow.appendChild(custVal);
-
-      const adminRow = document.createElement('div');
-      adminRow.className = 'row';
-      const adminLab = document.createElement('label');
-      adminLab.textContent = 'Admin notes';
-      const adminInput = document.createElement('textarea');
-      adminInput.className = 'field-input';
-      adminInput.rows = 3;
-      adminInput.placeholder = 'What did we email the user?';
-      adminInput.value = adminNotes;
-
-      // FIX (Code quality): Show error to admin if the save fails instead of silently failing
-      adminInput.addEventListener('blur', async () => {
-        try{
-          const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/admin-notes`, {
-            method:'POST',
-            credentials:'include',
-            headers:{ 'Content-Type':'application/json' },
-            body: JSON.stringify({ adminNotes: adminInput.value || '' }),
-          });
-          if (!res.ok) {
-            const data = await res.json().catch(() => ({}));
-            throw new Error(data.error || 'Save failed');
-          }
-        } catch(err) {
-          showDashStatus('Failed to save admin notes: ' + err.message, true);
-          console.error('Admin notes save error:', err);
-        }
-      });
-
-      adminRow.appendChild(adminLab);
-      adminRow.appendChild(adminInput);
-
-      leftKv.appendChild(custRow);
-      leftKv.appendChild(adminRow);
-      left.appendChild(leftKv);
-
-      const right = document.createElement('div');
-      right.className = 'order-box';
-      right.innerHTML = `<h4>Order</h4>`;
-      const rightKv = document.createElement('div');
-      rightKv.className = 'kv';
-
-      // Status
-      const statusRow = document.createElement('div');
-      statusRow.className = 'row';
-      const statusLab = document.createElement('label');
-      statusLab.textContent = 'Status';
-      const statusSel = document.createElement('select');
-      statusSel.className = 'field-input';
-      buildStatusOptions(status).forEach(o => statusSel.appendChild(o));
-      statusSel.addEventListener('change', async () => {
-        showDashStatus('Updating status...', false);
-        try{
-          const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/status`, {
-            method:'POST',
-            credentials:'include',
-            headers:{ 'Content-Type':'application/json' },
-            body: JSON.stringify({ status: statusSel.value }),
-          });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || 'Request failed');
-
-          const isShipped = statusSel.value === 'shipped';
-          trackingInput.disabled = !isShipped;
-          trackingInput.placeholder = isShipped ? 'Paste tracking' : 'Set status to Shipped';
-
-          showDashStatus('Status updated.', false);
-        } catch(err){
-          showDashStatus('Status update failed: ' + err.message, true);
-        }
-      });
-      statusRow.appendChild(statusLab);
-      statusRow.appendChild(statusSel);
-
-      // Fulfilled by
-      const fulfillRow = document.createElement('div');
-      fulfillRow.className = 'row';
-      const fulfillLab = document.createElement('label');
-      fulfillLab.textContent = 'Fulfilled by';
-      const fulfillSel = document.createElement('select');
-      fulfillSel.className = 'field-input';
-      buildFulfilledOptions(fulfilledBy).forEach(o => fulfillSel.appendChild(o));
-      fulfillSel.addEventListener('change', async () => {
-        showDashStatus('Updating fulfilled by...', false);
-        try{
-          const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/fulfilled`, {
-            method:'POST',
-            credentials:'include',
-            headers:{ 'Content-Type':'application/json' },
-            body: JSON.stringify({ fulfilledBy: fulfillSel.value }),
-          });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(data.error || 'Request failed');
-          showDashStatus('Fulfilled by updated.', false);
-        } catch(err){
-          showDashStatus('Fulfilled update failed: ' + err.message, true);
-        }
-      });
-      fulfillRow.appendChild(fulfillLab);
-      fulfillRow.appendChild(fulfillSel);
-
-      // Tracking
-      const trackingRow = document.createElement('div');
-      trackingRow.className = 'row';
-      const trackingLab = document.createElement('label');
-      trackingLab.textContent = 'Tracking #';
-      const trackingInput = document.createElement('input');
-      trackingInput.className = 'field-input';
-      trackingInput.value = trackingNumber;
-      trackingInput.placeholder = (status === 'shipped') ? 'Paste tracking' : 'Set status to Shipped';
-      trackingInput.disabled = (status !== 'shipped');
-
-      // FIX (Code quality): Show error to admin if tracking save fails
-      trackingInput.addEventListener('blur', async () => {
-        try{
-          const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/tracking`, {
-            method:'POST',
-            credentials:'include',
-            headers:{ 'Content-Type':'application/json' },
-            body: JSON.stringify({ trackingNumber: trackingInput.value || '' }),
-          });
-          if (!res.ok) {
-            const data = await res.json().catch(() => ({}));
-            throw new Error(data.error || 'Save failed');
-          }
-        } catch(err) {
-          showDashStatus('Failed to save tracking number: ' + err.message, true);
-          console.error('Tracking save error:', err);
-        }
-      });
-
-      trackingInput.addEventListener('paste', () => {
-        if (trackingInput.disabled) return;
-        setTimeout(async () => {
-          const val = (trackingInput.value || '').trim();
-          if (!val) return;
-
-          try{
-            const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/tracking`, {
-              method:'POST',
-              credentials:'include',
-              headers:{ 'Content-Type':'application/json' },
-              body: JSON.stringify({ trackingNumber: val }),
-            });
-            if (!res.ok) {
-              const data = await res.json().catch(() => ({}));
-              throw new Error(data.error || 'Save failed');
-            }
-          } catch(err) {
-            showDashStatus('Failed to save tracking number: ' + err.message, true);
-            console.error('Tracking paste save error:', err);
-            return;
-          }
-
-          if (!email) return;
-
-          const subject = 'Your LM3DPTFY order has shipped — Tracking #' + ' ' + val;
-          const body =
-            'Hi ' + name + ',\n\n' +
-            'Great news — your print has shipped!\n\n' +
-            'Tracking number: ' + val + '\n\n' +
-            (stlLink ? ('Your model link: ' + stlLink + '\n\n') : '') +
-            'Thanks again!\n' +
-            '— LM3DPTFY';
-
-          window.open(buildGmailUrl(email, subject, body), '_blank');
-        }, 10);
-      });
-
-      trackingRow.appendChild(trackingLab);
-      trackingRow.appendChild(trackingInput);
-
-      rightKv.appendChild(statusRow);
-      rightKv.appendChild(fulfillRow);
-      rightKv.appendChild(trackingRow);
-      right.appendChild(rightKv);
-
-      body.appendChild(left);
-      body.appendChild(right);
-
-      wrap.appendChild(top);
-      wrap.appendChild(body);
-
-      return wrap;
-    }
-
-    // =========================
-    // LOAD REQUESTS
-    // =========================
-    async function loadRequests(){
-      try{
-        await loadSettings();
-
-        const res = await fetch('/api/requests', { credentials:'include' });
-        if (res.status === 401){
-          loginCard.style.display = 'block';
-          dashboardCard.style.display = 'none';
-          return;
-        }
-
-        const data = await res.json();
-        const active = data.filter(r => !r.archived);
-        const archived = data.filter(r => r.archived);
-
-        activeList.innerHTML = '';
-        archivedList.innerHTML = '';
-
-        if (!active.length){
-          const empty = document.createElement('div');
-          empty.style.color = 'var(--muted)';
-          empty.style.padding = '10px 2px';
-          empty.textContent = 'No active requests.';
-          activeList.appendChild(empty);
-        } else {
-          active.forEach(r => activeList.appendChild(renderOrderCard(r)));
-        }
-
-        if (!archived.length){
-          const empty = document.createElement('div');
-          empty.style.color = 'var(--muted)';
-          empty.style.padding = '10px 2px';
-          empty.textContent = 'No archived requests.';
-          archivedList.appendChild(empty);
-        } else {
-          archived.forEach(r => archivedList.appendChild(renderOrderCard(r)));
-        }
-
-        loginCard.style.display = 'none';
-        dashboardCard.style.display = 'block';
-        showDashStatus('Loaded ' + data.length + ' request(s).', false);
-      } catch(err){
-        console.error(err);
-        showDashStatus('Error loading requests: ' + err.message, true);
-      }
-    }
-
-    // =========================
-    // AUTH
-    // =========================
-    loginBtn.addEventListener('click', async () => {
-      loginStatus.style.display = 'block';
-      loginStatus.textContent = 'Signing in...';
-      loginStatus.classList.remove('status-error', 'status-success');
-
-      const email = document.getElementById('adminEmail').value.trim();
-      const password = document.getElementById('adminPassword').value;
-
-      try{
-        const res = await fetch('/api/login', {
-          method:'POST',
-          headers:{ 'Content-Type':'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Invalid email or password');
-
-        loginStatus.textContent = 'Login successful. Loading dashboard...';
-        loginStatus.classList.add('status-success');
-
-        await loadRequests();
-      } catch(err){
-        loginStatus.textContent = err.message;
-        loginStatus.classList.add('status-error');
-      }
+        window.open(buildGmailUrl(email, 'Your LM3DPTFY order has shipped — Tracking # ' + val,
+          'Hi ' + name + ',\n\nGreat news — your print has shipped!\n\nTracking number: ' + val + '\n\n' + (stlLink ? 'Your model link: ' + stlLink + '\n\n' : '') + 'Thanks!\n— LM3DPTFY'), '_blank');
+      }, 10);
     });
+    trRow.appendChild(trLab); trRow.appendChild(trackInput);
 
-    // Allow Enter key on password field to trigger login
-    document.getElementById('adminPassword').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') loginBtn.click();
-    });
+    rightKv.appendChild(stRow); rightKv.appendChild(fuRow); rightKv.appendChild(trRow);
+    right.appendChild(rightKv);
+    body.appendChild(left); body.appendChild(right);
+    wrap.appendChild(top); wrap.appendChild(body);
+    return wrap;
+  }
 
-    async function doLogout(){
-      try{ await fetch('/api/logout', { method:'POST', credentials:'include' }); } catch(e){}
-      loginCard.style.display = 'block';
-      dashboardCard.style.display = 'none';
-      document.getElementById('adminEmail').value = '';
-      document.getElementById('adminPassword').value = '';
-    }
-    logoutTopBtn.addEventListener('click', doLogout);
-
-    // =========================
-    // SHEETS ACTIONS
-    // =========================
-    reloadBtn?.addEventListener('click', async () => {
-      showDashStatus('Refreshing from Google Sheets...', false);
-      try{
-        const res = await fetch('/api/sheets/reload', { method:'POST', credentials:'include' });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Reload failed');
-        showDashStatus('Reloaded ' + (data.count || 0) + ' requests from Sheets.', false);
-        await loadRequests();
-      } catch(err){
-        showDashStatus('Reload failed: ' + err.message, true);
+  async function loadRequests() {
+    try {
+      await loadSettings();
+      const res = await fetch('/api/requests', { credentials: 'include' });
+      if (res.status === 401) {
+        loginCard.style.display = 'block'; dashboardCard.style.display = 'none'; logoutTopBtn.style.display = 'none'; return;
       }
-    });
+      const data     = await res.json();
+      const active   = data.filter(r => !r.archived);
+      const archived = data.filter(r =>  r.archived);
+      activeList.innerHTML = ''; archivedList.innerHTML = '';
+      if (!active.length)   { const el = document.createElement('div'); el.className = 'empty-state'; el.textContent = 'No active requests.'; activeList.appendChild(el); }
+      else active.forEach(r => activeList.appendChild(renderOrderCard(r)));
+      if (!archived.length) { const el = document.createElement('div'); el.className = 'empty-state'; el.textContent = 'No archived requests.'; archivedList.appendChild(el); }
+      else archived.forEach(r => archivedList.appendChild(renderOrderCard(r)));
+      loginCard.style.display = 'none'; dashboardCard.style.display = 'block'; logoutTopBtn.style.display = 'inline-flex';
+      showDashStatus('Loaded ' + data.length + ' request(s).', false);
+    } catch(e) { showDashStatus('Error: ' + e.message, true); }
+  }
 
-    syncBtn?.addEventListener('click', async () => {
-      showDashStatus('Syncing to Google Sheets...', false);
-      try{
-        const res = await fetch('/api/sheets/sync', { method:'POST', credentials:'include' });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Sync failed');
-        showDashStatus('Synced ' + (data.count || 0) + ' requests to Sheets.', false);
-      } catch(err){
-        showDashStatus('Sync failed: ' + err.message, true);
-      }
-    });
+  loginBtn.addEventListener('click', async () => {
+    loginStatus.style.display = 'block'; loginStatus.textContent = 'Signing in…'; loginStatus.className = 'status';
+    const email    = document.getElementById('adminEmail').value.trim();
+    const password = document.getElementById('adminPassword').value;
+    try {
+      const res  = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password }) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Invalid email or password');
+      loginStatus.textContent = 'Login successful. Loading…'; loginStatus.className = 'status status-ok';
+      await loadRequests();
+    } catch(e) { loginStatus.textContent = e.message; loginStatus.className = 'status status-err'; }
+  });
 
-    // Load on page open
-    loadRequests();
-  </script>
+  document.getElementById('adminPassword').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') loginBtn.click();
+  });
+
+  async function doLogout() {
+    try { await fetch('/api/logout', { method:'POST', credentials:'include' }); } catch {}
+    loginCard.style.display = 'block'; dashboardCard.style.display = 'none'; logoutTopBtn.style.display = 'none';
+    document.getElementById('adminEmail').value = ''; document.getElementById('adminPassword').value = '';
+  }
+  logoutTopBtn.addEventListener('click', doLogout);
+
+  reloadBtn?.addEventListener('click', async () => {
+    showDashStatus('Refreshing from Google Sheets…', false);
+    try {
+      const res  = await fetch('/api/sheets/reload', { method:'POST', credentials:'include' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Reload failed');
+      showDashStatus('Reloaded ' + (data.count||0) + ' requests.', false);
+      await loadRequests();
+    } catch(e) { showDashStatus('Reload failed: ' + e.message, true); }
+  });
+
+  syncBtn?.addEventListener('click', async () => {
+    showDashStatus('Syncing to Google Sheets…', false);
+    try {
+      const res  = await fetch('/api/sheets/sync', { method:'POST', credentials:'include' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Sync failed');
+      showDashStatus('Synced ' + (data.count||0) + ' requests.', false);
+    } catch(e) { showDashStatus('Sync failed: ' + e.message, true); }
+  });
+
+  loadRequests();
+</script>
 
 </body>
 </html>
