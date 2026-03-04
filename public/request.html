@@ -1,88 +1,113 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Request a 3D Print Quote | Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Submit your model link and get a custom 3D print quote emailed to you. Usually responds within one business day." />
+
+  <!-- Canonical URL -->
+
+  <link rel="canonical" href="https://www.lm3dptfy.online/request.html" />
+
+  <!-- Favicon -->
+
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- Open Graph / Social sharing -->
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.lm3dptfy.online/request.html" />
+  <meta property="og:title" content="Request a 3D Print Quote | LM3DPTFY" />
+  <meta property="og:description" content="Submit your model link and get a custom 3D print quote emailed to you." />
+  <meta property="og:image" content="https://www.lm3dptfy.online/lm3dptfy-logo-tp-cropped.png" />
 
   <!-- Cache-bust -->
+
   <link rel="stylesheet" href="/style.css?v=req5" />
 </head>
 
 <body>
   <div class="page-shell">
 
-    <header class="topbar">
-      <div class="topbar-inner">
-        <a class="brand" href="/" title="LM3DPTFY">
-          <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
-          <div class="brand-title">
-            <strong>Let Me 3D Print That For You</strong>
-            <span>Quote request</span>
-          </div>
-        </a>
+```
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/" title="LM3DPTFY">
+      <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
+      <div class="brand-title">
+        <strong>Let Me 3D Print That For You</strong>
+        <span>Quote request</span>
+      </div>
+    </a>
 
-        <div class="nav-right">
-          <a class="pill-link" href="/">Home</a>
+    <div class="nav-right">
+      <a class="pill-link" href="/">Home</a>
+    </div>
+  </div>
+</header>
+
+<main class="page-main">
+  <div class="main-inner">
+
+    <section class="hero">
+      <h1>Where should I send your quote?</h1>
+      <p>I'll review your model link, estimate material and print time, then email you a quote.</p>
+    </section>
+
+    <section class="card" style="max-width:720px; margin: 0 auto 14px; padding: 14px 16px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div style="color:var(--muted); font-size:.92rem;">
+          <strong style="color:var(--text);">Detected library:</strong>
+          <span id="sourceName">Checking…</span>
+        </div>
+        <a id="browseSourceBtn" class="btn-primary btn-sm" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">
+          Browse
+        </a>
+      </div>
+    </section>
+
+    <section class="card form-card" style="max-width:720px;">
+      <!-- FIX (Accessibility): Removed <form> wrapper per style guide; using div with
+           proper <label for="..."> associations on all inputs so screen readers work correctly -->
+      <div id="quoteForm">
+        <input type="hidden" id="stlLinkHidden" name="stlLink" />
+
+        <!-- FIX (Accessibility): All labels now use <label for="id"> to associate with their inputs -->
+        <label class="field-label" for="name">Your name</label>
+        <input class="field-input" type="text" id="name" required autocomplete="name" />
+
+        <div style="height:10px;"></div>
+
+        <label class="field-label" for="email">Email</label>
+        <input class="field-input" type="email" id="email" required autocomplete="email" />
+
+        <div style="height:10px;"></div>
+
+        <label class="field-label" for="details">Notes (optional)</label>
+        <textarea class="field-input" id="details" rows="4" style="border-radius:16px;"></textarea>
+
+        <button class="btn-primary btn-block" type="button" id="submitBtn">Submit request</button>
+
+        <div id="statusMessage" class="status-message" style="display:none;"></div>
+
+        <div class="small-note">
+          I usually respond within one business day. If I have questions about wall thickness,
+          print orientation, or supports, I'll ask before printing.
         </div>
       </div>
-    </header>
+    </section>
 
-    <main class="page-main">
-      <div class="main-inner">
+  </div>
+</main>
 
-        <section class="hero">
-          <h1>Where should I send your quote?</h1>
-          <p>I’ll review your model link, estimate material and print time, then email you a quote.</p>
-        </section>
-
-        <section class="card" style="max-width:720px; margin: 0 auto 14px; padding: 14px 16px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-            <div style="color:var(--muted); font-size:.92rem;">
-              <strong style="color:var(--text);">Detected library:</strong>
-              <span id="sourceName">Checking…</span>
-            </div>
-            <a id="browseSourceBtn" class="btn-primary btn-sm" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">
-              Browse
-            </a>
-          </div>
-        </section>
-
-        <section class="card form-card" style="max-width:720px;">
-          <form id="quoteForm">
-            <input type="hidden" id="stlLinkHidden" name="stlLink" />
-
-            <label class="field-label" for="name">Your name</label>
-            <input class="field-input" type="text" id="name" required />
-
-            <div style="height:10px;"></div>
-
-            <label class="field-label" for="email">Email</label>
-            <input class="field-input" type="email" id="email" required />
-
-            <div style="height:10px;"></div>
-
-            <label class="field-label" for="details">Notes (optional)</label>
-            <textarea class="field-input" id="details" rows="4" style="border-radius:16px;"></textarea>
-
-            <button class="btn-primary btn-block" type="submit" id="submitBtn">Submit request</button>
-
-            <div id="statusMessage" class="status-message" style="display:none;"></div>
-
-            <div class="small-note">
-              I usually respond within one business day. If I have questions about wall thickness,
-              print orientation, or supports, I’ll ask before printing.
-            </div>
-          </form>
-        </section>
-
-      </div>
-    </main>
-
-    <footer class="site-footer">
-      Let Me 3D Print That For You · LM3DPTFY.online · Questions? Email
-      <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
-    </footer>
+<footer class="site-footer">
+  Let Me 3D Print That For You · LM3DPTFY.online · Questions? Email
+  <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+</footer>
+```
 
   </div>
 
@@ -133,10 +158,10 @@
             browseBtn.href = match.browseUrl;
           }
         } else {
-          sourceNameEl.textContent = 'Unknown (we’ll confirm compatibility)';
+          sourceNameEl.textContent = "Unknown (we'll confirm compatibility)";
         }
       } catch (e){
-        sourceNameEl.textContent = 'Unknown (we’ll confirm compatibility)';
+        sourceNameEl.textContent = "Unknown (we'll confirm compatibility)";
       }
     }
 
@@ -149,9 +174,7 @@
       btn.disabled = true;
     }
 
-    document.getElementById('quoteForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
+    btn.addEventListener('click', async () => {
       const payload = {
         stlLink: document.getElementById('stlLinkHidden').value,
         name: document.getElementById('name').value.trim(),
@@ -162,6 +185,20 @@
       if (!payload.stlLink) {
         statusEl.style.display = 'block';
         statusEl.textContent = '✗ Error: No model link provided. Please go back to the homepage.';
+        statusEl.className = 'status-message status-error';
+        return;
+      }
+
+      if (!payload.name) {
+        statusEl.style.display = 'block';
+        statusEl.textContent = '✗ Please enter your name.';
+        statusEl.className = 'status-message status-error';
+        return;
+      }
+
+      if (!payload.email) {
+        statusEl.style.display = 'block';
+        statusEl.textContent = '✗ Please enter your email address.';
         statusEl.className = 'status-message status-error';
         return;
       }
@@ -193,5 +230,6 @@
       }
     });
   </script>
+
 </body>
 </html>
