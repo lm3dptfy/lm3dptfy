@@ -1,195 +1,462 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <title>Let Me 3D Print That For You</title>
+  <title>LM3DPTFY — Let Me 3D Print That For You</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Paste a public model link and get a custom 3D print quote by email. Fast quotes, clear ETA, no spam." />
-
-  <!-- Canonical URL -->
-
+  <meta name="description" content="Veteran-owned 3D printing service. Paste a model link, get a fast quote by email, and see a photo before it ships — all made and shipped inside the USA." />
   <link rel="canonical" href="https://www.lm3dptfy.online/" />
-
-  <!-- Favicon -->
-
   <link rel="icon" href="/favicon.ico" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-
-  <!-- Open Graph / Social sharing -->
-
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.lm3dptfy.online/" />
-  <meta property="og:title" content="Let Me 3D Print That For You" />
-  <meta property="og:description" content="Paste a public model link and get a custom 3D print quote by email. Fast quotes, clear ETA, no spam." />
-  <meta property="og:image" content="https://www.lm3dptfy.online/lm3dptfy-logo-tp-cropped.png" />
-
-  <!-- Twitter card -->
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Let Me 3D Print That For You" />
-  <meta name="twitter:description" content="Paste a public model link and get a custom 3D print quote by email." />
-  <meta name="twitter:image" content="https://www.lm3dptfy.online/lm3dptfy-logo-tp-cropped.png" />
-
-  <!-- Cache-bust -->
-
-  <link rel="stylesheet" href="/style.css?v=home5" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://www.lm3dptfy.online/" />
+  <meta property="og:title"       content="LM3DPTFY — Let Me 3D Print That For You" />
+  <meta property="og:description" content="Veteran-owned 3D printing service. Fast quotes, photo before ship, ships USA only." />
+  <meta property="og:image"       content="https://www.lm3dptfy.online/logo-lm3dptfy-wh.png" />
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content="LM3DPTFY — Let Me 3D Print That For You" />
+  <meta name="twitter:description" content="Veteran-owned 3D printing. Fast quotes, ships USA only." />
+  <meta name="twitter:image"       content="https://www.lm3dptfy.online/logo-lm3dptfy-wh.png" />
+  <link rel="stylesheet" href="/style.css?v=3.0" />
 </head>
-
 <body>
-  <div class="page-shell">
+
+<!-- ===== NAV ===== -->
+
+<nav class="nav" id="mainNav">
+  <a class="nav-logo" href="/" title="LM3DPTFY">
+    <img src="/logo-lm3dptfy-wh.png" alt="LM3DPTFY logo" />
+    <div class="nav-logo-text">
+      <strong>LM3DPTFY</strong>
+      <span>Let Me 3D Print That For You</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="#how-it-works">How It Works</a>
+    <a class="nav-link" href="#pricing">Pricing</a>
+    <a class="nav-link" href="#faq">FAQ</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"><span class="i-moon">🌙</span><span class="i-sun">☀️</span></button>
+    <a class="nav-cta" href="/request.html">Get a Quote</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">🇺🇸 Veteran Owned &amp; Operated · Ships USA Only</div>
+    <h1>Let Me <em>3D Print</em><br/>That For You.</h1>
+    <p class="hero-sub">Paste a model link. Get a real quote by email. See a photo of your finished print before it ever ships.</p>
+    <div class="hero-cta-group">
+      <a class="btn btn-solid" href="/request.html">Start Your Free Quote →</a>
+      <a class="btn btn-outline" href="#how-it-works">See How It Works</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ===== SUPPORTED LIBRARIES ===== -->
+
+<section class="section section-sm section-alt">
+  <div class="container container-md">
+    <span class="eyebrow">Browse & Submit</span>
+    <h2 class="section-title">Supported Model Libraries</h2>
+    <div class="section-divider"></div>
+    <p class="section-body" style="margin-bottom:8px;">Find your model on a supported library, copy the link, and paste it in the quote form. Don't see your library? Submit anyway — we'll confirm compatibility.</p>
+    <div id="sitesList" class="lib-row"></div>
+    <div id="sitesEmpty" style="display:none;color:var(--ink3);font-size:.88rem;margin-top:10px;">No libraries configured yet — paste any link and we'll check it out.</div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+
+<section class="section" id="how-it-works">
+  <div class="container">
+    <span class="eyebrow">Simple Process</span>
+    <h2 class="section-title">Three Steps to Your<br/><em>Finished Print</em></h2>
+    <div class="section-divider"></div>
+    <div class="steps-row">
+      <div class="step">
+        <div class="step-n">01</div>
+        <h3>Find &amp; Paste</h3>
+        <p>Browse a supported model library, copy the direct link to your model, and paste it in the quote form above.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">02</div>
+        <h3>Receive Your Quote</h3>
+        <p>We review your model and email you a full price and timeline quote — typically within one business day. No guesswork, no surprises.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div>
+        <h3>Approve &amp; Ship</h3>
+        <p>Approve the quote, we print it, then send you a photo of the finished piece before anything gets packaged and mailed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY US — split layout ===== -->
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="split">
+      <div>
+        <span class="eyebrow">Who We Are</span>
+        <h2 class="section-title">Veteran-Owned,<br/><em>American-Made.</em></h2>
+        <div class="section-divider"></div>
+        <p class="section-body">We are a proudly veteran-owned and operated 3D printing service. Every print is made and shipped exclusively within the United States. We believe in honest pricing, clear communication, and standing behind the work we deliver.</p>
+        <ul style="list-style:none;margin-top:28px;display:flex;flex-direction:column;gap:14px;">
+          <li style="display:flex;align-items:flex-start;gap:14px;font-size:.95rem;color:var(--ink2);font-weight:300;line-height:1.6;">
+            <span style="color:var(--teal-light);font-size:1.1rem;flex-shrink:0;margin-top:1px;">✓</span>
+            <span><strong style="color:var(--ink);font-weight:600;">Photo before shipment</strong> — you approve the print before it ever leaves our hands.</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:14px;font-size:.95rem;color:var(--ink2);font-weight:300;line-height:1.6;">
+            <span style="color:var(--teal-light);font-size:1.1rem;flex-shrink:0;margin-top:1px;">✓</span>
+            <span><strong style="color:var(--ink);font-weight:600;">PLA filament</strong> — durable, eco-friendly, available in a wide range of colors.</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:14px;font-size:.95rem;color:var(--ink2);font-weight:300;line-height:1.6;">
+            <span style="color:var(--teal-light);font-size:1.1rem;flex-shrink:0;margin-top:1px;">✓</span>
+            <span><strong style="color:var(--ink);font-weight:600;">Turnaround varies by complexity</strong> — we keep you informed at every step, from printer to mailbox.</span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:14px;font-size:.95rem;color:var(--ink2);font-weight:300;line-height:1.6;">
+            <span style="color:var(--teal-light);font-size:1.1rem;flex-shrink:0;margin-top:1px;">✓</span>
+            <span><strong style="color:var(--ink);font-weight:600;">Transparent quotes</strong> — priced on actual material and print time. You approve before we start.</span>
+          </li>
+        </ul>
+      </div>
+      <div class="split-visual">
+        <div class="split-icon-grid">
+          <div class="sig">🖨️</div>
+          <div class="sig">🧵</div>
+          <div class="sig">🇺🇸</div>
+          <div class="sig">📸</div>
+          <div class="sig">⚡</div>
+          <div class="sig">🔒</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TRUST BADGES ===== -->
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow">What You Get</span>
+    <h2 class="section-title">Built Around<br/><em>Your Confidence.</em></h2>
+    <div class="section-divider"></div>
+    <div class="trust-strip">
+      <div class="trust-item">
+        <div class="icon">📸</div>
+        <h3>Photo Before Ship</h3>
+        <p>We photograph your finished print and send it to you before anything is packaged. You approve — or we make it right.</p>
+      </div>
+      <div class="trust-item">
+        <div class="icon">💬</div>
+        <h3>Real Communication</h3>
+        <p>Questions about wall thickness, orientation, or supports? We ask before printing — never guess your way to a failed build.</p>
+      </div>
+      <div class="trust-item">
+        <div class="icon">🇺🇸</div>
+        <h3>USA Prints &amp; Ships</h3>
+        <p>Every order is manufactured and shipped from within the United States. Veteran-owned and operated.</p>
+      </div>
+      <div class="trust-item">
+        <div class="icon">🧵</div>
+        <h3>PLA Filament</h3>
+        <p>We use quality PLA — biodegradable, durable, and available in many colors. Ask about your preferred color in the notes.</p>
+      </div>
+      <div class="trust-item">
+        <div class="icon">📋</div>
+        <h3>Honest Quotes</h3>
+        <p>Priced on actual material use and print time — no hidden fees. Your quote is exact and approved before work begins.</p>
+      </div>
+      <div class="trust-item">
+        <div class="icon">⚡</div>
+        <h3>Status Updates</h3>
+        <p>Track your order from "sent to printer" through to "shipped." We keep you in the loop at every stage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+
+<section class="section section-alt" id="pricing">
+  <div class="container">
+    <span class="eyebrow">Pricing Guide</span>
+    <h2 class="section-title">Rough Ranges.<br/><em>Exact Quote by Email.</em></h2>
+    <div class="section-divider"></div>
+    <p class="section-body">Final pricing depends on your model's complexity, infill density, and size. These are ballpark ranges — your emailed quote will reflect the actual cost.</p>
+    <div class="pricing-row">
+      <div class="price-card">
+        <div class="price-tag">Small</div>
+        <div class="price-name">Keychain-Sized</div>
+        <div class="price-amount">$5–$20</div>
+        <p class="price-desc">Under approximately 3 inches. Coins, keychains, clips, figurines, small parts.</p>
+        <ul class="price-list">
+          <li>Keychains &amp; pins</li>
+          <li>Miniatures &amp; figurines</li>
+          <li>Small replacement parts</li>
+          <li>Badges &amp; emblems</li>
+        </ul>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tag">Medium · Most Common</div>
+        <div class="price-name">Palm-Sized</div>
+        <div class="price-amount">$20–$50</div>
+        <p class="price-desc">3 to 6 inches. Decorative models, functional brackets, props, organizers.</p>
+        <ul class="price-list">
+          <li>Display models &amp; busts</li>
+          <li>Functional brackets &amp; mounts</li>
+          <li>Desk organizers &amp; holders</li>
+          <li>Game pieces &amp; props</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <div class="price-tag">Large</div>
+        <div class="price-name">Two-Hand Sized</div>
+        <div class="price-amount">$50–$100+</div>
+        <p class="price-desc">6 inches and up. Helmets, large display pieces, enclosures, assemblies.</p>
+        <ul class="price-list">
+          <li>Helmets &amp; cosplay pieces</li>
+          <li>Large display models</li>
+          <li>Multi-part assemblies</li>
+          <li>Complex enclosures</li>
+        </ul>
+      </div>
+    </div>
+    <p class="price-note">Prices are estimates only. Color preferences? Note them in your request — we carry a variety of PLA colors.<br/>Your final quote is confirmed by email before we ever start printing.</p>
+  </div>
+</section>
+
+<!-- ===== QUOTE BANNER ===== -->
+
+<section class="section" style="padding:80px 0;">
+  <div class="container">
+    <div class="quote-banner">
+      <div class="quote-banner-text">
+        <span class="eyebrow" style="margin-bottom:10px;">Free &amp; No Obligation</span>
+        <h2>Ready to Print?<br/><em>Let's get started.</em></h2>
+        <p style="margin-top:14px;">Paste your model link, tell us any color or size preferences, and we'll have a quote in your inbox — usually by the next business day.</p>
+      </div>
+      <div class="inline-form">
+        <div class="field">
+          <label class="label" for="heroLink">Your Model Link</label>
+          <input class="input" type="url" id="heroLink" placeholder="Paste STL / model URL here…" />
+        </div>
+        <a class="btn btn-solid" id="heroCta" href="/request.html">Get My Free Quote →</a>
+        <p style="font-size:.78rem;color:var(--ink3);font-weight:300;text-align:center;line-height:1.5;">No payment until you approve the quote and the final photo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+
+<section class="section section-alt" id="faq">
+  <div class="container container-md">
+    <span class="eyebrow">Questions</span>
+    <h2 class="section-title">Frequently Asked<br/><em>Questions.</em></h2>
+    <div class="section-divider"></div>
+    <div class="faq-stack">
 
 ```
-<!-- Top bar -->
-<header class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="/" title="LM3DPTFY">
-      <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
-      <div class="brand-title">
-        <strong>Let Me 3D Print That For You</strong>
-        <span>Fast quotes • Clear ETA • No spam</span>
-      </div>
-    </a>
-
-    <div class="nav-right"></div>
+  <div class="faq-item">
+    <button class="faq-q" aria-expanded="false">What material do you print in?<span class="faq-icon">+</span></button>
+    <div class="faq-a" hidden>We print in PLA (Polylactic Acid) filament — a durable, biodegradable thermoplastic available in many colors. PLA is excellent for decorative items, display models, and lightweight functional parts. Mention your preferred color in your request notes and we'll do our best to match.</div>
   </div>
-</header>
 
-<main class="page-main">
-  <div class="main-inner">
+  <div class="faq-item">
+    <button class="faq-q" aria-expanded="false">How long does it take?<span class="faq-icon">+</span></button>
+    <div class="faq-a" hidden>Turnaround depends on your model's size and complexity. Small prints may be ready 1–3 business days after quote approval; larger or more complex pieces take longer. We include an estimated timeline in your quote and keep you updated throughout.</div>
+  </div>
 
-    <section class="hero">
-      <h1>Turn STL Files into real prints.</h1>
-      <p>
-        Paste a public link, from the options below, and I'll email you pricing, ETA, and any quick questions before printing.
-      </p>
-    </section>
+  <div class="faq-item">
+    <button class="faq-q" aria-expanded="false">Do you ship outside the USA?<span class="faq-icon">+</span></button>
+    <div class="faq-a" hidden>No — we are a veteran-owned American business and currently print and ship within the United States only.</div>
+  </div>
 
-    <!-- Get Quote card -->
-    <section class="card form-card">
-      <form class="stl-form" action="/request.html" method="GET">
-        <label for="stlLink" class="field-label">Model link</label>
+  <div class="faq-item">
+    <button class="faq-q" aria-expanded="false">Will it look factory-made?<span class="faq-icon">+</span></button>
+    <div class="faq-a" hidden>Our prints are produced on FDM (Fused Deposition Modeling) printers, which build objects layer by layer. While we work to minimize layer lines and deliver clean results, FDM prints will have some visible texture — this is normal for the technology. They will not match the surface finish of injection-molded products. If you'd like sanding or post-processing, mention it in your request.</div>
+  </div>
 
-        <input
-          type="url"
-          id="stlLink"
-          name="link"
-          class="field-input"
-          placeholder="https://..."
-          required
-        />
+  <div class="faq-item">
+    <button class="faq-q" aria-expanded="false">Why are all sales final?<span class="faq-icon">+</span></button>
+    <div class="faq-a" hidden>Every print is custom-made to order and cannot be restocked. To protect you, we send a photo of the completed print before shipping so you can review it and raise any concerns. All sales are final once the item ships.</div>
+  </div>
 
-        <button type="submit" class="btn-primary btn-block">
-          Get Quote
-        </button>
+  <div class="faq-item">
+    <button class="faq-q" aria-expanded="false">Can I request a specific color?<span class="faq-icon">+</span></button>
+    <div class="faq-a" hidden>Yes. We carry a variety of PLA colors. Just mention your preference in the Notes field when submitting your request. We'll let you know in the quote if your first choice isn't in stock.</div>
+  </div>
 
-        <p class="small-note">
-          Choose a supported library below to browse models, then paste the model link here.
-        </p>
+  <div class="faq-item">
+    <button class="faq-q" aria-expanded="false">What link format do I need?<span class="faq-icon">+</span></button>
+    <div class="faq-a" hidden>Paste the public URL to the model on any supported library (like STLFlix). No file upload needed. If your model is on a site we don't currently list, paste the link anyway — we'll check licensing and compatibility before printing.</div>
+  </div>
 
-        <p class="small-note">
-          Don't see your library yet? Paste the link anyway — I'll confirm licensing/compatibility before printing.
-        </p>
-      </form>
-    </section>
+  <div class="faq-item">
+    <button class="faq-q" aria-expanded="false">Can you print any model I send?<span class="faq-icon">+</span></button>
+    <div class="faq-a" hidden>Not all requests can be fulfilled. We do not print licensed or copyrighted characters (Disney, Marvel, etc.), functional weapons, or illegal items. We reserve the right to decline any request at our discretion. See Terms &amp; Restrictions below for full details.</div>
+  </div>
 
-    <!-- Browse supported libraries card -->
-    <section class="card" style="padding:16px; margin-top:14px;">
-      <h2 class="section-title" style="margin:0 0 6px;">Browse supported libraries</h2>
-      <p style="margin:0 0 12px; color:var(--muted); font-size:.95rem; line-height:1.45;">
-        Open a library in a new tab, find your model, then paste the link above.
-      </p>
-
-      <div id="sitesList" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
-
-      <div id="sitesEmpty"
-           style="display:none; margin-top:10px; padding:12px; border-radius:16px; border:1px dashed rgba(15,23,42,.20); background: rgba(255,255,255,.55); color:var(--muted); font-size:.92rem; line-height:1.45;">
-        No supported libraries are listed yet.<br/>
-        You can still paste your link above — I'll confirm licensing/compatibility before printing.
-      </div>
-    </section>
-
-    <section class="how-grid" id="how">
-      <div class="card list-card">
-        <h2 class="section-title" style="margin-top:0;">How this works</h2>
-        <ol>
-          <li>Find a model on an approved library (STLFlix to start) and copy the link.</li>
-          <li>Paste it here, then add your name/email on the next step.</li>
-          <li>I'll reply with a quote + ETA (and any questions) before printing.</li>
-        </ol>
-      </div>
-
-      <div class="feature-grid">
-        <div class="feature">
-          <h3>Quote</h3>
-          <p>Price based on material, size, and print time — no guessing.</p>
-        </div>
-        <div class="feature">
-          <h3>Timeline</h3>
-          <p>Clear status from "sent to printer" to "shipped".</p>
-        </div>
-        <div class="feature">
-          <h3>Next steps</h3>
-          <p>Approve, tweak, or ask questions — quick and simple.</p>
-        </div>
-      </div>
-    </section>
-
-    <p class="small-note" style="margin-top:18px;">
-      I won't print weapons, illegal items, or obviously infringing IP.
-    </p>
+</div>
+```
 
   </div>
-</main>
+</section>
 
-<footer class="site-footer">
-  Let Me 3D Print That For You · LM3DPTFY.online ·
-  Questions? Email <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+<!-- ===== LEGAL ===== -->
+
+<section class="section legal-section" id="terms">
+  <div class="container">
+    <span class="eyebrow">Policies</span>
+    <h2 class="section-title">Terms &amp; Restrictions.</h2>
+    <div class="section-divider"></div>
+    <div class="legal-grid">
+
+```
+  <div class="legal-block">
+    <h3>⚠ Intellectual Property</h3>
+    <p>LM3DPTFY will not reproduce any item that infringes on the intellectual property rights of third parties — including copyrighted characters, trademarked logos, or proprietary designs owned by entertainment companies such as Disney, Marvel, DC, Nintendo, and similar licensors.</p>
+    <p>By submitting a request, you warrant that you have the legal right to reproduce the design and that it does not infringe any patent, copyright, or trademark. Requests found to involve infringing content will be declined.</p>
+  </div>
+
+  <div class="legal-block">
+    <h3>⚠ Prohibited Items</h3>
+    <p>We will not print any item designed or intended to function as a weapon capable of causing bodily harm — including functional firearms, firearm components, or any device engineered to injure. We will not print anything illegal under applicable federal, state, or local law.</p>
+    <p>LM3DPTFY reserves the right to refuse any request at our sole discretion, for any reason, without obligation to explain.</p>
+  </div>
+
+  <div class="legal-block">
+    <h3>📸 Pre-Shipment Approval &amp; All Sales Final</h3>
+    <p>Prior to shipment, we will provide a photograph of your completed print for your review. Because all items are <strong>custom-made to order</strong>, all sales are final once the item has shipped. No returns, exchanges, or refunds will be accepted after shipment.</p>
+    <p>By allowing shipment to proceed, you acknowledge acceptance of the item as reviewed.</p>
+  </div>
+
+  <div class="legal-block">
+    <h3>🖨 FDM Print Quality</h3>
+    <p>All items are produced using <strong>FDM (Fused Deposition Modeling)</strong> technology. FDM prints are built layer by layer and may exhibit visible layer lines, minor surface texture, or slight dimensional variation. These are normal characteristics of FDM printing.</p>
+    <p><strong>Our prints are not manufactured products</strong> and will not have the surface finish of injection-molded items. By submitting a request, you acknowledge and accept these characteristics.</p>
+  </div>
+
+</div>
+<p style="margin-top:28px;font-size:.82rem;color:var(--ink3);font-weight:300;line-height:1.65;">
+  LM3DPTFY reserves the right to modify these terms at any time. Continued use constitutes acceptance of current terms. We are not responsible for carrier delays. Questions? <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
+</p>
+```
+
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="/logo-lm3dptfy-wh.png" alt="LM3DPTFY logo" />
+        <div class="footer-brand-name">LM3DPTFY.ONLINE</div>
+        <p>Veteran-owned 3D printing service. We print and ship exclusively within the United States.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#terms">Terms</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Get Started</h4>
+        <ul>
+          <li><a href="/request.html">Submit a Quote</a></li>
+          <li><a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a></li>
+        </ul>
+        <div style="margin-top:24px;padding:12px 16px;background:rgba(0,154,184,.08);border:1px solid var(--line2);border-radius:8px;font-size:.78rem;color:var(--ink3);font-weight:300;line-height:1.6;">
+          🇺🇸 Veteran Owned · Prints &amp; Ships USA Only · PLA Filament · All Sales Final
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 LM3DPTFY.ONLINE — Let Me 3D Print That For You. All rights reserved.</span>
+      <span>FDM prints may show layer lines · We do not print licensed IP or functional weapons</span>
+    </div>
+  </div>
 </footer>
-```
 
-  </div>
+<script>
+  // Theme
+  const html = document.documentElement;
+  const saved = localStorage.getItem('lm3d-theme');
+  if (saved) html.setAttribute('data-theme', saved);
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('lm3d-theme', next);
+  });
 
-  <script>
-    async function loadSupportedSites(){
-      const list = document.getElementById('sitesList');
-      const empty = document.getElementById('sitesEmpty');
+  // Nav scroll
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
 
-      list.innerHTML = '';
-      empty.style.display = 'none';
-
-      try{
-        const res = await fetch('/api/public/sites', { headers: { 'Accept': 'application/json' } });
-        const data = await res.json().catch(() => ({}));
-        const sites = Array.isArray(data.sites) ? data.sites : [];
-
-        if (!sites.length){
-          empty.style.display = 'block';
-          return;
-        }
-
-        sites.forEach((s) => {
-          const a = document.createElement('a');
-          a.href = s.browseUrl || '#';
-          a.target = '_blank';
-          a.rel = 'noopener noreferrer';
-          a.className = 'btn-primary btn-sm';
-          a.textContent = `Browse ${s.name || 'library'}`;
-
-          if (!s.browseUrl){
-            a.style.opacity = '0.6';
-            a.style.pointerEvents = 'none';
-          }
-
-          list.appendChild(a);
-        });
-      }catch(err){
-        empty.style.display = 'block';
-      }
+  // Hero CTA carries link
+  document.getElementById('heroCta').addEventListener('click', (e) => {
+    const link = document.getElementById('heroLink').value.trim();
+    if (link) {
+      e.preventDefault();
+      window.location.href = '/request.html?link=' + encodeURIComponent(link);
     }
+  });
 
-    loadSupportedSites();
-  </script>
+  // Libraries
+  async function loadSites() {
+    const list  = document.getElementById('sitesList');
+    const empty = document.getElementById('sitesEmpty');
+    list.innerHTML = ''; empty.style.display = 'none';
+    try {
+      const res   = await fetch('/api/public/sites', { headers: { Accept: 'application/json' } });
+      const data  = await res.json().catch(() => ({}));
+      const sites = Array.isArray(data.sites) ? data.sites : [];
+      if (!sites.length) { empty.style.display = 'block'; return; }
+      sites.forEach(s => {
+        const a = document.createElement('a');
+        a.href = s.browseUrl || '#'; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.className = 'btn btn-outline btn-sm';
+        a.textContent = s.name || 'Library';
+        if (!s.browseUrl) { a.style.opacity = '.5'; a.style.pointerEvents = 'none'; }
+        list.appendChild(a);
+      });
+    } catch { empty.style.display = 'block'; }
+  }
+  loadSites();
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item   = btn.closest('.faq-item');
+      const answer = item.querySelector('.faq-a');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-a').hidden = true;
+        i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        answer.hidden = false;
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
