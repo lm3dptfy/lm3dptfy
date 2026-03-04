@@ -248,7 +248,7 @@ console.log('GOOGLE_SERVICE_ACCOUNT not set. Google Sheets integration disabled.
 function escapeHtml(str) {
 return String(str == null ? '' : str)
 .replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>')
-.replace(/"/g, '"').replace(/'/g, ''');
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 // ========== EMAIL ================================================
