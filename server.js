@@ -288,7 +288,9 @@ console.error('Error sending admin notification email via Resend:', err);
 
 // ========== MIDDLEWARE ===========================================
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 app.use(compression());
 app.use(cors({ origin: ALLOWED_ORIGIN, credentials: true }));
 app.use(express.json());
