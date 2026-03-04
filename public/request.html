@@ -1,235 +1,349 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <title>Request a 3D Print Quote | Let Me 3D Print That For You</title>
+  <title>Request a Quote | LM3DPTFY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Submit your model link and get a custom 3D print quote emailed to you. Usually responds within one business day." />
-
-  <!-- Canonical URL -->
-
+  <meta name="description" content="Submit your model link and get a custom 3D print quote emailed to you. Veteran-owned, ships USA only." />
   <link rel="canonical" href="https://www.lm3dptfy.online/request.html" />
-
-  <!-- Favicon -->
-
   <link rel="icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-
-  <!-- Open Graph / Social sharing -->
-
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.lm3dptfy.online/request.html" />
-  <meta property="og:title" content="Request a 3D Print Quote | LM3DPTFY" />
-  <meta property="og:description" content="Submit your model link and get a custom 3D print quote emailed to you." />
-  <meta property="og:image" content="https://www.lm3dptfy.online/lm3dptfy-logo-tp-cropped.png" />
-
-  <!-- Cache-bust -->
-
-  <link rel="stylesheet" href="/style.css?v=req5" />
-</head>
-
-<body>
-  <div class="page-shell">
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://www.lm3dptfy.online/request.html" />
+  <meta property="og:title"       content="Request a 3D Print Quote | LM3DPTFY" />
+  <meta property="og:description" content="Submit your model link and get a custom 3D print quote by email." />
+  <meta property="og:image"       content="https://www.lm3dptfy.online/logo-lm3dptfy-wh.png" />
+  <link rel="stylesheet" href="/style.css?v=3.0" />
+  <style>
+    body { padding-top: 72px; }
+    .req-page { min-height: 100vh; background: var(--bg); }
 
 ```
-<header class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="/" title="LM3DPTFY">
-      <img src="/lm3dptfy-logo-tp-cropped.png" alt="LM3DPTFY logo" />
-      <div class="brand-title">
-        <strong>Let Me 3D Print That For You</strong>
-        <span>Quote request</span>
-      </div>
-    </a>
+.req-hero {
+  background: linear-gradient(180deg, var(--navy-deep) 0%, var(--bg) 100%);
+  padding: 80px 0 60px;
+  border-bottom: 1px solid var(--line);
+}
 
-    <div class="nav-right">
-      <a class="pill-link" href="/">Home</a>
+.req-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+  padding: 72px 0 80px;
+}
+
+@media (max-width: 900px) {
+  .req-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+
+.req-info { position: sticky; top: 90px; }
+.req-info h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.req-info h2 em { font-style: italic; color: var(--teal-light); }
+.req-info p { font-size: .95rem; color: var(--ink2); font-weight: 300; line-height: 1.75; margin-bottom: 12px; }
+
+.req-info ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.req-info ul li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: .9rem;
+  color: var(--ink2);
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+.req-info ul li span.check {
+  color: var(--teal-light);
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.warning-box {
+  background: rgba(220,50,70,.07);
+  border: 1px solid rgba(220,50,70,.18);
+  border-left: 3px solid #e11d48;
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-top: 20px;
+}
+
+.warning-box h4 {
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #ff8090;
+  margin-bottom: 8px;
+}
+
+.warning-box p {
+  font-size: .82rem;
+  color: var(--ink3);
+  font-weight: 300;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.source-banner {
+  background: var(--bg3);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.source-label {
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--teal-light);
+  margin-bottom: 3px;
+}
+
+.source-value { font-size: .9rem; color: var(--ink); font-weight: 500; }
+```
+
+  </style>
+</head>
+<body class="req-page">
+
+<!-- NAV -->
+
+<nav class="nav scrolled" id="mainNav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-lm3dptfy-wh.png" alt="LM3DPTFY logo" />
+    <div class="nav-logo-text">
+      <strong>LM3DPTFY</strong>
+      <span>Quote Request</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="/">← Home</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle theme"><span class="i-moon">🌙</span><span class="i-sun">☀️</span></button>
+  </div>
+</nav>
+
+<!-- REQ HERO -->
+
+<div class="req-hero">
+  <div class="container container-md" style="text-align:center;">
+    <span class="eyebrow" style="display:inline-block;margin-bottom:12px;">Free &amp; No Obligation</span>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:900;line-height:1.1;letter-spacing:-.02em;color:#fff;margin-bottom:16px;">Request Your <em style="font-style:italic;color:var(--teal-light);">Free Quote</em></h1>
+    <p style="font-size:1rem;color:var(--ink2);font-weight:300;max-width:500px;margin:0 auto;line-height:1.75;">Fill in your details below. We'll review your model and email you a full price and timeline — usually within one business day.</p>
+  </div>
+</div>
+
+<!-- MAIN FORM -->
+
+<div style="background:var(--bg);padding:0;">
+  <div class="container">
+    <div class="req-grid">
+
+```
+  <!-- LEFT: Info panel -->
+  <div class="req-info">
+    <h2>What happens<br/><em>next?</em></h2>
+    <div style="width:40px;height:2px;background:var(--teal);border-radius:2px;margin:14px 0 18px;"></div>
+    <p>Once you submit your request, we review your model link, check the file and licensing, then email you a full quote — price, timeline, and any questions we have before starting.</p>
+    <p>You'll never be charged until you've approved both the quote and the pre-shipment photo of your finished print.</p>
+    <ul>
+      <li><span class="check">✓</span><span><strong style="color:var(--ink);font-weight:600;">Photo before shipment</strong> — review and approve the print before it ships</span></li>
+      <li><span class="check">✓</span><span><strong style="color:var(--ink);font-weight:600;">PLA filament</strong> — durable, eco-friendly, many colors available</span></li>
+      <li><span class="check">✓</span><span><strong style="color:var(--ink);font-weight:600;">Veteran-owned</strong> — prints and ships USA only</span></li>
+      <li><span class="check">✓</span><span><strong style="color:var(--ink);font-weight:600;">FDM printing</strong> — layer lines are normal and expected</span></li>
+      <li><span class="check">✓</span><span><strong style="color:var(--ink);font-weight:600;">All sales final</strong> after shipment — we protect you with the pre-ship photo</span></li>
+    </ul>
+
+    <div class="warning-box">
+      <h4>⚠ Please Note</h4>
+      <p>We do <strong style="color:var(--ink);">not</strong> print licensed characters (Disney, Marvel, etc.), functional weapons, or illegal items. By submitting, you confirm you have the rights to reproduce the requested design.</p>
     </div>
   </div>
-</header>
 
-<main class="page-main">
-  <div class="main-inner">
-
-    <section class="hero">
-      <h1>Where should I send your quote?</h1>
-      <p>I'll review your model link, estimate material and print time, then email you a quote.</p>
-    </section>
-
-    <section class="card" style="max-width:720px; margin: 0 auto 14px; padding: 14px 16px;">
-      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-        <div style="color:var(--muted); font-size:.92rem;">
-          <strong style="color:var(--text);">Detected library:</strong>
-          <span id="sourceName">Checking…</span>
-        </div>
-        <a id="browseSourceBtn" class="btn-primary btn-sm" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">
-          Browse
-        </a>
+  <!-- RIGHT: Form -->
+  <div>
+    <!-- Source detection banner -->
+    <div class="source-banner" id="sourceBanner">
+      <div>
+        <div class="source-label">Detected Library</div>
+        <div class="source-value" id="sourceName">Checking…</div>
       </div>
-    </section>
+      <a id="sourceBrowseBtn" class="btn btn-outline btn-sm" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">Browse Library</a>
+    </div>
 
-    <section class="card form-card" style="max-width:720px;">
-      <!-- FIX (Accessibility): Removed <form> wrapper per style guide; using div with
-           proper <label for="..."> associations on all inputs so screen readers work correctly -->
-      <div id="quoteForm">
-        <input type="hidden" id="stlLinkHidden" name="stlLink" />
-
-        <!-- FIX (Accessibility): All labels now use <label for="id"> to associate with their inputs -->
-        <label class="field-label" for="name">Your name</label>
-        <input class="field-input" type="text" id="name" required autocomplete="name" />
-
-        <div style="height:10px;"></div>
-
-        <label class="field-label" for="email">Email</label>
-        <input class="field-input" type="email" id="email" required autocomplete="email" />
-
-        <div style="height:10px;"></div>
-
-        <label class="field-label" for="details">Notes (optional)</label>
-        <textarea class="field-input" id="details" rows="4" style="border-radius:16px;"></textarea>
-
-        <button class="btn-primary btn-block" type="button" id="submitBtn">Submit request</button>
-
-        <div id="statusMessage" class="status-message" style="display:none;"></div>
-
-        <div class="small-note">
-          I usually respond within one business day. If I have questions about wall thickness,
-          print orientation, or supports, I'll ask before printing.
-        </div>
+    <div class="form-card">
+      <div style="margin-bottom:24px;">
+        <span style="font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--teal-light);">Your Details</span>
       </div>
-    </section>
 
+      <input type="hidden" id="stlLinkHidden" />
+
+      <div class="field">
+        <label class="label" for="name">Your Name</label>
+        <input class="input" type="text" id="name" placeholder="First and last name" autocomplete="name" required />
+      </div>
+
+      <div class="field">
+        <label class="label" for="email">Email Address</label>
+        <input class="input" type="email" id="email" placeholder="We'll send your quote here" autocomplete="email" required />
+      </div>
+
+      <div class="field">
+        <label class="label" for="details">Notes <span style="font-weight:300;opacity:.6;">(optional)</span></label>
+        <textarea class="input" id="details" rows="4" placeholder="Color preference, quantity, size notes, or anything else we should know…"></textarea>
+        <span class="field-note">Color requests, specific finish preferences, or any questions — mention them here.</span>
+      </div>
+
+      <button class="btn btn-solid btn-block" type="button" id="submitBtn" style="margin-top:8px;">Submit My Request →</button>
+
+      <div id="statusMsg" class="status" style="display:none;"></div>
+
+      <div style="border-top:1px solid var(--line);margin-top:24px;padding-top:18px;">
+        <p style="font-size:.78rem;color:var(--ink3);font-weight:300;line-height:1.7;margin:0;">
+          🇺🇸 Veteran-owned · Prints &amp; ships USA only · PLA filament · Photo before shipment · All sales final after ship.
+          <a href="/#terms" style="color:var(--teal-light);">Full terms →</a>
+        </p>
+      </div>
+    </div>
   </div>
-</main>
 
-<footer class="site-footer">
-  Let Me 3D Print That For You · LM3DPTFY.online · Questions? Email
-  <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a>
-</footer>
+</div>
 ```
 
   </div>
+</div>
 
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const stlLink = urlParams.get('link') || '';
-    document.getElementById('stlLinkHidden').value = stlLink;
+<!-- FOOTER -->
 
-    const statusEl = document.getElementById('statusMessage');
-    const btn = document.getElementById('submitBtn');
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <span>© 2025 LM3DPTFY.ONLINE — Let Me 3D Print That For You</span>
+      <span>Questions? <a href="mailto:lm3dptfy@gmail.com">lm3dptfy@gmail.com</a> · <a href="/#terms">Terms</a></span>
+    </div>
+  </div>
+</footer>
 
-    const sourceNameEl = document.getElementById('sourceName');
-    const browseBtn = document.getElementById('browseSourceBtn');
+<script>
+  // Theme
+  const html  = document.documentElement;
+  const saved = localStorage.getItem('lm3d-theme');
+  if (saved) html.setAttribute('data-theme', saved);
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('lm3d-theme', next);
+  });
 
-    function normalizeHost(host){
-      return String(host || '').trim().toLowerCase().replace(/^www\./,'');
-    }
+  // Pull link param
+  const params  = new URLSearchParams(window.location.search);
+  const stlLink = params.get('link') || '';
+  document.getElementById('stlLinkHidden').value = stlLink;
 
-    async function detectSource(){
-      if (!stlLink){
-        sourceNameEl.textContent = 'None (missing link)';
-        return;
+  const statusEl = document.getElementById('statusMsg');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function normHost(h) { return String(h || '').trim().toLowerCase().replace(/^www\./, ''); }
+
+  async function detectSource() {
+    const nameEl  = document.getElementById('sourceName');
+    const browseBtn = document.getElementById('sourceBrowseBtn');
+    if (!stlLink) { nameEl.textContent = 'No link provided'; return; }
+    let host = '';
+    try { host = normHost(new URL(stlLink).hostname); } catch {}
+    try {
+      const res   = await fetch('/api/public/sites', { headers: { Accept: 'application/json' } });
+      const data  = await res.json().catch(() => ({}));
+      const sites = Array.isArray(data.sites) ? data.sites : [];
+      let match   = null;
+      for (const s of sites) {
+        const hosts = Array.isArray(s.hosts) ? s.hosts.map(normHost) : [];
+        if (hosts.includes(host)) { match = s; break; }
+        for (const h of hosts) { if (h && host.endsWith('.' + h)) { match = s; break; } }
+        if (match) break;
       }
-
-      let host = '';
-      try { host = normalizeHost(new URL(stlLink).hostname); } catch {}
-
-      try{
-        const res = await fetch('/api/public/sites', { headers: { 'Accept': 'application/json' } });
-        const data = await res.json().catch(() => ({}));
-        const sites = Array.isArray(data.sites) ? data.sites : [];
-
-        let match = null;
-        for (const s of sites){
-          const hosts = Array.isArray(s.hosts) ? s.hosts.map(normalizeHost) : [];
-          if (hosts.includes(host)) { match = s; break; }
-          for (const h of hosts){
-            if (h && host.endsWith('.' + h)) { match = s; break; }
-          }
-          if (match) break;
+      if (match) {
+        nameEl.textContent = match.name || 'Supported Library';
+        if (match.browseUrl) {
+          browseBtn.style.display = 'inline-flex';
+          browseBtn.textContent   = `Browse ${match.name}`;
+          browseBtn.href          = match.browseUrl;
         }
-
-        if (match){
-          sourceNameEl.textContent = match.name || 'Supported library';
-          if (match.browseUrl){
-            browseBtn.style.display = 'inline-block';
-            browseBtn.textContent = `Browse ${match.name}`;
-            browseBtn.href = match.browseUrl;
-          }
-        } else {
-          sourceNameEl.textContent = "Unknown (we'll confirm compatibility)";
-        }
-      } catch (e){
-        sourceNameEl.textContent = "Unknown (we'll confirm compatibility)";
+      } else {
+        nameEl.textContent = "Unknown — we'll confirm compatibility";
       }
+    } catch {
+      nameEl.textContent = "Unknown — we'll confirm compatibility";
     }
+  }
+  detectSource();
 
-    detectSource();
+  if (!stlLink) {
+    statusEl.style.display = 'block';
+    statusEl.className     = 'status status-err';
+    statusEl.textContent   = '⚠ No model link found. Please go back to the homepage and paste your model URL first.';
+    submitBtn.disabled     = true;
+  }
 
-    if (!stlLink) {
-      statusEl.style.display = 'block';
-      statusEl.textContent = '⚠ No model link provided. Please go back to the homepage and paste a link.';
-      statusEl.className = 'status-message status-error';
-      btn.disabled = true;
+  submitBtn.addEventListener('click', async () => {
+    const name    = document.getElementById('name').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const details = document.getElementById('details').value.trim();
+    const link    = document.getElementById('stlLinkHidden').value;
+
+    if (!link)  { showStatus('⚠ No model link found. Please go back and paste a link.', true); return; }
+    if (!name)  { showStatus('Please enter your name.', true); return; }
+    if (!email) { showStatus('Please enter your email address.', true); return; }
+
+    submitBtn.disabled = true;
+    showStatus('Sending your request…', false);
+
+    try {
+      const res  = await fetch('/api/requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ stlLink: link, name, email, details }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Submission failed');
+      showStatus('✓ Request sent! Redirecting…', false);
+      setTimeout(() => window.location.replace('/'), 1000);
+    } catch(err) {
+      showStatus('✗ ' + err.message + ' — or email us at lm3dptfy@gmail.com', true);
+      submitBtn.disabled = false;
     }
+  });
 
-    btn.addEventListener('click', async () => {
-      const payload = {
-        stlLink: document.getElementById('stlLinkHidden').value,
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        details: document.getElementById('details').value.trim()
-      };
-
-      if (!payload.stlLink) {
-        statusEl.style.display = 'block';
-        statusEl.textContent = '✗ Error: No model link provided. Please go back to the homepage.';
-        statusEl.className = 'status-message status-error';
-        return;
-      }
-
-      if (!payload.name) {
-        statusEl.style.display = 'block';
-        statusEl.textContent = '✗ Please enter your name.';
-        statusEl.className = 'status-message status-error';
-        return;
-      }
-
-      if (!payload.email) {
-        statusEl.style.display = 'block';
-        statusEl.textContent = '✗ Please enter your email address.';
-        statusEl.className = 'status-message status-error';
-        return;
-      }
-
-      btn.disabled = true;
-      statusEl.style.display = 'block';
-      statusEl.textContent = 'Sending your request...';
-      statusEl.className = 'status-message';
-
-      try {
-        const res = await fetch('/api/requests', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.error || 'Failed to submit request');
-
-        statusEl.textContent = '✓ Request sent successfully! Redirecting to homepage...';
-        statusEl.className = 'status-message status-success';
-
-        setTimeout(() => { window.location.replace('/'); }, 900);
-      } catch (err) {
-        statusEl.textContent = '✗ Error: ' + err.message + '. Please email lm3dptfy@gmail.com';
-        statusEl.className = 'status-message status-error';
-        btn.disabled = false;
-      }
-    });
-  </script>
+  function showStatus(msg, isErr) {
+    statusEl.style.display = 'block';
+    statusEl.textContent   = msg;
+    statusEl.className     = 'status ' + (isErr ? 'status-err' : 'status-ok');
+  }
+</script>
 
 </body>
 </html>
