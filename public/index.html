@@ -40,7 +40,7 @@
     
     
     <label class="dark-toggle"><input type="checkbox" id="themeToggle" style="position:absolute;opacity:0;width:0;height:0;margin:0;" /><div class="dark-toggle-track"><div class="dark-toggle-thumb"></div></div><span class="dark-toggle-label">Dark Mode</span></label>
-    <a class="nav-cta" href="/request.html">Get a Quote</a>
+    <a class="nav-cta" href="#quote">Get a Quote</a>
   </div>
   </nav>
 
@@ -52,7 +52,7 @@
     <h1>Let Me <em>3D Print</em><br/>That For You.</h1>
     <p class="hero-sub">Paste a model link. Get a real quote by email. See a photo of your finished print before it ever ships.</p>
     <div class="hero-cta-group">
-      <a class="btn btn-solid" href="/request.html">Start Your Free Quote →</a>
+      <a class="btn btn-solid" href="#quote">Start Your Free Quote →</a>
       <a class="btn btn-outline" href="#how-it-works">See How It Works</a>
     </div>
   </div>
@@ -238,7 +238,7 @@
 
 <section class="section" style="padding:80px 0;">
   <div class="container">
-    <div class="quote-banner">
+    <div class="quote-banner" id="quote">
       <div class="quote-banner-text">
         <span class="eyebrow" style="margin-bottom:10px;">Free &amp; No Obligation</span>
         <h2>Ready to Print?<br/><em>Let's get started.</em></h2>
@@ -249,7 +249,7 @@
           <label class="label" for="heroLink">Your Model Link</label>
           <input class="input" type="url" id="heroLink" placeholder="Paste STL / model URL here…" />
         </div>
-        <a class="btn btn-solid" id="heroCta" href="/request.html">Get My Free Quote →</a>
+        <button class="btn btn-solid" id="heroCta" type="button">Get My Free Quote →</button>
         <p style="font-size:.78rem;color:var(--ink3);font-weight:300;text-align:center;line-height:1.5;">No payment until you approve the quote and the final photo.</p>
       </div>
     </div>
@@ -461,7 +461,18 @@
       }
     });
   });
+  // Hero CTA: pass link to request page
+  const heroCta = document.getElementById('heroCta');
+  if (heroCta) {
+    heroCta.addEventListener('click', () => {
+      const link = (document.getElementById('heroLink').value || '').trim();
+      if (link) {
+        window.location.href = '/request.html?link=' + encodeURIComponent(link);
+      } else {
+        window.location.href = '/request.html';
+      }
+    });
+  }
 </script>
-
 </body>
 </html>
