@@ -414,11 +414,9 @@
 
   // Hero CTA carries link
   document.getElementById('heroCta').addEventListener('click', (e) => {
+    e.preventDefault();
     const link = document.getElementById('heroLink').value.trim();
-    if (link) {
-      e.preventDefault();
-      window.location.href = '/request.html?link=' + encodeURIComponent(link);
-    }
+    window.location.href = link ? '/request.html?link=' + encodeURIComponent(link) : '/request.html';
   });
 
   // Libraries
