@@ -147,6 +147,8 @@ html[data-theme="light"] .theme-btn .i-sun  { display: inline; }
 .btn-solid:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
 .btn-outline { color: var(--ink); background: transparent; border: 1px solid var(--line2); }
 .btn-outline:hover { border-color: var(--teal); color: var(--teal-light); background: var(--teal-dim); text-decoration: none; }
+.hero .btn-outline { color: rgba(255,255,255,.9); border-color: rgba(255,255,255,.4); }
+.hero .btn-outline:hover { color: #fff; border-color: rgba(255,255,255,.8); background: rgba(255,255,255,.1); }
 .btn-sm { padding: 10px 20px; font-size: .74rem; }
 .btn-block { width: 100%; }
 
