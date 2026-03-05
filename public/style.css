@@ -135,7 +135,8 @@ button, input, textarea, select { font-family: var(--sans); }
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
-html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.90); }
+html[data-theme="light"] .nav { background: rgba(245,248,252,.95); border-color: rgba(0,0,0,.08); }
+html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); border-color: rgba(0,0,0,.1); }
 .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
 .nav-logo img { width: 36px; height: 36px; object-fit: contain; border-radius: 8px; filter: drop-shadow(0 0 6px rgba(0,200,232,.25)); }
 .nav-logo-text { display: flex; flex-direction: column; line-height: 1.15; }
