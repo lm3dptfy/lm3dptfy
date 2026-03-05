@@ -155,12 +155,12 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.90); }
 
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 92vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  padding: 0 24px 100px;
+  justify-content: center;
+  padding: 80px 24px 80px;
   text-align: center;
   overflow: hidden;
 }
