@@ -416,7 +416,7 @@
     const empty = document.getElementById('sitesEmpty');
     list.innerHTML = ''; empty.style.display = 'none';
     try {
-      const res   = await fetch('/api/public/sites', { headers: { Accept: 'application/json' } });
+      const res   = await fetch('/api/public/sites', { headers: { Accept: 'application/json' }, redirect: 'follow' });
       const data  = await res.json().catch(() => ({}));
       const sites = Array.isArray(data.sites) ? data.sites : [];
       if (!sites.length) { empty.style.display = 'block'; return; }
