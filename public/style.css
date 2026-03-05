@@ -283,7 +283,7 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
 .legal-block strong { color: var(--ink); font-weight: 600; }
 
 .quote-banner {
-  scroll-margin-top: 100px; background: linear-gradient(135deg, #091828 0%, #0d2238 50%, #091828 100%); border: 1px solid var(--line2); border-radius: 20px; padding: 64px 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  scroll-margin-top: 140px; background: linear-gradient(135deg, #091828 0%, #0d2238 50%, #091828 100%); border: 1px solid var(--line2); border-radius: 20px; padding: 64px 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
 @media (max-width: 860px) { .quote-banner {
   scroll-margin-top: 80px; grid-template-columns: 1fr; gap: 32px; padding: 40px 28px; } }
 .quote-banner-text h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; line-height: 1.1; letter-spacing: -.02em; color: #fff; margin-bottom: 14px; }
