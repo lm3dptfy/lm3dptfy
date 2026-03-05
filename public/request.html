@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <title>Request a Quote | LM3DPTFY</title>
@@ -141,7 +141,7 @@
   </a>
   <div class="nav-links">
     <a class="nav-link" href="/">← Home</a>
-    <label class="dark-toggle"><input type="checkbox" id="themeToggle" style="position:absolute;opacity:0;width:0;height:0;margin:0;" /><div class="dark-toggle-track"><div class="dark-toggle-thumb"></div></div><span class="dark-toggle-label">Dark Mode</span></label>
+    
   </div>
   </nav>
 
@@ -248,8 +248,7 @@
   // Theme
           const html = document.documentElement;
   const toggle = document.getElementById('themeToggle');
-  const saved = localStorage.getItem('lm3d-theme') || 'light';
-  html.setAttribute('data-theme', saved);
+  document.documentElement.setAttribute('data-theme', 'dark');
   if (toggle) {
     toggle.checked = saved === 'dark';
     toggle.addEventListener('change', () => {

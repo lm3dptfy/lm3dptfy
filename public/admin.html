@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <title>Admin | LM3DPTFY</title>
@@ -139,8 +139,7 @@
   // Theme
         const html = document.documentElement;
   const toggle = document.getElementById('themeToggle');
-  const saved = localStorage.getItem('lm3d-theme') || 'light';
-  html.setAttribute('data-theme', saved);
+  document.documentElement.setAttribute('data-theme', 'dark');
   toggle.checked = saved === 'dark';
   toggle.addEventListener('change', () => {
     const next = toggle.checked ? 'dark' : 'light';
