@@ -137,11 +137,13 @@
 
 <script>
   // Theme
-  const html  = document.documentElement;
-  const saved = localStorage.getItem('lm3d-theme');
-  html.setAttribute('data-theme', saved || 'light');
-  document.getElementById('themeBtn').addEventListener('click', () => {
-    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    const html = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('lm3d-theme') || 'light';
+  html.setAttribute('data-theme', saved);
+  toggle.checked = saved === 'dark';
+  toggle.addEventListener('change', () => {
+    const next = toggle.checked ? 'dark' : 'light';
     html.setAttribute('data-theme', next);
     localStorage.setItem('lm3d-theme', next);
   });
