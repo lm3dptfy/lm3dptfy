@@ -398,21 +398,13 @@
   const nav = document.getElementById('mainNav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
-  const heroStartBtn = document.getElementById('heroStartBtn');
-  const navCta = document.getElementById('navCta');
-  if (heroStartBtn && navCta) {
-    const rect = heroStartBtn.getBoundingClientRect();
-    const visible = rect.top < window.innerHeight && rect.bottom > 0;
-    navCta.style.opacity = visible ? '0' : '1';
-    navCta.style.pointerEvents = visible ? 'none' : 'auto';
-  }
-  const heroCtaEl = document.getElementById('heroCta');
-  const navCta = document.querySelector('.nav-cta');
-  if (heroCtaEl && navCta) {
-    const rect = heroCtaEl.getBoundingClientRect();
-    navCta.style.opacity = rect.bottom < 0 ? '1' : '0';
-    navCta.style.pointerEvents = rect.bottom < 0 ? 'auto' : 'none';
-  }
+    const heroBtn = document.getElementById('heroStartBtn');
+    const navCta  = document.getElementById('navCta');
+    if (heroBtn && navCta) {
+      const visible = heroBtn.getBoundingClientRect().bottom > 0;
+      navCta.style.opacity = visible ? '0' : '1';
+      navCta.style.pointerEvents = visible ? 'none' : 'auto';
+    }
   }, { passive: true });
 
   // Hero CTA carries link
