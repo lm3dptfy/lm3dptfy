@@ -383,13 +383,6 @@
         const html = document.documentElement;
   const toggle = document.getElementById('themeToggle');
   document.documentElement.setAttribute('data-theme', 'dark');
-  toggle.checked = saved === 'dark';
-  toggle.addEventListener('change', () => {
-    const next = toggle.checked ? 'dark' : 'light';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('lm3d-theme', next);
-  });
-
   // Nav scroll
   const nav = document.getElementById('mainNav');
   window.addEventListener('scroll', () => {
