@@ -37,6 +37,7 @@
     <a class="nav-link" href="#pricing">Pricing</a>
     <a class="nav-link" href="#faq">FAQ</a>
     <label class="theme-toggle" title="Toggle dark mode"><span class="theme-toggle-icon sun">☀️</span><span class="theme-toggle-icon moon">🌙</span></label>
+    
     <label class="dark-toggle"><input type="checkbox" id="themeToggle" /><div class="dark-toggle-track"><div class="dark-toggle-thumb"></div></div><span class="dark-toggle-label">Dark Mode</span></label>
     <a class="nav-cta" href="/request.html">Get a Quote</a>
   </div>
@@ -393,7 +394,7 @@
 
 <script>
   // Theme
-    const html = document.documentElement;
+      const html = document.documentElement;
   const toggle = document.getElementById('themeToggle');
   const saved = localStorage.getItem('lm3d-theme') || 'light';
   html.setAttribute('data-theme', saved);

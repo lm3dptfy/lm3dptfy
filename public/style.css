@@ -10,10 +10,15 @@
   -webkit-tap-highlight-color: transparent;
 }
 .dark-toggle input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  appearance: none;
+  -webkit-appearance: none;
   pointer-events: none;
 }
 .dark-toggle-track {
