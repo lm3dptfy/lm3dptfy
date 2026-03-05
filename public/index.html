@@ -40,7 +40,7 @@
     
     
     <label class="dark-toggle"><input type="checkbox" id="themeToggle" style="position:absolute;opacity:0;width:0;height:0;margin:0;" /><div class="dark-toggle-track"><div class="dark-toggle-thumb"></div></div><span class="dark-toggle-label">Dark Mode</span></label>
-    <a class="nav-cta" href="#quote">Get a Quote</a>
+    <a class="nav-cta" href="#quote" onclick="event.preventDefault();document.getElementById('quote').scrollIntoView();window.scrollBy(0,-80);">Get a Quote</a>
   </div>
   </nav>
 
@@ -52,7 +52,7 @@
     <h1>Let Me <em>3D Print</em><br/>That For You.</h1>
     <p class="hero-sub">Paste a model link. Get a real quote by email. See a photo of your finished print before it ever ships.</p>
     <div class="hero-cta-group">
-      <a class="btn btn-solid" href="#quote">Start Your Free Quote →</a>
+      <a class="btn btn-solid" href="#quote" onclick="event.preventDefault();document.getElementById('quote').scrollIntoView();window.scrollBy(0,-80);">Start Your Free Quote →</a>
       <a class="btn btn-outline" href="#how-it-works">See How It Works</a>
     </div>
   </div>
