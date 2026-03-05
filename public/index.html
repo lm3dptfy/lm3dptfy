@@ -40,7 +40,7 @@
     
     
     
-    <a class="nav-cta" href="#quote" onclick="event.preventDefault();document.getElementById('quote').scrollIntoView();window.scrollBy(0,-80);">Get a Quote</a>
+    <a class="nav-cta" href="#quote" style="opacity:0;pointer-events:none;transition:opacity .3s ease;" onclick="event.preventDefault();document.getElementById('quote').scrollIntoView();window.scrollBy(0,-80);">Get a Quote</a>
   </div>
   </nav>
 
@@ -53,7 +53,7 @@
     <p class="hero-sub">Paste a model link. Get a real quote by email. See a photo of your finished print before it ever ships.</p>
     <div class="hero-cta-group">
       <a class="btn btn-solid" href="#quote" onclick="event.preventDefault();document.getElementById('quote').scrollIntoView();window.scrollBy(0,-80);">Start Your Free Quote →</a>
-      <a class="btn btn-outline" href="#how-it-works">See How It Works</a>
+      <a class="btn btn-outline" href="#how-it-works" onclick="event.preventDefault();document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'});window.scrollBy(0,-80);">See How It Works</a>
     </div>
   </div>
   <div class="hero-scroll">Scroll</div>
@@ -398,6 +398,13 @@
   const nav = document.getElementById('mainNav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
+  const heroCtaEl = document.getElementById('heroCta');
+  const navCta = document.querySelector('.nav-cta');
+  if (heroCtaEl && navCta) {
+    const rect = heroCtaEl.getBoundingClientRect();
+    navCta.style.opacity = rect.bottom < 0 ? '1' : '0';
+    navCta.style.pointerEvents = rect.bottom < 0 ? 'auto' : 'none';
+  }
   }, { passive: true });
 
   // Hero CTA carries link
