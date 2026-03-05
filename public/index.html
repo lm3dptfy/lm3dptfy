@@ -422,7 +422,17 @@
         if (!s.browseUrl) { a.style.opacity = '.5'; a.style.pointerEvents = 'none'; }
         list.appendChild(a);
       });
-    } catch { empty.style.display = 'block'; }
+    } catch {
+      // Fallback: show hardcoded sites if API fails
+      const fallback = [{name:'STLFlix', browseUrl:'https://platform.stlflix.com/explore'}];
+      fallback.forEach(s => {
+        const a = document.createElement('a');
+        a.href = s.browseUrl; a.target = '_blank'; a.rel = 'noopener noreferrer';
+        a.className = 'btn btn-outline btn-sm';
+        a.textContent = s.name;
+        list.appendChild(a);
+      });
+    }
   }
   loadSites();
 
