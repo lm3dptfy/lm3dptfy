@@ -262,6 +262,10 @@
   // Pull link param
   const params  = new URLSearchParams(window.location.search);
   const stlLink = params.get('link') || '';
+  if (stlLink) {
+    const hero = document.querySelector('.req-hero');
+    if (hero) hero.style.display = 'none';
+  }
   document.getElementById('stlLinkHidden').value = stlLink;
 
   const statusEl = document.getElementById('statusMsg');
