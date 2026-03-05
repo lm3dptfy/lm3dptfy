@@ -404,12 +404,6 @@
   }, { passive: true });
 
   // Hero CTA carries link
-  document.getElementById('heroCta').addEventListener('click', (e) => {
-    e.preventDefault();
-    const link = document.getElementById('heroLink').value.trim();
-    window.location.href = link ? '/request.html?link=' + encodeURIComponent(link) : '/request.html';
-  });
-
   // Libraries
   async function loadSites() {
     const list  = document.getElementById('sitesList');
