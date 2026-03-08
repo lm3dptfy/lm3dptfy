@@ -18,7 +18,7 @@
   <meta name="twitter:title"       content="LM3DPTFY — Let Me 3D Print That For You" />
   <meta name="twitter:description" content="Veteran-owned 3D printing. Fast quotes, ships USA only." />
   <meta name="twitter:image"       content="https://www.lm3dptfy.online/logo-lm3dptfy-wh.png" />
-  <link rel="stylesheet" href="/style.css?v=3.6" />
+  <link rel="stylesheet" href="/style.css?v=3.7" />
 </head>
 <body>
 
@@ -469,9 +469,10 @@
   const burger = document.getElementById('navBurger');
   const navLinks = document.getElementById('navLinks');
   if (burger && navLinks) {
+    let menuOpen = false;
     burger.addEventListener('click', () => {
-      const isOpen = navLinks.style.display === 'flex';
-      navLinks.style.display = isOpen ? 'none' : 'flex';
+      menuOpen = !menuOpen;
+      navLinks.style.display = menuOpen ? 'flex' : 'none';
       navLinks.style.flexDirection = 'column';
       navLinks.style.position = 'fixed';
       navLinks.style.top = '70px';
@@ -487,6 +488,7 @@
     document.addEventListener('click', (e) => {
       if (!burger.contains(e.target) && !navLinks.contains(e.target)) {
         navLinks.style.display = 'none';
+        menuOpen = false;
       }
     });
   }
