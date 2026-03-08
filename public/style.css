@@ -403,7 +403,7 @@ body.admin-page { padding-top: 72px; }
   .nav-burger { display: block; }
 
   .nav-links {
-    display: none !important;
+    display: none;
     position: fixed;
     top: 70px;
     left: 0;
@@ -417,7 +417,7 @@ body.admin-page { padding-top: 72px; }
     box-shadow: 0 8px 24px rgba(0,0,0,.4);
   }
 
-  .nav-links.open { display: flex !important; }
+  .nav-links.open { display: flex; }
 
   .container { padding: 0 20px; }
   .hero { min-height: 80vh; padding: 100px 20px 60px; text-align: center; }
