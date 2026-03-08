@@ -432,7 +432,7 @@ body.admin-page { padding-top: 72px; }
 
   .split, .split.reverse { grid-template-columns: 1fr !important; gap: 32px; }
   .split-visual { min-height: 0 !important; }
-  .split-visual img { min-height: 0 !important; max-height: 380px; width: 100%; object-fit: contain !important; }
+  .split-visual img { min-height: 0 !important; max-height: 380px; width: 100%; object-fit: cover; object-position: center top; }
 
   .trust-strip { grid-template-columns: 1fr !important; }
   .steps-row { grid-template-columns: 1fr !important; }

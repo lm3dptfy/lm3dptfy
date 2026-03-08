@@ -18,7 +18,7 @@
   <meta name="twitter:title"       content="LM3DPTFY — Let Me 3D Print That For You" />
   <meta name="twitter:description" content="Veteran-owned 3D printing. Fast quotes, ships USA only." />
   <meta name="twitter:image"       content="https://www.lm3dptfy.online/logo-lm3dptfy-wh.png" />
-  <link rel="stylesheet" href="/style.css?v=3.5" />
+  <link rel="stylesheet" href="/style.css?v=3.6" />
 </head>
 <body>
 
@@ -469,10 +469,24 @@
   const burger = document.getElementById('navBurger');
   const navLinks = document.getElementById('navLinks');
   if (burger && navLinks) {
-    burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    burger.addEventListener('click', () => {
+      const isOpen = navLinks.style.display === 'flex';
+      navLinks.style.display = isOpen ? 'none' : 'flex';
+      navLinks.style.flexDirection = 'column';
+      navLinks.style.position = 'fixed';
+      navLinks.style.top = '70px';
+      navLinks.style.left = '0';
+      navLinks.style.right = '0';
+      navLinks.style.background = 'var(--bg)';
+      navLinks.style.padding = '24px 28px 32px';
+      navLinks.style.gap = '24px';
+      navLinks.style.zIndex = '9999';
+      navLinks.style.borderBottom = '1px solid var(--line)';
+      navLinks.style.boxShadow = '0 8px 24px rgba(0,0,0,.4)';
+    });
     document.addEventListener('click', (e) => {
       if (!burger.contains(e.target) && !navLinks.contains(e.target)) {
-        navLinks.classList.remove('open');
+        navLinks.style.display = 'none';
       }
     });
   }
