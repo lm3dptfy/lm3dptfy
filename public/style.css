@@ -384,15 +384,39 @@ body.admin-page { padding-top: 72px; }
   .login-card { padding: 28px 20px; }
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 600px) {
-  .container { padding: 0 20px; }
-  .nav { padding: 0 20px; }
-  .nav-links { gap: 16px; }
-  .nav-links a { font-size: .8rem; }
+/* ===== BURGER NAV ===== */
+.nav-burger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--ink);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto;
+}
 
-  .hero { min-height: 80vh; padding: 100px 20px 60px; }
-  .hero-content { text-align: center; }
+@media (max-width: 600px) {
+  .nav-burger { display: block; }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--line);
+    flex-direction: column;
+    padding: 16px 24px 24px;
+    gap: 20px;
+    z-index: 999;
+  }
+
+  .nav-links.open { display: flex; }
+
+  .container { padding: 0 20px; }
+  .hero { min-height: 80vh; padding: 100px 20px 60px; text-align: center; }
   .hero-sub { text-align: center; }
   .hero-btns { flex-direction: column; align-items: center; gap: 12px; }
   .hero-btns a, .hero-btns button { width: 100%; text-align: center; }
@@ -401,16 +425,16 @@ body.admin-page { padding-top: 72px; }
   .section-sm { padding: 48px 0; }
   .section-title { font-size: clamp(1.6rem, 6vw, 2.4rem); }
 
-  .split, .split.reverse { grid-template-columns: 1fr; gap: 32px; }
-  .split-visual { min-height: 280px !important; }
-  .split-visual img { min-height: 280px !important; max-height: 380px; }
+  .split, .split.reverse { grid-template-columns: 1fr !important; gap: 32px; }
+  .split-visual { min-height: 0 !important; }
+  .split-visual img { min-height: 0 !important; max-height: 320px; object-position: top center; }
+
+  .trust-strip { grid-template-columns: 1fr !important; }
+  .steps-row { grid-template-columns: 1fr !important; }
+  .pricing-row { grid-template-columns: 1fr !important; }
 
   .quote-banner { padding: 32px 20px !important; flex-direction: column; gap: 24px; }
 
-  .steps-row { grid-template-columns: 1fr; }
-  .trust-strip { grid-template-columns: repeat(2,1fr); }
-  .pricing-row { grid-template-columns: 1fr; }
-
-  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .footer-inner { grid-template-columns: 1fr !important; gap: 28px; }
   .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
 }

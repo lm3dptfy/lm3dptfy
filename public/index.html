@@ -32,7 +32,8 @@
       <span>Let Me 3D Print That For You</span>
     </div>
   </a>
-  <div class="nav-links">
+  <button class="nav-burger" id="navBurger" aria-label="Menu">&#9776;</button>
+  <div class="nav-links" id="navLinks">
     <a class="nav-link" href="#how-it-works">How It Works</a>
     <a class="nav-link" href="#pricing">Pricing</a>
     <a class="nav-link" href="#faq">FAQ</a>
@@ -460,6 +461,18 @@
         window.location.href = '/request.html?link=' + encodeURIComponent(link);
       } else {
         window.location.href = '/request.html';
+      }
+    });
+  }
+
+  // Burger menu
+  const burger = document.getElementById('navBurger');
+  const navLinks = document.getElementById('navLinks');
+  if (burger && navLinks) {
+    burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    document.addEventListener('click', (e) => {
+      if (!burger.contains(e.target) && !navLinks.contains(e.target)) {
+        navLinks.classList.remove('open');
       }
     });
   }
