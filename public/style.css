@@ -407,13 +407,20 @@ body.admin-page { padding-top: 72px; }
     top: 70px;
     left: 0;
     right: 0;
-    background: var(--bg);
+    background: var(--bg2);
     border-bottom: 1px solid var(--line);
+    border-top: 1px solid var(--line);
     flex-direction: column;
-    padding: 24px 28px 32px;
-    gap: 24px;
+    padding: 16px 24px 28px;
+    gap: 4px;
     z-index: 9999;
-    box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    box-shadow: 0 12px 32px rgba(0,0,0,.5);
+  }
+  .nav-links .nav-link {
+    font-size: 1rem;
+    padding: 14px 16px;
+    border-radius: 10px;
+    letter-spacing: .04em;
   }
 
   .nav-links.open { display: flex; }
