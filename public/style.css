@@ -453,11 +453,8 @@ body.admin-page { padding-top: 72px; }
 /* Mascot */
 .hero { position: relative; }
 .hero-mascot {
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
   width: 320px;
+  flex-shrink: 0;
   pointer-events: none;
   filter: drop-shadow(0 0 30px rgba(0,200,232,.3));
 }
