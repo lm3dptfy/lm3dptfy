@@ -450,3 +450,22 @@ body.admin-page { padding-top: 72px; }
   .footer-inner { grid-template-columns: 1fr !important; gap: 28px; }
   .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
 }
+
+@media (min-width: 601px) {
+  .nav-links.open {
+    display: flex;
+    position: absolute;
+    top: 60px;
+    right: 16px;
+    left: auto;
+    width: auto;
+    min-width: 180px;
+    flex-direction: column;
+    background: var(--bg2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    z-index: 9999;
+  }
+}
