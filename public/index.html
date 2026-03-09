@@ -473,18 +473,22 @@
     burger.addEventListener('click', (e) => {
       e.stopPropagation();
       menuOpen = !menuOpen;
-      navLinks.style.display = menuOpen ? 'flex' : 'none';
-      navLinks.style.flexDirection = 'column';
-      navLinks.style.position = 'fixed';
-      navLinks.style.top = '70px';
-      navLinks.style.left = '0';
-      navLinks.style.right = '0';
-      navLinks.style.background = 'var(--bg)';
-      navLinks.style.padding = '24px 28px 32px';
-      navLinks.style.gap = '24px';
-      navLinks.style.zIndex = '9999';
-      navLinks.style.borderBottom = '1px solid var(--line)';
-      navLinks.style.boxShadow = '0 8px 24px rgba(0,0,0,.4)';
+          const isMobile = window.innerWidth <= 600;
+          navLinks.style.display = menuOpen ? 'flex' : 'none';
+          navLinks.style.flexDirection = 'column';
+          navLinks.style.position = 'fixed';
+          navLinks.style.top = '70px';
+          navLinks.style.left = isMobile ? '0' : 'auto';
+          navLinks.style.right = '0';
+          navLinks.style.width = isMobile ? '100%' : 'auto';
+          navLinks.style.minWidth = isMobile ? '' : '200px';
+          navLinks.style.background = isMobile ? 'var(--bg)' : 'var(--bg2)';
+          navLinks.style.padding = isMobile ? '24px 28px 32px' : '8px';
+          navLinks.style.gap = isMobile ? '24px' : '4px';
+          navLinks.style.zIndex = '9999';
+          navLinks.style.border = '1px solid var(--line)';
+          navLinks.style.borderRadius = isMobile ? '0' : '12px';
+          navLinks.style.boxShadow = '0 8px 24px rgba(0,0,0,.4)';
     });
     document.addEventListener('click', (e) => {
       if (!burger.contains(e.target) && !navLinks.contains(e.target)) {
