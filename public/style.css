@@ -163,7 +163,6 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   justify-content: center;
   padding: 80px 24px 80px;
   text-align: center;
-  overflow: hidden;
 }
 .hero::before {
   content: '';
