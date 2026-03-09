@@ -450,3 +450,17 @@ body.admin-page { padding-top: 72px; }
   .footer-inner { grid-template-columns: 1fr !important; gap: 28px; }
   .footer-bottom { flex-direction: column; text-align: center; gap: 8px; }
 }
+
+/* Mascot */
+.hero { position: relative; }
+.hero-mascot {
+  position: absolute;
+  bottom: 0;
+  right: 40px;
+  width: 280px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 30px rgba(0,200,232,.2));
+}
+@media (max-width: 600px) {
+  .hero-mascot { width: 160px; right: 0; }
+}
