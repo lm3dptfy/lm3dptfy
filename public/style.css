@@ -158,9 +158,11 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   position: relative;
   min-height: 92vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 20px;
+  padding: 0 40px;
   padding: 80px 24px 80px;
   text-align: center;
 }
@@ -185,7 +187,7 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   z-index: 0;
   mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.6) 30%, rgba(0,0,0,.4) 70%, transparent 100%);
 }
-.hero-content { position: relative; z-index: 2; max-width: 860px; }
+.hero-content { position: relative; z-index: 2; max-width: 560px; }
 .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: .72rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--teal-light); border: 1px solid rgba(0,200,232,.3); border-radius: var(--r-pill); padding: 6px 18px; margin-bottom: 28px; background: rgba(0,154,184,.08); }
 .hero h1 { font-family: var(--serif); font-size: clamp(3rem, 7vw, 6rem); font-weight: 900; line-height: 1.05; letter-spacing: -.02em; color: #fff; margin-bottom: 24px; }
 .hero h1 em { font-style: italic; color: var(--teal-light); }
