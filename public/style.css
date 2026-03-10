@@ -158,9 +158,10 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   position: relative;
   min-height: 92vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
+  gap: 24px;
   padding: 80px 24px 80px;
   text-align: center;
 }
@@ -453,13 +454,15 @@ body.admin-page { padding-top: 72px; }
 /* Mascot */
 .hero { position: relative; }
 .hero-mascot {
-  position: absolute;
-  left: 40px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 300px;
+  width: 260px;
+  flex-shrink: 0;
   pointer-events: none;
   filter: drop-shadow(0 0 30px rgba(0,200,232,.3));
+}
+
+@media (max-width: 600px) {
+  .hero-mascot { width: 120px; }
+  .hero-content { text-align: center; }
 }
 @media (max-width: 600px) {
   .hero-mascot { width: 160px; right: 0; }
