@@ -453,15 +453,19 @@ body.admin-page { padding-top: 72px; }
 /* Mascot */
 .hero { position: relative; }
 .hero-mascot {
-  display: block;
-  width: 220px;
-  margin: 32px auto 0;
+  width: 140px;
   pointer-events: none;
-  filter: drop-shadow(0 0 30px rgba(0,200,232,.3));
+  filter: drop-shadow(0 0 20px rgba(0,200,232,.3));
+  animation: mascot-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes mascot-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
 @media (max-width: 600px) {
-  .hero-mascot { width: 150px; }
+  .hero-mascot { width: 100px; }
 }
 @media (max-width: 600px) {
   .hero-mascot { width: 140px; }
