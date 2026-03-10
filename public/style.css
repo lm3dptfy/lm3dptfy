@@ -452,8 +452,8 @@ body.admin-page { padding-top: 72px; }
 /* Mascot */
 .hero { position: relative; }
 .hero-mascot {
-  width: 140px;
-  margin-left: -20px;
+  width: 160px;
+  margin-left: -10px;
   pointer-events: none;
   filter: drop-shadow(0 0 20px rgba(0,200,232,.3));
   animation: mascot-bounce 1.6s ease-in-out infinite;
