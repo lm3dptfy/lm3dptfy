@@ -158,11 +158,9 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   position: relative;
   min-height: 92vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  padding: 0 40px;
   padding: 80px 24px 80px;
   text-align: center;
 }
@@ -455,8 +453,11 @@ body.admin-page { padding-top: 72px; }
 /* Mascot */
 .hero { position: relative; }
 .hero-mascot {
-  width: 320px;
-  flex-shrink: 0;
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
   pointer-events: none;
   filter: drop-shadow(0 0 30px rgba(0,200,232,.3));
 }
