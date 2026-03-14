@@ -466,6 +466,7 @@ body.admin-page { padding-top: 72px; }
 
 @media (max-width: 600px) {
   .hero-mascot { width: 100px; }
+  .hero-scroll { bottom: 16px; }
 }
 @media (max-width: 600px) {
   .hero-mascot { width: 140px; }
