@@ -550,14 +550,31 @@ id: f.id,
 name: f.name,
 mimeType: f.mimeType,
 isVideo: f.mimeType.startsWith('video/'),
-thumb: `https://drive.google.com/thumbnail?id=${f.id}&sz=w800`,
-full: `https://drive.google.com/uc?export=view&id=${f.id}`,
+thumb: `/api/gallery/image/${f.id}`,
+full: `/api/gallery/image/${f.id}`,
 embed: `https://drive.google.com/file/d/${f.id}/preview`,
 }));
 res.json({ ok: true, files });
 } catch (err) {
 console.error('Gallery fetch error:', err.message);
 res.status(500).json({ ok: false, error: 'Failed to load gallery.' });
+}
+});
+
+app.get('/api/gallery/image/:id', async (req, res) => {
+if (!driveClient) return res.status(503).send('Drive not configured');
+const id = req.params.id;
+if (!/^[a-zA-Z0-9_-]+$/.test(id)) return res.status(400).send('Invalid id');
+try {
+const meta = await driveClient.files.get({ fileId: id, fields: 'mimeType' });
+const mimeType = meta.data.mimeType || 'image/jpeg';
+const stream = await driveClient.files.get({ fileId: id, alt: 'media' }, { responseType: 'stream' });
+res.setHeader('Content-Type', mimeType);
+res.setHeader('Cache-Control', 'public, max-age=86400');
+stream.data.pipe(res);
+} catch (err) {
+console.error('Gallery image proxy error:', err.message);
+res.status(500).send('Failed to load image');
 }
 });
 
