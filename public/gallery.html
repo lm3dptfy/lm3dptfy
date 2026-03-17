@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <title>Our Work — LM3DPTFY</title>
+  <title>Photo Gallery — LM3DPTFY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="See prints we've made — real photos and videos of completed 3D prints from LM3DPTFY." />
   <link rel="icon" href="/favicon.ico" />
@@ -320,12 +320,10 @@
         if (f.isVideo) {
           item.innerHTML = `
             <img src="${f.thumb}" alt="${f.name}" loading="lazy" onerror="this.src='/logo-lm3dptfy-wh.png'" />
-            <div class="play-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
-            <div class="item-name">${f.name}</div>`;
+            <div class="play-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>`;
         } else {
           item.innerHTML = `
-            <img src="${f.thumb}" alt="${f.name}" loading="lazy" onerror="this.src='/logo-lm3dptfy-wh.png'" />
-            <div class="item-name">${f.name}</div>`;
+            <img src="${f.thumb}" alt="${f.name}" loading="lazy" onerror="this.src='/logo-lm3dptfy-wh.png'" />`;
         }
         item.addEventListener('click', () => openLightbox(i));
         grid.appendChild(item);
