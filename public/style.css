@@ -311,6 +311,7 @@ select.input { cursor: pointer; }
 .footer-brand img { width: 42px; height: 42px; object-fit: contain; border-radius: 10px; margin-bottom: 14px; }
 .footer-brand-name { font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); margin-bottom: 10px; }
 .footer-brand p { font-size: .85rem; color: var(--ink3); font-weight: 300; line-height: 1.7; max-width: 280px; }
+.footer-va-badge { margin-top: 14px; padding: 10px 14px; background: rgba(0,154,184,.08); border: 1px solid var(--line2); border-radius: 8px; font-size: .76rem; color: var(--ink3); font-weight: 300; line-height: 1.6; max-width: 280px; }
 .footer-socials { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
 .footer-socials a { color: var(--ink3); transition: color .2s; display: flex; line-height: 0; }
 .footer-socials a:hover { color: var(--accent); }
