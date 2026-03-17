@@ -316,9 +316,17 @@ message: { error: 'Too many requests from this IP. Please try again later.' },
 standardHeaders: true, legacyHeaders: false,
 });
 
-app.get('/', (req, res) => { res.sendFile(path.join(STATIC_DIR, 'index.html')); });
+app.get('/', (req, res) => { res.setHeader('Cache-Control', 'no-cache'); res.sendFile(path.join(STATIC_DIR, 'index.html')); });
 app.get('/admin', (req, res) => res.redirect('/admin.html'));
-app.use(express.static(STATIC_DIR, { maxAge: '7d', etag: true }));
+app.use(express.static(STATIC_DIR, {
+  maxAge: '7d',
+  etag: true,
+  setHeaders(res, filePath) {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  }
+}));
 
 // ========== HELPERS ==============================================
 
