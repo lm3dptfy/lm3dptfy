@@ -59,19 +59,16 @@ const SHEET_HEADER = [
 ];
 
 const VALID_STATUSES = [
-'new', 'responded', 'quote_approved', 'sent_to_printer',
-'print_complete', 'qc_complete', 'shipped', 'paid',
+'new', 'quoted', 'confirmed', 'printing', 'shipped', 'cancelled',
 ];
 
 const STATUS_LABELS = {
 new: 'New',
-responded: 'Responded',
-quote_approved: 'Quote approved',
-sent_to_printer: 'Sent to printer',
-print_complete: 'Print complete',
-qc_complete: 'QC complete',
+quoted: 'Quoted',
+confirmed: 'Confirmed',
+printing: 'Printing',
 shipped: 'Shipped',
-paid: 'Paid',
+cancelled: 'Cancelled',
 };
 
 function statusToSheet(status) {
