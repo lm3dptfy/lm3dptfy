@@ -316,6 +316,10 @@ select.input { cursor: pointer; }
 .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
 .footer-col ul li a { font-size: .88rem; color: var(--ink3); font-weight: 300; text-decoration: none; transition: color var(--t); }
 .footer-col ul li a:hover { color: var(--ink); }
+.footer-socials { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 28px 0; border-top: 1px solid var(--line); }
+.footer-socials a { color: var(--ink3); transition: color .2s; display: flex; }
+.footer-socials a:hover { color: var(--accent); }
+.footer-socials svg { width: 22px; height: 22px; }
 .footer-bottom { border-top: 1px solid var(--line); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: .78rem; color: var(--ink3); font-weight: 300; }
 
 body.admin-page { padding-top: 72px; }
