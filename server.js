@@ -222,22 +222,26 @@ console.warn('Failed to write requests-cache.json:', err && err.message || err);
 
 // ========== GOOGLE SHEETS CLIENT =================================
 
+const GALLERY_FOLDER_ID = '1WWjzhZvhK3XzMhvwxvvY0PHYkR5HS7Pc';
+
 let sheetsClient = null;
+let driveClient = null;
 
 if (process.env.GOOGLE_SERVICE_ACCOUNT) {
 try {
 const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
 const auth = new google.auth.JWT(
 credentials.client_email, null, credentials.private_key,
-['https://www.googleapis.com/auth/spreadsheets']
+['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly']
 );
 sheetsClient = google.sheets({ version: 'v4', auth });
-console.log('Google Sheets integration enabled.');
+driveClient = google.drive({ version: 'v3', auth });
+console.log('Google Sheets + Drive integration enabled. Service account:', credentials.client_email);
 } catch (err) {
-console.error('Failed to initialize Google Sheets client:', err);
+console.error('Failed to initialize Google clients:', err);
 }
 } else {
-console.log('GOOGLE_SERVICE_ACCOUNT not set. Google Sheets integration disabled.');
+console.log('GOOGLE_SERVICE_ACCOUNT not set. Google Sheets/Drive integration disabled.');
 }
 
 // ========== HTML ESCAPE ==========================================
@@ -530,6 +534,31 @@ res.json({ ok: true, env: process.env.NODE_ENV || 'development', emailEnabled: E
 app.get('/api/public/sites', (req, res) => {
 const sites = (settings.supportedSites || []).filter((s) => s.enabled).map((s) => ({ id: s.id, name: s.name, hosts: s.hosts, browseUrl: s.browseUrl }));
 res.json({ ok: true, sites });
+});
+
+app.get('/api/gallery', async (req, res) => {
+if (!driveClient) return res.json({ ok: true, files: [] });
+try {
+const response = await driveClient.files.list({
+q: `'${GALLERY_FOLDER_ID}' in parents and trashed=false`,
+fields: 'files(id,name,mimeType,createdTime)',
+orderBy: 'createdTime desc',
+pageSize: 100,
+});
+const files = (response.data.files || []).map(f => ({
+id: f.id,
+name: f.name,
+mimeType: f.mimeType,
+isVideo: f.mimeType.startsWith('video/'),
+thumb: `https://drive.google.com/thumbnail?id=${f.id}&sz=w800`,
+full: `https://drive.google.com/uc?export=view&id=${f.id}`,
+embed: `https://drive.google.com/file/d/${f.id}/preview`,
+}));
+res.json({ ok: true, files });
+} catch (err) {
+console.error('Gallery fetch error:', err.message);
+res.status(500).json({ ok: false, error: 'Failed to load gallery.' });
+}
 });
 
 app.post('/api/requests', requestLimiter, async (req, res) => {

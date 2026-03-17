@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>Our Work — LM3DPTFY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="See prints we've made — real photos and videos of completed 3D prints from LM3DPTFY." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css?v=6.9" />
+  <style>
+    /* ── Gallery page styles ── */
+    .gallery-hero {
+      padding: 100px 0 60px;
+      text-align: center;
+    }
+    .gallery-hero .eyebrow { justify-content: center; display: flex; }
+    .gallery-hero .section-title { text-align: center; margin: 0 auto 16px; }
+    .gallery-hero .section-divider { margin: 16px auto 24px; }
+    .gallery-hero p {
+      color: var(--ink2);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ── Masonry grid ── */
+    .masonry {
+      columns: 3;
+      column-gap: 16px;
+      margin-top: 48px;
+    }
+    @media (max-width: 900px) { .masonry { columns: 2; } }
+    @media (max-width: 500px) { .masonry { columns: 1; } }
+
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 16px;
+      border-radius: var(--r);
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      background: var(--bg3);
+      border: 1px solid var(--line);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .masonry-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4);
+    }
+    .masonry-item img {
+      width: 100%;
+      display: block;
+      border-radius: var(--r);
+    }
+    .masonry-item .play-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.35);
+    }
+    .masonry-item .play-icon svg {
+      width: 48px;
+      height: 48px;
+      color: #fff;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,.6));
+    }
+    .masonry-item .item-name {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px 12px 10px;
+      background: linear-gradient(transparent, rgba(0,0,0,.7));
+      font-size: .75rem;
+      color: rgba(255,255,255,.7);
+      font-weight: 300;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .masonry-item:hover .item-name { opacity: 1; }
+
+    /* ── States ── */
+    .gallery-state {
+      text-align: center;
+      padding: 80px 0;
+      color: var(--ink3);
+      font-size: .95rem;
+    }
+    .gallery-state .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--line);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(4,12,23,.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s var(--ease);
+    }
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .lightbox-inner {
+      position: relative;
+      max-width: 1100px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-inner img {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: var(--r);
+      display: block;
+    }
+    .lightbox-inner iframe {
+      width: min(900px, 100%);
+      aspect-ratio: 16/9;
+      border: none;
+      border-radius: var(--r);
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+    }
+    .lightbox-close:hover { background: var(--bg4); }
+    .lightbox-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+    }
+    .lightbox-nav:hover { background: var(--bg4); }
+    .lightbox-prev { left: 16px; }
+    .lightbox-next { right: 16px; }
+
+    /* ── CTA bar ── */
+    .gallery-cta {
+      text-align: center;
+      padding: 80px 0 60px;
+      border-top: 1px solid var(--line);
+      margin-top: 60px;
+    }
+    .gallery-cta p { color: var(--ink2); margin-bottom: 24px; font-weight: 300; }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav" id="mainNav">
+  <a class="nav-logo" href="/" title="LM3DPTFY">
+    <img src="/logo-lm3dptfy-wh.png" alt="LM3DPTFY logo" />
+    <div class="nav-logo-text">
+      <strong>LM3DPTFY</strong>
+      <span>Let Me 3D Print That For You</span>
+    </div>
+  </a>
+  <button class="nav-burger" id="navBurger" aria-label="Menu">&#9776;</button>
+  <div class="nav-links" id="navLinks">
+    <a class="nav-link" href="/#how-it-works">How It Works</a>
+    <a class="nav-link" href="/#pricing">Pricing</a>
+    <a class="nav-link" href="/#libraries">Model Library</a>
+    <a class="nav-link" href="/#libraries">Get a Quote</a>
+    <a class="nav-link" href="/#what-you-get">What You Get</a>
+    <a class="nav-link nav-link--active" href="/gallery.html">Our Work</a>
+    <a class="nav-link" href="/#faq">FAQ</a>
+    <a class="nav-link" href="/#terms">Terms</a>
+    <a class="nav-link" href="/#who-we-are">Who We Are</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<div class="gallery-hero">
+  <div class="container container-md">
+    <span class="eyebrow">Our Work</span>
+    <h2 class="section-title">Prints We've<br/><em>Made & Shipped.</em></h2>
+    <div class="section-divider"></div>
+    <p>Real photos and videos of completed prints — every item you see was made right here and shipped to a customer.</p>
+  </div>
+</div>
+
+<!-- ===== GALLERY ===== -->
+<div class="container">
+  <div id="galleryState" class="gallery-state">
+    <div class="spinner"></div>
+    Loading gallery…
+  </div>
+  <div class="masonry" id="masonry" style="display:none;"></div>
+</div>
+
+<!-- ===== CTA ===== -->
+<div class="gallery-cta">
+  <div class="container">
+    <span class="eyebrow">Ready to Order?</span>
+    <p>Get a free quote — no payment until you approve.</p>
+    <a class="btn btn-solid" href="/#libraries">Start Your Free Quote →</a>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="/logo-lm3dptfy-wh.png" alt="LM3DPTFY logo" />
+        <div class="footer-brand-name">LM3DPTFY.ONLINE</div>
+        <p>Veteran-owned 3D printing service. We print and ship exclusively within the United States.</p>
+        <div class="footer-va-badge">🇺🇸 Veteran Owned · Prints &amp; Ships USA Only · PLA Filament · All Sales Final</div>
+      </div>
+      <div class="footer-socials">
+        <span class="footer-follow">FOLLOW US ON</span>
+        <div class="footer-icons">
+          <a href="https://www.youtube.com/@LM3DPTFY" target="_blank" rel="noopener" aria-label="YouTube"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+          <a href="https://www.facebook.com/profile.php?id=61584799695182" target="_blank" rel="noopener" aria-label="Facebook"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg></a>
+          <a href="https://www.instagram.com/lm3dptfy/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+          <a href="https://x.com/LM3DPTFY" target="_blank" rel="noopener" aria-label="X (Twitter)"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a>
+          <a href="mailto:lm3dptfy@gmail.com" aria-label="Email"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 LM3DPTFY.ONLINE — Let Me 3D Print That For You. All rights reserved.</span>
+      <span>FDM prints may show layer lines · We do not print licensed IP or functional weapons</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== LIGHTBOX ===== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <div class="lightbox-inner" id="lightboxInner"></div>
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">‹</button>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">›</button>
+</div>
+
+<script>
+  // ── Nav burger ──
+  const burger = document.getElementById('navBurger');
+  const navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  document.addEventListener('click', e => {
+    if (!burger.contains(e.target) && !navLinks.contains(e.target)) navLinks.classList.remove('open');
+  });
+
+  // ── Gallery ──
+  let files = [];
+  let current = 0;
+
+  async function loadGallery() {
+    const state = document.getElementById('galleryState');
+    const grid  = document.getElementById('masonry');
+    try {
+      const res  = await fetch('/api/gallery');
+      const data = await res.json();
+      files = data.files || [];
+      if (!files.length) {
+        state.innerHTML = '<p style="color:var(--ink3)">No photos yet — check back soon!</p>';
+        return;
+      }
+      state.style.display = 'none';
+      grid.style.display  = '';
+      files.forEach((f, i) => {
+        const item = document.createElement('div');
+        item.className = 'masonry-item';
+        item.dataset.index = i;
+        if (f.isVideo) {
+          item.innerHTML = `
+            <img src="${f.thumb}" alt="${f.name}" loading="lazy" onerror="this.src='/logo-lm3dptfy-wh.png'" />
+            <div class="play-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="item-name">${f.name}</div>`;
+        } else {
+          item.innerHTML = `
+            <img src="${f.thumb}" alt="${f.name}" loading="lazy" onerror="this.src='/logo-lm3dptfy-wh.png'" />
+            <div class="item-name">${f.name}</div>`;
+        }
+        item.addEventListener('click', () => openLightbox(i));
+        grid.appendChild(item);
+      });
+    } catch (err) {
+      state.innerHTML = '<p style="color:var(--ink3)">Could not load gallery. Please try again later.</p>';
+    }
+  }
+
+  // ── Lightbox ──
+  const lightbox = document.getElementById('lightbox');
+  const lbInner  = document.getElementById('lightboxInner');
+
+  function openLightbox(index) {
+    current = index;
+    renderLightbox();
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    lbInner.innerHTML = '';
+  }
+
+  function renderLightbox() {
+    const f = files[current];
+    lbInner.innerHTML = f.isVideo
+      ? `<iframe src="${f.embed}" allowfullscreen></iframe>`
+      : `<img src="${f.full}" alt="${f.name}" />`;
+  }
+
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  document.getElementById('lightboxPrev').addEventListener('click', () => {
+    current = (current - 1 + files.length) % files.length;
+    renderLightbox();
+  });
+  document.getElementById('lightboxNext').addEventListener('click', () => {
+    current = (current + 1) % files.length;
+    renderLightbox();
+  });
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft')  { current = (current - 1 + files.length) % files.length; renderLightbox(); }
+    if (e.key === 'ArrowRight') { current = (current + 1) % files.length; renderLightbox(); }
+  });
+
+  loadGallery();
+</script>
+</body>
+</html>
