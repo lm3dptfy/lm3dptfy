@@ -713,17 +713,19 @@ res.send(requestsToCsv(requests));
 app.get('/api/quote/options', requireAdmin, async (req, res) => {
 if (!sheetsClient || !QUOTE_SHEET_ID) return res.status(501).json({ error: 'Quote sheet not configured.' });
 try {
-const [printersRes, materialsRes, defaultsRes] = await Promise.all([
+const [printersRes, materialsRes, markupRes, taxRes] = await Promise.all([
 sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Printers!A2:A50' }),
 sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Materials!A2:A50' }),
-sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Cost Calculator!B41:B41' }),
+sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Cost Calculator!B41', valueRenderOption: 'UNFORMATTED_VALUE' }),
+sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Cost Calculator!B47', valueRenderOption: 'UNFORMATTED_VALUE' }),
 ]);
 const printers = (printersRes.data.values || []).map(r => r[0]).filter(Boolean);
 const materials = (materialsRes.data.values || []).map(r => r[0]).filter(Boolean);
-const defaultMarkup = parseFloat(((defaultsRes.data.values || [[33]])[0] || [33])[0]) || 33;
-// Read tax default from B47
-const taxRes = await sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Cost Calculator!B47' });
-const defaultTax = parseFloat(((taxRes.data.values || [[8.25]])[0] || [8.25])[0]) || 8.25;
+// Sheet stores percentages as decimals (0.33 = 33%) — multiply by 100 for display
+const rawMarkup = parseFloat(((markupRes.data.values || [[0.33]])[0] || [0.33])[0]) || 0.33;
+const rawTax    = parseFloat(((taxRes.data.values    || [[0.0825]])[0] || [0.0825])[0]) || 0.0825;
+const defaultMarkup = Math.round(rawMarkup * 100 * 100) / 100;
+const defaultTax    = Math.round(rawTax    * 100 * 100) / 100;
 res.json({ ok: true, printers, materials, defaultMarkup, defaultTax });
 } catch (err) {
 console.error('Quote options error:', err.message);
@@ -759,8 +761,8 @@ data: [
 { range: 'Cost Calculator!B25', values: [[Number(b.supportRemoval) || 0]] },
 { range: 'Cost Calculator!B26', values: [[Number(b.additionalWork) || 0]] },
 { range: 'Cost Calculator!B29', values: [[Number(b.misc) || 0]] },
-{ range: 'Cost Calculator!B41', values: [[Number(b.markup) || 33]] },
-{ range: 'Cost Calculator!B47', values: [[Number(b.tax) || 8.25]] },
+{ range: 'Cost Calculator!B41', values: [[Number(b.markup) / 100 || 0.33]] },
+{ range: 'Cost Calculator!B47', values: [[Number(b.tax) / 100 || 0.0825]] },
 { range: 'Cost Calculator!B49', values: [[Number(b.shipping) || 0]] },
 ],
 },
@@ -790,12 +792,11 @@ try {
 const meta = await sheetsClient.spreadsheets.get({ spreadsheetId: QUOTE_SHEET_ID, fields: 'sheets.properties' });
 const quoteOutputSheet = (meta.data.sheets || []).find(s => s.properties.title === 'Quote Output');
 const gid = quoteOutputSheet ? quoteOutputSheet.properties.sheetId : 0;
-// Export PDF via authenticated fetch
-const tokenRes = await googleAuth.getAccessToken();
+// Export PDF using authenticated googleAuth request (handles token automatically)
 const pdfUrl = `https://docs.google.com/spreadsheets/d/${QUOTE_SHEET_ID}/export?format=pdf&gid=${gid}&portrait=true&fitw=true&size=letter`;
-const pdfFetch = await fetch(pdfUrl, { headers: { Authorization: 'Bearer ' + tokenRes.token } });
-if (!pdfFetch.ok) throw new Error('PDF export failed: ' + pdfFetch.status);
-const pdfBuffer = Buffer.from(await pdfFetch.arrayBuffer());
+const pdfResponse = await googleAuth.request({ url: pdfUrl, responseType: 'arraybuffer' });
+if (!pdfResponse || !pdfResponse.data) throw new Error('PDF export returned empty response');
+const pdfBuffer = Buffer.from(pdfResponse.data);
 // Upload PDF to Drive
 if (driveClient) {
 const { Readable } = require('stream');
