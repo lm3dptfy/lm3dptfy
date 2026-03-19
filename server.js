@@ -817,7 +817,7 @@ console.warn('Drive PDF upload skipped (use a Shared Drive for storage):', drive
 // Send email to customer with PDF attached
 if (EMAIL_ENABLED && r.email) {
 const grandTotal = (summary || {})['Grand Total (w/ Shipping)'] || 'See quote';
-const HIDDEN_SUMMARY_KEYS = /markup|profit|margin/i;
+const HIDDEN_SUMMARY_KEYS = /markup|profit|margin|suggested price/i;
 const html = '<h2>Your 3D Print Quote — LM3DPTFY</h2>'
 + '<p>Hi ' + escapeHtml(r.name) + ',</p>'
 + '<p>Thank you for your request! Please find your full quote attached as a PDF.</p>'
