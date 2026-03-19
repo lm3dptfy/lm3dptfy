@@ -223,19 +223,22 @@ console.warn('Failed to write requests-cache.json:', err && err.message || err);
 // ========== GOOGLE SHEETS CLIENT =================================
 
 const GALLERY_FOLDER_ID = '1WWjzhZvhK3XzMhvwxvvY0PHYkR5HS7Pc';
+const QUOTE_SHEET_ID = process.env.QUOTE_SHEET_ID;
+const QUOTES_PDF_FOLDER_ID = process.env.QUOTES_PDF_FOLDER_ID || '1EdnLRjFU9vtd05_Soa3p6za8-vo6GhlI';
 
 let sheetsClient = null;
 let driveClient = null;
+let googleAuth = null;
 
 if (process.env.GOOGLE_SERVICE_ACCOUNT) {
 try {
 const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
-const auth = new google.auth.JWT(
+googleAuth = new google.auth.JWT(
 credentials.client_email, null, credentials.private_key,
-['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.readonly']
+['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
 );
-sheetsClient = google.sheets({ version: 'v4', auth });
-driveClient = google.drive({ version: 'v3', auth });
+sheetsClient = google.sheets({ version: 'v4', auth: googleAuth });
+driveClient = google.drive({ version: 'v3', auth: googleAuth });
 console.log('Google Sheets + Drive integration enabled. Service account:', credentials.client_email);
 } catch (err) {
 console.error('Failed to initialize Google clients:', err);
@@ -703,6 +706,139 @@ app.get('/api/export/csv', requireAdmin, (req, res) => {
 res.setHeader('Content-Type', 'text/csv; charset=utf-8');
 res.setHeader('Content-Disposition', 'attachment; filename="lm3dptfy-requests.csv"');
 res.send(requestsToCsv(requests));
+});
+
+// ========== QUOTE CALCULATOR =====================================
+
+app.get('/api/quote/options', requireAdmin, async (req, res) => {
+if (!sheetsClient || !QUOTE_SHEET_ID) return res.status(501).json({ error: 'Quote sheet not configured.' });
+try {
+const [printersRes, materialsRes, defaultsRes] = await Promise.all([
+sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Printers!A2:A50' }),
+sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Materials!A2:A50' }),
+sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Cost Calculator!B41:B41' }),
+]);
+const printers = (printersRes.data.values || []).map(r => r[0]).filter(Boolean);
+const materials = (materialsRes.data.values || []).map(r => r[0]).filter(Boolean);
+const defaultMarkup = parseFloat(((defaultsRes.data.values || [[33]])[0] || [33])[0]) || 33;
+// Read tax default from B47
+const taxRes = await sheetsClient.spreadsheets.values.get({ spreadsheetId: QUOTE_SHEET_ID, range: 'Cost Calculator!B47' });
+const defaultTax = parseFloat(((taxRes.data.values || [[8.25]])[0] || [8.25])[0]) || 8.25;
+res.json({ ok: true, printers, materials, defaultMarkup, defaultTax });
+} catch (err) {
+console.error('Quote options error:', err.message);
+res.status(500).json({ error: 'Failed to load quote options.' });
+}
+});
+
+app.post('/api/quote/calculate', requireAdmin, async (req, res) => {
+if (!sheetsClient || !QUOTE_SHEET_ID) return res.status(501).json({ error: 'Quote sheet not configured.' });
+const b = req.body;
+try {
+await sheetsClient.spreadsheets.values.batchUpdate({
+spreadsheetId: QUOTE_SHEET_ID,
+requestBody: {
+valueInputOption: 'USER_ENTERED',
+data: [
+{ range: 'Cost Calculator!B2', values: [[b.customerName || '']] },
+{ range: 'Cost Calculator!B3', values: [[b.date || new Date().toLocaleDateString()]] },
+{ range: 'Cost Calculator!B4', values: [[b.jobDescription || '']] },
+{ range: 'Cost Calculator!B5', values: [[Number(b.quantity) || 1]] },
+{ range: 'Cost Calculator!B8', values: [[b.printer || '']] },
+{ range: 'Cost Calculator!B9', values: [[b.material || '']] },
+{ range: 'Cost Calculator!B10', values: [[Number(b.weight) || 0]] },
+{ range: 'Cost Calculator!B11', values: [[b.useSupport ? 'TRUE' : 'FALSE']] },
+{ range: 'Cost Calculator!B12', values: [[b.supportMaterial || '']] },
+{ range: 'Cost Calculator!B13', values: [[Number(b.supportWeight) || 0]] },
+{ range: 'Cost Calculator!B14', values: [[Number(b.printTime) || 0]] },
+{ range: 'Cost Calculator!B17', values: [[Number(b.modelPrep) || 0]] },
+{ range: 'Cost Calculator!B18', values: [[Number(b.slicing) || 0]] },
+{ range: 'Cost Calculator!B19', values: [[Number(b.materialChange) || 0]] },
+{ range: 'Cost Calculator!B20', values: [[Number(b.transferStart) || 0]] },
+{ range: 'Cost Calculator!B24', values: [[Number(b.jobRemoval) || 0]] },
+{ range: 'Cost Calculator!B25', values: [[Number(b.supportRemoval) || 0]] },
+{ range: 'Cost Calculator!B26', values: [[Number(b.additionalWork) || 0]] },
+{ range: 'Cost Calculator!B29', values: [[Number(b.misc) || 0]] },
+{ range: 'Cost Calculator!B41', values: [[Number(b.markup) || 33]] },
+{ range: 'Cost Calculator!B47', values: [[Number(b.tax) || 8.25]] },
+{ range: 'Cost Calculator!B49', values: [[Number(b.shipping) || 0]] },
+],
+},
+});
+await new Promise(r => setTimeout(r, 1800));
+const summaryRes = await sheetsClient.spreadsheets.values.get({
+spreadsheetId: QUOTE_SHEET_ID, range: 'Cost Calculator!E1:F11',
+});
+const summary = {};
+for (const row of (summaryRes.data.values || [])) {
+if (row[0] && row[1] !== undefined) summary[row[0]] = row[1];
+}
+res.json({ ok: true, summary });
+} catch (err) {
+console.error('Quote calculate error:', err.message);
+res.status(500).json({ error: 'Failed to calculate quote.' });
+}
+});
+
+app.post('/api/quote/send', requireAdmin, async (req, res) => {
+if (!sheetsClient || !QUOTE_SHEET_ID) return res.status(501).json({ error: 'Quote sheet not configured.' });
+const { requestId, summary } = req.body;
+const r = requests.find(x => x.id === requestId);
+if (!r) return res.status(404).json({ error: 'Request not found.' });
+try {
+// Get Quote Output sheet GID
+const meta = await sheetsClient.spreadsheets.get({ spreadsheetId: QUOTE_SHEET_ID, fields: 'sheets.properties' });
+const quoteOutputSheet = (meta.data.sheets || []).find(s => s.properties.title === 'Quote Output');
+const gid = quoteOutputSheet ? quoteOutputSheet.properties.sheetId : 0;
+// Export PDF via authenticated fetch
+const tokenRes = await googleAuth.getAccessToken();
+const pdfUrl = `https://docs.google.com/spreadsheets/d/${QUOTE_SHEET_ID}/export?format=pdf&gid=${gid}&portrait=true&fitw=true&size=letter`;
+const pdfFetch = await fetch(pdfUrl, { headers: { Authorization: 'Bearer ' + tokenRes.token } });
+if (!pdfFetch.ok) throw new Error('PDF export failed: ' + pdfFetch.status);
+const pdfBuffer = Buffer.from(await pdfFetch.arrayBuffer());
+// Upload PDF to Drive
+if (driveClient) {
+const { Readable } = require('stream');
+const readable = new Readable();
+readable.push(pdfBuffer);
+readable.push(null);
+await driveClient.files.create({
+requestBody: { name: requestId + '.pdf', parents: [QUOTES_PDF_FOLDER_ID], mimeType: 'application/pdf' },
+media: { mimeType: 'application/pdf', body: readable },
+});
+console.log('Quote PDF saved:', requestId + '.pdf');
+}
+// Send email to customer
+if (EMAIL_ENABLED && r.email) {
+const grandTotal = (summary || {})['Grand Total (w/ Shipping)'] || 'See quote';
+const html = '<h2>Your 3D Print Quote — LM3DPTFY</h2>'
++ '<p>Hi ' + escapeHtml(r.name) + ',</p>'
++ '<p>Thank you for your request! Here is your quote summary:</p>'
++ '<table style="border-collapse:collapse;width:100%;max-width:420px;font-family:sans-serif;">'
++ Object.entries(summary || {}).map(([k, v]) =>
+'<tr><td style="padding:7px 12px;border:1px solid #ddd;">' + escapeHtml(k) + '</td>'
++ '<td style="padding:7px 12px;border:1px solid #ddd;"><strong>' + escapeHtml(String(v)) + '</strong></td></tr>'
+).join('')
++ '</table>'
++ '<p><strong>Grand Total: ' + escapeHtml(grandTotal) + '</strong></p>'
++ '<p>To confirm your order, simply reply to this email. No payment required until you approve.</p>'
++ '<p>— The LM3DPTFY Team<br><a href="https://lm3dptfy.online">lm3dptfy.online</a></p>';
+const emailRes = await fetch('https://api.resend.com/emails', {
+method: 'POST',
+headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+body: JSON.stringify({ from: EMAIL_FROM, to: r.email, subject: 'Your 3D Print Quote from LM3DPTFY', html }),
+});
+if (!emailRes.ok) console.error('Quote email error:', await emailRes.text());
+}
+// Update status
+r.status = 'quoted'; r.updatedAt = new Date().toISOString();
+writeRequestsToFile();
+if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
+res.json({ ok: true });
+} catch (err) {
+console.error('Quote send error:', err.message);
+res.status(500).json({ error: 'Failed to send quote: ' + err.message });
+}
 });
 
 // ========== STARTUP ==============================================

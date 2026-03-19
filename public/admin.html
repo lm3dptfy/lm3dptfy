@@ -357,7 +357,9 @@
     });
     const archTxt = document.createElement('span'); archTxt.textContent = 'Archive';
     archWrap.appendChild(archCb); archWrap.appendChild(archTxt);
-    acts.appendChild(viewBtn); acts.appendChild(replyBtn); acts.appendChild(archWrap);
+    const quoteBtn = document.createElement('button'); quoteBtn.type = 'button'; quoteBtn.className = 'btn btn-teal btn-sm'; quoteBtn.textContent = 'Quote';
+    quoteBtn.addEventListener('click', () => openQuoteModal(r));
+    acts.appendChild(viewBtn); acts.appendChild(quoteBtn); acts.appendChild(replyBtn); acts.appendChild(archWrap);
     top.appendChild(meta); top.appendChild(acts);
 
     const body = document.createElement('div'); body.className = 'order-body';
@@ -518,7 +520,237 @@
   });
 
   loadRequests().catch(e => console.error('Auto-load failed:', e));
+
+  // ========== QUOTE MODAL ==========================================
+
+  let quoteOptions = null;
+
+  async function loadQuoteOptions() {
+    if (quoteOptions) return quoteOptions;
+    const res = await fetch('/api/quote/options', { credentials: 'include' });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error || 'Failed to load quote options');
+    quoteOptions = d;
+    return quoteOptions;
+  }
+
+  function buildSelect(options, selectedVal) {
+    const sel = document.createElement('select'); sel.className = 'input';
+    options.forEach(opt => {
+      const o = document.createElement('option'); o.value = opt; o.textContent = opt;
+      if (opt === selectedVal) o.selected = true;
+      sel.appendChild(o);
+    });
+    return sel;
+  }
+
+  function qField(label, inputEl, hint) {
+    const row = document.createElement('div'); row.className = 'qrow';
+    const lab = document.createElement('label'); lab.className = 'qlab'; lab.textContent = label;
+    row.appendChild(lab); row.appendChild(inputEl);
+    if (hint) { const h = document.createElement('span'); h.className = 'qhint'; h.textContent = hint; row.appendChild(h); }
+    return row;
+  }
+
+  function qNum(val, placeholder) {
+    const inp = document.createElement('input'); inp.type = 'number'; inp.className = 'input';
+    inp.step = 'any'; inp.min = '0'; inp.placeholder = placeholder || '0'; inp.value = val != null ? val : '';
+    return inp;
+  }
+
+  async function openQuoteModal(r) {
+    let opts;
+    try { opts = await loadQuoteOptions(); }
+    catch(e) { alert('Could not load quote options: ' + e.message); return; }
+
+    const overlay = document.createElement('div'); overlay.className = 'qmodal-overlay';
+    const modal   = document.createElement('div'); modal.className = 'qmodal';
+
+    // Header
+    const hdr = document.createElement('div'); hdr.className = 'qmodal-hdr';
+    const htitle = document.createElement('div'); htitle.className = 'qmodal-title';
+    htitle.innerHTML = '<strong>Quote</strong> — ' + (r.name || 'Unknown') + '<span class="qmodal-id">' + r.id.slice(0,8) + '</span>';
+    const closeBtn = document.createElement('button'); closeBtn.type = 'button'; closeBtn.className = 'qclose'; closeBtn.textContent = '✕';
+    closeBtn.addEventListener('click', () => overlay.remove());
+    hdr.appendChild(htitle); hdr.appendChild(closeBtn);
+
+    // Body — two columns
+    const body = document.createElement('div'); body.className = 'qmodal-body';
+    const left = document.createElement('div'); left.className = 'qmodal-left';
+    const right = document.createElement('div'); right.className = 'qmodal-right';
+
+    // ---- Section helper ----
+    function sec(title) {
+      const s = document.createElement('div'); s.className = 'qsec';
+      const h = document.createElement('div'); h.className = 'qsec-title'; h.textContent = title;
+      s.appendChild(h); return s;
+    }
+
+    // ---- Customer Details ----
+    const s1 = sec('Customer Details');
+    const fName = document.createElement('input'); fName.type = 'text'; fName.className = 'input'; fName.value = r.name || '';
+    const fDate = document.createElement('input'); fDate.type = 'date'; fDate.className = 'input';
+    fDate.value = new Date().toISOString().slice(0, 10);
+    const fDesc = document.createElement('input'); fDesc.type = 'text'; fDesc.className = 'input';
+    fDesc.value = r.details || r.stlLink || '';
+    const fQty  = qNum(1, '1');
+    s1.appendChild(qField('Customer Name', fName));
+    s1.appendChild(qField('Date', fDate));
+    s1.appendChild(qField('Job Description', fDesc));
+    s1.appendChild(qField('Quantity', fQty));
+
+    // ---- Print Details ----
+    const s2 = sec('General Print Details');
+    const fPrinter  = buildSelect(opts.printers, opts.printers[0]);
+    const fMaterial = buildSelect(opts.materials, opts.materials[0]);
+    const fWeight   = qNum('', 'grams');
+    const fSupport  = document.createElement('input'); fSupport.type = 'checkbox'; fSupport.className = 'qcheckbox';
+    const fSuppMat  = buildSelect(opts.materials, opts.materials[0]);
+    const fSuppWt   = qNum('', 'grams');
+    const fPrintTime = qNum('', 'hours');
+    const suppRow = document.createElement('div'); suppRow.className = 'qsupp-extra';
+    suppRow.style.display = 'none';
+    suppRow.appendChild(qField('Support Material', fSuppMat));
+    suppRow.appendChild(qField('Support Weight (g)', fSuppWt));
+    fSupport.addEventListener('change', () => { suppRow.style.display = fSupport.checked ? 'block' : 'none'; });
+    s2.appendChild(qField('Printer', fPrinter));
+    s2.appendChild(qField('Material', fMaterial));
+    s2.appendChild(qField('Weight (g)', fWeight));
+    s2.appendChild(qField('Use Supports?', fSupport, 'Check if supports needed'));
+    s2.appendChild(suppRow);
+    s2.appendChild(qField('Printing Time (hrs)', fPrintTime));
+
+    // ---- Preparation ----
+    const s3 = sec('Preparation (mins)');
+    const fModelPrep = qNum(1); const fSlicing = qNum(1);
+    const fMatChange = qNum(1); const fTransfer = qNum(5);
+    s3.appendChild(qField('Model Prep (Fixing/CAD)', fModelPrep));
+    s3.appendChild(qField('Slicing (Supports/Params)', fSlicing));
+    s3.appendChild(qField('Material Change', fMatChange));
+    s3.appendChild(qField('Transfer & Start', fTransfer));
+
+    // ---- Post-Processing ----
+    const s4 = sec('Post-Processing (mins)');
+    const fJobRemoval = qNum(1); const fSuppRemoval = qNum(1); const fAddlWork = qNum(2);
+    s4.appendChild(qField('Job Removal', fJobRemoval));
+    s4.appendChild(qField('Support Removal', fSuppRemoval));
+    s4.appendChild(qField('Additional Work', fAddlWork));
+
+    // ---- Misc & Quote Overrides ----
+    const s5 = sec('Misc & Quote Overrides');
+    const fMisc = qNum(1); const fMarkup = qNum(opts.defaultMarkup, '%'); const fTax = qNum(opts.defaultTax, '%'); const fShipping = qNum(10, '$');
+    s5.appendChild(qField('Misc.', fMisc));
+    s5.appendChild(qField('Markup %', fMarkup, 'Default from sheet'));
+    s5.appendChild(qField('Tax %', fTax, 'Default from sheet'));
+    s5.appendChild(qField('Shipping ($)', fShipping));
+
+    left.appendChild(s1); left.appendChild(s2); left.appendChild(s3); left.appendChild(s4); left.appendChild(s5);
+
+    // ---- Right: Summary Panel ----
+    const sumPanel = document.createElement('div'); sumPanel.className = 'qsummary';
+    const sumTitle = document.createElement('div'); sumTitle.className = 'qsummary-title'; sumTitle.textContent = 'Cost Summary';
+    const sumBody  = document.createElement('div'); sumBody.className = 'qsummary-body'; sumBody.textContent = 'Fill in the fields and click Calculate.';
+    const calcBtn  = document.createElement('button'); calcBtn.type = 'button'; calcBtn.className = 'btn btn-solid'; calcBtn.textContent = 'Calculate';
+    const sendBtn  = document.createElement('button'); sendBtn.type = 'button'; sendBtn.className = 'btn btn-teal'; sendBtn.textContent = 'Send Quote to Customer'; sendBtn.disabled = true;
+    const qStatus  = document.createElement('div'); qStatus.className = 'qstatus';
+
+    let lastSummary = null;
+
+    function getFormData() {
+      return {
+        customerName: fName.value, date: fDate.value, jobDescription: fDesc.value,
+        quantity: fQty.value, printer: fPrinter.value, material: fMaterial.value,
+        weight: fWeight.value, useSupport: fSupport.checked,
+        supportMaterial: fSuppMat.value, supportWeight: fSuppWt.value,
+        printTime: fPrintTime.value, modelPrep: fModelPrep.value, slicing: fSlicing.value,
+        materialChange: fMatChange.value, transferStart: fTransfer.value,
+        jobRemoval: fJobRemoval.value, supportRemoval: fSuppRemoval.value,
+        additionalWork: fAddlWork.value, misc: fMisc.value,
+        markup: fMarkup.value, tax: fTax.value, shipping: fShipping.value,
+      };
+    }
+
+    calcBtn.addEventListener('click', async () => {
+      calcBtn.disabled = true; calcBtn.textContent = 'Calculating…'; qStatus.textContent = '';
+      try {
+        const res = await fetch('/api/quote/calculate', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(getFormData()) });
+        const d = await res.json();
+        if (!res.ok) throw new Error(d.error || 'Calculation failed');
+        lastSummary = d.summary;
+        sumBody.innerHTML = '';
+        const tbl = document.createElement('table'); tbl.className = 'qsum-table';
+        Object.entries(d.summary).forEach(([k, v]) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + k + '</td><td><strong>' + v + '</strong></td>';
+          tbl.appendChild(tr);
+        });
+        sumBody.appendChild(tbl);
+        sendBtn.disabled = false;
+        qStatus.textContent = '✓ Calculated successfully';
+        qStatus.style.color = 'var(--teal-light)';
+      } catch(e) {
+        qStatus.textContent = '✗ ' + e.message; qStatus.style.color = '#f87171';
+      } finally { calcBtn.disabled = false; calcBtn.textContent = 'Calculate'; }
+    });
+
+    sendBtn.addEventListener('click', async () => {
+      if (!lastSummary) return;
+      sendBtn.disabled = true; sendBtn.textContent = 'Sending…'; qStatus.textContent = '';
+      try {
+        const res = await fetch('/api/quote/send', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ requestId: r.id, summary: lastSummary, ...getFormData() }) });
+        const d = await res.json();
+        if (!res.ok) throw new Error(d.error || 'Failed to send');
+        qStatus.textContent = '✓ Quote sent! PDF saved. Status updated to Quoted.';
+        qStatus.style.color = 'var(--teal-light)';
+        sendBtn.textContent = 'Sent ✓';
+        setTimeout(() => { overlay.remove(); loadRequests(); }, 2000);
+      } catch(e) {
+        qStatus.textContent = '✗ ' + e.message; qStatus.style.color = '#f87171';
+        sendBtn.disabled = false; sendBtn.textContent = 'Send Quote to Customer';
+      }
+    });
+
+    sumPanel.appendChild(sumTitle); sumPanel.appendChild(sumBody);
+    sumPanel.appendChild(calcBtn); sumPanel.appendChild(sendBtn); sumPanel.appendChild(qStatus);
+    right.appendChild(sumPanel);
+
+    body.appendChild(left); body.appendChild(right);
+    modal.appendChild(hdr); modal.appendChild(body);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  }
 </script>
+
+<style>
+.btn-teal { background: var(--teal); color: #fff; border: none; cursor: pointer; }
+.btn-teal:hover { background: var(--teal-light); }
+.qmodal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto; }
+.qmodal { background:var(--bg2);border:1px solid var(--line2);border-radius:12px;width:100%;max-width:960px;display:flex;flex-direction:column;max-height:calc(100vh - 48px);overflow:hidden; }
+.qmodal-hdr { display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--line);flex-shrink:0; }
+.qmodal-title { font-size:1.05rem;color:var(--ink);display:flex;align-items:center;gap:10px; }
+.qmodal-id { font-size:.72rem;color:var(--ink3);font-family:monospace;background:var(--bg3);padding:2px 6px;border-radius:4px; }
+.qclose { background:none;border:none;color:var(--ink3);font-size:1.1rem;cursor:pointer;padding:4px 8px;border-radius:4px; }
+.qclose:hover { background:var(--bg3);color:var(--ink); }
+.qmodal-body { display:grid;grid-template-columns:1fr 320px;gap:0;overflow:hidden;flex:1; }
+.qmodal-left { overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:20px; }
+.qmodal-right { border-left:1px solid var(--line);overflow-y:auto;padding:20px; }
+.qsec { display:flex;flex-direction:column;gap:8px; }
+.qsec-title { font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--teal-light);padding-bottom:4px;border-bottom:1px solid var(--line); }
+.qrow { display:grid;grid-template-columns:180px 1fr;align-items:center;gap:8px; }
+.qlab { font-size:.82rem;color:var(--ink2); }
+.qhint { font-size:.72rem;color:var(--ink3);grid-column:2; }
+.qcheckbox { width:18px;height:18px;cursor:pointer;accent-color:var(--teal); }
+.qsupp-extra { display:flex;flex-direction:column;gap:8px;padding-left:12px;border-left:2px solid var(--teal-dim); }
+.qsummary { display:flex;flex-direction:column;gap:12px; }
+.qsummary-title { font-size:.65rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--teal-light);padding-bottom:4px;border-bottom:1px solid var(--line); }
+.qsummary-body { font-size:.85rem;color:var(--ink2);flex:1; }
+.qsum-table { width:100%;border-collapse:collapse; }
+.qsum-table td { padding:5px 4px;border-bottom:1px solid var(--line);font-size:.82rem;color:var(--ink2); }
+.qsum-table td:last-child { text-align:right;color:var(--ink); }
+.qstatus { font-size:.8rem;margin-top:4px; }
+@media(max-width:680px){ .qmodal-body{grid-template-columns:1fr;} .qmodal-right{border-left:none;border-top:1px solid var(--line);} .qrow{grid-template-columns:1fr;} }
+</style>
 
 </body>
 </html>
