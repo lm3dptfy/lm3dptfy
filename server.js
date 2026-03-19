@@ -793,7 +793,7 @@ const meta = await sheetsClient.spreadsheets.get({ spreadsheetId: QUOTE_SHEET_ID
 const quoteOutputSheet = (meta.data.sheets || []).find(s => s.properties.title === 'Quote Output');
 const gid = quoteOutputSheet ? quoteOutputSheet.properties.sheetId : 0;
 // Export PDF using authenticated googleAuth request (handles token automatically)
-const pdfUrl = `https://docs.google.com/spreadsheets/d/${QUOTE_SHEET_ID}/export?format=pdf&gid=${gid}&portrait=true&fitw=true&size=letter`;
+const pdfUrl = `https://docs.google.com/spreadsheets/d/${QUOTE_SHEET_ID}/export?format=pdf&gid=${gid}&portrait=true&fitw=true&size=letter&gridlines=false`;
 const pdfResponse = await googleAuth.request({ url: pdfUrl, responseType: 'arraybuffer' });
 if (!pdfResponse || !pdfResponse.data) throw new Error('PDF export returned empty response');
 const pdfBuffer = Buffer.from(pdfResponse.data);
