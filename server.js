@@ -817,23 +817,10 @@ console.warn('Drive PDF upload skipped (use a Shared Drive for storage):', drive
 // Send email to customer with PDF attached
 if (EMAIL_ENABLED && r.email) {
 const grandTotal = (summary || {})['Grand Total (w/ Shipping)'] || 'See quote';
-const HIDDEN_SUMMARY_KEYS = /markup|profit|margin|suggested price/i;
-const suggestedPrice = (summary || {})['Suggested Price (Total)'];
 const html = '<h2>Your 3D Print Quote — LM3DPTFY</h2>'
 + '<p>Hi ' + escapeHtml(r.name) + ',</p>'
 + '<p>Thank you for your request! Please find your full quote attached as a PDF.</p>'
-+ '<p>Here is your quote summary:</p>'
-+ '<table style="border-collapse:collapse;width:100%;max-width:420px;font-family:sans-serif;">'
-+ Object.entries(summary || {}).filter(([k, v]) => {
-  if (HIDDEN_SUMMARY_KEYS.test(k)) return false;
-  if (/discounted total/i.test(k) && v === suggestedPrice) return false;
-  return true;
-}).map(([k, v]) =>
-'<tr><td style="padding:7px 12px;border:1px solid #ddd;">' + escapeHtml(k) + '</td>'
-+ '<td style="padding:7px 12px;border:1px solid #ddd;"><strong>' + escapeHtml(String(v)) + '</strong></td></tr>'
-).join('')
-+ '</table>'
-+ '<p><strong>Grand Total: ' + escapeHtml(grandTotal) + '</strong></p>'
++ '<p>Your quote total is <strong>' + escapeHtml(grandTotal) + '</strong>. All details are in the attached PDF.</p>'
 + '<p>To confirm your order, simply reply to this email. No payment required until you approve.</p>'
 + '<p>— The LM3DPTFY Team<br><a href="https://lm3dptfy.online">lm3dptfy.online</a></p>';
 const emailRes = await fetch('https://api.resend.com/emails', {
