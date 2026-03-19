@@ -818,12 +818,17 @@ console.warn('Drive PDF upload skipped (use a Shared Drive for storage):', drive
 if (EMAIL_ENABLED && r.email) {
 const grandTotal = (summary || {})['Grand Total (w/ Shipping)'] || 'See quote';
 const HIDDEN_SUMMARY_KEYS = /markup|profit|margin|suggested price/i;
+const suggestedPrice = (summary || {})['Suggested Price (Total)'];
 const html = '<h2>Your 3D Print Quote — LM3DPTFY</h2>'
 + '<p>Hi ' + escapeHtml(r.name) + ',</p>'
 + '<p>Thank you for your request! Please find your full quote attached as a PDF.</p>'
 + '<p>Here is your quote summary:</p>'
 + '<table style="border-collapse:collapse;width:100%;max-width:420px;font-family:sans-serif;">'
-+ Object.entries(summary || {}).filter(([k]) => !HIDDEN_SUMMARY_KEYS.test(k)).map(([k, v]) =>
++ Object.entries(summary || {}).filter(([k, v]) => {
+  if (HIDDEN_SUMMARY_KEYS.test(k)) return false;
+  if (/discounted total/i.test(k) && v === suggestedPrice) return false;
+  return true;
+}).map(([k, v]) =>
 '<tr><td style="padding:7px 12px;border:1px solid #ddd;">' + escapeHtml(k) + '</td>'
 + '<td style="padding:7px 12px;border:1px solid #ddd;"><strong>' + escapeHtml(String(v)) + '</strong></td></tr>'
 ).join('')
