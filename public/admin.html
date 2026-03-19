@@ -357,7 +357,8 @@
     });
     const archTxt = document.createElement('span'); archTxt.textContent = 'Archive';
     archWrap.appendChild(archCb); archWrap.appendChild(archTxt);
-    const quoteBtn = document.createElement('button'); quoteBtn.type = 'button'; quoteBtn.className = 'btn btn-teal btn-sm'; quoteBtn.textContent = 'Quote';
+    const quoteSent = ['quoted','confirmed','printing','shipped'].includes(status);
+    const quoteBtn = document.createElement('button'); quoteBtn.type = 'button'; quoteBtn.className = 'btn btn-sm ' + (quoteSent ? 'btn-quoted' : 'btn-teal'); quoteBtn.textContent = quoteSent ? 'Quoted ✓' : 'Quote';
     quoteBtn.addEventListener('click', () => openQuoteModal(r));
     acts.appendChild(viewBtn); acts.appendChild(quoteBtn); acts.appendChild(replyBtn); acts.appendChild(archWrap);
     top.appendChild(meta); top.appendChild(acts);
@@ -725,6 +726,8 @@
 <style>
 .btn-teal { background: var(--teal); color: #fff; border: none; cursor: pointer; }
 .btn-teal:hover { background: var(--teal-light); }
+.btn-quoted { background: #16a34a; color: #fff; border: none; cursor: pointer; }
+.btn-quoted:hover { background: #15803d; }
 .qmodal-overlay { position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:24px;overflow-y:auto; }
 .qmodal { background:var(--bg2);border:1px solid var(--line2);border-radius:12px;width:100%;max-width:960px;display:flex;flex-direction:column;max-height:calc(100vh - 48px);overflow:hidden; }
 .qmodal-hdr { display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--line);flex-shrink:0; }
