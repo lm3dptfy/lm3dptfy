@@ -797,24 +797,30 @@ const pdfUrl = `https://docs.google.com/spreadsheets/d/${QUOTE_SHEET_ID}/export?
 const pdfResponse = await googleAuth.request({ url: pdfUrl, responseType: 'arraybuffer' });
 if (!pdfResponse || !pdfResponse.data) throw new Error('PDF export returned empty response');
 const pdfBuffer = Buffer.from(pdfResponse.data);
-// Upload PDF to Drive
+// Try to upload PDF to Drive (requires Shared Drive — silently skip if quota error)
 if (driveClient) {
+try {
 const { Readable } = require('stream');
 const readable = new Readable();
 readable.push(pdfBuffer);
 readable.push(null);
 await driveClient.files.create({
-requestBody: { name: requestId + '.pdf', parents: [QUOTES_PDF_FOLDER_ID], mimeType: 'application/pdf' },
+requestBody: { name: requestId + '.pdf', parents: [QUOTES_PDF_FOLDER_ID], mimeType: 'application/pdf', driveId: QUOTES_PDF_FOLDER_ID },
 media: { mimeType: 'application/pdf', body: readable },
+supportsAllDrives: true,
 });
-console.log('Quote PDF saved:', requestId + '.pdf');
+console.log('Quote PDF saved to Drive:', requestId + '.pdf');
+} catch (driveErr) {
+console.warn('Drive PDF upload skipped (use a Shared Drive for storage):', driveErr.message);
 }
-// Send email to customer
+}
+// Send email to customer with PDF attached
 if (EMAIL_ENABLED && r.email) {
 const grandTotal = (summary || {})['Grand Total (w/ Shipping)'] || 'See quote';
 const html = '<h2>Your 3D Print Quote — LM3DPTFY</h2>'
 + '<p>Hi ' + escapeHtml(r.name) + ',</p>'
-+ '<p>Thank you for your request! Here is your quote summary:</p>'
++ '<p>Thank you for your request! Please find your full quote attached as a PDF.</p>'
++ '<p>Here is your quote summary:</p>'
 + '<table style="border-collapse:collapse;width:100%;max-width:420px;font-family:sans-serif;">'
 + Object.entries(summary || {}).map(([k, v]) =>
 '<tr><td style="padding:7px 12px;border:1px solid #ddd;">' + escapeHtml(k) + '</td>'
@@ -827,7 +833,12 @@ const html = '<h2>Your 3D Print Quote — LM3DPTFY</h2>'
 const emailRes = await fetch('https://api.resend.com/emails', {
 method: 'POST',
 headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
-body: JSON.stringify({ from: EMAIL_FROM, to: r.email, subject: 'Your 3D Print Quote from LM3DPTFY', html }),
+body: JSON.stringify({
+from: EMAIL_FROM, to: r.email,
+subject: 'Your 3D Print Quote from LM3DPTFY',
+html,
+attachments: [{ filename: 'quote-' + requestId.slice(0,8) + '.pdf', content: pdfBuffer.toString('base64') }],
+}),
 });
 if (!emailRes.ok) console.error('Quote email error:', await emailRes.text());
 }
