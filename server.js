@@ -224,7 +224,7 @@ console.warn('Failed to write requests-cache.json:', err && err.message || err);
 
 const GALLERY_FOLDER_ID = '1WWjzhZvhK3XzMhvwxvvY0PHYkR5HS7Pc';
 const QUOTE_SHEET_ID = process.env.QUOTE_SHEET_ID;
-const QUOTES_PDF_FOLDER_ID = process.env.QUOTES_PDF_FOLDER_ID || '1EdnLRjFU9vtd05_Soa3p6za8-vo6GhlI';
+const QUOTES_PDF_FOLDER_ID = process.env.QUOTES_PDF_FOLDER_ID || '1iiiDGQwwdpi19IBkWwjYmcHjmUEgC9dM';
 
 let sheetsClient = null;
 let driveClient = null;
