@@ -834,6 +834,21 @@ attachments: [{ filename: 'quote-' + requestId.slice(0,8) + '.pdf', content: pdf
 }),
 });
 if (!emailRes.ok) console.error('Quote email error:', await emailRes.text());
+// Send admin copy with PDF
+const adminHtml = '<h3>Quote Archive — ' + escapeHtml(requestId) + '</h3>'
++ '<p><strong>Customer:</strong> ' + escapeHtml(r.name) + ' &lt;' + escapeHtml(r.email) + '&gt;</p>'
++ '<p>Full quote PDF attached.</p>';
+const adminEmailRes = await fetch('https://api.resend.com/emails', {
+method: 'POST',
+headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+body: JSON.stringify({
+from: EMAIL_FROM, to: NOTIFY_EMAIL,
+subject: 'Quote Sent: ' + r.name + ' — ' + requestId.slice(0,8),
+html: adminHtml,
+attachments: [{ filename: requestId + '.pdf', content: pdfBuffer.toString('base64') }],
+}),
+});
+if (!adminEmailRes.ok) console.error('Admin quote copy error:', await adminEmailRes.text());
 }
 // Update status
 r.status = 'quoted'; r.updatedAt = new Date().toISOString();
