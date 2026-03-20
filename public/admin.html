@@ -593,7 +593,8 @@
     const fDate = document.createElement('input'); fDate.type = 'date'; fDate.className = 'input';
     fDate.value = new Date().toISOString().slice(0, 10);
     const fDesc = document.createElement('input'); fDesc.type = 'text'; fDesc.className = 'input';
-    fDesc.value = r.details || r.stlLink || '';
+    let _descSlug = ''; try { _descSlug = new URL(r.stlLink||'').pathname.split('/').filter(Boolean).pop() || ''; } catch(e){}
+    fDesc.value = _descSlug || r.details || '';
     const fQty  = qNum(1, '1');
     s1.appendChild(qField('Customer Name', fName));
     s1.appendChild(qField('Date', fDate));
