@@ -805,7 +805,7 @@ const readable = new Readable();
 readable.push(pdfBuffer);
 readable.push(null);
 await driveClient.files.create({
-requestBody: { name: requestId + '.pdf', parents: [QUOTES_PDF_FOLDER_ID], mimeType: 'application/pdf', driveId: QUOTES_PDF_FOLDER_ID },
+requestBody: { name: requestId + '.pdf', parents: [QUOTES_PDF_FOLDER_ID], mimeType: 'application/pdf' },
 media: { mimeType: 'application/pdf', body: readable },
 supportsAllDrives: true,
 });
