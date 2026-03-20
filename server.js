@@ -811,7 +811,7 @@ supportsAllDrives: true,
 });
 console.log('Quote PDF saved to Drive:', requestId + '.pdf');
 } catch (driveErr) {
-console.warn('Drive PDF upload skipped (use a Shared Drive for storage):', driveErr.message);
+console.error('Drive PDF upload FAILED:', driveErr.message, driveErr.code, JSON.stringify(driveErr.errors || []));
 }
 }
 // Send email to customer with PDF attached
