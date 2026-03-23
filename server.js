@@ -222,7 +222,7 @@ console.warn('Failed to write requests-cache.json:', err && err.message || err);
 
 // ========== GOOGLE SHEETS CLIENT =================================
 
-const GALLERY_FOLDER_ID = '1WWjzhZvhK3XzMhvwxvvY0PHYkR5HS7Pc';
+const GALLERY_FOLDER_ID = process.env.GALLERY_FOLDER_ID || '1WWjzhZvhK3XzMhvwxvvY0PHYkR5HS7Pc';
 const QUOTE_SHEET_ID = process.env.QUOTE_SHEET_ID;
 const QUOTES_PDF_FOLDER_ID = process.env.QUOTES_PDF_FOLDER_ID || '1iiiDGQwwdpi19IBkWwjYmcHjmUEgC9dM';
 
@@ -248,6 +248,13 @@ console.log('GOOGLE_SERVICE_ACCOUNT not set. Google Sheets/Drive integration dis
 }
 
 // ========== HTML ESCAPE ==========================================
+
+function safeCompare(a, b) {
+const bufA = Buffer.from(String(a));
+const bufB = Buffer.from(String(b));
+if (bufA.length !== bufB.length) return false;
+return crypto.timingSafeEqual(bufA, bufB);
+}
 
 function escapeHtml(str) {
 return String(str == null ? '' : str)
@@ -293,7 +300,20 @@ console.error('Error sending admin notification email via Resend:', err);
 // ========== MIDDLEWARE ===========================================
 
 app.use(helmet({
-  contentSecurityPolicy: false,
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc:  ["'self'", "'unsafe-inline'"],
+      styleSrc:   ["'self'", "'unsafe-inline'"],
+      imgSrc:     ["'self'", "flagcdn.com", "data:"],
+      frameSrc:   ["drive.google.com"],
+      connectSrc: ["'self'"],
+      fontSrc:    ["'self'"],
+      objectSrc:  ["'none'"],
+      baseUri:    ["'self'"],
+      formAction: ["'self'"],
+    },
+  },
 }));
 app.use(compression());
 app.use(cors({ origin: ALLOWED_ORIGIN, credentials: true }));
@@ -604,7 +624,7 @@ res.status(201).json({ ok: true, id: newRequest.id });
 
 app.post('/api/login', loginLimiter, (req, res) => {
 const { email, password } = req.body;
-if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+if (email === ADMIN_EMAIL && safeCompare(password, ADMIN_PASSWORD)) {
 req.session.admin = { email };
 return res.json({ ok: true });
 }
