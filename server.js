@@ -222,7 +222,7 @@ console.warn('Failed to write requests-cache.json:', err && err.message || err);
 
 // ========== GOOGLE SHEETS CLIENT =================================
 
-const GALLERY_FOLDER_ID = process.env.GALLERY_FOLDER_ID || '';
+const GALLERY_FOLDER_ID = process.env.GALLERY_FOLDER_ID || '1WWjzhZvhK3XzMhvwxvvY0PHYkR5HS7Pc';
 const QUOTE_SHEET_ID = process.env.QUOTE_SHEET_ID;
 const QUOTES_PDF_FOLDER_ID = process.env.QUOTES_PDF_FOLDER_ID || '';
 
