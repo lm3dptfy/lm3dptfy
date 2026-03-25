@@ -478,21 +478,28 @@
 <script>
   // Nav scroll
   const nav = document.getElementById('mainNav');
+  const heroSection = document.getElementById('heroSection');
+  const navQuoteBar = document.getElementById('navQuoteBar');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
+    if (heroSection && navQuoteBar) {
+      navQuoteBar.classList.toggle('visible', heroSection.getBoundingClientRect().bottom < 0);
+    }
   }, { passive: true });
 
   // Hero CTA carries link
   // Libraries
-  async function loadSites() {
-    const list  = document.getElementById('sitesList');
-    const empty = document.getElementById('sitesEmpty');
-    list.innerHTML = ''; empty.style.display = 'none';
+  async function loadSites(listId, emptyId) {
+    const list  = document.getElementById(listId);
+    const empty = emptyId ? document.getElementById(emptyId) : null;
+    if (!list) return;
+    list.innerHTML = '';
+    if (empty) empty.style.display = 'none';
     try {
       const res   = await fetch('/api/public/sites', { headers: { Accept: 'application/json' }, redirect: 'follow' });
       const data  = await res.json().catch(() => ({}));
       const sites = Array.isArray(data.sites) ? data.sites : [];
-      if (!sites.length) { empty.style.display = 'block'; return; }
+      if (!sites.length) { if (empty) empty.style.display = 'block'; return; }
       sites.forEach(s => {
         const a = document.createElement('a');
         a.href = s.browseUrl || '#'; a.target = '_blank'; a.rel = 'noopener noreferrer';
@@ -502,7 +509,6 @@
         list.appendChild(a);
       });
     } catch {
-      // Fallback: show hardcoded sites if API fails
       const fallback = [{name:'STLFlix', browseUrl:'https://platform.stlflix.com/explore'}];
       fallback.forEach(s => {
         const a = document.createElement('a');
@@ -513,7 +519,8 @@
       });
     }
   }
-  loadSites();
+  loadSites('sitesList', 'sitesEmpty');
+  loadSites('heroPanelSites', null);
 
   // FAQ accordion
   document.querySelectorAll('.faq-q').forEach(btn => {
@@ -543,6 +550,28 @@
       } else {
         window.location.href = '/request.html';
       }
+    });
+  }
+
+  // Hero panel quote button
+  const heroQuoteBtn = document.getElementById('heroQuoteBtn');
+  if (heroQuoteBtn) {
+    heroQuoteBtn.addEventListener('click', () => {
+      const link = (document.getElementById('heroLinkInput').value || '').trim();
+      window.location.href = link
+        ? '/request.html?link=' + encodeURIComponent(link)
+        : '/request.html';
+    });
+  }
+
+  // Nav quote bar button
+  const navQBtn = document.getElementById('navQuoteBtn');
+  if (navQBtn) {
+    navQBtn.addEventListener('click', () => {
+      const link = (document.getElementById('navQuoteInput').value || '').trim();
+      window.location.href = link
+        ? '/request.html?link=' + encodeURIComponent(link)
+        : '/request.html';
     });
   }
 
