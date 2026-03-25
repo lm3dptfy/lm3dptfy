@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.local
+.env.*.local
+CLAUDE.md
+*.log
+npm-debug.log*
+settings.json
+requests-cache.json

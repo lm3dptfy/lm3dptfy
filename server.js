@@ -222,9 +222,9 @@ console.warn('Failed to write requests-cache.json:', err && err.message || err);
 
 // ========== GOOGLE SHEETS CLIENT =================================
 
-const GALLERY_FOLDER_ID = process.env.GALLERY_FOLDER_ID || '1WWjzhZvhK3XzMhvwxvvY0PHYkR5HS7Pc';
+const GALLERY_FOLDER_ID = process.env.GALLERY_FOLDER_ID || '';
 const QUOTE_SHEET_ID = process.env.QUOTE_SHEET_ID;
-const QUOTES_PDF_FOLDER_ID = process.env.QUOTES_PDF_FOLDER_ID || '1iiiDGQwwdpi19IBkWwjYmcHjmUEgC9dM';
+const QUOTES_PDF_FOLDER_ID = process.env.QUOTES_PDF_FOLDER_ID || '';
 
 let sheetsClient = null;
 let driveClient = null;
@@ -250,10 +250,11 @@ console.log('GOOGLE_SERVICE_ACCOUNT not set. Google Sheets/Drive integration dis
 // ========== HTML ESCAPE ==========================================
 
 function safeCompare(a, b) {
-const bufA = Buffer.from(String(a));
-const bufB = Buffer.from(String(b));
-if (bufA.length !== bufB.length) return false;
-return crypto.timingSafeEqual(bufA, bufB);
+// Hash both values so timingSafeEqual always operates on same-length buffers,
+// avoiding the password-length leak from an early-return length check.
+const hashA = crypto.createHash('sha256').update(String(a)).digest();
+const hashB = crypto.createHash('sha256').update(String(b)).digest();
+return crypto.timingSafeEqual(hashA, hashB);
 }
 
 function escapeHtml(str) {
@@ -304,11 +305,11 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc:  ["'self'", "'unsafe-inline'"],
-      styleSrc:   ["'self'", "'unsafe-inline'"],
-      imgSrc:     ["'self'", "flagcdn.com", "data:"],
+      styleSrc:   ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      imgSrc:     ["'self'", "https://flagcdn.com", "data:"],
       frameSrc:   ["drive.google.com"],
       connectSrc: ["'self'"],
-      fontSrc:    ["'self'"],
+      fontSrc:    ["'self'", "https://fonts.gstatic.com"],
       objectSrc:  ["'none'"],
       baseUri:    ["'self'"],
       formAction: ["'self'"],
@@ -345,6 +346,9 @@ standardHeaders: true, legacyHeaders: false,
 
 app.get('/', (req, res) => { res.setHeader('Cache-Control', 'no-cache'); res.sendFile(path.join(STATIC_DIR, 'index.html')); });
 app.get('/admin', (req, res) => res.redirect('/admin.html'));
+app.get('/favicon.ico', (req, res) => res.redirect(301, '/logo-lm3dptfy-wh.png'));
+app.get('/apple-touch-icon.png', (req, res) => res.redirect(301, '/logo-lm3dptfy-wh.png'));
+app.get('/apple-touch-icon-precomposed.png', (req, res) => res.redirect(301, '/logo-lm3dptfy-wh.png'));
 app.use(express.static(STATIC_DIR, {
   maxAge: '7d',
   etag: true,
@@ -607,6 +611,10 @@ if (!stlLink || !name || !email) return res.status(400).json({ error: 'Missing r
 if (String(name).length > 120) return res.status(400).json({ error: 'Name is too long (max 120 characters).' });
 if (String(email).length > 200) return res.status(400).json({ error: 'Email is too long (max 200 characters).' });
 if (String(stlLink).length > 2000) return res.status(400).json({ error: 'Model link is too long (max 2000 characters).' });
+try {
+const parsedUrl = new URL(String(stlLink));
+if (!['http:', 'https:'].includes(parsedUrl.protocol)) return res.status(400).json({ error: 'Model link must be an http or https URL.' });
+} catch { return res.status(400).json({ error: 'Model link must be a valid URL (starting with http:// or https://).' }); }
 if (details && String(details).length > 4000) return res.status(400).json({ error: 'Details are too long (max 4000 characters).' });
 if (!isValidEmail(email)) return res.status(400).json({ error: 'Please enter a valid email address.' });
 const nowIso = new Date().toISOString();
@@ -624,7 +632,7 @@ res.status(201).json({ ok: true, id: newRequest.id });
 
 app.post('/api/login', loginLimiter, (req, res) => {
 const { email, password } = req.body;
-if (email === ADMIN_EMAIL && safeCompare(password, ADMIN_PASSWORD)) {
+if (safeCompare(email, ADMIN_EMAIL) && safeCompare(password, ADMIN_PASSWORD)) {
 req.session.admin = { email };
 return res.json({ ok: true });
 }

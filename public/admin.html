@@ -6,8 +6,8 @@
   <title>Admin | LM3DPTFY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="stylesheet" href="/style.css?v=3.1" />
+  <link rel="icon" type="image/png" href="/logo-lm3dptfy-wh.png" />
+  <link rel="stylesheet" href="/style.css?v=6.9" />
 </head>
 <body class="admin-page">
 
@@ -22,7 +22,11 @@
     </div>
   </a>
   <div class="nav-links">
-    <label class="theme-toggle" title="Toggle dark mode"><span class="theme-toggle-icon sun"></span><span class="theme-toggle-icon moon"></span></label>
+    <label class="dark-toggle" title="Toggle dark mode">
+      <input type="checkbox" id="themeToggle" />
+      <span class="dark-toggle-track"><span class="dark-toggle-thumb"></span></span>
+      <span class="dark-toggle-label">Dark</span>
+    </label>
     <button class="btn btn-outline btn-sm" id="logoutTopBtn" style="display:none;">Sign Out</button>
   </div>
   </nav>
@@ -135,8 +139,18 @@
 
 <script>
   // Theme
-        const html = document.documentElement;
-  document.documentElement.setAttribute('data-theme', 'dark');
+  const html = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const savedTheme = localStorage.getItem('lm3d-theme') || 'dark';
+  html.setAttribute('data-theme', savedTheme);
+  if (themeToggle) {
+    themeToggle.checked = savedTheme === 'dark';
+    themeToggle.addEventListener('change', () => {
+      const next = themeToggle.checked ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('lm3d-theme', next);
+    });
+  }
 
   // Refs
   const loginCard      = document.getElementById('loginCard');

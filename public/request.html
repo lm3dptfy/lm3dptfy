@@ -7,13 +7,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Submit your model link and get a custom 3D print quote emailed to you. Veteran-owned, ships USA only." />
   <link rel="canonical" href="https://www.lm3dptfy.online/request.html" />
-  <link rel="icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" href="/logo-lm3dptfy-wh.png" />
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://www.lm3dptfy.online/request.html" />
   <meta property="og:title"       content="Request a 3D Print Quote | LM3DPTFY" />
   <meta property="og:description" content="Submit your model link and get a custom 3D print quote by email." />
   <meta property="og:image"       content="https://www.lm3dptfy.online/logo-lm3dptfy-wh.png" />
-  <link rel="stylesheet" href="/style.css?v=3.1" />
+  <link rel="stylesheet" href="/style.css?v=6.9" />
   <style>
     body { padding-top: 72px; }
     .req-page { min-height: 100vh; background: var(--bg); transition: background .4s ease, color .4s ease; }
@@ -38,10 +38,6 @@
 }
 
 .req-info { position: sticky; top: 80px; }
-  @media (max-width: 900px) { .req-info { position: static; } }
-  @media (max-width: 900px) { .req-info { position: static; } }
-  @media (max-width: 900px) { .req-info { position: static; } }
-  @media (max-width: 900px) { .req-info { position: static; } }
   @media (max-width: 900px) { .req-info { position: static; } }
 .req-info h2 {
   font-family: 'Playfair Display', serif;
@@ -250,19 +246,6 @@
 </footer>
 
 <script>
-  // Theme
-          const html = document.documentElement;
-  const toggle = document.getElementById('themeToggle');
-  document.documentElement.setAttribute('data-theme', 'dark');
-  if (toggle) {
-    toggle.checked = saved === 'dark';
-    toggle.addEventListener('change', () => {
-    const next = toggle.checked ? 'dark' : 'light';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('lm3d-theme', next);
-    });
-  }
-
   // Pull link param
   const params  = new URLSearchParams(window.location.search);
   const stlLink = params.get('link') || '';

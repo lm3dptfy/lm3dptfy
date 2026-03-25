@@ -7,8 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Veteran-owned custom 3D printing service. Paste any STL model link, get a fast quote by email, approve the print, and it ships straight to your door — all made in the USA with PLA filament." />
   <link rel="canonical" href="https://www.lm3dptfy.online/" />
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="/logo-lm3dptfy-wh.png" />
+  <link rel="apple-touch-icon" href="/logo-lm3dptfy-wh.png" />
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://www.lm3dptfy.online/" />
   <meta property="og:title"       content="Custom 3D Printing Service | LM3DPTFY" />
@@ -68,7 +68,7 @@
       <a class="nav-link" href="#how-it-works">How It Works</a>
       <a class="nav-link" href="#pricing">Pricing</a>
       <a class="nav-link" href="#libraries">Model Library</a>
-      <a class="nav-link" href="#libraries">Get a Quote</a>
+      <a class="nav-link" href="#get-a-quote">Get a Quote</a>
       <a class="nav-link" href="#what-you-get">What You Get</a>
       <a class="nav-link" href="/gallery.html">Our Work</a>
       <a class="nav-link" href="#faq">FAQ</a>
@@ -421,21 +421,10 @@
 </footer>
 
 <script>
-  // Theme
-        const html = document.documentElement;
-  const toggle = document.getElementById('themeToggle');
-  document.documentElement.setAttribute('data-theme', 'dark');
   // Nav scroll
   const nav = document.getElementById('mainNav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 40);
-    const heroBtn = document.getElementById('heroStartBtn');
-    const navCta  = document.getElementById('navCta');
-    if (heroBtn && navCta) {
-      const visible = heroBtn.getBoundingClientRect().bottom > 0;
-      navCta.style.opacity = visible ? '0' : '1';
-      navCta.style.pointerEvents = visible ? 'none' : 'auto';
-    }
   }, { passive: true });
 
   // Hero CTA carries link
