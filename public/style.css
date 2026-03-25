@@ -176,6 +176,20 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
 }
 @media (max-width: 900px) { .hero-left { width: 100%; } }
 @media (max-width: 600px) { .hero-left { padding: 80px 20px 60px; } }
+.hero-right {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 45%;
+  background-image: url('/bambu-h2s.png');
+  background-size: cover;
+  background-position: center;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%);
+  mask-image: linear-gradient(to right, transparent 0%, black 35%);
+  opacity: .28;
+  z-index: 0;
+}
+html[data-theme="light"] .hero-right { display: none; }
+@media (max-width: 900px) { .hero-right { display: none; } }
 .hero::before {
   content: '';
   position: absolute;
