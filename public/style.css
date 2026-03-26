@@ -211,27 +211,6 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   justify-content: center;
   padding: 120px 48px 200px;
 }
-@media (max-width: 768px) {
-  /* Remove overflow:hidden so mascot isn't clipped; height auto-grows */
-  .hero {
-    overflow: visible;
-    min-height: 0;
-  }
-  /* hero-left fills width, flows from top, with bottom padding for mascot clearance */
-  .hero-left {
-    width: 100%;
-    justify-content: flex-start;
-    padding: 88px 20px 170px;
-  }
-  /* Mascot stays absolute — but hero is now tall enough to clear the panels */
-  .hero-scroll {
-    bottom: 20px;
-  }
-  /* Tighten gaps between hero content on mobile */
-  .hero-sub { margin-bottom: 10px; }
-  .hero-action-panels { margin-top: 10px; gap: 10px; }
-  .hero-eyebrow { margin-bottom: 10px; }
-}
 .hero-right {
   position: absolute;
   top: 0; right: 0; bottom: 0;
@@ -705,3 +684,20 @@ body.admin-page { padding-top: 72px; }
   filter: drop-shadow(0 0 20px rgba(0,200,232,.3));
 }
 @media (max-width: 600px) { .hero-mascot { width: 60px; } }
+
+/* ===== MOBILE HERO — must be at end of file to override base rules ===== */
+@media (max-width: 768px) {
+  .hero {
+    overflow: visible;
+    min-height: 0;
+  }
+  .hero-left {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 80px 20px 140px;
+  }
+  .hero-eyebrow { margin-bottom: 6px; }
+  .hero-sub { margin: 0 0 8px; }
+  .hero-action-panels { margin: 8px auto 0; gap: 10px; }
+  .hero-scroll { bottom: 16px; }
+}
