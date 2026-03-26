@@ -694,7 +694,7 @@ body.admin-page { padding-top: 72px; }
   .hero-left {
     width: 100%;
     justify-content: flex-start;
-    padding: 80px 20px 110px;
+    padding: 60px 20px 110px;
   }
   .hero-eyebrow { margin-bottom: 6px; }
   .hero-sub { margin: 0 0 8px; }
