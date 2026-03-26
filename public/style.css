@@ -212,35 +212,34 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   padding: 120px 48px 200px;
 }
 @media (max-width: 768px) {
-  /* Hero becomes a column so scroll indicator flows below content */
+  /* Hero stacks vertically; height grows to fit content */
   .hero {
     flex-direction: column;
+    align-items: center;
     min-height: 100svh;
   }
+  /* hero-left sizes to its content (no forced height) */
   .hero-left {
-    flex: 1;
-    justify-content: flex-start;
-    padding: 88px 20px 16px;
+    flex: none;
     width: 100%;
+    justify-content: flex-start;
+    padding: 88px 20px 8px;
   }
-  /* Pull hero-scroll out of absolute positioning on mobile */
+  /* Mascot flows below hero-left, pushed to remaining space */
   .hero-scroll {
     position: static;
     left: auto;
     bottom: auto;
     transform: none;
     animation: mascot-bounce 2s ease-in-out infinite;
-    padding: 12px 0 20px;
+    margin-top: auto;
+    padding: 16px 0 24px;
     flex-shrink: 0;
   }
-  /* Tighten gaps between hero elements */
-  .hero-sub {
-    margin-bottom: 12px;
-  }
-  .hero-action-panels {
-    margin-top: 12px;
-    gap: 10px;
-  }
+  /* Tighten gaps between hero content */
+  .hero-sub { margin-bottom: 10px; }
+  .hero-action-panels { margin-top: 10px; gap: 10px; }
+  .hero-eyebrow { margin-bottom: 10px; }
 }
 .hero-right {
   position: absolute;
