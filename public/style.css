@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 /* ── Dark mode toggle ── */
 .dark-toggle {
@@ -73,8 +73,8 @@ html[data-theme="dark"] .dark-toggle-label { color: var(--teal-light); }
   --ink3:       #5a7490;
   --line:       rgba(255,255,255,.07);
   --line2:      rgba(0,154,184,.2);
-  --serif: 'Playfair Display', Georgia, serif;
-  --sans:  'Outfit', system-ui, sans-serif;
+  --serif: 'Space Grotesk', system-ui, sans-serif;
+  --sans:  'Space Grotesk', system-ui, sans-serif;
   --r: 6px;
   --r-pill: 999px;
   --ease: cubic-bezier(.4,0,.2,1);
