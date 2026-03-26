@@ -704,7 +704,7 @@ body.admin-page { padding-top: 72px; }
   /* Nav quote bar drops below nav as full-width strip on mobile */
   .nav-quote-bar {
     position: fixed;
-    top: 71px;
+    top: 59px;
     left: 0;
     right: 0;
     max-width: 100% !important;
