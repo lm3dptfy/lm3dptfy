@@ -700,4 +700,31 @@ body.admin-page { padding-top: 72px; }
   .hero-sub { margin: 0 0 8px; }
   .hero-action-panels { margin: 8px auto 0; gap: 10px; }
   .hero-scroll { bottom: 40px; }
+
+  /* Nav quote bar drops below nav as full-width strip on mobile */
+  .nav-quote-bar {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    max-width: 100% !important;
+    width: 100%;
+    padding: 10px 16px;
+    background: rgba(7,16,28,.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line2);
+    box-sizing: border-box;
+    overflow: visible;
+    transform: translateY(-8px);
+    transition: opacity 300ms ease, transform 300ms ease;
+  }
+  .nav-quote-bar.visible {
+    transform: translateY(0);
+  }
+  .nav-quote-input {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
 }
