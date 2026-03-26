@@ -211,7 +211,19 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   justify-content: center;
   padding: 120px 48px 200px;
 }
-@media (max-width: 600px) { .hero-left { padding: 80px 20px 60px; } }
+@media (max-width: 768px) {
+  .hero {
+    min-height: auto;
+    padding-bottom: 60px;
+  }
+  .hero-left {
+    justify-content: flex-start;
+    padding: 96px 24px 48px;
+  }
+  .hero-scroll {
+    display: none;
+  }
+}
 .hero-right {
   position: absolute;
   top: 0; right: 0; bottom: 0;
