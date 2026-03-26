@@ -212,31 +212,22 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   padding: 120px 48px 200px;
 }
 @media (max-width: 768px) {
-  /* Hero stacks vertically; height grows to fit content */
+  /* Remove overflow:hidden so mascot isn't clipped; height auto-grows */
   .hero {
-    flex-direction: column;
-    align-items: center;
-    min-height: 100svh;
+    overflow: visible;
+    min-height: 0;
   }
-  /* hero-left sizes to its content (no forced height) */
+  /* hero-left fills width, flows from top, with bottom padding for mascot clearance */
   .hero-left {
-    flex: none;
     width: 100%;
     justify-content: flex-start;
-    padding: 88px 20px 8px;
+    padding: 88px 20px 170px;
   }
-  /* Mascot flows below hero-left, pushed to remaining space */
+  /* Mascot stays absolute — but hero is now tall enough to clear the panels */
   .hero-scroll {
-    position: static;
-    left: auto;
-    bottom: auto;
-    transform: none;
-    animation: mascot-bounce 2s ease-in-out infinite;
-    margin-top: auto;
-    padding: 16px 0 24px;
-    flex-shrink: 0;
+    bottom: 20px;
   }
-  /* Tighten gaps between hero content */
+  /* Tighten gaps between hero content on mobile */
   .hero-sub { margin-bottom: 10px; }
   .hero-action-panels { margin-top: 10px; gap: 10px; }
   .hero-eyebrow { margin-bottom: 10px; }
