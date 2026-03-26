@@ -699,5 +699,5 @@ body.admin-page { padding-top: 72px; }
   .hero-eyebrow { margin-bottom: 6px; }
   .hero-sub { margin: 0 0 8px; }
   .hero-action-panels { margin: 8px auto 0; gap: 10px; }
-  .hero-scroll { bottom: 16px; }
+  .hero-scroll { bottom: 40px; }
 }
