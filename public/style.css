@@ -704,20 +704,24 @@ body.admin-page { padding-top: 72px; }
   /* Nav quote bar drops below nav as full-width strip on mobile */
   .nav-quote-bar {
     position: fixed;
-    top: 72px;
+    top: 71px;
     left: 0;
     right: 0;
     max-width: 100% !important;
     width: 100%;
     padding: 10px 16px;
     background: rgba(7,16,28,.96);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: none;
     border-bottom: 1px solid var(--line2);
     box-sizing: border-box;
     overflow: visible;
     transform: translateY(-8px);
     transition: opacity 300ms ease, transform 300ms ease;
+  }
+  .nav.scrolled {
+    border-bottom-color: transparent;
   }
   .nav-quote-bar.visible {
     transform: translateY(0);
