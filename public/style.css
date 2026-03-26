@@ -212,16 +212,34 @@ html[data-theme="light"] .nav.scrolled { background: rgba(245,248,252,.97); bord
   padding: 120px 48px 200px;
 }
 @media (max-width: 768px) {
+  /* Hero becomes a column so scroll indicator flows below content */
   .hero {
-    min-height: auto;
-    padding-bottom: 60px;
+    flex-direction: column;
+    min-height: 100svh;
   }
   .hero-left {
+    flex: 1;
     justify-content: flex-start;
-    padding: 96px 24px 48px;
+    padding: 88px 20px 16px;
+    width: 100%;
   }
+  /* Pull hero-scroll out of absolute positioning on mobile */
   .hero-scroll {
-    display: none;
+    position: static;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    animation: mascot-bounce 2s ease-in-out infinite;
+    padding: 12px 0 20px;
+    flex-shrink: 0;
+  }
+  /* Tighten gaps between hero elements */
+  .hero-sub {
+    margin-bottom: 12px;
+  }
+  .hero-action-panels {
+    margin-top: 12px;
+    gap: 10px;
   }
 }
 .hero-right {
