@@ -319,12 +319,25 @@
   // Copy command
   function copyCmd(el) {
     const text = el.childNodes[el.childNodes.length - 1].textContent.trim();
-    navigator.clipboard.writeText(text).then(() => {
-      const hint = el.querySelector('.copy-hint');
+    const hint = el.querySelector('.copy-hint');
+    function showCopied() {
       hint.textContent = 'copied!';
       hint.style.color = 'var(--teal-light)';
       setTimeout(() => { hint.textContent = 'click to copy'; hint.style.color = ''; }, 1500);
-    });
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(showCopied);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showCopied();
+    }
   }
 </script>
 
