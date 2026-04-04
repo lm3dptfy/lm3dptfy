@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>MooseClaw Dashboard | LM3DPTFY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/png" href="/logo-lm3dptfy-wh.png" />
+  <link rel="stylesheet" href="/style.css?v=8.0" />
+  <style>
+    /* ── Dashboard-specific overrides ── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 28px 0 48px;
+    }
+    @media (max-width: 800px) { .dash-grid { grid-template-columns: 1fr; } }
+    .full-width { grid-column: 1 / -1; }
+
+    .panel-label { color: var(--teal-light); }
+
+    .mc-header {
+      padding: 32px 0 16px;
+      border-bottom: 1px solid var(--line2);
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .mc-header h1 { font-size: 1.7rem; font-weight: 700; margin: 0; }
+    .mc-header .updated-tag {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      background: var(--teal-dim);
+      border: 1px solid var(--line2);
+      border-radius: var(--r-pill);
+      padding: 4px 12px;
+    }
+
+    /* Alert banner */
+    .alert-banner {
+      background: rgba(220,38,38,.08);
+      border: 1px solid rgba(220,38,38,.35);
+      border-radius: var(--r);
+      padding: 14px 18px;
+      margin-bottom: 4px;
+    }
+    .alert-banner .alert-title {
+      font-weight: 700;
+      color: #f87171;
+      font-size: .85rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+    .alert-banner.resolved {
+      background: rgba(0,154,184,.06);
+      border-color: var(--line2);
+    }
+    .alert-banner.resolved .alert-title { color: var(--teal-light); }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--r-pill);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-right: 6px;
+    }
+    .badge.critical { background: #dc2626; color: #fff; }
+    .badge.fixed    { background: var(--teal); color: #fff; }
+    .badge.new      { background: #16a34a; color: #fff; }
+    .badge.warn     { background: #d97706; color: #fff; }
+
+    /* Version row */
+    .ver-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: .88rem;
+    }
+    .ver-row:last-child { border-bottom: none; }
+    .ver-row .name { font-weight: 600; }
+    .ver-row .nums { color: var(--ink2); font-size: .82rem; }
+    .ver-row .nums .current { color: var(--ink); }
+    .ver-row .nums .latest  { color: var(--teal-light); }
+    .ver-row .nums .stale   { color: #d97706; }
+
+    /* News item */
+    .news-item {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: .88rem;
+    }
+    .news-item:last-child { border-bottom: none; }
+    .news-item a { color: var(--teal-light); text-decoration: none; font-weight: 500; }
+    .news-item a:hover { text-decoration: underline; }
+    .news-item .desc { color: var(--ink2); font-size: .82rem; margin-top: 2px; }
+    .news-item .date { color: var(--ink3); font-size: .76rem; margin-top: 2px; }
+
+    /* Command block */
+    .cmd-block {
+      background: var(--bg);
+      border: 1px solid var(--line2);
+      border-radius: var(--r);
+      padding: 10px 14px;
+      margin: 8px 0;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: .8rem;
+      color: var(--teal-light);
+      cursor: pointer;
+      position: relative;
+      transition: border-color .15s;
+    }
+    .cmd-block:hover { border-color: var(--teal); }
+    .cmd-block .cmd-label {
+      font-family: var(--sans);
+      font-size: .65rem;
+      color: var(--ink3);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 4px;
+    }
+    .cmd-block .copy-hint {
+      position: absolute;
+      top: 10px; right: 12px;
+      font-family: var(--sans);
+      font-size: .65rem;
+      color: var(--ink3);
+    }
+
+    .empty { color: var(--ink3); font-style: italic; font-size: .85rem; padding: 16px 0; }
+
+    /* Section label pill */
+    .section-icon {
+      font-size: .85rem;
+      margin-right: 4px;
+    }
+  </style>
+</head>
+<body class="admin-page">
+
+<!-- NAV -->
+<nav class="nav scrolled" id="mainNav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-lm3dptfy-wh.png" alt="LM3DPTFY logo" />
+    <div class="nav-logo-text">
+      <strong>LM3DPTFY</strong>
+      <span>MooseClaw Dashboard</span>
+    </div>
+  </a>
+  <div class="nav-links">
+    <label class="dark-toggle" title="Toggle dark mode">
+      <input type="checkbox" id="themeToggle" />
+      <span class="dark-toggle-track"><span class="dark-toggle-thumb"></span></span>
+      <span class="dark-toggle-label">Dark</span>
+    </label>
+  </div>
+</nav>
+
+<div class="admin-wrap">
+  <div class="mc-header">
+    <div>
+      <h1>🦌 MooseClaw Dashboard</h1>
+      <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
+    </div>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 4 2026<!-- /LAST_UPDATED --></span>
+  </div>
+
+  <div class="dash-grid">
+
+    <!-- SECURITY ALERTS -->
+    <div class="panel full-width" id="security-panel">
+      <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
+      <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
+      <div id="security-body">
+
+        <div class="alert-banner resolved">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> Claude Code axios supply chain RAT — March 31, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">
+            Malicious <code>axios</code> injected into Claude Code npm installs between 00:21–03:29 UTC on March 31.
+            MooseClaw system scan: <strong style="color:var(--teal-light);">CLEAN</strong> — you were on v2.1.83 (installed Mar 24, before the window).
+            <br/><a href="https://www.bleepingcomputer.com/news/artificial-intelligence/claude-code-source-code-accidentally-leaked-in-npm-package/" target="_blank" style="color:var(--teal-light);">BleepingComputer</a> ·
+            <a href="https://thehackernews.com/2026/04/claude-code-tleaked-via-npm-packaging.html" target="_blank" style="color:var(--teal-light);">The Hacker News</a>
+          </div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> Claude Code 2.1.88 — source map leak</div>
+          <div style="font-size:.85rem;color:var(--ink2);">
+            Version 2.1.88 accidentally shipped with TypeScript source maps exposing ~512k lines of internal code. Version pulled from npm. No direct user data at risk.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VERSION STATUS -->
+    <div class="panel" id="versions-panel">
+      <div class="panel-label"><span class="section-icon">⚡</span> Version Status</div>
+      <div class="panel-desc">Installed vs. latest available.</div>
+      <div id="versions-body">
+        <div class="ver-row">
+          <span class="name">Claude Code</span>
+          <span class="nums">installed <span class="current stale">2.1.83</span> · latest <span class="latest">2.1.87</span></span>
+        </div>
+        <div class="ver-row">
+          <span class="name">OpenClaw</span>
+          <span class="nums">version <span class="current">2026.4.2</span></span>
+        </div>
+        <div class="ver-row">
+          <span class="name">Claude Model</span>
+          <span class="nums"><span class="current">claude-sonnet-4-6</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPENCLAW NEWS -->
+    <div class="panel" id="openclaw-panel">
+      <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
+      <div class="panel-desc">Platform releases and changes.</div>
+      <div id="openclaw-body">
+        <div class="news-item">
+          <div><strong>OpenClaw 2026.4.2</strong> — currently installed</div>
+          <div class="desc">Monitoring for new releases daily.</div>
+          <div class="date">Apr 4, 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPDATE COMMANDS -->
+    <div class="panel full-width" id="commands-panel">
+      <div class="panel-label"><span class="section-icon">💻</span> Update Commands</div>
+      <div class="panel-desc">Click any block to copy to clipboard.</div>
+
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">Update Claude Code</div>
+        <span class="copy-hint">click to copy</span>
+        npm update -g @anthropic-ai/claude-code
+      </div>
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">Check installed version</div>
+        <span class="copy-hint">click to copy</span>
+        claude --version
+      </div>
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">Check latest npm release</div>
+        <span class="copy-hint">click to copy</span>
+        npm info @anthropic-ai/claude-code dist-tags.latest
+      </div>
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">Verify no axios in Claude Code (supply chain check)</div>
+        <span class="copy-hint">click to copy</span>
+        grep -r "axios" /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/ 2>/dev/null | wc -l
+      </div>
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">List Claude Code dependencies</div>
+        <span class="copy-hint">click to copy</span>
+        ls /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/
+      </div>
+    </div>
+
+    <!-- AI NEWS -->
+    <div class="panel" id="news-panel">
+      <div class="panel-label"><span class="section-icon">📡</span> AI Headlines</div>
+      <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
+      <div id="news-body">
+        <div class="empty">Awaiting first scheduled update (daily @ 8:00 AM CDT)…</div>
+      </div>
+    </div>
+
+    <!-- LEARNING RESOURCES -->
+    <div class="panel" id="learning-panel">
+      <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
+      <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
+      <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://code.claude.com/docs" target="_blank">Claude Code Official Docs</a></div>
+          <div class="desc">Setup, advanced usage, MCP integrations, permissions model</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md" target="_blank">Claude Code CHANGELOG</a></div>
+          <div class="desc">Full release history — check after each update</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.anthropic.com/news" target="_blank">Anthropic News</a></div>
+          <div class="desc">Official model updates, safety research, product announcements</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dash-grid -->
+</div><!-- /admin-wrap -->
+
+<script>
+  // Dark mode toggle (mirrors admin.html behavior)
+  const toggle = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  const saved = localStorage.getItem('theme') || 'dark';
+  html.setAttribute('data-theme', saved);
+  toggle.checked = saved === 'dark';
+  toggle.addEventListener('change', () => {
+    const t = toggle.checked ? 'dark' : 'light';
+    html.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+  });
+
+  // Copy command
+  function copyCmd(el) {
+    const text = el.childNodes[el.childNodes.length - 1].textContent.trim();
+    navigator.clipboard.writeText(text).then(() => {
+      const hint = el.querySelector('.copy-hint');
+      hint.textContent = 'copied!';
+      hint.style.color = 'var(--teal-light)';
+      setTimeout(() => { hint.textContent = 'click to copy'; hint.style.color = ''; }, 1500);
+    });
+  }
+</script>
+
+</body>
+</html>
