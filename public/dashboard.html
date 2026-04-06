@@ -175,7 +175,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 4 2026<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 6 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -186,7 +186,17 @@
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
 
-        <div class="alert-banner resolved">
+        <div class="alert-banner">
+          <div class="alert-title"><span class="badge critical">Critical</span> Claude Code Post-Leak RCE Vulnerability — Apr 5, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">A critical vulnerability emerged days after the v2.1.88 source map leak, enabling remote code execution. Patch available in v2.1.92+. <strong style="color:#f87171;">Update immediately if on v2.1.88–2.1.91.</strong> <a href="https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/" style="color:var(--teal-light);">SecurityWeek</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> CVE-2026-24887 — Command Injection via find command</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Allowed attackers to bypass Claude Code's confirmation prompt and trigger untrusted command execution. Fixed in v2.0.72+. <a href="https://www.sentinelone.com/vulnerability-database/cve-2026-24887/" style="color:var(--teal-light);">SentinelOne</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
           <div class="alert-title"><span class="badge fixed">Resolved</span> Claude Code axios supply chain RAT — March 31, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">
             Malicious <code>axios</code> injected into Claude Code npm installs between 00:21–03:29 UTC on March 31.
@@ -213,7 +223,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.83</span> · latest <span class="latest">2.1.87</span></span>
+          <span class="nums">installed <span class="current stale">2.1.83</span> · latest <span class="latest">2.1.92</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
@@ -276,7 +286,26 @@
       <div class="panel-label"><span class="section-icon">📡</span> AI Headlines</div>
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
-        <div class="empty">Awaiting first scheduled update (daily @ 8:00 AM CDT)…</div>
+        <div class="news-item">
+          <div><a href="https://techcrunch.com/2026/04/04/anthropic-says-claude-code-subscribers-will-need-to-pay-extra-for-openclaw-support/" target="_blank">Anthropic Begins Billing 3rd-Party Claude Tools Separately</a></div>
+          <div class="desc">Claude Pro and Max subscriptions no longer cover third-party agentic tools like OpenClaw as of April 4. Users must switch to API billing or Anthropic's pay-as-you-go add-on.</div>
+          <div class="date">Apr 4, 2026 · TechCrunch</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/" target="_blank">Critical Vulnerability in Claude Code Emerges Days After Source Leak</a></div>
+          <div class="desc">Security researchers discovered a critical flaw in Claude Code shortly after the accidental source map leak of v2.1.88. Update to v2.1.92 immediately.</div>
+          <div class="date">Apr 5, 2026 · SecurityWeek</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.bloomberg.com/news/articles/2026-04-01/anthropic-accidentally-releases-source-code-for-claude-ai-agent" target="_blank">Anthropic Accidentally Releases Claude Code Source Code</a></div>
+          <div class="desc">Anthropic inadvertently published ~512k lines of internal Claude Code source via a debugging sourcemap in the v2.1.88 npm package. No credentials or customer data exposed.</div>
+          <div class="date">Apr 1, 2026 · Bloomberg</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.newsbytesapp.com/news/science/anthropic-begins-billing-3rd-party-claude-tools-separately-april-4-2026/tldr" target="_blank">Anthropic Raises Message Batches API Token Cap to 300k</a></div>
+          <div class="desc">max_tokens cap raised to 300k on the Message Batches API for Claude Opus 4.6 and Sonnet 4.6. 1M-token context beta for Sonnet 4.5 and Sonnet 4 retiring April 30, 2026.</div>
+          <div class="date">Apr 4, 2026 · Anthropic</div>
+        </div>
       </div>
     </div>
 
@@ -285,6 +314,14 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf" target="_blank">2026 Agentic Coding Trends Report — Anthropic</a></div>
+          <div class="desc">How coding agents are reshaping development workflows — data-backed insights from Anthropic's research on real-world agentic coding adoption</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.microsoft.com/en-us/security/blog/2026/03/20/secure-agentic-ai-end-to-end/" target="_blank">Secure Agentic AI End-to-End — Microsoft Security</a></div>
+          <div class="desc">Practical guidance for securing agentic AI pipelines, covering identity, prompt injection defenses, and trust boundaries in multi-agent systems</div>
+        </div>
         <div class="news-item">
           <div><a href="https://code.claude.com/docs" target="_blank">Claude Code Official Docs</a></div>
           <div class="desc">Setup, advanced usage, MCP integrations, permissions model</div>
