@@ -389,34 +389,33 @@
 
   // Copy command
   async function copyCmd(el) {
-    const textNode = Array.from(el.childNodes).reverse().find(n => n.nodeType === 3 && n.textContent.trim());
-    const text = textNode ? textNode.textContent.trim() : '';
-    const hint = el.querySelector('.copy-hint');
-    let copied = false;
+    const label = el.querySelector('.cmd-label')?.textContent || '';
+    const hintEl = el.querySelector('.copy-hint');
+    const hint = hintEl?.textContent || '';
+    const text = el.textContent.replace(label, '').replace(hint, '').trim();
+    if (!text) return;
 
-    if (navigator.clipboard) {
-      try { await navigator.clipboard.writeText(text); copied = true; } catch(e) {}
-    }
+    const showFeedback = (ok) => {
+      if (!hintEl) return;
+      hintEl.textContent = ok ? 'copied!' : 'failed';
+      hintEl.style.color = ok ? 'var(--teal-light)' : '#f87171';
+      setTimeout(() => { hintEl.textContent = 'click to copy'; hintEl.style.color = ''; }, 1500);
+    };
 
-    if (!copied) {
+    try {
+      await navigator.clipboard.writeText(text);
+      showFeedback(true);
+    } catch(e) {
       try {
         const ta = document.createElement('textarea');
         ta.value = text;
-        ta.setAttribute('readonly', '');
         ta.style.cssText = 'position:fixed;left:-9999px;top:0';
         document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        ta.setSelectionRange(0, 99999);
-        copied = document.execCommand('copy');
+        ta.focus(); ta.select(); ta.setSelectionRange(0, 99999);
+        const ok = document.execCommand('copy');
         document.body.removeChild(ta);
-      } catch(e) {}
-    }
-
-    if (copied) {
-      hint.textContent = 'copied!';
-      hint.style.color = 'var(--teal-light)';
-      setTimeout(() => { hint.textContent = 'click to copy'; hint.style.color = ''; }, 1500);
+        showFeedback(ok);
+      } catch(e2) { showFeedback(false); }
     }
   }
 </script>
