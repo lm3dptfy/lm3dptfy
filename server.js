@@ -700,12 +700,41 @@ writeRequestsToFile(); res.json({ ok: true, request: r });
 if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
 });
 
-app.post('/api/requests/:id/tracking', requireAdmin, (req, res) => {
+app.post('/api/requests/:id/tracking', requireAdmin, async (req, res) => {
 const r = requests.find((x) => x.id === req.params.id);
 if (!r) return res.status(404).json({ error: 'Request not found' });
-r.trackingNumber = String(req.body.trackingNumber || '').trim(); r.updatedAt = new Date().toISOString();
-writeRequestsToFile(); res.json({ ok: true, request: r });
+r.trackingNumber = String(req.body.trackingNumber || '').trim();
+r.status = 'shipped';
+r.updatedAt = new Date().toISOString();
+writeRequestsToFile();
 if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
+res.json({ ok: true, request: r });
+// Send shipping notification email
+if (EMAIL_ENABLED && r.email && r.trackingNumber) {
+const safeName = escapeHtml(r.name || 'there');
+const safeTracking = escapeHtml(r.trackingNumber);
+const html = '<h2>Your 3D Print Has Shipped! 📦 — LM3DPTFY</h2>'
++ '<p>Hi ' + safeName + ',</p>'
++ '<p>Great news — your print is on its way!</p>'
++ '<p><strong>Tracking Number:</strong> ' + safeTracking + '</p>'
++ '<p style="margin:24px 0;text-align:center;"><a href="https://www.google.com/search?q=' + encodeURIComponent(r.trackingNumber) + '" style="background:#0d9488;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:16px;">Track Your Package</a></p>'
++ '<p>If you have any questions about your order, just reply to this email.</p>'
++ '<p>Thank you for choosing LM3DPTFY!</p>'
++ '<p>— The LM3DPTFY Team<br><a href="https://lm3dptfy.online">lm3dptfy.online</a></p>';
+fetch('https://api.resend.com/emails', {
+method: 'POST',
+headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'Content-Type': 'application/json' },
+body: JSON.stringify({
+from: EMAIL_FROM,
+to: r.email,
+subject: 'Your LM3DPTFY order has shipped — Tracking # ' + r.trackingNumber,
+html,
+}),
+}).then(async (emailRes) => {
+if (!emailRes.ok) console.error('Shipping email error:', await emailRes.text());
+else console.log('Shipping notification sent to', r.email);
+}).catch(err => console.error('Shipping email failed:', err.message));
+}
 });
 
 app.post('/api/requests/:id/archive', requireAdmin, (req, res) => {
