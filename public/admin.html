@@ -716,10 +716,14 @@
         const res = await fetch('/api/quote/send', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ requestId: r.id, summary: lastSummary, ...getFormData() }) });
         const d = await res.json();
         if (!res.ok) throw new Error(d.error || 'Failed to send');
-        qStatus.textContent = '✓ Quote sent! PDF saved. Status updated to Quoted.';
         qStatus.style.color = 'var(--teal-light)';
         sendBtn.textContent = 'Sent ✓';
-        setTimeout(() => { overlay.remove(); loadRequests(); }, 2000);
+        if (d.paymentUrl) {
+          qStatus.innerHTML = '✓ Quote sent! <a href="' + d.paymentUrl + '" target="_blank" rel="noopener" style="color:var(--teal-light);font-weight:600;">Open payment link ↗</a>';
+        } else {
+          qStatus.textContent = '✓ Quote sent! PDF saved. Status updated to Quoted.';
+        }
+        setTimeout(() => { overlay.remove(); loadRequests(); }, 4000);
       } catch(e) {
         qStatus.textContent = '✗ ' + e.message; qStatus.style.color = '#f87171';
         sendBtn.disabled = false; sendBtn.textContent = 'Send Quote to Customer';
