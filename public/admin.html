@@ -454,10 +454,8 @@
         try {
           const res = await fetch(`/api/requests/${encodeURIComponent(r.id)}/tracking`, { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ trackingNumber: val }) });
           if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error||'Save failed'); }
+          showDashStatus('Tracking saved — shipping email sent to ' + (email || 'customer'));
         } catch(e) { showDashStatus('Tracking save failed: ' + e.message, true); return; }
-        if (!email) return;
-        window.open(buildGmailUrl(email, 'Your LM3DPTFY order has shipped — Tracking # ' + val,
-          'Hi ' + name + ',\n\nGreat news — your print has shipped!\n\nTracking number: ' + val + '\n\n' + (stlLink ? 'Your model link: ' + stlLink + '\n\n' : '') + 'Thanks!\n— LM3DPTFY'), '_blank');
       }, 10);
     });
     trRow.appendChild(trLab); trRow.appendChild(trackInput);
