@@ -139,6 +139,15 @@
       font-size: .65rem;
       color: var(--ink3);
     }
+    .cmd-block code {
+      display: block;
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+    }
 
     .empty { color: var(--ink3); font-style: italic; font-size: .85rem; padding: 16px 0; }
 
@@ -262,52 +271,52 @@
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">Update Claude Code</div>
         <span class="copy-hint">click to copy</span>
-        npm update -g @anthropic-ai/claude-code
+        <code>npm update -g @anthropic-ai/claude-code</code>
       </div>
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">Check installed version</div>
         <span class="copy-hint">click to copy</span>
-        claude --version
+        <code>claude --version</code>
       </div>
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">Check latest npm release</div>
         <span class="copy-hint">click to copy</span>
-        npm info @anthropic-ai/claude-code dist-tags.latest
+        <code>npm info @anthropic-ai/claude-code dist-tags.latest</code>
       </div>
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">Verify no axios in Claude Code (supply chain check)</div>
         <span class="copy-hint">click to copy</span>
-        grep -r "axios" /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/ 2>/dev/null | wc -l
+        <code>grep -r "axios" /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/ 2>/dev/null | wc -l</code>
       </div>
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">List Claude Code dependencies</div>
         <span class="copy-hint">click to copy</span>
-        ls /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/
+        <code>ls /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/</code>
       </div>
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">Check GitHub security advisories for Claude Code</div>
         <span class="copy-hint">click to copy</span>
-        gh api repos/anthropics/claude-code/security-advisories --jq '.[0:5] | .[] | {cve_id, summary, severity, published_at}'
+        <code>gh api repos/anthropics/claude-code/security-advisories --jq '.[0:5] | .[] | {cve_id, summary, severity, published_at}'</code>
       </div>
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">Rotate Anthropic API key (open settings)</div>
         <span class="copy-hint">click to copy</span>
-        open https://console.anthropic.com/settings/keys
+        <code>open https://console.anthropic.com/settings/keys</code>
       </div>
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">View all installed MCP servers</div>
         <span class="copy-hint">click to copy</span>
-        cat ~/.claude/settings.json | python3 -m json.tool | grep -A2 '"mcpServers"'
+        <code>cat ~/.claude/settings.json | python3 -m json.tool | grep -A2 '"mcpServers"'</code>
       </div>
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">List Claude Code plugins</div>
         <span class="copy-hint">click to copy</span>
-        ls ~/.claude/plugins/ 2>/dev/null || echo "No plugins directory found"
+        <code>ls ~/.claude/plugins/ 2>/dev/null || echo "No plugins directory found"</code>
       </div>
       <div class="cmd-block" onclick="copyCmd(this)">
         <div class="cmd-label">Audit Claude Code permissions (show current mode)</div>
         <span class="copy-hint">click to copy</span>
-        cat ~/.claude/settings.json | python3 -c "import json,sys; d=json.load(sys.stdin); print('Mode:', d.get('permissions',{}).get('defaultMode','not set'))"
+        <code>cat ~/.claude/settings.json | python3 -c "import json,sys; d=json.load(sys.stdin); print('Mode:', d.get('permissions',{}).get('defaultMode','not set'))"</code>
       </div>
     </div>
 
@@ -389,11 +398,9 @@
 
   // Copy command
   async function copyCmd(el) {
-    const label = el.querySelector('.cmd-label')?.textContent || '';
-    const hintEl = el.querySelector('.copy-hint');
-    const hint = hintEl?.textContent || '';
-    const text = el.textContent.replace(label, '').replace(hint, '').trim();
+    const text = el.querySelector('code')?.textContent.trim() || '';
     if (!text) return;
+    const hintEl = el.querySelector('.copy-hint');
 
     const showFeedback = (ok) => {
       if (!hintEl) return;
@@ -409,7 +416,7 @@
       try {
         const ta = document.createElement('textarea');
         ta.value = text;
-        ta.style.cssText = 'position:fixed;left:-9999px;top:0';
+        ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
         document.body.appendChild(ta);
         ta.focus(); ta.select(); ta.setSelectionRange(0, 99999);
         const ok = document.execCommand('copy');
