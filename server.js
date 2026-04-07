@@ -41,6 +41,11 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const EMAIL_FROM = process.env.EMAIL_FROM || 'LM3DPTFY <no-reply@lm3dptfy.online>';
 const EMAIL_ENABLED = !!RESEND_API_KEY;
 
+const stripe = process.env.STRIPE_SECRET_KEY
+  ? require('stripe')(process.env.STRIPE_SECRET_KEY)
+  : null;
+if (!stripe) console.warn('STRIPE_SECRET_KEY not set — payment links will be skipped.');
+
 const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID;
 if (!GOOGLE_SHEET_ID) {
 console.error('ERROR: GOOGLE_SHEET_ID not set in environment variables!');
@@ -842,14 +847,47 @@ console.log('Quote PDF saved to Drive:', requestId + '.pdf');
 console.error('Drive PDF upload FAILED:', driveErr.message, driveErr.code, JSON.stringify(driveErr.errors || []));
 }
 }
+// Create Stripe payment link
+let paymentUrl = null;
+const grandTotal = (summary || {})['Grand Total (w/ Shipping)'] || '';
+if (stripe && grandTotal) {
+try {
+const amountCents = Math.round(parseFloat(String(grandTotal).replace(/[^0-9.]/g, '')) * 100);
+if (amountCents > 0) {
+const session = await stripe.checkout.sessions.create({
+mode: 'payment',
+customer_email: r.email,
+line_items: [{
+price_data: {
+currency: 'usd',
+product_data: { name: '3D Print — LM3DPTFY Quote #' + requestId.slice(0, 8) },
+unit_amount: amountCents,
+},
+quantity: 1,
+}],
+success_url: 'https://www.lm3dptfy.online/?payment=success',
+cancel_url: 'https://www.lm3dptfy.online/',
+expires_at: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60,
+});
+paymentUrl = session.url;
+console.log('Stripe payment link created:', paymentUrl);
+}
+} catch (stripeErr) {
+console.error('Stripe session creation failed:', stripeErr.message);
+}
+}
 // Send email to customer with PDF attached
 if (EMAIL_ENABLED && r.email) {
-const grandTotal = (summary || {})['Grand Total (w/ Shipping)'] || 'See quote';
+const displayTotal = grandTotal || 'See quote';
+const paymentBlock = paymentUrl
+? '<p style="margin:24px 0;text-align:center;"><a href="' + paymentUrl + '" style="background:#0d9488;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:16px;">Pay Now — ' + escapeHtml(displayTotal) + '</a></p>'
++ '<p style="font-size:12px;color:#666;text-align:center;">This payment link expires in 30 days.</p>'
+: '<p>To confirm your order, simply reply to this email.</p>';
 const html = '<h2>Your 3D Print Quote — LM3DPTFY</h2>'
 + '<p>Hi ' + escapeHtml(r.name) + ',</p>'
 + '<p>Thank you for your request! Please find your full quote attached as a PDF.</p>'
-+ '<p>Your quote total is <strong>' + escapeHtml(grandTotal) + '</strong>. All details are in the attached PDF.</p>'
-+ '<p>To confirm your order, simply reply to this email. No payment required until you approve.</p>'
++ '<p>Your quote total is <strong>' + escapeHtml(displayTotal) + '</strong>. All details are in the attached PDF.</p>'
++ paymentBlock
 + '<p>— The LM3DPTFY Team<br><a href="https://lm3dptfy.online">lm3dptfy.online</a></p>';
 const emailRes = await fetch('https://api.resend.com/emails', {
 method: 'POST',
@@ -882,7 +920,7 @@ if (!adminEmailRes.ok) console.error('Admin quote copy error:', await adminEmail
 r.status = 'quoted'; r.updatedAt = new Date().toISOString();
 writeRequestsToFile();
 if (sheetsClient) writeAllRequestsToSheet().catch(console.error);
-res.json({ ok: true });
+res.json({ ok: true, paymentUrl });
 } catch (err) {
 console.error('Quote send error:', err.message);
 res.status(500).json({ error: 'Failed to send quote: ' + err.message });
