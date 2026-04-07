@@ -867,7 +867,6 @@ quantity: 1,
 }],
 success_url: 'https://www.lm3dptfy.online/?payment=success',
 cancel_url: 'https://www.lm3dptfy.online/',
-expires_at: Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60,
 });
 paymentUrl = session.url;
 console.log('Stripe payment link created:', paymentUrl);
