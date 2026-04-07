@@ -175,7 +175,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 6 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 7 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -187,6 +187,11 @@
       <div id="security-body">
 
         <div class="alert-banner">
+          <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2026-35020 / 35021 / 35022 — CLI Command Injection Chain → Credential Exfiltration</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Three newly disclosed CWE-78 command injection flaws in the Claude Code CLI can be chained to exfiltrate Anthropic API keys. Patch to v2.1.92+. <a href="https://phoenix.security/claude-code-leak-to-vulnerability-three-cves-in-claude-code-cli-and-the-chain-that-connects-them/" style="color:var(--teal-light);">Phoenix Security</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-top:10px;">
           <div class="alert-title"><span class="badge critical">Critical</span> Claude Code Post-Leak RCE Vulnerability — Apr 5, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">A critical vulnerability emerged days after the v2.1.88 source map leak, enabling remote code execution. Patch available in v2.1.92+. <strong style="color:#f87171;">Update immediately if on v2.1.88–2.1.91.</strong> <a href="https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/" style="color:var(--teal-light);">SecurityWeek</a></div>
         </div>
@@ -287,24 +292,24 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://techcrunch.com/2026/04/04/anthropic-says-claude-code-subscribers-will-need-to-pay-extra-for-openclaw-support/" target="_blank">Anthropic Begins Billing 3rd-Party Claude Tools Separately</a></div>
-          <div class="desc">Claude Pro and Max subscriptions no longer cover third-party agentic tools like OpenClaw as of April 4. Users must switch to API billing or Anthropic's pay-as-you-go add-on.</div>
-          <div class="date">Apr 4, 2026 · TechCrunch</div>
+          <div><a href="https://www.techradar.com/news/live/claude-anthropic-down-outage-april-6-2026" target="_blank">Claude.ai Down — Service Outage Hits Logins, Voice Mode, and Chats</a></div>
+          <div class="desc">Anthropic confirmed elevated errors on Claude.ai on April 6, with users unable to log in, engage voice mode, or complete chats. Service was restored after several hours.</div>
+          <div class="date">Apr 6, 2026 · TechRadar</div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/" target="_blank">Critical Vulnerability in Claude Code Emerges Days After Source Leak</a></div>
-          <div class="desc">Security researchers discovered a critical flaw in Claude Code shortly after the accidental source map leak of v2.1.88. Update to v2.1.92 immediately.</div>
-          <div class="date">Apr 5, 2026 · SecurityWeek</div>
+          <div><a href="https://venturebeat.com/technology/anthropic-cuts-off-the-ability-to-use-claude-subscriptions-with-openclaw-and/" target="_blank">Anthropic Cuts Off Third-Party Claude Agent Access — OpenClaw and Others Affected</a></div>
+          <div class="desc">Claude Pro and Max subscribers can no longer use flat-rate plans to power third-party agents like OpenClaw. Anthropic is offering a one-time credit and discounted API bundles as concessions.</div>
+          <div class="date">Apr 6, 2026 · VentureBeat</div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.bloomberg.com/news/articles/2026-04-01/anthropic-accidentally-releases-source-code-for-claude-ai-agent" target="_blank">Anthropic Accidentally Releases Claude Code Source Code</a></div>
-          <div class="desc">Anthropic inadvertently published ~512k lines of internal Claude Code source via a debugging sourcemap in the v2.1.88 npm package. No credentials or customer data exposed.</div>
-          <div class="date">Apr 1, 2026 · Bloomberg</div>
+          <div><a href="https://phoenix.security/claude-code-leak-to-vulnerability-three-cves-in-claude-code-cli-and-the-chain-that-connects-them/" target="_blank">Three New CVEs in Claude Code CLI Chain into Credential Exfiltration</a></div>
+          <div class="desc">Researchers disclosed CVE-2026-35020, CVE-2026-35021, and CVE-2026-35022 — three CWE-78 command injections in the Claude Code CLI that can be chained to steal API credentials. Patch to latest.</div>
+          <div class="date">Apr 7, 2026 · Phoenix Security</div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.newsbytesapp.com/news/science/anthropic-begins-billing-3rd-party-claude-tools-separately-april-4-2026/tldr" target="_blank">Anthropic Raises Message Batches API Token Cap to 300k</a></div>
-          <div class="desc">max_tokens cap raised to 300k on the Message Batches API for Claude Opus 4.6 and Sonnet 4.6. 1M-token context beta for Sonnet 4.5 and Sonnet 4 retiring April 30, 2026.</div>
-          <div class="date">Apr 4, 2026 · Anthropic</div>
+          <div><a href="https://www.openpr.com/news/4457186/openclaw-direct-adds-ability-to-hire-ai-employees-through" target="_blank">OpenClaw.Direct Launches: Hire AI Employees via Claude, ChatGPT, and Cursor</a></div>
+          <div class="desc">OpenClaw.Direct is a new managed service that lets teams spin up, manage, and dismiss AI "employees" directly from Claude Desktop, ChatGPT, Cursor, and other chat frontends via conversation.</div>
+          <div class="date">Apr 6, 2026 · OpenPR</div>
         </div>
       </div>
     </div>
@@ -314,6 +319,10 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://www.cio.com/article/4134741/how-agentic-ai-will-reshape-engineering-workflows-in-2026.html" target="_blank">How Agentic AI Will Reshape Engineering Workflows in 2026 — CIO</a></div>
+          <div class="desc">Analysis of how coding agents are changing developer roles, team structures, and delivery pipelines — with concrete examples from early adopters</div>
+        </div>
         <div class="news-item">
           <div><a href="https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf" target="_blank">2026 Agentic Coding Trends Report — Anthropic</a></div>
           <div class="desc">How coding agents are reshaping development workflows — data-backed insights from Anthropic's research on real-world agentic coding adoption</div>
