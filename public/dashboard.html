@@ -268,52 +268,52 @@
       <div class="panel-label"><span class="section-icon">💻</span> Update Commands</div>
       <div class="panel-desc">Click any block to copy to clipboard.</div>
 
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">Update Claude Code</div>
         <span class="copy-hint">click to copy</span>
         <code>npm update -g @anthropic-ai/claude-code</code>
       </div>
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">Check installed version</div>
         <span class="copy-hint">click to copy</span>
         <code>claude --version</code>
       </div>
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">Check latest npm release</div>
         <span class="copy-hint">click to copy</span>
         <code>npm info @anthropic-ai/claude-code dist-tags.latest</code>
       </div>
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">Verify no axios in Claude Code (supply chain check)</div>
         <span class="copy-hint">click to copy</span>
         <code>grep -r "axios" /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/ 2>/dev/null | wc -l</code>
       </div>
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">List Claude Code dependencies</div>
         <span class="copy-hint">click to copy</span>
         <code>ls /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/</code>
       </div>
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">Check GitHub security advisories for Claude Code</div>
         <span class="copy-hint">click to copy</span>
         <code>gh api repos/anthropics/claude-code/security-advisories --jq '.[0:5] | .[] | {cve_id, summary, severity, published_at}'</code>
       </div>
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">Rotate Anthropic API key (open settings)</div>
         <span class="copy-hint">click to copy</span>
         <code>open https://console.anthropic.com/settings/keys</code>
       </div>
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">View all installed MCP servers</div>
         <span class="copy-hint">click to copy</span>
         <code>cat ~/.claude/settings.json | python3 -m json.tool | grep -A2 '"mcpServers"'</code>
       </div>
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">List Claude Code plugins</div>
         <span class="copy-hint">click to copy</span>
         <code>ls ~/.claude/plugins/ 2>/dev/null || echo "No plugins directory found"</code>
       </div>
-      <div class="cmd-block" onclick="copyCmd(this)">
+      <div class="cmd-block">
         <div class="cmd-label">Audit Claude Code permissions (show current mode)</div>
         <span class="copy-hint">click to copy</span>
         <code>cat ~/.claude/settings.json | python3 -c "import json,sys; d=json.load(sys.stdin); print('Mode:', d.get('permissions',{}).get('defaultMode','not set'))"</code>
@@ -396,40 +396,43 @@
     localStorage.setItem('theme', t);
   });
 
-  // Copy command — non-async to preserve user gesture context on Mac/Safari
-  function copyCmd(el) {
-    const text = el.querySelector('code')?.textContent.trim() || '';
-    if (!text) return;
-    const hintEl = el.querySelector('.copy-hint');
+  // Copy command — uses addEventListener (not inline onclick) to avoid CSP blocking
+  document.querySelectorAll('.cmd-block').forEach(function(block) {
+    block.addEventListener('click', function() {
+      var text = (block.querySelector('code') || {}).textContent;
+      if (!text) return;
+      text = text.trim();
+      var hintEl = block.querySelector('.copy-hint');
 
-    function feedback(ok) {
-      if (!hintEl) return;
-      hintEl.textContent = ok ? 'copied!' : 'failed';
-      hintEl.style.color = ok ? 'var(--teal-light)' : '#f87171';
-      setTimeout(function() { hintEl.textContent = 'click to copy'; hintEl.style.color = ''; }, 1500);
-    }
+      function feedback(ok) {
+        if (!hintEl) return;
+        hintEl.textContent = ok ? 'copied!' : 'failed';
+        hintEl.style.color = ok ? 'var(--teal-light)' : '#f87171';
+        setTimeout(function() { hintEl.textContent = 'click to copy'; hintEl.style.color = ''; }, 1500);
+      }
 
-    function legacyCopy() {
-      var ta = document.createElement('textarea');
-      ta.value = text;
-      ta.setAttribute('readonly', '');
-      ta.style.cssText = 'position:absolute;left:-9999px;top:-9999px';
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      ta.setSelectionRange(0, 99999);
-      var ok = false;
-      try { ok = document.execCommand('copy'); } catch(e) {}
-      document.body.removeChild(ta);
-      feedback(ok);
-    }
+      function legacyCopy() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:absolute;left:-9999px;top:-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        ta.setSelectionRange(0, 99999);
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch(e) {}
+        document.body.removeChild(ta);
+        feedback(ok);
+      }
 
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(function() { feedback(true); }, legacyCopy);
-    } else {
-      legacyCopy();
-    }
-  }
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function() { feedback(true); }, legacyCopy);
+      } else {
+        legacyCopy();
+      }
+    });
+  });
 </script>
 
 </body>
