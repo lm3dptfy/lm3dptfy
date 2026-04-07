@@ -175,7 +175,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 7 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 7 2026, 10:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -228,7 +228,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.83</span> · latest <span class="latest">2.1.92</span></span>
+          <span class="nums">installed <span class="current">2.1.92</span> · latest <span class="latest">2.1.92</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ unpatched CVEs — await 2.1.92+</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
@@ -283,6 +283,31 @@
         <div class="cmd-label">List Claude Code dependencies</div>
         <span class="copy-hint">click to copy</span>
         ls /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/
+      </div>
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">Check GitHub security advisories for Claude Code</div>
+        <span class="copy-hint">click to copy</span>
+        gh api repos/anthropics/claude-code/security-advisories --jq '.[0:5] | .[] | {cve_id, summary, severity, published_at}'
+      </div>
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">Rotate Anthropic API key (open settings)</div>
+        <span class="copy-hint">click to copy</span>
+        open https://console.anthropic.com/settings/keys
+      </div>
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">View all installed MCP servers</div>
+        <span class="copy-hint">click to copy</span>
+        cat ~/.claude/settings.json | python3 -m json.tool | grep -A2 '"mcpServers"'
+      </div>
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">List Claude Code plugins</div>
+        <span class="copy-hint">click to copy</span>
+        ls ~/.claude/plugins/ 2>/dev/null || echo "No plugins directory found"
+      </div>
+      <div class="cmd-block" onclick="copyCmd(this)">
+        <div class="cmd-label">Audit Claude Code permissions (show current mode)</div>
+        <span class="copy-hint">click to copy</span>
+        cat ~/.claude/settings.json | python3 -c "import json,sys; d=json.load(sys.stdin); print('Mode:', d.get('permissions',{}).get('defaultMode','not set'))"
       </div>
     </div>
 
