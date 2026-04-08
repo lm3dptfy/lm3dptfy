@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 7 2026, 10:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 8 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,6 +196,11 @@
       <div id="security-body">
 
         <div class="alert-banner">
+          <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2025-59536 / CVE-2026-21852 — RCE &amp; API Token Exfiltration via Project Files</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Check Point Research found attackers can achieve remote code execution and steal API credentials through malicious Claude Code project configurations — exploiting Hooks, MCP servers, and environment variables. CVE-2025-59536 published Oct 3 2025; CVE-2026-21852 published Jan 21 2026. Review untrusted CLAUDE.md files and MCP configs before use. <a href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/" style="color:var(--teal-light);">Check Point Research</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-top:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2026-35020 / 35021 / 35022 — CLI Command Injection Chain → Credential Exfiltration</div>
           <div style="font-size:.85rem;color:var(--ink2);">Three newly disclosed CWE-78 command injection flaws in the Claude Code CLI can be chained to exfiltrate Anthropic API keys. Patch to v2.1.92+. <a href="https://phoenix.security/claude-code-leak-to-vulnerability-three-cves-in-claude-code-cli-and-the-chain-that-connects-them/" style="color:var(--teal-light);">Phoenix Security</a></div>
         </div>
@@ -237,7 +242,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current">2.1.92</span> · latest <span class="latest">2.1.92</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ unpatched CVEs — await 2.1.92+</span></span>
+          <span class="nums">installed <span class="current stale">2.1.92</span> · latest <span class="latest">2.1.96</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run npm update -g @anthropic-ai/claude-code</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
@@ -255,6 +260,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><strong>OpenClaw 2026.4.2 — Task Flow Orchestration</strong></div>
+          <div class="desc">Task Flow is back with durable flow state, managed vs. mirrored sync modes, and inspection/recovery tooling. Also ships optional memory "dreaming" (controlled background recall with /dreaming command), structured plan execution events, and a loopback MCP bridge exposing OpenClaw tools to background Claude CLI runs.</div>
+          <div class="date">Apr 7, 2026 · OpenClaw Changelog</div>
+        </div>
         <div class="news-item">
           <div><strong>OpenClaw 2026.4.2</strong> — currently installed</div>
           <div class="desc">Monitoring for new releases daily.</div>
@@ -326,24 +336,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.techradar.com/news/live/claude-anthropic-down-outage-april-6-2026" target="_blank">Claude.ai Down — Service Outage Hits Logins, Voice Mode, and Chats</a></div>
-          <div class="desc">Anthropic confirmed elevated errors on Claude.ai on April 6, with users unable to log in, engage voice mode, or complete chats. Service was restored after several hours.</div>
-          <div class="date">Apr 6, 2026 · TechRadar</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Anthropic Retiring 1M Token Context Window for Sonnet 4.5 and Sonnet 4 — Apr 30 Deadline</a></div>
+          <div class="desc">Anthropic announced the context-1m-2025-08-07 beta header will stop working for claude-sonnet-4-5 and claude-sonnet-4 on April 30, 2026. Requests exceeding the 200k standard limit will return errors. Migrate now if you rely on 1M context.</div>
+          <div class="date">Apr 8, 2026 · Anthropic Docs</div>
         </div>
         <div class="news-item">
-          <div><a href="https://venturebeat.com/technology/anthropic-cuts-off-the-ability-to-use-claude-subscriptions-with-openclaw-and/" target="_blank">Anthropic Cuts Off Third-Party Claude Agent Access — OpenClaw and Others Affected</a></div>
-          <div class="desc">Claude Pro and Max subscribers can no longer use flat-rate plans to power third-party agents like OpenClaw. Anthropic is offering a one-time credit and discounted API bundles as concessions.</div>
-          <div class="date">Apr 6, 2026 · VentureBeat</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Haiku 3 Deprecated — Retirement April 19, 2026</a></div>
+          <div class="desc">Anthropic is retiring claude-3-haiku-20240307 on April 19, 2026. Teams still on Haiku 3 should migrate to Claude Haiku 4.5 (claude-haiku-4-5-20251001) before that date to avoid outages.</div>
+          <div class="date">Apr 8, 2026 · Anthropic</div>
         </div>
         <div class="news-item">
-          <div><a href="https://phoenix.security/claude-code-leak-to-vulnerability-three-cves-in-claude-code-cli-and-the-chain-that-connects-them/" target="_blank">Three New CVEs in Claude Code CLI Chain into Credential Exfiltration</a></div>
-          <div class="desc">Researchers disclosed CVE-2026-35020, CVE-2026-35021, and CVE-2026-35022 — three CWE-78 command injections in the Claude Code CLI that can be chained to steal API credentials. Patch to latest.</div>
+          <div><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md" target="_blank">Claude Code 2.1.93–2.1.96: CRLF Double-Write Fix, CLAUDE.md Re-injection Fix, Config Corruption Fix</a></div>
+          <div class="desc">Recent releases fixed Edit/Write tools doubling CRLF line endings on Windows, nested CLAUDE.md files being re-injected dozens of times in long sessions, unnecessary config disk writes causing corruption on Windows, and a potential OOM crash when using /feedback on very long sessions.</div>
+          <div class="date">Apr 7–8, 2026 · Claude Code Changelog</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/" target="_blank">Check Point Research: RCE and API Key Theft via Malicious Claude Code Project Files</a></div>
+          <div class="desc">Detailed writeup of CVE-2025-59536 and CVE-2026-21852 — attackers can drop malicious CLAUDE.md or MCP configs in a repo to trigger RCE and steal Anthropic API keys on first claude command. Never run Claude Code in untrusted repos without reviewing project files.</div>
+          <div class="date">Jan 21, 2026 · Check Point Research</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://medium.com/vibecodingpub/claude-code-ide-integrations-for-jetbrains-ides-and-vs-code-71023d27b86d" target="_blank">WebStorm 2026.1 Integrates Claude Agent Natively in JetBrains AI Chat</a></div>
+          <div class="desc">JetBrains shipped Claude Agent as a first-class option in the AI chat sidebar with WebStorm 2026.1 (March 2026). Claude Code also adds deeper diff viewer support for all JetBrains IDEs, making the proposed-changes flow cleaner.</div>
+          <div class="date">Mar 2026 · Medium / JetBrains</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://phoenix.security/claude-code-leak-to-vulnerability-three-cves-in-claude-code-cli-and-the-chain-that-connects-them/" target="_blank">Three CVEs in Claude Code CLI Chain into Credential Exfiltration — CVE-2026-35020/21/22</a></div>
+          <div class="desc">Phoenix Security confirmed three CWE-78 OS command injection flaws sharing the same root cause — shell metacharacters in crafted file paths. Can be chained for full API key exfiltration from CI/CD pipelines. Patched in v2.1.92+.</div>
           <div class="date">Apr 7, 2026 · Phoenix Security</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.openpr.com/news/4457186/openclaw-direct-adds-ability-to-hire-ai-employees-through" target="_blank">OpenClaw.Direct Launches: Hire AI Employees via Claude, ChatGPT, and Cursor</a></div>
-          <div class="desc">OpenClaw.Direct is a new managed service that lets teams spin up, manage, and dismiss AI "employees" directly from Claude Desktop, ChatGPT, Cursor, and other chat frontends via conversation.</div>
-          <div class="date">Apr 6, 2026 · OpenPR</div>
         </div>
       </div>
     </div>
@@ -353,6 +373,14 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://www.datacamp.com/tutorial/claude-code-hooks" target="_blank">Claude Code Hooks: A Practical Guide to Workflow Automation — DataCamp</a></div>
+          <div class="desc">Hands-on tutorial covering all hook types (command, http, prompt), common patterns (auto-format, test-on-save, notifications), and security considerations when wiring hooks to external systems</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.truefoundry.com/blog/claude-code-prompt-injection" target="_blank">Prompt Injection and AI Agent Security Risks: A Claude Code Guide for Enterprise Teams — TrueFoundry</a></div>
+          <div class="desc">Deep dive into how prompt injection attacks target Claude Code in enterprise contexts, with input filtering strategies, gateway-layer defenses, and OWASP Agentic Top 10 alignment</div>
+        </div>
         <div class="news-item">
           <div><a href="https://www.cio.com/article/4134741/how-agentic-ai-will-reshape-engineering-workflows-in-2026.html" target="_blank">How Agentic AI Will Reshape Engineering Workflows in 2026 — CIO</a></div>
           <div class="desc">Analysis of how coding agents are changing developer roles, team structures, and delivery pipelines — with concrete examples from early adopters</div>
@@ -367,15 +395,7 @@
         </div>
         <div class="news-item">
           <div><a href="https://code.claude.com/docs" target="_blank">Claude Code Official Docs</a></div>
-          <div class="desc">Setup, advanced usage, MCP integrations, permissions model</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md" target="_blank">Claude Code CHANGELOG</a></div>
-          <div class="desc">Full release history — check after each update</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.anthropic.com/news" target="_blank">Anthropic News</a></div>
-          <div class="desc">Official model updates, safety research, product announcements</div>
+          <div class="desc">Setup, advanced usage, MCP integrations, hooks, permissions model</div>
         </div>
       </div>
     </div>
