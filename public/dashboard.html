@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 8 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 9 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -242,7 +242,15 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.92</span> · latest <span class="latest">2.1.96</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run npm update -g @anthropic-ai/claude-code</span></span>
+          <span class="nums">installed <span class="current stale">2.1.92</span> · latest <span class="latest">2.1.97</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run npm update -g @anthropic-ai/claude-code</span></span>
+        </div>
+        <div class="ver-row">
+          <span class="name">Happy</span>
+          <span class="nums">version <span class="current">—</span> → <span class="latest">1.1.4</span></span>
+        </div>
+        <div class="ver-row">
+          <span class="name">MemPalace</span>
+          <span class="nums">version <span class="current">—</span> → <span class="latest">2.0.0</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
@@ -261,6 +269,11 @@
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
         <div class="news-item">
+          <div><a href="https://techcrunch.com/2026/04/04/anthropic-says-claude-code-subscribers-will-need-to-pay-extra-for-openclaw-support/" target="_blank">Anthropic Blocks Claude Subscriptions for OpenClaw — Apr 4, 2026</a></div>
+          <div class="desc">Starting April 4 at noon PT, Claude Pro/Max subscribers can no longer use their subscription limits with OpenClaw or other third-party harnesses. Users must switch to pay-as-you-go extra usage billing. Affects 135k+ OpenClaw instances. OpenClaw is transitioning to an open-source foundation with OpenAI support.</div>
+          <div class="date">Apr 4–6, 2026 · TechCrunch / The Register / VentureBeat</div>
+        </div>
+        <div class="news-item">
           <div><strong>OpenClaw 2026.4.2 — Task Flow Orchestration</strong></div>
           <div class="desc">Task Flow is back with durable flow state, managed vs. mirrored sync modes, and inspection/recovery tooling. Also ships optional memory "dreaming" (controlled background recall with /dreaming command), structured plan execution events, and a loopback MCP bridge exposing OpenClaw tools to background Claude CLI runs.</div>
           <div class="date">Apr 7, 2026 · OpenClaw Changelog</div>
@@ -269,6 +282,50 @@
           <div><strong>OpenClaw 2026.4.2</strong> — currently installed</div>
           <div class="desc">Monitoring for new releases daily.</div>
           <div class="date">Apr 4, 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HAPPY UPDATES -->
+    <div class="panel" id="happy-panel">
+      <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
+      <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
+      <div id="happy-body">
+        <div class="news-item">
+          <div><a href="https://happy.engineering/docs/versions/release-notes/" target="_blank">Happy v1.1.4 — Latest on npm</a></div>
+          <div class="desc">Current latest version of the Happy mobile client for Claude Code. Happy lets you start remote Claude Code sessions from your phone with one tap, staying ready in the background on your computer.</div>
+          <div class="date">Apr 2026 · happy.engineering</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMPALACE UPDATES -->
+    <div class="panel" id="mempalace-panel">
+      <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
+      <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
+      <div id="mempalace-body">
+        <div class="news-item">
+          <div><a href="https://www.mempalace.tech/" target="_blank">MemPalace v2.0.0 — Now on npm</a></div>
+          <div class="desc">MemPalace 2.0.0 is the current latest version on npm. MemPalace is a free, open-source local AI memory system (MIT) with 96.6% score on LongMemEval, supports Claude Code via MCP. A Claude Code one-step install plugin (hooks + MCP) is under active development (issue #187).</div>
+          <div class="date">Apr 2026 · mempalace.tech / npm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLUGINS & SKILLS -->
+    <div class="panel" id="plugins-panel">
+      <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
+      <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
+      <div id="plugins-body">
+        <div class="news-item">
+          <div><a href="https://blog.fsck.com/releases/2026/03/31/superpowers-v5-0-7/" target="_blank">Superpowers v5.0.7 — Mar 31, 2026</a></div>
+          <div class="desc">Now works on GitHub Copilot CLI. Fixes a token waste problem in the OpenCode integration. Superpowers ships 38 agents, 156 skills, 72 legacy command shims, and production-ready hooks. Available in the Anthropic Claude Code plugin marketplace since Jan 2026.</div>
+          <div class="date">Mar 31, 2026 · blog.fsck.com</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://smithery.ai/server/@upstash/context7-mcp" target="_blank">Context7 MCP v2.1.7 — Apr 7, 2026</a></div>
+          <div class="desc">Latest release of the @upstash/context7-mcp server, last published 2 days ago. New tool activation system reduces context usage by 92%. Note: SSE transport protocol deprecated — migrate to HTTP or stdio transport.</div>
+          <div class="date">Apr 7, 2026 · Smithery / npm</div>
         </div>
       </div>
     </div>
@@ -328,6 +385,21 @@
         <span class="copy-hint">click to copy</span>
         <code>cat ~/.claude/settings.json | python3 -c "import json,sys; d=json.load(sys.stdin); print('Mode:', d.get('permissions',{}).get('defaultMode','not set'))"</code>
       </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Update Happy</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm update -g happy</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Update MemPalace</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm update -g mempalace</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check npm latest for Claude Code, Happy, and MemPalace</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm info @anthropic-ai/claude-code dist-tags.latest &amp;&amp; npm info happy dist-tags.latest &amp;&amp; npm info mempalace dist-tags.latest</code>
+      </div>
     </div>
 
     <!-- AI NEWS -->
@@ -336,29 +408,29 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Anthropic Retiring 1M Token Context Window for Sonnet 4.5 and Sonnet 4 — Apr 30 Deadline</a></div>
-          <div class="desc">Anthropic announced the context-1m-2025-08-07 beta header will stop working for claude-sonnet-4-5 and claude-sonnet-4 on April 30, 2026. Requests exceeding the 200k standard limit will return errors. Migrate now if you rely on 1M context.</div>
-          <div class="date">Apr 8, 2026 · Anthropic Docs</div>
+          <div><a href="https://techcrunch.com/2026/04/04/anthropic-says-claude-code-subscribers-will-need-to-pay-extra-for-openclaw-support/" target="_blank">Anthropic Blocks Claude Subscriptions for OpenClaw — Requires Pay-As-You-Go</a></div>
+          <div class="desc">Starting April 4, 2026 at noon PT, Claude Pro/Max subscription limits no longer cover OpenClaw or other third-party harnesses. Over 135,000 OpenClaw users face cost increases up to 50x. OpenClaw founder Peter Steinberger is leaving for OpenAI; project moves to an open-source foundation.</div>
+          <div class="date">Apr 4–6, 2026 · TechCrunch / The Register / VentureBeat</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Haiku 3 Deprecated — Retirement April 19, 2026</a></div>
-          <div class="desc">Anthropic is retiring claude-3-haiku-20240307 on April 19, 2026. Teams still on Haiku 3 should migrate to Claude Haiku 4.5 (claude-haiku-4-5-20251001) before that date to avoid outages.</div>
-          <div class="date">Apr 8, 2026 · Anthropic</div>
+          <div><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md" target="_blank">Claude Code 2.1.97 Released — Latest on npm</a></div>
+          <div class="desc">v2.1.97 is now the latest on npm (up from 2.1.96). Recent 2.1.93–2.1.97 fixes: CRLF double-write on Windows, nested CLAUDE.md re-injection in long sessions, config corruption on Windows, OOM crash on /feedback with large sessions, and faster Write tool diff computation.</div>
+          <div class="date">Apr 9, 2026 · Claude Code Changelog</div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md" target="_blank">Claude Code 2.1.93–2.1.96: CRLF Double-Write Fix, CLAUDE.md Re-injection Fix, Config Corruption Fix</a></div>
-          <div class="desc">Recent releases fixed Edit/Write tools doubling CRLF line endings on Windows, nested CLAUDE.md files being re-injected dozens of times in long sessions, unnecessary config disk writes causing corruption on Windows, and a potential OOM crash when using /feedback on very long sessions.</div>
-          <div class="date">Apr 7–8, 2026 · Claude Code Changelog</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Haiku 3 Retiring April 19 — 1M Context Beta Ending April 30</a></div>
+          <div class="desc">claude-3-haiku-20240307 retires April 19, 2026 — migrate to claude-haiku-4-5-20251001. Separately, the context-1m-2025-08-07 beta header (1M token window) stops working for Sonnet 4.5 and Sonnet 4 on April 30; requests over 200k will error.</div>
+          <div class="date">Apr 8–9, 2026 · Anthropic Docs</div>
         </div>
         <div class="news-item">
-          <div><a href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/" target="_blank">Check Point Research: RCE and API Key Theft via Malicious Claude Code Project Files</a></div>
-          <div class="desc">Detailed writeup of CVE-2025-59536 and CVE-2026-21852 — attackers can drop malicious CLAUDE.md or MCP configs in a repo to trigger RCE and steal Anthropic API keys on first claude command. Never run Claude Code in untrusted repos without reviewing project files.</div>
-          <div class="date">Jan 21, 2026 · Check Point Research</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Message Batches API Now Supports 300k Output Tokens for Opus 4.6 &amp; Sonnet 4.6</a></div>
+          <div class="desc">The Message Batches API max_tokens cap is raised to 300k for Claude Opus 4.6 and Sonnet 4.6. Use the output-300k-2026-03-24 beta header to enable longer structured output, large code generation, and data tasks. Web search and tool calling now GA (no beta header needed).</div>
+          <div class="date">Apr 2026 · Anthropic API Docs</div>
         </div>
         <div class="news-item">
-          <div><a href="https://medium.com/vibecodingpub/claude-code-ide-integrations-for-jetbrains-ides-and-vs-code-71023d27b86d" target="_blank">WebStorm 2026.1 Integrates Claude Agent Natively in JetBrains AI Chat</a></div>
-          <div class="desc">JetBrains shipped Claude Agent as a first-class option in the AI chat sidebar with WebStorm 2026.1 (March 2026). Claude Code also adds deeper diff viewer support for all JetBrains IDEs, making the proposed-changes flow cleaner.</div>
-          <div class="date">Mar 2026 · Medium / JetBrains</div>
+          <div><a href="https://smithery.ai/server/@upstash/context7-mcp" target="_blank">Context7 MCP v2.1.7 — 92% Context Reduction, SSE Transport Deprecated</a></div>
+          <div class="desc">@upstash/context7-mcp v2.1.7 ships a new tool activation system cutting context usage by 92%. SSE transport endpoint is being removed — users must migrate to HTTP or stdio transport before the next major release.</div>
+          <div class="date">Apr 7, 2026 · Smithery / Upstash</div>
         </div>
         <div class="news-item">
           <div><a href="https://phoenix.security/claude-code-leak-to-vulnerability-three-cves-in-claude-code-cli-and-the-chain-that-connects-them/" target="_blank">Three CVEs in Claude Code CLI Chain into Credential Exfiltration — CVE-2026-35020/21/22</a></div>
