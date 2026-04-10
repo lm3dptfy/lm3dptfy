@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 9 2026, 8:35 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 10 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -242,7 +242,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.92</span> · latest <span class="latest">2.1.97</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run npm update -g @anthropic-ai/claude-code</span></span>
+          <span class="nums">installed <span class="current stale">2.1.92</span> · latest <span class="latest">2.1.100</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run npm update -g @anthropic-ai/claude-code</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -418,9 +418,19 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md" target="_blank">Claude Code 2.1.97 Released — Latest on npm</a></div>
-          <div class="desc">v2.1.97 is now the latest on npm. Recent 2.1.93–2.1.97 fixes: CRLF double-write on Windows, nested CLAUDE.md re-injection in long sessions, config corruption on Windows, OOM crash on /feedback with large sessions, and faster Write tool diff computation. Update if on v2.1.92 or below.</div>
-          <div class="date">Apr 9, 2026 · Claude Code Changelog</div>
+          <div><a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md" target="_blank">Claude Code 2.1.100 Released — Now Latest on npm</a></div>
+          <div class="desc">v2.1.100 is now latest. Key additions in 2.1.98–2.1.100: Monitor tool for streaming background script events, subprocess sandboxing with PID namespace isolation on Linux, --exclude-dynamic-system-prompt-sections flag for prompt caching, W3C TRACEPARENT propagation via OTEL, LSP clientInfo, Vertex AI setup wizard, and multiple Bash tool security fixes (backslash-escaped flags, compound commands, env-var prefixes, /dev/tcp redirects). Critical bug fixes: rate-limit infinite loop, --resume full cache miss, Edit/Write failing with format-on-save hooks.</div>
+          <div class="date">Apr 10, 2026 · Claude Code Changelog</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/managed-agents/overview" target="_blank">Anthropic Launches Claude Managed Agents Public Beta — Apr 8, 2026</a></div>
+          <div class="desc">Fully managed agent harness: sandboxed code execution, checkpointing, credential management, scoped permissions, and SSE streaming. Priced at $0.08/session-hour plus standard token costs. Requires managed-agents-2026-04-01 beta header (Claude SDK adds it automatically). The ant CLI also launched — a command-line client for the Claude API with native Claude Code integration and YAML resource versioning.</div>
+          <div class="date">Apr 8, 2026 · Anthropic / InfoWorld / Help Net Security</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://techcrunch.com/2026/04/07/anthropic-mythos-ai-model-preview-security/" target="_blank">Claude Mythos Preview — Anthropic's Most Capable Model, Too Dangerous for Public Release</a></div>
+          <div class="desc">Mythos Preview found thousands of zero-day vulnerabilities in major OSes and browsers during red-team testing, exploiting them on first attempt in 83.1% of cases. Not publicly available — restricted to Project Glasswing partners (defensive cybersecurity). Available via API, Bedrock, Vertex, and Microsoft Foundry at $25/$125 per million input/output tokens for approved participants.</div>
+          <div class="date">Apr 7–8, 2026 · TechCrunch / Axios / Euronews</div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Haiku 3 Retiring April 19 — 1M Context Beta Ending April 30</a></div>
@@ -435,17 +445,7 @@
         <div class="news-item">
           <div><a href="https://smithery.ai/server/@upstash/context7-mcp" target="_blank">Context7 MCP v2.1.7 — 92% Context Reduction, SSE Transport Deprecated</a></div>
           <div class="desc">@upstash/context7-mcp v2.1.7 ships a new tool activation system cutting context usage by 92%. SSE transport endpoint is being removed — migrate to HTTP or stdio transport before the next major release.</div>
-          <div class="date">Apr 7, 2026 · Smithery / Upstash</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Message Batches API Now Supports 300k Output Tokens for Opus 4.6 &amp; Sonnet 4.6</a></div>
-          <div class="desc">The Message Batches API max_tokens cap is raised to 300k for Claude Opus 4.6 and Sonnet 4.6. Use the output-300k-2026-03-24 beta header for longer structured output, large code gen, and data tasks. Web search and tool calling now GA — no beta header required.</div>
-          <div class="date">Apr 2026 · Anthropic API Docs</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://workspacemcp.com" target="_blank">Google Workspace MCP Server — Gmail, Calendar, Drive in One Integration</a></div>
-          <div class="desc">New unified Google Workspace MCP server published April 6, 2026. Covers 12 services (Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Tasks, Contacts, Chat) with 100+ tools via a single MCP connection. All write actions require explicit user approval.</div>
-          <div class="date">Apr 6, 2026 · workspacemcp.com</div>
+          <div class="date">Apr 7–10, 2026 · Smithery / Upstash / npm</div>
         </div>
       </div>
     </div>
