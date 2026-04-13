@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 12 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 13 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -448,34 +448,29 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code 2.1.104 — /team-onboarding, OS CA Trust &amp; MCP Deduplication</a></div>
-          <div class="desc">Latest release adds /team-onboarding command to generate ramp-up guides from local usage, OS CA certificate store trusted by default (fixes enterprise TLS proxies), and MCP server deduplication (local config wins over claude.ai connectors). MCP tool descriptions capped at 2KB. Also fixes the --resume prompt-cache miss regression (broken since v2.1.69) and Bedrock 403 errors (regression in v2.1.94).</div>
-          <div class="date">Apr 12, 2026 · Claude Code Changelog</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.104 — Current Latest, Released Apr 13</a></div>
+          <div class="desc">v2.1.104 published today (Apr 13 01:45 UTC). This week's headline changes (across 2.1.97–2.1.104): /team-onboarding command, OS CA cert store trusted by default, Monitor tool for streaming background script events, Linux subprocess sandboxing (PID namespace isolation), Vertex AI interactive setup wizard, command injection fix in POSIX which fallback (LSP binary detection), --resume prompt-cache miss fix (broken since v2.1.69), and Bedrock 403 regression fix.</div>
+          <div class="date">Apr 13, 2026 · Claude Code GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">Claude Code --resume Prompt-Cache Miss Regression Fixed (v2.1.69–2.1.103)</a></div>
-          <div class="desc">A regression introduced in v2.1.69 caused --resume sessions to incur full token costs instead of cache rates for users with deferred tools, MCP servers, or custom agents. Fixed in v2.1.104 after 35 versions. High-impact cost fix for regular --resume users. Also fixed: infinite rate-limit dialog loop, Edit/Write "File content changed" errors when PostToolUse hooks rewrite files.</div>
-          <div class="date">Apr 12, 2026 · Claude Code / Releasebot</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠️ Haiku 3 Retires in 6 Days (Apr 19) — 1M Context Beta Ends Apr 30</a></div>
+          <div class="desc">claude-3-haiku-20240307 retires April 19 — migrate to claude-haiku-4-5-20251001 now. The context-1m-2025-08-07 beta header stops working for Sonnet 4.5 and Sonnet 4 on April 30; requests over 200k tokens will error. Move to Sonnet 4.6 or Opus 4.6 for native 1M context. max_tokens cap raised to 300k on Batches API with output-300k-2026-03-24 header.</div>
+          <div class="date">Apr 8–9, 2026 · Anthropic Docs · <strong style="color:#f87171;">ACTION REQUIRED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Haiku 3 Retires April 19 — 1M Context Beta Ends April 30</a></div>
-          <div class="desc">claude-3-haiku-20240307 retires April 19 — migrate to claude-haiku-4-5-20251001. The context-1m-2025-08-07 beta header stops working for Sonnet 4.5 and Sonnet 4 on April 30; requests over 200k tokens will error after that date. Migrate to Sonnet 4.6 or Opus 4.6 which support 1M context natively. max_tokens cap raised to 300k on Batches API with output-300k-2026-03-24 header.</div>
-          <div class="date">Apr 8–9, 2026 · Anthropic Docs</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://smithery.ai/server/@upstash/context7-mcp" target="_blank">Context7 MCP v2.1.7 — SSE Transport Deprecated</a></div>
-          <div class="desc">@upstash/context7-mcp v2.1.7 published Apr 7. New tool activation system reduces context usage by 92%. SSE transport endpoint will be removed in an upcoming release — migrate to HTTP or stdio transport now to avoid future breakage.</div>
-          <div class="date">Apr 7, 2026 · Smithery / Upstash</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://hackarandas.com/blog/2026/04/07/beyond-the-chatbot-how-claude-code-is-turning-security-audits-into-a-one-command-workflow/" target="_blank">Claude Code Turning Security Audits Into a One-Command Workflow</a></div>
-          <div class="desc">Practical walkthrough on using Claude Code with OWASP skill and agentic hooks to automate full security audits — covering dependency scanning, SAST, secrets detection, and CVE triage in a single session. Includes the claude-code-owasp GitHub skill (OWASP Top 10:2025, ASVS 5.0, 20+ language-specific quirks).</div>
-          <div class="date">Apr 7, 2026 · H4CKarandas</div>
+          <div><a href="https://red.anthropic.com/2026/mythos-preview/" target="_blank">Anthropic Claude Mythos Preview — Frontier Cybersecurity Research Program</a></div>
+          <div class="desc">Anthropic's "Project Glasswing" grants 11 organizations early access to Claude Mythos Preview, a frontier AI model focused on finding and fixing cybersecurity vulnerabilities. Claude Code Security scanning (limited research preview) also available — scans codebases and suggests targeted patches for human review.</div>
+          <div class="date">Apr 7, 2026 · Anthropic red.anthropic.com</div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/managed-agents/overview" target="_blank">Anthropic Managed Agents Public Beta + ant CLI</a></div>
           <div class="desc">Fully managed agent harness with sandboxed code execution, checkpointing, and SSE streaming at $0.08/session-hour. The ant CLI also launched — command-line client for the Claude API with YAML resource versioning and native Claude Code integration. Requires managed-agents-2026-04-01 beta header.</div>
           <div class="date">Apr 8, 2026 · Anthropic</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://smithery.ai/server/@upstash/context7-mcp" target="_blank">Context7 MCP v2.1.7 — SSE Transport End-of-Life Warning</a></div>
+          <div class="desc">@upstash/context7-mcp v2.1.7 published Apr 7. New tool activation system cuts context usage by 92%. SSE transport endpoint will be removed in an upcoming release — migrate to HTTP or stdio transport now to avoid breakage.</div>
+          <div class="date">Apr 7, 2026 · Smithery / Upstash</div>
         </div>
       </div>
     </div>
