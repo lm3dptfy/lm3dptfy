@@ -196,6 +196,11 @@
       <div id="security-body">
 
         <div class="alert-banner">
+          <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-mmgp-wc2j-qcv7 — Workspace Trust Dialog Bypass via Repo-Controlled Settings File — Mar 18, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">High-severity: a malicious repository can include a <code>.claude/settings.json</code> that bypasses the workspace trust dialog, allowing the repo to execute code with elevated trust before user approval. Patched in recent releases. Always inspect <code>.claude/settings.json</code> in cloned repos before opening. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-mmgp-wc2j-qcv7" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-top:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2025-59536 / CVE-2026-21852 — RCE &amp; API Token Exfiltration via Project Files</div>
           <div style="font-size:.85rem;color:var(--ink2);">Check Point Research found attackers can achieve remote code execution and steal API credentials through malicious Claude Code project configurations — exploiting Hooks, MCP servers, and environment variables. CVE-2025-59536 published Oct 3 2025; CVE-2026-21852 published Jan 21 2026. Review untrusted CLAUDE.md files and MCP configs before use. <a href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/" style="color:var(--teal-light);">Check Point Research</a></div>
         </div>
@@ -250,7 +255,7 @@
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
-          <span class="nums">version <span class="current">—</span> → <span class="latest">2.0.0</span></span>
+          <span class="nums">npm <span class="current">—</span> → <span class="latest">2.0.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">v3.3.0 on GitHub/PyPI</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
@@ -330,6 +335,16 @@
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
         <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.3.0 — Released TODAY (Apr 14) — Closets, BM25 Hybrid Search</a></div>
+          <div class="desc">Huge release: introduces "Closets" — a searchable index layer for organized memory retrieval. BM25 Hybrid Search (vector + keyword combined) improves retrieval R@1 from 42% → 58%. Adds 8-language support, multi-agent file-level locking for parallel sessions, and cross-project "tunnels" for shared memory. GitHub/PyPI only — npm stable remains v2.0.0.</div>
+          <div class="date">Apr 14, 2026 · MemPalace GitHub Releases</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.1.0 — Claude + Codex Plugin Packaging (Apr 9)</a></div>
+          <div class="desc">First PyPI release post-v3.0. 39 merged PRs: input validation at MCP entry points, shell-injection fix in save hook, Windows Unicode crash fix. Test coverage 30% → 85%. Ships as both Claude Code plugin and Codex CLI plugin. PyPI stable, npm stable still v2.0.0.</div>
+          <div class="date">Apr 9, 2026 · MemPalace / PyPI</div>
+        </div>
+        <div class="news-item">
           <div><a href="https://github.com/milla-jovovich/mempalace/releases" target="_blank">MemPalace v3.0.0 — First PyPI Package Cut Released (Apr 6)</a></div>
           <div class="desc">The first PyPI release of the v3.0.0 series shipped April 6, 2026, landing 39 merged PRs: pip/plugin version drift fixes, first-week community patches, and groundwork for 170-token recall. npm stable remains v2.0.0.</div>
           <div class="date">Apr 6, 2026 · GitHub Releases / PyPI</div>
@@ -353,9 +368,9 @@
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
         <div class="news-item">
-          <div><a href="https://smithery.ai/server/@upstash/context7-mcp" target="_blank">Context7 MCP v2.1.7 — SSE Transport Deprecated, New Tool Activation System</a></div>
-          <div class="desc">Latest @upstash/context7-mcp published Apr 7. New tool activation system reduces context usage by 92%. SSE transport protocol is now deprecated — migrate to HTTP or stdio transport to avoid breakage in upcoming releases.</div>
-          <div class="date">Apr 7, 2026 · Smithery / npm</div>
+          <div><a href="https://smithery.ai/server/@upstash/context7-mcp" target="_blank">Context7 MCP v2.1.8 — SSE Transport Removal Imminent</a></div>
+          <div class="desc">@upstash/context7-mcp v2.1.8 published Apr 14. SSE transport endpoint is now marked for imminent removal — migrate to HTTP or stdio transport now. Tool activation system (launched in v2.1.7) cuts context usage by 92% and is stable.</div>
+          <div class="date">Apr 14, 2026 · Smithery / npm</div>
         </div>
         <div class="news-item">
           <div><a href="https://www.canva.com/newsroom/news/claude-ai-connector/" target="_blank">Canva MCP Adds On-Brand Design Generation for Claude</a></div>
