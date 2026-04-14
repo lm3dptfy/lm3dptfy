@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 13 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 14 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -242,11 +242,11 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.92</span> · latest <span class="latest">2.1.104</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run npm update -g @anthropic-ai/claude-code</span></span>
+          <span class="nums">installed <span class="current stale">2.1.92</span> · latest <span class="latest">2.1.107</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run npm update -g @anthropic-ai/claude-code</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
-          <span class="nums">version <span class="current">—</span> → <span class="latest">1.1.4</span></span>
+          <span class="nums">version <span class="current">—</span> → <span class="latest">1.1.6</span></span>
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
@@ -268,6 +268,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.4.12" target="_blank">OpenClaw 2026.4.12 — Plugin Loading, Memory &amp; Dreaming Reliability, LM Studio Support</a></div>
+          <div class="desc">Broad quality release: plugin loading narrowed to manifest-declared needs, dreaming heartbeat reliability hardened, new bundled LM Studio provider (runtime model discovery + memory-search embeddings for local/self-hosted models), and smoother Feishu setup. Dream sessions now clean up stale artifacts automatically.</div>
+          <div class="date">Apr 12–14, 2026 · OpenClaw GitHub Releases</div>
+        </div>
         <div class="news-item">
           <div><a href="https://newclawtimes.com/articles/openclaw-2026-4-10-codex-active-memory-mlx-speech/" target="_blank">OpenClaw 2026.4.10 — Codex Support, Active Memory Plugin &amp; MLX Speech</a></div>
           <div class="desc">Bundles Codex support, an optional Active Memory plugin, local MLX speech for Talk Mode, richer Teams and WhatsApp handling, and broader QA, gateway, and security hardening. Latest stable as of Apr 10.</div>
@@ -307,9 +312,14 @@
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
         <div class="news-item">
-          <div><a href="https://happy.engineering/docs/versions/release-notes/" target="_blank">Happy v1.1.4 — Latest on npm</a></div>
-          <div class="desc">Current latest version of the Happy mobile client for Claude Code. Happy lets you start remote Claude Code sessions from your phone with one tap, staying ready in the background on your computer.</div>
-          <div class="date">Apr 2026 · happy.engineering</div>
+          <div><a href="https://happy.engineering/docs/versions/release-notes/" target="_blank">Happy v1.1.6 — Now on npm</a></div>
+          <div class="desc">v1.1.6 is the current latest on npm (up from v1.1.4). Happy is the mobile/web client for Claude Code — start remote sessions from your phone with one tap. Update with: <code>npm update -g happy</code></div>
+          <div class="date">Apr 2026 · happy.engineering / npm</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/slopus/happy" target="_blank">Happy — Mobile and Web Client for Claude Code (GitHub)</a></div>
+          <div class="desc">Open-source mobile and web client for Claude Code with realtime voice, end-to-end encryption, and full-featured UI. Also supports Codex. Happy stays ready in the background on your computer while you work remotely.</div>
+          <div class="date">Apr 2026 · github.com/slopus/happy</div>
         </div>
       </div>
     </div>
@@ -448,19 +458,24 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.104 — Current Latest, Released Apr 13</a></div>
-          <div class="desc">v2.1.104 published today (Apr 13 01:45 UTC). This week's headline changes (across 2.1.97–2.1.104): /team-onboarding command, OS CA cert store trusted by default, Monitor tool for streaming background script events, Linux subprocess sandboxing (PID namespace isolation), Vertex AI interactive setup wizard, command injection fix in POSIX which fallback (LSP binary detection), --resume prompt-cache miss fix (broken since v2.1.69), and Bedrock 403 regression fix.</div>
-          <div class="date">Apr 13, 2026 · Claude Code GitHub Releases</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.107 — Show Thinking Hints Sooner, Released Apr 14</a></div>
+          <div class="desc">v2.1.107 published today. Key change: thinking hints now surface sooner during long operations, improving perceived responsiveness. This week's cumulative changes (2.1.104–2.1.107) include UI polish and stability fixes. Latest stable: run <code>npm update -g @anthropic-ai/claude-code</code> to get it.</div>
+          <div class="date">Apr 14, 2026 · Claude Code GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠️ Haiku 3 Retires in 6 Days (Apr 19) — 1M Context Beta Ends Apr 30</a></div>
-          <div class="desc">claude-3-haiku-20240307 retires April 19 — migrate to claude-haiku-4-5-20251001 now. The context-1m-2025-08-07 beta header stops working for Sonnet 4.5 and Sonnet 4 on April 30; requests over 200k tokens will error. Move to Sonnet 4.6 or Opus 4.6 for native 1M context. max_tokens cap raised to 300k on Batches API with output-300k-2026-03-24 header.</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠️ Haiku 3 Retires TOMORROW (Apr 19) — 1M Context Beta Ends Apr 30</a></div>
+          <div class="desc">claude-3-haiku-20240307 retires April 19 — migrate to claude-haiku-4-5-20251001 NOW. The context-1m-2025-08-07 beta header stops working for Sonnet 4.5 and Sonnet 4 on April 30; requests over 200k tokens will error. Move to Sonnet 4.6 or Opus 4.6 for native 1M context.</div>
           <div class="date">Apr 8–9, 2026 · Anthropic Docs · <strong style="color:#f87171;">ACTION REQUIRED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://red.anthropic.com/2026/mythos-preview/" target="_blank">Anthropic Claude Mythos Preview — Frontier Cybersecurity Research Program</a></div>
-          <div class="desc">Anthropic's "Project Glasswing" grants 11 organizations early access to Claude Mythos Preview, a frontier AI model focused on finding and fixing cybersecurity vulnerabilities. Claude Code Security scanning (limited research preview) also available — scans codebases and suggests targeted patches for human review.</div>
-          <div class="date">Apr 7, 2026 · Anthropic red.anthropic.com</div>
+          <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.4.12" target="_blank">OpenClaw 2026.4.12 Stable — LM Studio, Dream Reliability, Plugin Scoping</a></div>
+          <div class="desc">OpenClaw's latest stable drops a bundled LM Studio provider (local/self-hosted OpenAI-compatible models with memory-search embeddings), hardens dreaming heartbeat reliability, narrows plugin loading to manifest-declared needs, and fixes Feishu channel handling.</div>
+          <div class="date">Apr 12–14, 2026 · OpenClaw / GitHub</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.helpnetsecurity.com/2026/04/08/anthropic-claude-mythos-preview-identify-vulnerabilities/" target="_blank">Anthropic Claude Mythos Finds &amp; Exploits Zero-Days Across Every Major OS</a></div>
+          <div class="desc">Anthropic's Claude Mythos Preview — a frontier cybersecurity model — autonomously identified and exploited zero-day vulnerabilities across every major OS and browser. Part of "Project Glasswing," 11 research orgs have early access. Claude Code Security scanning also available in limited research preview.</div>
+          <div class="date">Apr 8, 2026 · Help Net Security</div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/managed-agents/overview" target="_blank">Anthropic Managed Agents Public Beta + ant CLI</a></div>
@@ -468,9 +483,9 @@
           <div class="date">Apr 8, 2026 · Anthropic</div>
         </div>
         <div class="news-item">
-          <div><a href="https://smithery.ai/server/@upstash/context7-mcp" target="_blank">Context7 MCP v2.1.7 — SSE Transport End-of-Life Warning</a></div>
-          <div class="desc">@upstash/context7-mcp v2.1.7 published Apr 7. New tool activation system cuts context usage by 92%. SSE transport endpoint will be removed in an upcoming release — migrate to HTTP or stdio transport now to avoid breakage.</div>
-          <div class="date">Apr 7, 2026 · Smithery / Upstash</div>
+          <div><a href="https://venturebeat.com/technology/is-anthropic-nerfing-claude-users-increasingly-report-performance-degradation" target="_blank">Is Anthropic "Nerfing" Claude? Users Report Performance Degradation</a></div>
+          <div class="desc">VentureBeat investigation: a growing number of users report perceived quality drops in Claude's responses. Anthropic leadership pushes back, citing no intentional capability reductions. Debate ongoing as Claude Sonnet 4.6 adoption grows and older model deprecations continue.</div>
+          <div class="date">Apr 2026 · VentureBeat</div>
         </div>
       </div>
     </div>
@@ -480,6 +495,14 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://github.com/agamm/claude-code-owasp" target="_blank">Claude Code OWASP Security Skill — GitHub</a></div>
+          <div class="desc">A Claude Code skill covering OWASP Top 10:2025, ASVS 5.0, agentic AI security, and 20+ language-specific security quirks. Auto-activates during code review. Essential for any team using Claude Code in production. MIT licensed.</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/affaan-m/everything-claude-code/blob/main/the-security-guide.md" target="_blank">The Security Guide — everything-claude-code (GitHub)</a></div>
+          <div class="desc">Community-maintained deep dive into securing Claude Code: threat modeling, CLAUDE.md hardening, MCP trust boundaries, hook injection risks, and supply chain verification steps. Updated through Apr 2026.</div>
+        </div>
         <div class="news-item">
           <div><a href="https://www.backslash.security/blog/claude-code-security-best-practices" target="_blank">Claude Code Security Best Practices — Backslash Security</a></div>
           <div class="desc">Comprehensive security checklist for Claude Code deployments: secrets in context, tool permission hygiene, network egress controls, MCP server vetting, and CI/CD pipeline hardening</div>
@@ -495,14 +518,6 @@
         <div class="news-item">
           <div><a href="https://www.truefoundry.com/blog/claude-code-prompt-injection" target="_blank">Prompt Injection and AI Agent Security Risks: A Claude Code Guide for Enterprise Teams — TrueFoundry</a></div>
           <div class="desc">Deep dive into how prompt injection attacks target Claude Code in enterprise contexts, with input filtering strategies, gateway-layer defenses, and OWASP Agentic Top 10 alignment</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.cio.com/article/4134741/how-agentic-ai-will-reshape-engineering-workflows-in-2026.html" target="_blank">How Agentic AI Will Reshape Engineering Workflows in 2026 — CIO</a></div>
-          <div class="desc">Analysis of how coding agents are changing developer roles, team structures, and delivery pipelines — with concrete examples from early adopters</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf" target="_blank">2026 Agentic Coding Trends Report — Anthropic</a></div>
-          <div class="desc">How coding agents are reshaping development workflows — data-backed insights from Anthropic's research on real-world agentic coding adoption</div>
         </div>
       </div>
     </div>
