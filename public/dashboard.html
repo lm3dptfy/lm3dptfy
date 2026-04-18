@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 17 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 18 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -252,7 +252,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.112</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.114</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -278,6 +278,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.15 — Quality &amp; Stability Release</a></div>
+          <div class="desc">Latest stable, released April 18 2026. Broad quality improvements building on the 2026.4.14 GPT-5 forward-compat work. Includes continued Ollama reliability fixes, plugin stability improvements, and core stability hardening. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Apr 18, 2026 · OpenClaw GitHub Releases</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.14 — GPT-5 Family Forward-Compat, Telegram Topics &amp; Ollama Timeout Fixes</a></div>
           <div class="desc">Broad quality release: forward-compatibility for gpt-5.4-pro (Codex pricing/limits, list/status visibility), Telegram/forum topics now surface human topic names in agent context and plugin hook metadata, improved Ollama timeout handling to prevent slow local runs from inheriting default stream cutoff. Core codebase refactors for overall performance.</div>
@@ -493,29 +498,29 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">🚀 Anthropic Releases Claude Opus 4.7 — New Most Capable Model</a></div>
-          <div class="desc">Opus 4.7 lands with a 13% coding benchmark lift, 3× more production tasks resolved, high-resolution vision (up to 3.75 MP), and a new tokenizer. Introduces xhigh effort level (between high and max) and Task Budgets (public beta) for token-targeted agentic loops. Same $5/$25 per million token pricing as Opus 4.6. Now in Claude Code via <code>/effort</code>. Available on API, Bedrock, Vertex AI, and Foundry.</div>
-          <div class="date">Apr 16, 2026 · Anthropic · <strong style="color:var(--teal-light);">JUST RELEASED</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.114 — Latest on npm (Up from 2.1.112)</a></div>
+          <div class="desc">v2.1.114 is now the latest on npm. Key fix: crash in permission dialog when an agent teams teammate requested tool permission. v2.1.113 switched the CLI to use the native Claude Code binary instead of bundled JS, added <code>sandbox.network.deniedDomains</code> setting, improved <code>/loop</code> with Esc-to-cancel, and launched <code>/ultrareview</code> for cloud-based parallel code review. Run <code>claude update</code> — <strong style="color:#f87171;">installed v2.1.92 is 22 versions behind.</strong></div>
+          <div class="date">Apr 18, 2026 · Claude Code GitHub Releases / npm</div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.112 — Latest on npm (Up From 2.1.110 Yesterday)</a></div>
-          <div class="desc">v2.1.112 is now the latest on npm. Recent fixes include: regression fix for stdio MCP servers disconnecting on stray non-JSON lines (introduced in 2.1.105), alt+enter newline regression on ESC-prefix alt encoding, and headless/SDK session auto-title excess Haiku requests. Run <code>claude update</code> to upgrade — <strong style="color:#f87171;">installed v2.1.92 is 20 versions behind.</strong></div>
-          <div class="date">Apr 17, 2026 · Claude Code GitHub Releases / npm</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠️ URGENT: Claude Haiku 3 Retires TODAY (Apr 19) — 1M Context Beta Ends Apr 30</a></div>
+          <div class="desc"><code>claude-3-haiku-20240307</code> reaches end-of-life April 19 — migrate immediately to <code>claude-haiku-4-5-20251001</code>. The <code>context-1m-2025-08-07</code> beta header stops working for Sonnet 4.5 and Sonnet 4 on April 30; requests over 200k tokens will error. Move to Sonnet 4.6 or Opus 4.7 for native 1M context.</div>
+          <div class="date">Apr 18, 2026 · Anthropic Docs · <strong style="color:#f87171;">ACTION REQUIRED TODAY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠️ URGENT: Haiku 3 Retires TOMORROW (Apr 19) — 1M Context Beta Ends Apr 30</a></div>
-          <div class="desc"><code>claude-3-haiku-20240307</code> retires April 19 — migrate to <code>claude-haiku-4-5-20251001</code> immediately. The <code>context-1m-2025-08-07</code> beta header stops working for Sonnet 4.5 and Sonnet 4 on April 30; requests over 200k tokens will error. Move to Sonnet 4.6 or Opus 4.6 for native 1M context.</div>
-          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#f87171;">ACTION REQUIRED</strong></div>
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.15 — Latest Stable Released Today</a></div>
+          <div class="desc">OpenClaw 2026.4.15 dropped April 18, continuing the broad quality improvements from the 2026.4.14 GPT-5 family forward-compat release. Includes plugin reliability, Ollama timeout hardening, and core stability fixes. Update via your OpenClaw installation mechanism.</div>
+          <div class="date">Apr 18, 2026 · OpenClaw GitHub Releases</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 Now GA — xhigh Effort Level &amp; Task Budgets</a></div>
+          <div class="desc">Opus 4.7 is generally available with 13% coding benchmark lift, 3× more production tasks resolved, and high-resolution vision (up to 3.75 MP). Introduces <code>xhigh</code> effort level in Claude Code via <code>/effort</code> and Task Budgets (beta) for token-targeted agentic loops. Same $5/$25 per million token pricing. Available on API, Bedrock, Vertex AI, and Foundry.</div>
+          <div class="date">Apr 16, 2026 · Anthropic</div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Sonnet 4 &amp; Opus 4 Retiring June 15 — Batch API Now 300k max_tokens</a></div>
-          <div class="desc">Anthropic: <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026 — migrate to Sonnet 4.6 / Opus 4.6. Message Batches API max_tokens raised to 300k for Opus 4.6 and Sonnet 4.6 (use <code>output-300k-2026-03-24</code> beta header). Web search and programmatic tool calling now GA.</div>
+          <div class="desc">Anthropic: <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026 — migrate to Sonnet 4.6 / Opus 4.7. Message Batches API max_tokens raised to 300k for Opus 4.6 and Sonnet 4.6 (use <code>output-300k-2026-03-24</code> beta header). Web search and programmatic tool calling now GA without beta headers.</div>
           <div class="date">Apr 2026 · Anthropic API Release Notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.14 — GPT-5 Forward-Compat, Telegram Topics, Ollama Fixes</a></div>
-          <div class="desc">OpenClaw's newest stable: forward-compat for gpt-5.4-pro with Codex pricing/limits, Telegram forum topics now surface human topic names in agent context, improved Ollama timeout handling for slow local runs. Broad quality and core refactor release. Adds Claude Opus 4.7 defaults.</div>
-          <div class="date">Apr 14–16, 2026 · OpenClaw / GitHub</div>
         </div>
         <div class="news-item">
           <div><a href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/" target="_blank">CVE-2026-35020/35021/35022 — Command Injection Chain → API Key Exfiltration</a></div>
