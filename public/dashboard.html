@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 18 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 19 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,6 +196,11 @@
       <div id="security-body">
 
         <div class="alert-banner">
+          <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2026-35603 — Windows Local Privilege Escalation via Insecure ProgramData Config — Apr 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">On Windows, Claude Code loaded system-wide default configuration from <code>C:\ProgramData\ClaudeCode\managed-settings.json</code> without validating directory ownership or permissions. Because ProgramData is writable by non-admin users and the ClaudeCode subdirectory was not pre-created or access-restricted, a low-privileged local user could plant a malicious config file that executes for any user launching Claude Code on the same machine. CVSS 4.0 base score 5.4 (Moderate). Patched in v2.1.75 — update immediately on any shared Windows system. <a href="https://advisories.gitlab.com/npm/@anthropic-ai/claude-code/CVE-2026-35603/" style="color:var(--teal-light);">GitLab Advisory</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-top:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-mmgp-wc2j-qcv7 — Workspace Trust Dialog Bypass via Repo-Controlled Settings File — Mar 18, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">High-severity: a malicious repository can include a <code>.claude/settings.json</code> that bypasses the workspace trust dialog, allowing the repo to execute code with elevated trust before user approval. Patched in recent releases. Always inspect <code>.claude/settings.json</code> in cloned repos before opening. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-mmgp-wc2j-qcv7" style="color:var(--teal-light);">GitHub Advisory</a></div>
         </div>
@@ -498,34 +503,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.114 — Latest on npm (Up from 2.1.112)</a></div>
-          <div class="desc">v2.1.114 is now the latest on npm. Key fix: crash in permission dialog when an agent teams teammate requested tool permission. v2.1.113 switched the CLI to use the native Claude Code binary instead of bundled JS, added <code>sandbox.network.deniedDomains</code> setting, improved <code>/loop</code> with Esc-to-cancel, and launched <code>/ultrareview</code> for cloud-based parallel code review. Run <code>claude update</code> — <strong style="color:#f87171;">installed v2.1.92 is 22 versions behind.</strong></div>
-          <div class="date">Apr 18, 2026 · Claude Code GitHub Releases / npm</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.114 — /ultrareview, Native Binary, Subprocess Sandboxing</a></div>
+          <div class="desc">v2.1.114 remains the latest on npm. Highlights across recent versions: <code>/ultrareview</code> skill for cloud-based parallel code review; CLI now uses the native Claude Code binary instead of bundled JS; <code>sandbox.network.deniedDomains</code> setting; subprocess sandboxing with PID namespace isolation on Linux when <code>CLAUDE_CODE_SUBPROCESS_ENV_SCRUB</code> is set; <code>/less-permission-prompts</code> skill; Ctrl+U to clear input buffer; interactive <code>/effort</code> slider. <strong style="color:#f87171;">Installed v2.1.92 is 22 versions behind</strong> — run <code>claude update</code>.</div>
+          <div class="date">Apr 19, 2026 · Claude Code GitHub Releases / npm</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠️ URGENT: Claude Haiku 3 Retires TODAY (Apr 19) — 1M Context Beta Ends Apr 30</a></div>
-          <div class="desc"><code>claude-3-haiku-20240307</code> reaches end-of-life April 19 — migrate immediately to <code>claude-haiku-4-5-20251001</code>. The <code>context-1m-2025-08-07</code> beta header stops working for Sonnet 4.5 and Sonnet 4 on April 30; requests over 200k tokens will error. Move to Sonnet 4.6 or Opus 4.7 for native 1M context.</div>
-          <div class="date">Apr 18, 2026 · Anthropic Docs · <strong style="color:#f87171;">ACTION REQUIRED TODAY</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Haiku 3 Retired TODAY — 1M Context Beta Ends Apr 30</a></div>
+          <div class="desc"><code>claude-3-haiku-20240307</code> reached end-of-life April 19 — migrate to <code>claude-haiku-4-5-20251001</code> now. The <code>context-1m-2025-08-07</code> beta header stops working for Sonnet 4.5 and Sonnet 4 on April 30; requests over 200k tokens will error. Move to Sonnet 4.6 or Opus 4.7 for native 1M context.</div>
+          <div class="date">Apr 19, 2026 · Anthropic Docs · <strong style="color:#d97706;">ACTION REQUIRED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.15 — Latest Stable Released Today</a></div>
-          <div class="desc">OpenClaw 2026.4.15 dropped April 18, continuing the broad quality improvements from the 2026.4.14 GPT-5 family forward-compat release. Includes plugin reliability, Ollama timeout hardening, and core stability fixes. Update via your OpenClaw installation mechanism.</div>
+          <div><a href="https://pasqualepillitteri.it/en/news/851/claude-code-routines-cloud-automation-guide" target="_blank">Claude Code Routines Research Preview — Schedule, API &amp; GitHub Triggers</a></div>
+          <div class="desc">Anthropic opened the research preview of Claude Code Routines on Apr 14: configure a prompt, repository, and connectors once, then the routine runs on a fixed cadence, from an API call, or in response to a GitHub event — no babysitting required. Durable cloud-backed automation for repeat tasks.</div>
+          <div class="date">Apr 14, 2026 · Anthropic</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.infoworld.com/article/4156852/anthropic-rolls-out-claude-managed-agents.html" target="_blank">Claude Managed Agents + ant CLI Now in Public Beta</a></div>
+          <div class="desc">Anthropic launched Claude Managed Agents (public beta Apr 8): a fully managed agent harness with secure sandboxing, built-in tools, checkpointing, credential management, and SSE streaming. Alongside it: <code>ant</code> CLI — a command-line client for the Claude API with native Claude Code integration and YAML-based API resource versioning.</div>
+          <div class="date">Apr 8, 2026 · Anthropic / InfoWorld</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.15 — Gemini TTS, Opus 4.7 Defaults &amp; Model Auth Card</a></div>
+          <div class="desc">OpenClaw 2026.4.15 adds Gemini text-to-speech in the bundled Google plugin, expands Anthropic defaults to Claude Opus 4.7, ships a Model Auth status card exposing OAuth health and provider pressure, cloud-backed LanceDB memory, and Copilot embeddings. Leaner plugin packaging across the board.</div>
           <div class="date">Apr 18, 2026 · OpenClaw GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 Now GA — xhigh Effort Level &amp; Task Budgets</a></div>
-          <div class="desc">Opus 4.7 is generally available with 13% coding benchmark lift, 3× more production tasks resolved, and high-resolution vision (up to 3.75 MP). Introduces <code>xhigh</code> effort level in Claude Code via <code>/effort</code> and Task Budgets (beta) for token-targeted agentic loops. Same $5/$25 per million token pricing. Available on API, Bedrock, Vertex AI, and Foundry.</div>
-          <div class="date">Apr 16, 2026 · Anthropic</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Sonnet 4 &amp; Opus 4 Retiring June 15 — Batch API Now 300k max_tokens</a></div>
-          <div class="desc">Anthropic: <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026 — migrate to Sonnet 4.6 / Opus 4.7. Message Batches API max_tokens raised to 300k for Opus 4.6 and Sonnet 4.6 (use <code>output-300k-2026-03-24</code> beta header). Web search and programmatic tool calling now GA without beta headers.</div>
-          <div class="date">Apr 2026 · Anthropic API Release Notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/" target="_blank">CVE-2026-35020/35021/35022 — Command Injection Chain → API Key Exfiltration</a></div>
-          <div class="desc">Three CWE-78 command injection flaws in the Claude Code CLI can be chained to exfiltrate Anthropic API keys via malicious file paths and environment manipulation. Patched in v2.1.92+. If you are still on an older version, update immediately via <code>claude update</code>.</div>
-          <div class="date">Apr 2026 · Phoenix Security / SentinelOne</div>
+          <div><a href="https://advisories.gitlab.com/npm/@anthropic-ai/claude-code/CVE-2026-35603/" target="_blank">CVE-2026-35603 — Windows LPE via Insecure ProgramData Config Loading (Patched)</a></div>
+          <div class="desc">On Windows, Claude Code loaded <code>C:\ProgramData\ClaudeCode\managed-settings.json</code> without validating directory permissions, enabling a low-privileged local user to plant a malicious config executed by any Claude Code user on the same machine. CVSS 5.4 (Moderate). Fixed in v2.1.75. Any shared Windows environment below that version is at risk.</div>
+          <div class="date">Apr 2026 · GitLab Advisory Database</div>
         </div>
       </div>
     </div>
@@ -535,6 +540,11 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Quickstart — Official Docs</a></div>
+          <div class="desc">Official Anthropic quickstart for Claude Managed Agents (public beta): create an agent container, configure tools and sandboxing, run sessions via API, and stream results. Pairs with the new <code>ant</code> CLI for local development.</div>
+          <div class="date">Apr 2026 · Anthropic Docs</div>
+        </div>
         <div class="news-item">
           <div><a href="https://levelup.gitconnected.com/claude-code-best-practices-12-patterns-agentic-engineers-use-65264e3eb919" target="_blank">Claude Code Best Practices: 12 Patterns Agentic Engineers Use — Level Up Coding</a></div>
           <div class="desc">April 2026 guide covering 12 concrete patterns top agentic engineers use with Claude Code: structured CLAUDE.md design, hook-driven automation, multi-agent orchestration, permission hygiene, and token-efficient workflows.</div>
@@ -556,10 +566,6 @@
         <div class="news-item">
           <div><a href="https://www.backslash.security/blog/claude-code-security-best-practices" target="_blank">Claude Code Security Best Practices — Backslash Security</a></div>
           <div class="desc">Comprehensive security checklist for Claude Code deployments: secrets in context, tool permission hygiene, network egress controls, MCP server vetting, and CI/CD pipeline hardening</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/FlorianBruniaux/claude-code-ultimate-guide" target="_blank">Claude Code Ultimate Guide (Community) — GitHub</a></div>
-          <div class="desc">Production-ready templates, agentic workflow patterns, hooks deep-dives, and a cheatsheet — beginner to power user with quizzes and reference materials</div>
         </div>
       </div>
     </div>
