@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 20 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 21 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -257,7 +257,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.114</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.116</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -513,34 +513,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.macrumors.com/2026/04/15/anthropic-rebuilds-claude-code-desktop-app/" target="_blank">Anthropic Rebuilds Claude Code Desktop App Around Parallel Sessions</a></div>
-          <div class="desc">The redesigned Claude Code desktop app ships a sidebar for managing multiple concurrent sessions, drag-and-drop workspace layout, integrated terminal, in-app file editor, rebuilt diff viewer for large changesets, and an expanded preview pane supporting HTML files and PDFs. Also adds Opus 4.7 xhigh mode, Auto mode for Max subscribers, and a terminal-matching theme.</div>
-          <div class="date">Apr 15, 2026 · MacRumors</div>
+          <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">Claude Code 2.1.116 — MCP Tool Search Cuts Context Usage 95%, /tui Fullscreen</a></div>
+          <div class="desc">Latest Claude Code (confirmed 2.1.116 on npm) ships MCP Tool Search — automatic lazy loading that reduces MCP context overhead by up to 95%. Also adds <code>/tui</code> fullscreen rendering, mobile push notifications, Focus View, and smarter session resume. Update: <code>claude update</code>.</div>
+          <div class="date">Apr 21, 2026 · npm / Anthropic Changelog</div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.infoq.com/news/2026/04/claude-code-review/" target="_blank">Anthropic Introduces Agent-Based Code Review for Claude Code</a></div>
-          <div class="desc">Claude Code's new <code>/ultrareview</code> feature launches multiple AI reviewers in parallel against pull requests, synthesizing findings into a unified report. Uses cloud-side subagents to dramatically reduce review time on large diffs.</div>
-          <div class="date">Apr 2026 · InfoQ</div>
+          <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Public Beta + ant CLI — Now Available</a></div>
+          <div class="desc">Anthropic launched Claude Managed Agents in public beta: a fully managed agent harness with secure sandboxing, built-in tools, and SSE streaming. All endpoints require the <code>managed-agents-2026-04-01</code> beta header. The companion <code>ant</code> CLI enables faster local API interaction and YAML-based resource versioning with native Claude Code integration.</div>
+          <div class="date">Apr 2026 · Anthropic Docs</div>
         </div>
         <div class="news-item">
-          <div><a href="https://9to5mac.com/2026/04/14/anthropic-adds-repeatable-routines-feature-to-claude-code-heres-how-it-works/" target="_blank">Claude Code Routines — Schedule, API &amp; GitHub Triggers (Research Preview)</a></div>
-          <div class="desc">Anthropic opened the research preview of Claude Code Routines Apr 14: configure a prompt, repository, and connectors once, then the routine runs on a fixed cadence, from an API call, or in response to a GitHub event — no babysitting required. Durable cloud-backed automation for repeat tasks.</div>
-          <div class="date">Apr 14, 2026 · 9to5Mac / Anthropic</div>
+          <div><a href="https://winbuzzer.com/2026/04/16/anthropic-launches-claude-opus-4-7-with-1m-context-xcxwbn/" target="_blank">Claude Opus 4.7 GA — Breaking Change: Remove budget_tokens from Extended Thinking</a></div>
+          <div class="desc">Opus 4.7 is generally available with higher-res vision (2576px / 3.75 MP), improved agentic coding benchmarks, and 1M native context. <strong style="color:#d97706;">Breaking change:</strong> passing <code>budget_tokens</code> in extended thinking now returns HTTP 400. Remove it from all Opus 4.7 API requests before upgrading.</div>
+          <div class="date">Apr 16, 2026 · Winbuzzer / AWS Blog · <strong style="color:#d97706;">MIGRATION REQUIRED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://winbuzzer.com/2026/04/16/anthropic-launches-claude-opus-4-7-with-1m-context-xcxwbn/" target="_blank">Claude Opus 4.7 — High-Res Vision, Breaking API Changes</a></div>
-          <div class="desc">Opus 4.7 raises max image resolution to 2576px (3.75 MP), improves agentic coding benchmarks, and keeps $5/$25 per MTok pricing. Breaking change: <code>budget_tokens</code> in extended thinking now returns a 400 error — remove it from all Opus 4.7 requests.</div>
-          <div class="date">Apr 16, 2026 · Winbuzzer / AWS Blog · <strong style="color:#d97706;">MIGRATION REQUIRED if using extended thinking</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — ACTION REQUIRED</a></div>
+          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error without migration. Move to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 also retire entirely June 15, 2026.</div>
+          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — Migrate Now</a></div>
-          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error. Migrate to Sonnet 4.6 or Opus 4.7 which have native 1M context. Sonnet 4 and Opus 4 also retire June 15, 2026.</div>
-          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">ACTION REQUIRED by Apr 30</strong></div>
+          <div><a href="https://novaknown.com/2026/04/12/claude-code-regression/" target="_blank">Claude Code Regression: Thinking Redaction Shifts Agent to Edit-First Behavior</a></div>
+          <div class="desc">Analysis of 6,852 Claude Code sessions (AMD AI director Stella Laurenzo) found that increased thinking redaction in recent versions caused Claude Code to skip research steps and jump straight to editing — reducing accuracy on complex tasks. Anthropic is investigating. Workaround: prompt explicitly for "research first, then edit."</div>
+          <div class="date">Apr 12, 2026 · novaknown.com</div>
         </div>
         <div class="news-item">
-          <div><a href="https://fortune.com/2026/04/14/anthropic-claude-performance-decline-user-complaints-backlash-lack-of-transparency-accusations-compute-crunch/" target="_blank">Anthropic Faces User Backlash Over Claude Performance Decline</a></div>
-          <div class="desc">Power users report Claude models increasingly failing to follow instructions, taking inappropriate shortcuts, and making more mistakes on complex workflows. Anthropic acknowledged an outage April 15 affecting Claude.ai, API, and Claude Code. Compute crunch suspected as contributing factor.</div>
-          <div class="date">Apr 14–15, 2026 · Fortune / TechRadar</div>
+          <div><a href="https://www.helpnetsecurity.com/2026/04/09/apache-activemq-rce-vulnerability-cve-2026-34197-claude/" target="_blank">Claude Helps Unearth Decade-Old Apache ActiveMQ RCE (CVE-2026-34197)</a></div>
+          <div class="desc">A security researcher used Claude to dig up a decade-old remote code execution vulnerability in Apache ActiveMQ (CVE-2026-34197), highlighting both the power of AI-assisted vulnerability research and the growing use of Claude in offensive security workflows.</div>
+          <div class="date">Apr 9, 2026 · Help Net Security</div>
         </div>
       </div>
     </div>
