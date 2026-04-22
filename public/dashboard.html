@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 21 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 22 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -257,7 +257,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.116</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.117</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -398,6 +398,11 @@
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
         <div class="news-item">
+          <div><a href="https://www.canva.com/newsroom/news/canva-claude-design/" target="_blank">Canva x Claude Design by Anthropic Labs — New Deep Integration</a></div>
+          <div class="desc">Canva and Anthropic launched Claude Design by Anthropic Labs, bringing the Canva Design Engine and Visual Suite into Claude. Turn AI-generated drafts and ideas directly into fully editable Canva designs without leaving Claude. The latest expansion of the Canva AI Connector partnership.</div>
+          <div class="date">Apr 2026 · Canva Newsroom / Anthropic Labs</div>
+        </div>
+        <div class="news-item">
           <div><a href="https://smithery.ai/server/@upstash/context7-mcp" target="_blank">Context7 MCP v2.1.8 — SSE Transport Removal Imminent</a></div>
           <div class="desc">@upstash/context7-mcp v2.1.8 published Apr 14. SSE transport endpoint is now marked for imminent removal — migrate to HTTP or stdio transport now. Tool activation system (launched in v2.1.7) cuts context usage by 92% and is stable.</div>
           <div class="date">Apr 14, 2026 · Smithery / npm</div>
@@ -513,9 +518,24 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">Claude Code 2.1.116 — MCP Tool Search Cuts Context Usage 95%, /tui Fullscreen</a></div>
-          <div class="desc">Latest Claude Code (confirmed 2.1.116 on npm) ships MCP Tool Search — automatic lazy loading that reduces MCP context overhead by up to 95%. Also adds <code>/tui</code> fullscreen rendering, mobile push notifications, Focus View, and smarter session resume. Update: <code>claude update</code>.</div>
-          <div class="date">Apr 21, 2026 · npm / Anthropic Changelog</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code 2.1.117 — Native bfs/ugrep Search, Model Persistence &amp; /resume Improvements</a></div>
+          <div class="desc">Latest on npm (Apr 22). <code>Glob</code>/<code>Grep</code> tools replaced with embedded <code>bfs</code> and <code>ugrep</code> for faster native search on macOS/Linux. <code>/model</code> selections now persist across restarts even when a project pins a different model. <code>/resume</code> offers to summarize large stale sessions before re-reading. Concurrent MCP connections speed up startup; plugin install auto-resolves missing dependencies. Update: <code>claude update</code>.</div>
+          <div class="date">Apr 22, 2026 · Anthropic GitHub Releases</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.canva.com/newsroom/news/canva-claude-design/" target="_blank">Canva x Claude Design by Anthropic Labs — AI Designs Now Fully Editable in Canva</a></div>
+          <div class="desc">Canva and Anthropic collaborated to bring the Canva Design Engine into Claude via Anthropic Labs. AI-drafted content in Claude can now be pushed directly into fully editable Canva designs, merging generative AI output with Canva's brand kit and Visual Suite. Latest expansion of the Canva AI Connector ecosystem.</div>
+          <div class="date">Apr 2026 · Canva Newsroom / Anthropic Labs</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7" target="_blank">Claude Opus 4.7 New API Breaking Change: temperature/top_p/top_k → HTTP 400</a></div>
+          <div class="desc"><strong style="color:#d97706;">New breaking change confirmed:</strong> with Opus 4.7, passing any non-default value for <code>temperature</code>, <code>top_p</code>, or <code>top_k</code> returns HTTP 400. Remove these parameters entirely from all Opus 4.7 requests. Previously disclosed: <code>budget_tokens</code> in extended thinking also returns 400. Audit API clients before migrating to Opus 4.7.</div>
+          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">MIGRATION REQUIRED</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — 8 Days Left</a></div>
+          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will return errors without migration. Move to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026.</div>
+          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Public Beta + ant CLI — Now Available</a></div>
@@ -523,24 +543,9 @@
           <div class="date">Apr 2026 · Anthropic Docs</div>
         </div>
         <div class="news-item">
-          <div><a href="https://winbuzzer.com/2026/04/16/anthropic-launches-claude-opus-4-7-with-1m-context-xcxwbn/" target="_blank">Claude Opus 4.7 GA — Breaking Change: Remove budget_tokens from Extended Thinking</a></div>
-          <div class="desc">Opus 4.7 is generally available with higher-res vision (2576px / 3.75 MP), improved agentic coding benchmarks, and 1M native context. <strong style="color:#d97706;">Breaking change:</strong> passing <code>budget_tokens</code> in extended thinking now returns HTTP 400. Remove it from all Opus 4.7 API requests before upgrading.</div>
-          <div class="date">Apr 16, 2026 · Winbuzzer / AWS Blog · <strong style="color:#d97706;">MIGRATION REQUIRED</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — ACTION REQUIRED</a></div>
-          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error without migration. Move to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 also retire entirely June 15, 2026.</div>
-          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30</strong></div>
-        </div>
-        <div class="news-item">
           <div><a href="https://novaknown.com/2026/04/12/claude-code-regression/" target="_blank">Claude Code Regression: Thinking Redaction Shifts Agent to Edit-First Behavior</a></div>
-          <div class="desc">Analysis of 6,852 Claude Code sessions (AMD AI director Stella Laurenzo) found that increased thinking redaction in recent versions caused Claude Code to skip research steps and jump straight to editing — reducing accuracy on complex tasks. Anthropic is investigating. Workaround: prompt explicitly for "research first, then edit."</div>
+          <div class="desc">Analysis of 6,852 Claude Code sessions (AMD AI director Stella Laurenzo) found increased thinking redaction in recent versions caused Claude Code to skip research steps and jump straight to editing — reducing accuracy on complex tasks. Anthropic is investigating. Workaround: prompt explicitly for "research first, then edit."</div>
           <div class="date">Apr 12, 2026 · novaknown.com</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.helpnetsecurity.com/2026/04/09/apache-activemq-rce-vulnerability-cve-2026-34197-claude/" target="_blank">Claude Helps Unearth Decade-Old Apache ActiveMQ RCE (CVE-2026-34197)</a></div>
-          <div class="desc">A security researcher used Claude to dig up a decade-old remote code execution vulnerability in Apache ActiveMQ (CVE-2026-34197), highlighting both the power of AI-assisted vulnerability research and the growing use of Claude in offensive security workflows.</div>
-          <div class="date">Apr 9, 2026 · Help Net Security</div>
         </div>
       </div>
     </div>
