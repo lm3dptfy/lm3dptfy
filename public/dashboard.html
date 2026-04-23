@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 22 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 23 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -257,7 +257,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.117</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.118</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -283,6 +283,16 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.21 — Image-Gen Model Upgrade, Plugin Dependency Recovery &amp; Slack Thread Fixes</a></div>
+          <div class="desc">Released April 21, 2026. Upgrades the default image-generation provider to gpt-image-2. Plugin dependencies are now recoverable without a full reinstall. Tighter owner-only command enforcement. Slack messages now stay inside their intended threads. Faster browser automation via immediate accessibility-tree validation. Cleans up npm install warnings.</div>
+          <div class="date">Apr 21, 2026 · OpenClaw GitHub Releases</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.20 — Session Management, Cost Tracking &amp; Channel Stability</a></div>
+          <div class="desc">Fixes session management bugs, cost-tracking accuracy, and channel stability for self-hosted smart-assistant deployments.</div>
+          <div class="date">Apr 20, 2026 · OpenClaw GitHub Releases</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.15 — Quality &amp; Stability Release</a></div>
           <div class="desc">Latest stable, released April 18 2026. Broad quality improvements building on the 2026.4.14 GPT-5 forward-compat work. Includes continued Ollama reliability fixes, plugin stability improvements, and core stability hardening. Update via your OpenClaw update mechanism.</div>
@@ -518,33 +528,33 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code 2.1.117 — Native bfs/ugrep Search, Model Persistence &amp; /resume Improvements</a></div>
-          <div class="desc">Latest on npm (Apr 22). <code>Glob</code>/<code>Grep</code> tools replaced with embedded <code>bfs</code> and <code>ugrep</code> for faster native search on macOS/Linux. <code>/model</code> selections now persist across restarts even when a project pins a different model. <code>/resume</code> offers to summarize large stale sessions before re-reading. Concurrent MCP connections speed up startup; plugin install auto-resolves missing dependencies. Update: <code>claude update</code>.</div>
-          <div class="date">Apr 22, 2026 · Anthropic GitHub Releases</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code 2.1.118 — Vim Visual Mode, /usage, Custom Themes &amp; Hooks→MCP Tools</a></div>
+          <div class="desc">Released Apr 23. Key additions: vim visual mode (<code>v</code>/<code>V</code>) with selection operators; <code>/cost</code> and <code>/stats</code> merged into <code>/usage</code>; custom themes via <code>/theme</code> or <code>~/.claude/themes/</code>; hooks can now invoke MCP tools directly via <code>type: "mcp_tool"</code>; new <code>DISABLE_UPDATES</code> env var blocks all update paths; WSL now inherits Windows managed settings via <code>wslInheritsWindowsSettings</code>. Update: <code>claude update</code></div>
+          <div class="date">Apr 23, 2026 · Anthropic GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.canva.com/newsroom/news/canva-claude-design/" target="_blank">Canva x Claude Design by Anthropic Labs — AI Designs Now Fully Editable in Canva</a></div>
-          <div class="desc">Canva and Anthropic collaborated to bring the Canva Design Engine into Claude via Anthropic Labs. AI-drafted content in Claude can now be pushed directly into fully editable Canva designs, merging generative AI output with Canva's brand kit and Visual Suite. Latest expansion of the Canva AI Connector ecosystem.</div>
-          <div class="date">Apr 2026 · Canva Newsroom / Anthropic Labs</div>
+          <div><a href="https://securityboulevard.com/2026/04/when-claude-code-hunts-cobalt-strike-agentic-security-operations-in-action/" target="_blank">When Claude Code Hunts Cobalt Strike: Agentic Security Operations in Action</a></div>
+          <div class="desc">Security Boulevard details real-world use of Claude Code as an autonomous threat-hunting agent — scanning for Cobalt Strike beacons, correlating indicators, and filing reports. Highlights governance requirements when AI takes autonomous action across production environments.</div>
+          <div class="date">Apr 2026 · Security Boulevard</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7" target="_blank">Claude Opus 4.7 New API Breaking Change: temperature/top_p/top_k → HTTP 400</a></div>
-          <div class="desc"><strong style="color:#d97706;">New breaking change confirmed:</strong> with Opus 4.7, passing any non-default value for <code>temperature</code>, <code>top_p</code>, or <code>top_k</code> returns HTTP 400. Remove these parameters entirely from all Opus 4.7 requests. Previously disclosed: <code>budget_tokens</code> in extended thinking also returns 400. Audit API clients before migrating to Opus 4.7.</div>
-          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">MIGRATION REQUIRED</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7" target="_blank">Claude Opus 4.7 Breaking API Changes: temperature/top_p/top_k → HTTP 400</a></div>
+          <div class="desc"><strong style="color:#d97706;">Migration required:</strong> Opus 4.7 (released Apr 18) returns HTTP 400 for any non-default <code>temperature</code>, <code>top_p</code>, or <code>top_k</code>. Also: <code>budget_tokens</code> in extended thinking returns 400. New <code>effort</code> parameter (standard/high/maximum) replaces manual tuning. Max-tokens cap raised to 300k on Batches API for Opus 4.6 and Sonnet 4.6.</div>
+          <div class="date">Apr 18, 2026 · Anthropic Docs · <strong style="color:#d97706;">MIGRATION REQUIRED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — 8 Days Left</a></div>
-          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will return errors without migration. Move to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026.</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — 7 Days Left</a></div>
+          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error. Move to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026.</div>
           <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Public Beta + ant CLI — Now Available</a></div>
-          <div class="desc">Anthropic launched Claude Managed Agents in public beta: a fully managed agent harness with secure sandboxing, built-in tools, and SSE streaming. All endpoints require the <code>managed-agents-2026-04-01</code> beta header. The companion <code>ant</code> CLI enables faster local API interaction and YAML-based resource versioning with native Claude Code integration.</div>
+          <div class="desc">Fully managed agent harness with secure sandboxing, built-in tools, and SSE streaming. Requires the <code>managed-agents-2026-04-01</code> beta header. The companion <code>ant</code> CLI supports YAML-based resource versioning and native Claude Code integration.</div>
           <div class="date">Apr 2026 · Anthropic Docs</div>
         </div>
         <div class="news-item">
           <div><a href="https://novaknown.com/2026/04/12/claude-code-regression/" target="_blank">Claude Code Regression: Thinking Redaction Shifts Agent to Edit-First Behavior</a></div>
-          <div class="desc">Analysis of 6,852 Claude Code sessions (AMD AI director Stella Laurenzo) found increased thinking redaction in recent versions caused Claude Code to skip research steps and jump straight to editing — reducing accuracy on complex tasks. Anthropic is investigating. Workaround: prompt explicitly for "research first, then edit."</div>
+          <div class="desc">Analysis of 6,852 sessions found increased thinking redaction in recent versions causes Claude Code to skip research and jump straight to editing, reducing accuracy on complex tasks. Workaround: prompt explicitly for "research first, then edit."</div>
           <div class="date">Apr 12, 2026 · novaknown.com</div>
         </div>
       </div>
@@ -555,6 +565,16 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://www.backslash.security/blog/claude-code-security-best-practices" target="_blank">Claude Code Security Best Practices — Backslash Security</a></div>
+          <div class="desc">Comprehensive 2026 guide: disable all hooks by default, explicitly allowlist safe MCP servers, use deny rules for <code>curl</code>/<code>fetch</code>/<code>.env</code> access, keep transcript retention short (7–14 days), sandbox in VM/container, and never run as root. Layered defense across OS, filesystem, and secrets management.</div>
+          <div class="date">Apr 2026 · Backslash Security</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://medium.com/@emergentcap/hardening-claude-code-a-security-review-framework-and-the-prompt-that-does-it-for-you-c546831f2cec" target="_blank">Hardening Claude Code: A Security Review Framework &amp; the Prompt That Does It For You — Medium</a></div>
+          <div class="desc">Practical framework for auditing Claude Code deployments: permissions audit, MCP server inventory, hook inspection, CLAUDE.md review for injected instructions, API key rotation hygiene, and a ready-to-run Claude prompt that automates the entire review.</div>
+          <div class="date">Apr 2026 · Tim McAllister / Medium</div>
+        </div>
         <div class="news-item">
           <div><a href="https://www.pixelmojo.io/blogs/claude-code-hooks-production-quality-ci-cd-patterns" target="_blank">Claude Code Hooks: All 12 Events with Examples — Pixelmojo</a></div>
           <div class="desc">Production patterns for all 12 Claude Code hook events (Apr 2026): PreToolUse is the only hook that can block actions — use it for security gates and mandatory review enforcement. Covers CI/CD integration, lint enforcement, secrets scanning, and token-budget guards. Hooks guarantee execution unlike prompt instructions.</div>
@@ -574,15 +594,6 @@
           <div><a href="https://levelup.gitconnected.com/claude-code-best-practices-12-patterns-agentic-engineers-use-65264e3eb919" target="_blank">Claude Code Best Practices: 12 Patterns Agentic Engineers Use — Level Up Coding</a></div>
           <div class="desc">April 2026 guide covering 12 concrete patterns top agentic engineers use with Claude Code: structured CLAUDE.md design, hook-driven automation, multi-agent orchestration, permission hygiene, and token-efficient workflows.</div>
           <div class="date">Apr 2026 · Level Up Coding / Medium</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/agamm/claude-code-owasp" target="_blank">Claude Code OWASP Security Skill — GitHub</a></div>
-          <div class="desc">A Claude Code skill covering OWASP Top 10:2025, ASVS 5.0, agentic AI security, and 20+ language-specific security quirks. Auto-activates during code review. Essential for any team using Claude Code in production. MIT licensed.</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.isaca.org/resources/news-and-trends/isaca-now-blog/2026/does-claude-have-a-security-problem" target="_blank">Does Claude Have a Security Problem? — ISACA Now Blog</a></div>
-          <div class="desc">ISACA's 2026 analysis of Claude Code's security posture: inventorying MCP servers across dev fleets, API key rotation governance, audit logging into SIEM, and human review checkpoints for agentic workflows. Essential for enterprise compliance scoping.</div>
-          <div class="date">2026 · ISACA Now Blog</div>
         </div>
       </div>
     </div>
