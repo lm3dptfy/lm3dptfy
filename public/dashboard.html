@@ -195,7 +195,12 @@
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
 
-        <div class="alert-banner resolved">
+        <div class="alert-banner">
+          <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-q5hj-mxqh-vv77 — Trust Dialog Bypass via Git Worktree Spoofing — Apr 24, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Published TODAY. High severity. An attacker can craft a git worktree that spoofs workspace trust context, bypassing the trust dialog and allowing arbitrary code execution without user confirmation. No CVE number assigned yet. Check GitHub for patched version. Avoid opening unfamiliar git worktrees until patched. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-q5hj-mxqh-vv77" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
           <div class="alert-title"><span class="badge fixed">Resolved</span> CVE-2026-39861 — Sandbox Escape via Symlink Following — Apr 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">Claude Code's sandbox did not prevent sandboxed processes from creating symlinks pointing outside the workspace. When the unsandboxed process subsequently wrote to that symlink path, it followed the link and wrote to arbitrary locations, enabling code execution outside the sandbox. Exploitation required the ability to inject untrusted content into the Claude Code context window to trigger sandboxed code execution. Fixed in v2.1.64. Users on auto-update are protected. <a href="https://advisories.gitlab.com/npm/@anthropic-ai/claude-code/CVE-2026-39861/" style="color:var(--teal-light);">GitLab Advisory</a> · <a href="https://cvereports.com/reports/CVE-2026-39861" style="color:var(--teal-light);">CVEReports</a></div>
         </div>
@@ -380,6 +385,11 @@
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
         <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.3.2 — PID File Guard &amp; Stale Index Quarantine</a></div>
+          <div class="desc">Patch release adding a PID file guard to prevent duplicate memory daemon instances, and automatic quarantine of stale HNSW indexes that could cause recall failures after unclean shutdowns. Builds on v3.3.1 multi-language entity detection. GitHub/PyPI only — npm stable remains v2.0.0.</div>
+          <div class="date">Apr 21, 2026 · MemPalace GitHub Releases</div>
+        </div>
+        <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.3.1" target="_blank">MemPalace v3.3.1 — Multi-Language Entity Detection</a></div>
           <div class="desc">Patch release adding 5 new locales (Portuguese, Russian, Italian, Hindi, Indonesian) with full entity-detection patterns and script-aware word boundaries. PyPI/GitHub release — npm stable remains v2.0.0.</div>
           <div class="date">Apr 18–20, 2026 · MemPalace GitHub Releases</div>
@@ -544,8 +554,8 @@
         </div>
         <div class="news-item">
           <div><a href="https://www.npmjs.com/package/@anthropic-ai/claude-code" target="_blank">Claude Code 2.1.119 Now on npm — Update Available</a></div>
-          <div class="desc">Version 2.1.119 landed on npm today (Apr 24). Builds on the v2.1.118 release (vim visual mode, <code>/usage</code>, custom themes, hooks→MCP tools, <code>DISABLE_UPDATES</code> env var, WSL Windows settings inheritance). Run <code>claude update</code> to get the latest.</div>
-          <div class="date">Apr 24, 2026 · npm / Anthropic GitHub Releases</div>
+          <div class="desc">v2.1.117–2.1.119 all shipped Apr 22–23. Key additions in this wave: <code>/resume</code> on large sessions up to 67% faster; thinking spinner now shows inline progress ("still thinking" / "almost done thinking"); faster MCP startup with deferred <code>resources/templates/list</code>; hook inputs now include <code>duration_ms</code>; <code>--from-pr</code> supports GitLab MRs and Bitbucket PRs; <code>prUrlTemplate</code> setting added; Opus 4.7 <code>/context</code> inflation and autocompact bug fixed; stdio MCP servers no longer disconnect on stray non-JSON stdout. Run <code>claude update</code>.</div>
+          <div class="date">Apr 22–23, 2026 · Anthropic GitHub Releases</div>
         </div>
         <div class="news-item">
           <div><a href="https://aitoolly.com/ai-news/article/2026-04-24-anthropic-addresses-claude-code-quality-degradation-reports-and-implements-fixes-for-sonnet-and-opus" target="_blank">Anthropic Denies Intentional Claude Code Slowdown — Quality Drop Was Accidental</a></div>
