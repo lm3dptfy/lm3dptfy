@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 23 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 24 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -195,7 +195,12 @@
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
 
-        <div class="alert-banner">
+        <div class="alert-banner resolved">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> CVE-2026-39861 — Sandbox Escape via Symlink Following — Apr 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Claude Code's sandbox did not prevent sandboxed processes from creating symlinks pointing outside the workspace. When the unsandboxed process subsequently wrote to that symlink path, it followed the link and wrote to arbitrary locations, enabling code execution outside the sandbox. Exploitation required the ability to inject untrusted content into the Claude Code context window to trigger sandboxed code execution. Fixed in v2.1.64. Users on auto-update are protected. <a href="https://advisories.gitlab.com/npm/@anthropic-ai/claude-code/CVE-2026-39861/" style="color:var(--teal-light);">GitLab Advisory</a> · <a href="https://cvereports.com/reports/CVE-2026-39861" style="color:var(--teal-light);">CVEReports</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-top:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2026-35603 — Windows Local Privilege Escalation via Insecure ProgramData Config — Apr 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">On Windows, Claude Code loaded system-wide default configuration from <code>C:\ProgramData\ClaudeCode\managed-settings.json</code> without validating directory ownership or permissions. Because ProgramData is writable by non-admin users and the ClaudeCode subdirectory was not pre-created or access-restricted, a low-privileged local user could plant a malicious config file that executes for any user launching Claude Code on the same machine. CVSS 4.0 base score 5.4 (Moderate). Patched in v2.1.75 — update immediately on any shared Windows system. <a href="https://advisories.gitlab.com/npm/@anthropic-ai/claude-code/CVE-2026-35603/" style="color:var(--teal-light);">GitLab Advisory</a></div>
         </div>
@@ -257,7 +262,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.118</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.119</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -283,6 +288,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.22 — xAI Image Gen, Voice Call STT &amp; TUI Local Embedded Mode</a></div>
+          <div class="desc">Latest stable. New xAI provider support: image generation (grok-imagine-image / grok-imagine-image-pro), text-to-speech with six xAI voices and multiple audio formats, and real-time Voice Call streaming transcription. Adds Voice Call STT for Deepgram, ElevenLabs, and Mistral. TUI local embedded mode lets you run terminal chats without a Gateway while keeping plugin approval gates enforced. Auto-installs missing provider and channel plugins during setup.</div>
+          <div class="date">Apr 22, 2026 · OpenClaw GitHub Releases</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.4.21 — Image-Gen Model Upgrade, Plugin Dependency Recovery &amp; Slack Thread Fixes</a></div>
           <div class="desc">Released April 21, 2026. Upgrades the default image-generation provider to gpt-image-2. Plugin dependencies are now recoverable without a full reinstall. Tighter owner-only command enforcement. Slack messages now stay inside their intended threads. Faster browser automation via immediate accessibility-tree validation. Cleans up npm install warnings.</div>
@@ -528,34 +538,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code 2.1.118 — Vim Visual Mode, /usage, Custom Themes &amp; Hooks→MCP Tools</a></div>
-          <div class="desc">Released Apr 23. Key additions: vim visual mode (<code>v</code>/<code>V</code>) with selection operators; <code>/cost</code> and <code>/stats</code> merged into <code>/usage</code>; custom themes via <code>/theme</code> or <code>~/.claude/themes/</code>; hooks can now invoke MCP tools directly via <code>type: "mcp_tool"</code>; new <code>DISABLE_UPDATES</code> env var blocks all update paths; WSL now inherits Windows managed settings via <code>wslInheritsWindowsSettings</code>. Update: <code>claude update</code></div>
-          <div class="date">Apr 23, 2026 · Anthropic GitHub Releases</div>
+          <div><a href="https://www.anthropic.com/engineering/april-23-postmortem" target="_blank">Anthropic Confirms Claude Code Quality Issues — Three Changes Caused Degradation, All Fixed</a></div>
+          <div class="desc">Anthropic released a postmortem identifying three distinct changes between March–April 2026 that degraded Claude Code quality: (1) reasoning effort downgraded from high→medium on Mar 4 (reverted Apr 7); (2) a session-clearing bug introduced Mar 26 that made models forgetful/repetitive (fixed in v2.1.116); (3) a verbosity system prompt change on Apr 16 that hurt coding quality (reverted). All three fixed as of v2.1.116 (Apr 20). Usage limits reset for all subscribers as compensation.</div>
+          <div class="date">Apr 24, 2026 · Anthropic Engineering · <strong style="color:var(--teal-light);">ALL FIXED in v2.1.116+</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://securityboulevard.com/2026/04/when-claude-code-hunts-cobalt-strike-agentic-security-operations-in-action/" target="_blank">When Claude Code Hunts Cobalt Strike: Agentic Security Operations in Action</a></div>
-          <div class="desc">Security Boulevard details real-world use of Claude Code as an autonomous threat-hunting agent — scanning for Cobalt Strike beacons, correlating indicators, and filing reports. Highlights governance requirements when AI takes autonomous action across production environments.</div>
-          <div class="date">Apr 2026 · Security Boulevard</div>
+          <div><a href="https://www.npmjs.com/package/@anthropic-ai/claude-code" target="_blank">Claude Code 2.1.119 Now on npm — Update Available</a></div>
+          <div class="desc">Version 2.1.119 landed on npm today (Apr 24). Builds on the v2.1.118 release (vim visual mode, <code>/usage</code>, custom themes, hooks→MCP tools, <code>DISABLE_UPDATES</code> env var, WSL Windows settings inheritance). Run <code>claude update</code> to get the latest.</div>
+          <div class="date">Apr 24, 2026 · npm / Anthropic GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7" target="_blank">Claude Opus 4.7 Breaking API Changes: temperature/top_p/top_k → HTTP 400</a></div>
-          <div class="desc"><strong style="color:#d97706;">Migration required:</strong> Opus 4.7 (released Apr 18) returns HTTP 400 for any non-default <code>temperature</code>, <code>top_p</code>, or <code>top_k</code>. Also: <code>budget_tokens</code> in extended thinking returns 400. New <code>effort</code> parameter (standard/high/maximum) replaces manual tuning. Max-tokens cap raised to 300k on Batches API for Opus 4.6 and Sonnet 4.6.</div>
-          <div class="date">Apr 18, 2026 · Anthropic Docs · <strong style="color:#d97706;">MIGRATION REQUIRED</strong></div>
+          <div><a href="https://aitoolly.com/ai-news/article/2026-04-24-anthropic-addresses-claude-code-quality-degradation-reports-and-implements-fixes-for-sonnet-and-opus" target="_blank">Anthropic Denies Intentional Claude Code Slowdown — Quality Drop Was Accidental</a></div>
+          <div class="desc">Anthropic addressed community reports that Claude Code was intentionally throttled, confirming the degradation was the unintentional result of three product changes. The company has reverted all problematic changes and pledged stricter quality controls before future harness/system-prompt modifications.</div>
+          <div class="date">Apr 24, 2026 · AIToolly / Dataconomy / VentureBeat</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — 7 Days Left</a></div>
-          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error. Move to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026.</div>
-          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30</strong></div>
+          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 Generally Available — Now Open to All Amazon Bedrock Customers</a></div>
+          <div class="desc">Opus 4.7 (released Apr 18) is now in general availability and accessible self-serve from the AWS Bedrock console in 27 regions, alongside Haiku 4.5. Pricing unchanged from Opus 4.6: $5/M input, $25/M output. Reminder: Opus 4.7 returns HTTP 400 for non-default <code>temperature</code>/<code>top_p</code>/<code>top_k</code> — migrate to the new <code>effort</code> parameter.</div>
+          <div class="date">Apr 2026 · Anthropic / AWS Bedrock</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Public Beta + ant CLI — Now Available</a></div>
-          <div class="desc">Fully managed agent harness with secure sandboxing, built-in tools, and SSE streaming. Requires the <code>managed-agents-2026-04-01</code> beta header. The companion <code>ant</code> CLI supports YAML-based resource versioning and native Claude Code integration.</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — 6 Days Left</a></div>
+          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error after that date. Migrate to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026.</div>
+          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30 (6 days)</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Memory Now in Public Beta</a></div>
+          <div class="desc">Memory for Claude Managed Agents is now in public beta under the standard <code>managed-agents-2026-04-01</code> header. Managed Agents provides a hosted harness for long-horizon agent work with durable state, secure sandboxing, built-in tools, and SSE streaming. The companion <code>ant</code> CLI supports YAML-based resource versioning and native Claude Code integration.</div>
           <div class="date">Apr 2026 · Anthropic Docs</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://novaknown.com/2026/04/12/claude-code-regression/" target="_blank">Claude Code Regression: Thinking Redaction Shifts Agent to Edit-First Behavior</a></div>
-          <div class="desc">Analysis of 6,852 sessions found increased thinking redaction in recent versions causes Claude Code to skip research and jump straight to editing, reducing accuracy on complex tasks. Workaround: prompt explicitly for "research first, then edit."</div>
-          <div class="date">Apr 12, 2026 · novaknown.com</div>
         </div>
       </div>
     </div>
