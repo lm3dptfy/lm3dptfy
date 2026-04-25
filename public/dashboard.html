@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 24 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 25 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -293,6 +293,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.4.23" target="_blank">OpenClaw v2026.4.23 — Reference-Image Editing, Codex OAuth &amp; Teams Security</a></div>
+          <div class="desc">Latest stable, released Apr 24, 2026. Image generation and reference-image editing for OpenAI's gpt-image-2 via Codex OAuth (no separate OPENAI_API_KEY needed), plus OpenRouter image_generate support. Plugin installation links the host OpenClaw package into external plugins. Teams security hardened — shared Bot Framework audience tokens now required to name the configured Teams app. Improved agent sessions, memory tuning, and webchat reliability.</div>
+          <div class="date">Apr 24, 2026 · OpenClaw GitHub Releases</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.22 — xAI Image Gen, Voice Call STT &amp; TUI Local Embedded Mode</a></div>
           <div class="desc">Latest stable. New xAI provider support: image generation (grok-imagine-image / grok-imagine-image-pro), text-to-speech with six xAI voices and multiple audio formats, and real-time Voice Call streaming transcription. Adds Voice Call STT for Deepgram, ElevenLabs, and Mistral. TUI local embedded mode lets you run terminal chats without a Gateway while keeping plugin approval gates enforced. Auto-installs missing provider and channel plugins during setup.</div>
@@ -553,28 +558,28 @@
           <div class="date">Apr 24, 2026 · Anthropic Engineering · <strong style="color:var(--teal-light);">ALL FIXED in v2.1.116+</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.npmjs.com/package/@anthropic-ai/claude-code" target="_blank">Claude Code 2.1.119 Now on npm — Update Available</a></div>
-          <div class="desc">v2.1.117–2.1.119 all shipped Apr 22–23. Key additions in this wave: <code>/resume</code> on large sessions up to 67% faster; thinking spinner now shows inline progress ("still thinking" / "almost done thinking"); faster MCP startup with deferred <code>resources/templates/list</code>; hook inputs now include <code>duration_ms</code>; <code>--from-pr</code> supports GitLab MRs and Bitbucket PRs; <code>prUrlTemplate</code> setting added; Opus 4.7 <code>/context</code> inflation and autocompact bug fixed; stdio MCP servers no longer disconnect on stray non-JSON stdout. Run <code>claude update</code>.</div>
+          <div><a href="https://fortune.com/2026/04/24/anthropic-engineering-missteps-claude-code-performance-decline-user-backlash/" target="_blank">Fortune: Engineering Missteps Behind Claude Code's Month-Long Decline — Anthropic Admits</a></div>
+          <div class="desc">Fortune reports Anthropic acknowledged the engineering errors that caused a widely-noticed Claude Code performance degradation. Anthropic also confirmed that its Pro plan page briefly removed the Claude Code feature listing — described as a "small test on ~2% of new prosumer signups" amid concerns that flat-rate plans weren't built for the rise in agentic AI usage patterns.</div>
+          <div class="date">Apr 24, 2026 · Fortune / PCWorld</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.npmjs.com/package/@anthropic-ai/claude-code" target="_blank">Claude Code 2.1.119 Latest on npm — Run <code>claude update</code></a></div>
+          <div class="desc">v2.1.117–2.1.119 shipped Apr 22–23. Key additions: <code>/resume</code> on large sessions up to 67% faster; thinking spinner shows inline progress; faster MCP startup with deferred <code>resources/templates/list</code>; hook inputs now include <code>duration_ms</code>; <code>--from-pr</code> supports GitLab MRs and Bitbucket PRs; <code>prUrlTemplate</code> setting added; Opus 4.7 <code>/context</code> inflation and autocompact bug fixed; stdio MCP servers no longer disconnect on stray non-JSON stdout.</div>
           <div class="date">Apr 22–23, 2026 · Anthropic GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://aitoolly.com/ai-news/article/2026-04-24-anthropic-addresses-claude-code-quality-degradation-reports-and-implements-fixes-for-sonnet-and-opus" target="_blank">Anthropic Denies Intentional Claude Code Slowdown — Quality Drop Was Accidental</a></div>
-          <div class="desc">Anthropic addressed community reports that Claude Code was intentionally throttled, confirming the degradation was the unintentional result of three product changes. The company has reverted all problematic changes and pledged stricter quality controls before future harness/system-prompt modifications.</div>
-          <div class="date">Apr 24, 2026 · AIToolly / Dataconomy / VentureBeat</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 Generally Available — Now Open to All Amazon Bedrock Customers</a></div>
-          <div class="desc">Opus 4.7 (released Apr 18) is now in general availability and accessible self-serve from the AWS Bedrock console in 27 regions, alongside Haiku 4.5. Pricing unchanged from Opus 4.6: $5/M input, $25/M output. Reminder: Opus 4.7 returns HTTP 400 for non-default <code>temperature</code>/<code>top_p</code>/<code>top_k</code> — migrate to the new <code>effort</code> parameter.</div>
+          <div><a href="https://aws.amazon.com/blogs/aws/introducing-anthropics-claude-opus-4-7-model-in-amazon-bedrock/" target="_blank">Claude Opus 4.7 GA on Amazon Bedrock — 27 Regions, Same Pricing</a></div>
+          <div class="desc">Opus 4.7 (released Apr 18) is now in general availability on AWS Bedrock in 27 regions alongside Haiku 4.5. Pricing: $5/M input, $25/M output (same as Opus 4.6). Improved software engineering and vision at higher resolution. Note: Opus 4.7 returns HTTP 400 for non-default <code>temperature</code>/<code>top_p</code>/<code>top_k</code> — migrate to the new <code>effort</code> parameter.</div>
           <div class="date">Apr 2026 · Anthropic / AWS Bedrock</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — 6 Days Left</a></div>
-          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error after that date. Migrate to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026.</div>
-          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30 (6 days)</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — <strong style="color:#d97706;">5 Days Left</strong></a></div>
+          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error after that date. Migrate to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026. Claude Haiku 3 also now fully retired.</div>
+          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30 (5 days)</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Memory Now in Public Beta</a></div>
-          <div class="desc">Memory for Claude Managed Agents is now in public beta under the standard <code>managed-agents-2026-04-01</code> header. Managed Agents provides a hosted harness for long-horizon agent work with durable state, secure sandboxing, built-in tools, and SSE streaming. The companion <code>ant</code> CLI supports YAML-based resource versioning and native Claude Code integration.</div>
+          <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Memory Now in Public Beta + <code>ant</code> CLI</a></div>
+          <div class="desc">Memory for Claude Managed Agents is now in public beta under the standard <code>managed-agents-2026-04-01</code> header. Managed Agents provides a hosted harness for long-horizon agent work with durable state, secure sandboxing, built-in tools, and SSE streaming. The companion <code>ant</code> CLI enables faster API interaction, native Claude Code integration, and YAML-based resource versioning.</div>
           <div class="date">Apr 2026 · Anthropic Docs</div>
         </div>
       </div>
