@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 25 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 27 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,6 +196,11 @@
       <div id="security-body">
 
         <div class="alert-banner">
+          <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2026-24052 — Domain Validation Bypass Allows Requests to Attacker-Controlled Domains — Apr 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Claude Code contained insufficient URL validation in its trusted domain verification mechanism for WebFetch requests, allowing an attacker to craft URLs that bypassed the allowlist check and caused Claude Code to automatically issue requests to attacker-controlled domains — potentially leaking session context or API credentials. Patch available in a recent release; update immediately via <code>claude update</code>. <a href="https://advisories.gitlab.com/npm/@anthropic-ai/claude-code/CVE-2026-24052/" style="color:var(--teal-light);">GitLab Advisory</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-top:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-q5hj-mxqh-vv77 — Trust Dialog Bypass via Git Worktree Spoofing — Apr 24, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">Published TODAY. High severity. An attacker can craft a git worktree that spoofs workspace trust context, bypassing the trust dialog and allowing arbitrary code execution without user confirmation. No CVE number assigned yet. Check GitHub for patched version. Avoid opening unfamiliar git worktrees until patched. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-q5hj-mxqh-vv77" style="color:var(--teal-light);">GitHub Advisory</a></div>
         </div>
@@ -271,7 +276,7 @@
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
-          <span class="nums">version <span class="current">—</span> → <span class="latest">1.1.7</span></span>
+          <span class="nums">version <span class="current">—</span> → <span class="latest">1.1.8</span></span>
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
@@ -293,6 +298,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.24 — Google Meet Integration, Gemini Live Voice &amp; Deeper Browser Automation</a></div>
+          <div class="desc">Latest stable, released Apr 24–25, 2026. Google Meet joins as a bundled participant plugin with personal Google auth, Chrome/Twilio realtime sessions, paired-node Chrome support, artifact/attendance exports, and recovery tooling for already-open Meet tabs. Gemini Live voice bridges added. DeepSeek V4 Flash and V4 Pro in the bundled catalog — V4 Flash is the new onboarding default. Browser automation gains coordinate clicks, longer action budgets, per-profile headless overrides, and steadier tab reuse/recovery. Lighter plugin startup.</div>
+          <div class="date">Apr 24–25, 2026 · OpenClaw GitHub Releases</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.4.23" target="_blank">OpenClaw v2026.4.23 — Reference-Image Editing, Codex OAuth &amp; Teams Security</a></div>
           <div class="desc">Latest stable, released Apr 24, 2026. Image generation and reference-image editing for OpenAI's gpt-image-2 via Codex OAuth (no separate OPENAI_API_KEY needed), plus OpenRouter image_generate support. Plugin installation links the host OpenClaw package into external plugins. Teams security hardened — shared Bot Framework audience tokens now required to name the configured Teams app. Improved agent sessions, memory tuning, and webchat reliability.</div>
@@ -366,6 +376,11 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
+        <div class="news-item">
+          <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.1.8 — Latest on npm</a></div>
+          <div class="desc">v1.1.8 is the new latest on npm (up from v1.1.7). Happy is the open-source mobile/web client for Claude Code and Codex — realtime voice, end-to-end encryption, full-featured UI. Update: <code>npm install -g happy</code></div>
+          <div class="date">Apr 2026 · npm / github.com/slopus/happy</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.1.7 — Now on npm</a></div>
           <div class="desc">v1.1.7 is the new latest on npm (up from v1.1.6). Happy is the open-source mobile/web client for Claude Code and Codex — realtime voice, end-to-end encryption, full-featured UI. Update: <code>npm install -g happy</code></div>
@@ -568,9 +583,9 @@
           <div class="date">Apr 24, 2026 · Anthropic Engineering · <strong style="color:var(--teal-light);">ALL FIXED in v2.1.116+</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://fortune.com/2026/04/24/anthropic-engineering-missteps-claude-code-performance-decline-user-backlash/" target="_blank">Fortune: Engineering Missteps Behind Claude Code's Month-Long Decline — Anthropic Admits</a></div>
-          <div class="desc">Fortune reports Anthropic acknowledged the engineering errors that caused a widely-noticed Claude Code performance degradation. Anthropic also confirmed that its Pro plan page briefly removed the Claude Code feature listing — described as a "small test on ~2% of new prosumer signups" amid concerns that flat-rate plans weren't built for the rise in agentic AI usage patterns.</div>
-          <div class="date">Apr 24, 2026 · Fortune / PCWorld</div>
+          <div><a href="https://github.com/anthropics/claude-code/issues/50616" target="_blank">Windows CLI Regression: Claude Code Hangs on v2.1.98–2.1.114 Since Apr 18</a></div>
+          <div class="desc">Active issue: Claude Code completely stopped working on Windows 10 machines starting Apr 18, with the VS Code extension showing "Query closed before response received" and the CLI exiting silently. Reproduced across multiple clean installs on versions 2.1.98–2.1.114. Appears correlated with the Opus 4.7 GA release (Apr 16) and/or the <code>managed-agents-2026-04-01</code> beta header introduction. Windows users should watch the GitHub issue for a fix.</div>
+          <div class="date">Apr 18+, 2026 · GitHub Issues #50616 · <strong style="color:#d97706;">OPEN</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.npmjs.com/package/@anthropic-ai/claude-code" target="_blank">Claude Code 2.1.119 Latest on npm — Run <code>claude update</code></a></div>
@@ -583,9 +598,9 @@
           <div class="date">Apr 2026 · Anthropic / AWS Bedrock</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — <strong style="color:#d97706;">5 Days Left</strong></a></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — <strong style="color:#d97706;">3 Days Left</strong></a></div>
           <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error after that date. Migrate to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026. Claude Haiku 3 also now fully retired.</div>
-          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30 (5 days)</strong></div>
+          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30 (3 days)</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Memory Now in Public Beta + <code>ant</code> CLI</a></div>
