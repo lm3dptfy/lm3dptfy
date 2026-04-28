@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 27 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 28 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -272,7 +272,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.119</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.121</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -298,6 +298,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.25 — TTS Overhaul, OpenTelemetry Expansion &amp; QQ Bot</a></div>
+          <div class="desc">Released Apr 25, 2026. Full TTS upgrade: <code>/tts latest</code>, chat-scoped auto-TTS, personas, per-agent and per-account overrides, new providers including Azure Speech, ElevenLabs v3, Volcengine, Inworld, and Xiaomi. Plugin startup moved to cold persisted registry for faster load. OpenTelemetry coverage expanded across model calls, token usage, tool loops, exec processes, context assembly, and memory pressure. QQ Bot added with multi-account config. Microsoft Teams gains message pinning, emoji reactions, read markers, and member info via Graph API.</div>
+          <div class="date">Apr 25, 2026 · OpenClaw GitHub Releases</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.24 — Google Meet Integration, Gemini Live Voice &amp; Deeper Browser Automation</a></div>
           <div class="desc">Latest stable, released Apr 24–25, 2026. Google Meet joins as a bundled participant plugin with personal Google auth, Chrome/Twilio realtime sessions, paired-node Chrome support, artifact/attendance exports, and recovery tooling for already-open Meet tabs. Gemini Live voice bridges added. DeepSeek V4 Flash and V4 Pro in the bundled catalog — V4 Flash is the new onboarding default. Browser automation gains coordinate clicks, longer action budgets, per-profile headless overrides, and steadier tab reuse/recovery. Lighter plugin startup.</div>
@@ -578,34 +583,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/engineering/april-23-postmortem" target="_blank">Anthropic Confirms Claude Code Quality Issues — Three Changes Caused Degradation, All Fixed</a></div>
-          <div class="desc">Anthropic released a postmortem identifying three distinct changes between March–April 2026 that degraded Claude Code quality: (1) reasoning effort downgraded from high→medium on Mar 4 (reverted Apr 7); (2) a session-clearing bug introduced Mar 26 that made models forgetful/repetitive (fixed in v2.1.116); (3) a verbosity system prompt change on Apr 16 that hurt coding quality (reverted). All three fixed as of v2.1.116 (Apr 20). Usage limits reset for all subscribers as compensation.</div>
-          <div class="date">Apr 24, 2026 · Anthropic Engineering · <strong style="color:var(--teal-light);">ALL FIXED in v2.1.116+</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.121 — <code>alwaysLoad</code> MCP Option, <code>claude plugin prune</code>, Skills Filter</a></div>
+          <div class="desc"><code>alwaysLoad</code> option lets you mark specific MCP servers to always start regardless of tool search state. <code>claude plugin prune</code> removes plugins disabled for more than 30 days. Type-to-filter in <code>/skills</code> for faster lookup. Scrollable permission dialogs. iTerm2 clipboard access prompt for paste security.</div>
+          <div class="date">Apr 28, 2026 · Anthropic GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/issues/50616" target="_blank">Windows CLI Regression: Claude Code Hangs on v2.1.98–2.1.114 Since Apr 18</a></div>
-          <div class="desc">Active issue: Claude Code completely stopped working on Windows 10 machines starting Apr 18, with the VS Code extension showing "Query closed before response received" and the CLI exiting silently. Reproduced across multiple clean installs on versions 2.1.98–2.1.114. Appears correlated with the Opus 4.7 GA release (Apr 16) and/or the <code>managed-agents-2026-04-01</code> beta header introduction. Windows users should watch the GitHub issue for a fix.</div>
-          <div class="date">Apr 18+, 2026 · GitHub Issues #50616 · <strong style="color:#d97706;">OPEN</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.120 — Windows No Longer Requires Git Bash; <code>claude ultrareview</code> Subcommand</a></div>
+          <div class="desc">Windows users can now run Claude Code without Git Bash installed. New <code>claude ultrareview</code> subcommand for non-interactive code review. Skills can reference the current effort level via <code>${CLAUDE_EFFORT}</code> environment variable. Builds on v2.1.119 GitLab/Bitbucket PR support and <code>prUrlTemplate</code> setting.</div>
+          <div class="date">Apr 27, 2026 · Anthropic GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.npmjs.com/package/@anthropic-ai/claude-code" target="_blank">Claude Code 2.1.119 Latest on npm — Run <code>claude update</code></a></div>
-          <div class="desc">v2.1.117–2.1.119 shipped Apr 22–23. Key additions: <code>/resume</code> on large sessions up to 67% faster; thinking spinner shows inline progress; faster MCP startup with deferred <code>resources/templates/list</code>; hook inputs now include <code>duration_ms</code>; <code>--from-pr</code> supports GitLab MRs and Bitbucket PRs; <code>prUrlTemplate</code> setting added; Opus 4.7 <code>/context</code> inflation and autocompact bug fixed; stdio MCP servers no longer disconnect on stray non-JSON stdout.</div>
-          <div class="date">Apr 22–23, 2026 · Anthropic GitHub Releases</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Rate Limits API Launched — Programmatic Access to Org &amp; Workspace Limits</a></div>
+          <div class="desc">Anthropic launched the Rate Limits API (Apr 24), enabling developers to programmatically query rate limit data for their org and workspace. Pairs with the Claude Managed Agents memory public beta (Apr 23) and the <code>ant</code> CLI for local development workflows.</div>
+          <div class="date">Apr 24, 2026 · Anthropic API Release Notes</div>
         </div>
         <div class="news-item">
-          <div><a href="https://aws.amazon.com/blogs/aws/introducing-anthropics-claude-opus-4-7-model-in-amazon-bedrock/" target="_blank">Claude Opus 4.7 GA on Amazon Bedrock — 27 Regions, Same Pricing</a></div>
-          <div class="desc">Opus 4.7 (released Apr 18) is now in general availability on AWS Bedrock in 27 regions alongside Haiku 4.5. Pricing: $5/M input, $25/M output (same as Opus 4.6). Improved software engineering and vision at higher resolution. Note: Opus 4.7 returns HTTP 400 for non-default <code>temperature</code>/<code>top_p</code>/<code>top_k</code> — migrate to the new <code>effort</code> parameter.</div>
-          <div class="date">Apr 2026 · Anthropic / AWS Bedrock</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">April 30 Deadline — 1M Context Beta Retiring for Sonnet 4.5 &amp; Sonnet 4 <strong style="color:#d97706;">(2 Days Left)</strong></a></div>
+          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error. Migrate to Sonnet 4.6 or Opus 4.7 (both have native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026.</div>
+          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30 (2 days)</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Context Beta Ends Apr 30 for Sonnet 4.5 &amp; Sonnet 4 — <strong style="color:#d97706;">3 Days Left</strong></a></div>
-          <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error after that date. Migrate to Sonnet 4.6 or Opus 4.7 (native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026. Claude Haiku 3 also now fully retired.</div>
-          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30 (3 days)</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/issues/51326" target="_blank">Gmail MCP Bug #51326 — Built-in Connector Non-Functional Due to OAuth Client Mismatch</a></div>
+          <div class="desc">Active issue: the built-in Gmail MCP consistently routes through the "Claude for Google Drive" OAuth client instead of a Gmail-specific one, making the Gmail connector permanently non-functional for affected users. Workaround: use a third-party Gmail MCP (e.g., via Composio or google-workspace-mcp). Calendar and Drive connectors appear unaffected.</div>
+          <div class="date">Apr 2026 · GitHub Issues #51326 · <strong style="color:#d97706;">OPEN</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Memory Now in Public Beta + <code>ant</code> CLI</a></div>
-          <div class="desc">Memory for Claude Managed Agents is now in public beta under the standard <code>managed-agents-2026-04-01</code> header. Managed Agents provides a hosted harness for long-horizon agent work with durable state, secure sandboxing, built-in tools, and SSE streaming. The companion <code>ant</code> CLI enables faster API interaction, native Claude Code integration, and YAML-based resource versioning.</div>
-          <div class="date">Apr 2026 · Anthropic Docs</div>
+          <div><a href="https://www.anthropic.com/engineering/april-23-postmortem" target="_blank">Quality Regression Resolved — Anthropic Resets Usage Limits for All Subscribers</a></div>
+          <div class="desc">All three Claude Code quality bugs (reasoning effort downgrade Mar 4, thinking-clear bug Mar 26, verbosity cap Apr 16) are confirmed fixed as of v2.1.116 (Apr 20). Anthropic reset usage limits for all Claude Code subscribers as compensation. The April 23 postmortem covers each root cause and full timeline.</div>
+          <div class="date">Apr 23, 2026 · Anthropic Engineering · <strong style="color:var(--teal-light);">ALL FIXED in v2.1.116+</strong></div>
         </div>
       </div>
     </div>
@@ -615,6 +620,16 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://www.datacamp.com/tutorial/claude-code-hooks" target="_blank">Claude Code Hooks: Complete Guide with Production Examples — DataCamp</a></div>
+          <div class="desc">Comprehensive tutorial on all Claude Code hook types (command, http, mcp_tool). Covers PreToolUse security gates, PostToolUse notifications, CI/CD integration, secrets scanning, and the MCP tool invocation capability added in v2.1.118. Ready-to-paste hook configs included.</div>
+          <div class="date">Apr 2026 · DataCamp</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.truefoundry.com/blog/claude-code-prompt-injection" target="_blank">Claude Code Prompt Injection: Attack Vectors &amp; Defenses — TrueFoundry</a></div>
+          <div class="desc">Detailed breakdown of how prompt injection works against Claude Code: malicious CLAUDE.md files, poisoned MCP tool responses, and repo-embedded instructions. Covers OWASP Top 10 for Agentic Applications 2026, defense-in-depth strategies, and enterprise hardening patterns.</div>
+          <div class="date">Apr 2026 · TrueFoundry</div>
+        </div>
         <div class="news-item">
           <div><a href="https://www.backslash.security/blog/claude-code-security-best-practices" target="_blank">Claude Code Security Best Practices — Backslash Security</a></div>
           <div class="desc">Comprehensive 2026 guide: disable all hooks by default, explicitly allowlist safe MCP servers, use deny rules for <code>curl</code>/<code>fetch</code>/<code>.env</code> access, keep transcript retention short (7–14 days), sandbox in VM/container, and never run as root. Layered defense across OS, filesystem, and secrets management.</div>
@@ -631,19 +646,9 @@
           <div class="date">Apr 2026 · Pixelmojo</div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.obviousworks.ch/en/designing-claude-md-right-the-2026-architecture-that-finally-makes-claude-code-work/" target="_blank">Designing CLAUDE.md Correctly: The 2026 Architecture — obviousworks</a></div>
-          <div class="desc">Deep dive into structuring CLAUDE.md for reliable agentic behavior: separating identity, constraints, tooling, and workflow sections; combining CLAUDE.md guidance with hooks for guaranteed enforcement; and avoiding the "70% follow-through" trap of pure prompt instructions.</div>
-          <div class="date">Apr 2026 · obviousworks.ch</div>
-        </div>
-        <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Quickstart — Official Docs</a></div>
           <div class="desc">Official Anthropic quickstart for Claude Managed Agents (public beta): create an agent container, configure tools and sandboxing, run sessions via API, and stream results. Pairs with the new <code>ant</code> CLI for local development.</div>
           <div class="date">Apr 2026 · Anthropic Docs</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://levelup.gitconnected.com/claude-code-best-practices-12-patterns-agentic-engineers-use-65264e3eb919" target="_blank">Claude Code Best Practices: 12 Patterns Agentic Engineers Use — Level Up Coding</a></div>
-          <div class="desc">April 2026 guide covering 12 concrete patterns top agentic engineers use with Claude Code: structured CLAUDE.md design, hook-driven automation, multi-agent orchestration, permission hygiene, and token-efficient workflows.</div>
-          <div class="date">Apr 2026 · Level Up Coding / Medium</div>
         </div>
       </div>
     </div>
