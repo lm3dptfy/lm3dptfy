@@ -382,9 +382,9 @@
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
         <div class="news-item">
-          <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.1.8 — Latest on npm</a></div>
-          <div class="desc">v1.1.8 is the new latest on npm (up from v1.1.7). Happy is the open-source mobile/web client for Claude Code and Codex — realtime voice, end-to-end encryption, full-featured UI. Update: <code>npm install -g happy</code></div>
-          <div class="date">Apr 2026 · npm / github.com/slopus/happy</div>
+          <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy cli-1.1.8 — File Diffs Sidebar, Session Resume via RPC, Analytics Toggle (Apr 27)</a></div>
+          <div class="desc">v1.1.8 (Apr 27, 2026): adds a file diffs sidebar for reviewing changes inline, session resume via RPC (so you can reconnect to running Claude Code sessions), an analytics toggle for privacy control, and fixes voice provider disconnection bugs in second sessions. Update: <code>npm install -g happy</code></div>
+          <div class="date">Apr 27, 2026 · github.com/slopus/happy / npm</div>
         </div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.1.7 — Now on npm</a></div>
@@ -457,6 +457,11 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
+        <div class="news-item">
+          <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 MCP v2.2.3 — SSE Streaming Fix for Claude Code 60s Timeout (Apr 29)</a></div>
+          <div class="desc">Released today (Apr 29, 2026). Streams MCP tool responses over SSE so HTTP headers flush before the client's fetch timeout fires — directly fixes the 60-second timeout limit in Claude Code that was causing Context7 tool calls to fail mid-response. Update: <code>npm install -g @upstash/context7-mcp</code></div>
+          <div class="date">Apr 29, 2026 · github.com/upstash/context7 / npm</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 MCP v2.2.0 + ctx7 v0.4.0 — Research Mode Lands (Apr 24)</a></div>
           <div class="desc">Both packages released Apr 24, 2026. <code>@upstash/context7-mcp@2.2.0</code> exposes a new <code>researchMode</code> MCP tool. <code>ctx7@0.4.0</code> adds <code>docs --research</code> CLI flag, in-terminal update notifications, and a <code>ctx7 remove</code> cleanup command. Update: <code>npm install -g @upstash/context7-mcp</code></div>
