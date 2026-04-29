@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 28 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 29 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -272,7 +272,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.121</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.123</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -583,24 +583,24 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.121 — <code>alwaysLoad</code> MCP Option, <code>claude plugin prune</code>, Skills Filter</a></div>
-          <div class="desc"><code>alwaysLoad</code> option lets you mark specific MCP servers to always start regardless of tool search state. <code>claude plugin prune</code> removes plugins disabled for more than 30 days. Type-to-filter in <code>/skills</code> for faster lookup. Scrollable permission dialogs. iTerm2 clipboard access prompt for paste security.</div>
-          <div class="date">Apr 28, 2026 · Anthropic GitHub Releases</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.123 &amp; v2.1.122 — OAuth Fix, Bedrock Service Tier, PR URL Resume Search</a></div>
+          <div class="desc">v2.1.123 (Apr 29): fixes OAuth 401 retry loop when <code>CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1</code> is set. v2.1.122 (Apr 29): adds <code>ANTHROPIC_BEDROCK_SERVICE_TIER</code> env var (default/flex/priority) for Bedrock; pasting a PR URL into <code>/resume</code> now finds the originating session; <code>/mcp</code> reveals claude.ai connectors hidden by duplicate manually-added servers; OpenTelemetry numeric attrs now emitted as numbers.</div>
+          <div class="date">Apr 29, 2026 · Anthropic GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.120 — Windows No Longer Requires Git Bash; <code>claude ultrareview</code> Subcommand</a></div>
-          <div class="desc">Windows users can now run Claude Code without Git Bash installed. New <code>claude ultrareview</code> subcommand for non-interactive code review. Skills can reference the current effort level via <code>${CLAUDE_EFFORT}</code> environment variable. Builds on v2.1.119 GitLab/Bitbucket PR support and <code>prUrlTemplate</code> setting.</div>
-          <div class="date">Apr 27, 2026 · Anthropic GitHub Releases</div>
+          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 — Most Capable GA Model for Complex Reasoning &amp; Agentic Coding</a></div>
+          <div class="desc">Anthropic launched Claude Opus 4.7, a significant improvement over Opus 4.6 especially on advanced software engineering and agentic tasks. Same $5/$25 per MTok pricing as Opus 4.6. Recommended for handoff of complex coding work. Available via API and Claude Code (set model with <code>claude config set model claude-opus-4-7</code>).</div>
+          <div class="date">Apr 2026 · Anthropic</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Rate Limits API Launched — Programmatic Access to Org &amp; Workspace Limits</a></div>
-          <div class="desc">Anthropic launched the Rate Limits API (Apr 24), enabling developers to programmatically query rate limit data for their org and workspace. Pairs with the Claude Managed Agents memory public beta (Apr 23) and the <code>ant</code> CLI for local development workflows.</div>
-          <div class="date">Apr 24, 2026 · Anthropic API Release Notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">April 30 Deadline — 1M Context Beta Retiring for Sonnet 4.5 &amp; Sonnet 4 <strong style="color:#d97706;">(2 Days Left)</strong></a></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">April 30 Deadline — 1M Context Beta Retiring for Sonnet 4.5 &amp; Sonnet 4 <strong style="color:#dc2626;">(TOMORROW)</strong></a></div>
           <div class="desc">The <code>context-1m-2025-08-07</code> beta header stops working for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code> on April 30. Requests over 200k tokens will error. Migrate to Sonnet 4.6 or Opus 4.7 (both have native 1M context). Sonnet 4 and Opus 4 retire entirely June 15, 2026.</div>
-          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#d97706;">DEADLINE: Apr 30 (2 days)</strong></div>
+          <div class="date">Apr 2026 · Anthropic Docs · <strong style="color:#dc2626;">DEADLINE: Apr 30 (TOMORROW)</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Memory — Now in Public Beta</a></div>
+          <div class="desc">Memory for Claude Managed Agents is now in public beta under the standard <code>managed-agents-2026-04-01</code> beta header. Enables agents to persist information across sessions. Pairs with the Rate Limits API (Apr 24) and the <code>ant</code> CLI for local development workflows.</div>
+          <div class="date">Apr 23–24, 2026 · Anthropic API Release Notes</div>
         </div>
         <div class="news-item">
           <div><a href="https://github.com/anthropics/claude-code/issues/51326" target="_blank">Gmail MCP Bug #51326 — Built-in Connector Non-Functional Due to OAuth Client Mismatch</a></div>
@@ -608,9 +608,9 @@
           <div class="date">Apr 2026 · GitHub Issues #51326 · <strong style="color:#d97706;">OPEN</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/engineering/april-23-postmortem" target="_blank">Quality Regression Resolved — Anthropic Resets Usage Limits for All Subscribers</a></div>
-          <div class="desc">All three Claude Code quality bugs (reasoning effort downgrade Mar 4, thinking-clear bug Mar 26, verbosity cap Apr 16) are confirmed fixed as of v2.1.116 (Apr 20). Anthropic reset usage limits for all Claude Code subscribers as compensation. The April 23 postmortem covers each root cause and full timeline.</div>
-          <div class="date">Apr 23, 2026 · Anthropic Engineering · <strong style="color:var(--teal-light);">ALL FIXED in v2.1.116+</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.121 — <code>alwaysLoad</code> MCP Option, <code>claude plugin prune</code>, Skills Filter</a></div>
+          <div class="desc"><code>alwaysLoad</code> option lets you mark specific MCP servers to always start regardless of tool search state. <code>claude plugin prune</code> removes plugins disabled for more than 30 days. Type-to-filter in <code>/skills</code> for faster lookup. Scrollable permission dialogs. iTerm2 clipboard access prompt for paste security.</div>
+          <div class="date">Apr 28, 2026 · Anthropic GitHub Releases</div>
         </div>
       </div>
     </div>
