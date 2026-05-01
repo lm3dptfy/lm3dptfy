@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Apr 30 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 1 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -194,6 +194,31 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner resolved">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> Sandbox Config Bypass — allowManagedDomainsOnly &amp; allowManagedReadPathsOnly Ignored — May 1, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Fixed in v2.1.126 (today): <code>allowManagedDomainsOnly</code> and <code>allowManagedReadPathsOnly</code> security restrictions were silently ignored when a higher-priority configuration source (e.g. enterprise managed settings) lacked a <code>sandbox</code> block entirely — meaning domain and path allowlists could be bypassed without warning. Update immediately via <code>claude update</code>. <a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.126" style="color:var(--teal-light);">GitHub Release v2.1.126</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-j4h9-wv2m-wrf7 — Arbitrary Code Execution via Malicious git user.email</div>
+          <div style="font-size:.85rem;color:var(--ink2);">A maliciously configured <code>git user.email</code> in a cloned repository could trigger arbitrary code execution in Claude Code before the workspace trust dialog appeared. All are patched in current auto-updated versions — run <code>claude update</code>. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-j4h9-wv2m-wrf7" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-xq4m-mc3c-vvg3 — Command Validation Bypass via $IFS / Short CLI Flags</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Command validation in Claude Code could be bypassed using <code>$IFS</code> manipulation or short CLI flag forms, allowing arbitrary code execution without the expected user approval prompt. Patched in current auto-updated versions. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-xq4m-mc3c-vvg3" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-x5gv-jw7f-j6xj — Permissive Default Allowlist Enables Unauthorized File Read &amp; Network Exfiltration</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Claude Code's default permission allowlist was overly permissive, allowing unauthorized file reads and network exfiltration without explicit user approval. Patched in current auto-updated versions. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-x5gv-jw7f-j6xj" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-qxfv-fcpc-w36x / GHSA-mhg7-666j-cqg4 / GHSA-x56v-x2h6-7j34 — Command Injection via rg / sed / echo Bypasses Approval</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Three command injection advisories: injection via <code>rg</code> (ripgrep), piped <code>sed</code>, and <code>echo</code> commands all bypassed the user approval prompt. All patched in current auto-updated versions — update immediately via <code>claude update</code>. <a href="https://github.com/anthropics/claude-code/security/advisories" style="color:var(--teal-light);">GitHub Security Advisories</a></div>
+        </div>
 
         <div class="alert-banner">
           <div class="alert-title"><span class="badge critical">Critical</span> GHSA-2jjv-qf24-vfm4 — Arbitrary Code Execution via Plugin Autoloading with Specific Yarn Versions — Apr 2026</div>
@@ -277,7 +302,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.123</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.126</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -303,6 +328,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.29 — Active-Run Steering, People-Aware Memory Wiki &amp; Subagent Routing</a></div>
+          <div class="desc">Latest stable. Active-run steering is now on by default for all conversations. Visible-reply enforcement prevents silent agent loops. Spawned subagents now carry routing metadata so orchestrators can track lineage. People-aware memory wiki adds provenance views — each remembered fact now shows the person/conversation it came from. Per-conversation Active Memory filters let you scope recall without touching global settings.</div>
+          <div class="date">Apr 29, 2026 · OpenClaw GitHub Releases</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.4.27" target="_blank">OpenClaw v2026.4.27 — Codex Computer Use, DeepInfra Provider &amp; LINE Media Persistence</a></div>
           <div class="desc">Released Apr 30, 2026. Codex Computer Use setup now ships with marketplace discovery and fail-closed MCP checks for desktop control. DeepInfra joins the bundled provider catalog with model discovery, media generation/editing, TTS, and embeddings. LINE channel now persists inbound image/video/audio/file downloads in ~/.openclaw/media/inbound/ instead of /tmp so agents can read media after cleanup. Telegram cron jobs gain --thread-id for forum topic targeting. Plugin install paths hardened so bundled plugins no longer trigger doctor warnings. Large PDF/image attachments no longer throw RangeError in the control UI.</div>
@@ -419,6 +449,11 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
+        <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.3.4 — Local LLM Setup Guide, Cross-Project Topics &amp; Storage Optimization (May 1)</a></div>
+          <div class="desc">Released today. Adds a local LLM integration for guided first-run setup (no API key required to get started), cross-project topic connections enabling knowledge sharing between different projects, and storage optimization reducing disk usage for large memory sets. PyPI/GitHub only — npm stable remains v2.0.0.</div>
+          <div class="date">May 1, 2026 · MemPalace GitHub Releases</div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.3.3" target="_blank">MemPalace v3.3.3 — Install Fix &amp; Silent-Save Restored</a></div>
           <div class="desc">Patch released Apr 24, 2026. Fixes a regression where the <code>mempalace-mcp</code> console script was not declared, breaking fresh installs. Restores silent-save visibility and improves project name detection. PyPI/GitHub only — npm stable remains v2.0.0.</div>
@@ -598,34 +633,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">April 30 Deadline — 1M Context Beta RETIRED TODAY for Sonnet 4.5 &amp; Sonnet 4 <strong style="color:#dc2626;">(TODAY)</strong></a></div>
-          <div class="desc">The <code>context-1m-2025-08-07</code> beta header is retired TODAY for <code>claude-sonnet-4-5</code> and <code>claude-sonnet-4-20250514</code>. Requests over 200k tokens will now error. Migrate to Sonnet 4.6 or Opus 4.7 (both have native 1M context with no beta header needed). Sonnet 4 and Opus 4 retire entirely June 15, 2026.</div>
-          <div class="date">Apr 30, 2026 · Anthropic Docs · <strong style="color:#dc2626;">DEADLINE: TODAY</strong></div>
+          <div><a href="https://www.anthropic.com/news/claude-code-security" target="_blank">Claude Security — AI Vulnerability Finding &amp; Fixing Tool Now in Public Beta (Apr 30)</a></div>
+          <div class="desc">Anthropic launched Claude Security in public beta: an AI-powered tool that finds and fixes software vulnerabilities across your codebase. Available to Claude Pro, Max, Team, and Enterprise users via claude.ai. Works across languages and frameworks. Uses the same agentic infrastructure as Claude Code.</div>
+          <div class="date">Apr 30, 2026 · Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-2jjv-qf24-vfm4" target="_blank">GHSA-2jjv-qf24-vfm4 — Claude Code Arbitrary Code Execution via Plugin Autoloading (Yarn)</a></div>
-          <div class="desc">New GitHub security advisory: Claude Code is vulnerable to arbitrary code execution when plugin autoloading runs under specific Yarn versions. Malicious plugin configs in cloned repos can load untrusted code at startup without a user prompt. Update immediately via <code>claude update</code> and audit <code>~/.claude/plugins/</code>.</div>
-          <div class="date">Apr 2026 · GitHub Security Advisories · <strong style="color:#d97706;">PATCH AVAILABLE</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.126" target="_blank">Claude Code v2.1.126 — Security Patch, Project Purge &amp; WSL2/SSH OAuth (May 1)</a></div>
+          <div class="desc">Released today: patches a sandbox config bypass (<code>allowManagedDomainsOnly</code>/<code>allowManagedReadPathsOnly</code> silently ignored). Adds <code>claude project purge [path]</code> to wipe all local Claude state, <code>/model</code> picker listing gateway models, and <code>claude auth login</code> accepting OAuth codes pasted in terminal for WSL2/SSH/container workflows. Update: <code>claude update</code></div>
+          <div class="date">May 1, 2026 · Anthropic GitHub Releases · <strong style="color:#d97706;">UPDATE NOW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.4.27" target="_blank">OpenClaw v2026.4.27 — Codex Computer Use, DeepInfra Provider &amp; LINE Media Persistence</a></div>
-          <div class="desc">Released Apr 30, 2026. Adds Codex Computer Use with marketplace discovery, DeepInfra as a bundled AI provider, LINE channel media persistence, Telegram forum --thread-id scheduling, and large attachment crash fixes. See OpenClaw Updates panel for full details.</div>
-          <div class="date">Apr 30, 2026 · OpenClaw GitHub Releases</div>
+          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 Launched — xhigh Effort Control, Higher-Res Images &amp; New Tokenizer</a></div>
+          <div class="desc">New top-tier model: Opus 4.7 adds an "xhigh" effort level between high and max for finer reasoning/latency control, higher-resolution image processing, and a new tokenizer. Note: the new tokenizer generates up to 35% more tokens for the same input — effective API cost per request may increase by up to 35%. Same $5/$25 per MTok pricing as Opus 4.6.</div>
+          <div class="date">May 2026 · Anthropic</div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.123 &amp; v2.1.122 — OAuth Fix, Bedrock Service Tier, PR URL Resume Search</a></div>
-          <div class="desc">v2.1.123 (Apr 29): fixes OAuth 401 retry loop when <code>CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1</code> is set. v2.1.122 (Apr 29): adds <code>ANTHROPIC_BEDROCK_SERVICE_TIER</code> env var (default/flex/priority) for Bedrock; pasting a PR URL into <code>/resume</code> now finds the originating session; <code>/mcp</code> reveals claude.ai connectors hidden by duplicate manually-added servers.</div>
-          <div class="date">Apr 29, 2026 · Anthropic GitHub Releases</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Sonnet 4 &amp; Opus 4 Retire June 15, 2026 — Migrate Now</a></div>
+          <div class="desc">Both <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> will be discontinued June 15, 2026. Migrate to Sonnet 4.6 or Opus 4.7. The 1M-token context beta header (<code>context-1m-2025-08-07</code>) was retired Apr 30 for Sonnet 4.5 and Sonnet 4 — requests over 200k now error on those models.</div>
+          <div class="date">Apr–May 2026 · Anthropic API Release Notes · <strong style="color:#d97706;">⚠ Jun 15 deadline</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/engineering/april-23-postmortem" target="_blank">Anthropic April 23 Postmortem — Claude Code Quality Regression &amp; Root Cause</a></div>
-          <div class="desc">Anthropic published a postmortem covering three bugs that degraded Claude Code quality between late March and April 20. A session-memory clearing bug (Mar 26, fixed Apr 10) made Claude seem forgetful; a verbosity-reduction system prompt (Apr 16) hurt coding quality and was reverted Apr 20; session resume crashes in v2.1.120 triggered an auto-rollback to v2.1.119. All three issues are now resolved.</div>
-          <div class="date">Apr 23, 2026 · Anthropic Engineering Blog</div>
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.29 — Active-Run Steering Default, People-Aware Memory Wiki</a></div>
+          <div class="desc">Latest OpenClaw stable. Active-run steering is now on by default; visible-reply enforcement prevents silent agent loops; spawned subagents carry routing metadata; people-aware memory wiki adds provenance to recalled facts; per-conversation Active Memory filters available. See OpenClaw Updates panel for full history.</div>
+          <div class="date">Apr 29, 2026 · OpenClaw GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/managed-agents/quickstart" target="_blank">Claude Managed Agents Memory — Now in Public Beta</a></div>
-          <div class="desc">Memory for Claude Managed Agents is now in public beta under the standard <code>managed-agents-2026-04-01</code> beta header. Enables agents to persist information across sessions. Pairs with the Rate Limits API and the <code>ant</code> CLI for local development workflows.</div>
-          <div class="date">Apr 23–24, 2026 · Anthropic API Release Notes</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Message Batches max_tokens Now 300k — Web Search Tool Now GA</a></div>
+          <div class="desc">The <code>output-300k-2026-03-24</code> beta header enables up to 300,000 output tokens per request on the Message Batches API for Opus 4.6 and Sonnet 4.6. Separately, the web search tool is now generally available — no beta header required.</div>
+          <div class="date">Apr 2026 · Anthropic API Release Notes</div>
         </div>
       </div>
     </div>
