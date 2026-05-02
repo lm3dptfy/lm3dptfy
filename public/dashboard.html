@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 1 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 2 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -232,7 +232,7 @@
 
         <div class="alert-banner" style="margin-top:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-q5hj-mxqh-vv77 — Trust Dialog Bypass via Git Worktree Spoofing — Apr 24, 2026</div>
-          <div style="font-size:.85rem;color:var(--ink2);">Published TODAY. High severity. An attacker can craft a git worktree that spoofs workspace trust context, bypassing the trust dialog and allowing arbitrary code execution without user confirmation. No CVE number assigned yet. Check GitHub for patched version. Avoid opening unfamiliar git worktrees until patched. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-q5hj-mxqh-vv77" style="color:var(--teal-light);">GitHub Advisory</a></div>
+          <div style="font-size:.85rem;color:var(--ink2);">High severity. An attacker can craft a git worktree that spoofs workspace trust context, bypassing the trust dialog and allowing arbitrary code execution without user confirmation. Check auto-update status — run <code>claude update</code>. Avoid opening unfamiliar git worktrees. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-q5hj-mxqh-vv77" style="color:var(--teal-light);">GitHub Advisory</a></div>
         </div>
 
         <div class="alert-banner resolved" style="margin-top:10px;">
@@ -310,7 +310,7 @@
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
-          <span class="nums">npm <span class="current">—</span> → <span class="latest">2.0.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">v3.3.0 on GitHub/PyPI</span></span>
+          <span class="nums">npm <span class="current">—</span> → <span class="latest">2.0.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">v3.3.4 on GitHub/PyPI</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
@@ -422,6 +422,11 @@
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
         <div class="news-item">
+          <div><a href="https://github.com/slopus/happy/issues/880" target="_blank">⚠ Supply-Chain Watch: Happy npm Package Ownership Transfer (#880)</a></div>
+          <div class="desc">GitHub issue #880 (opened Mar 18, 2026) discusses donating/transferring the <code>happy</code> npm package to a new maintainer. A mishandled npm ownership transfer is a supply-chain risk — a new owner could publish a malicious version. Monitor this issue and pin your version (<code>npm install -g happy@1.1.8</code>) until ownership is stable.</div>
+          <div class="date">Mar 18, 2026 · github.com/slopus/happy · <strong style="color:#d97706;">WATCH</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy cli-1.1.8 — File Diffs Sidebar, Session Resume via RPC, Analytics Toggle (Apr 27)</a></div>
           <div class="desc">v1.1.8 (Apr 27, 2026): adds a file diffs sidebar for reviewing changes inline, session resume via RPC (so you can reconnect to running Claude Code sessions), an analytics toggle for privacy control, and fixes voice provider disconnection bugs in second sessions. Update: <code>npm install -g happy</code></div>
           <div class="date">Apr 27, 2026 · github.com/slopus/happy / npm</div>
@@ -502,6 +507,11 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
+        <div class="news-item">
+          <div><a href="https://context7mcp.com/" target="_blank">Context7 "ContextCrush" — Critical Context Poisoning Vulnerability (Patched Feb 2026)</a></div>
+          <div class="desc">A critical context poisoning vulnerability in Context7 MCP was discovered and patched in February 2026. Attackers could craft library documentation responses that injected instructions into the LLM context window, redirecting agent behavior. Ensure you're on v2.1.8+ (<code>npm install -g @upstash/context7-mcp</code>) and on HTTP or stdio transport (SSE transport deprecated).</div>
+          <div class="date">Feb 2026 · Context7 / Upstash · <strong style="color:#d97706;">UPDATE if below v2.1.8</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 MCP v2.2.3 — SSE Streaming Fix for Claude Code 60s Timeout (Apr 29)</a></div>
           <div class="desc">Released today (Apr 29, 2026). Streams MCP tool responses over SSE so HTTP headers flush before the client's fetch timeout fires — directly fixes the 60-second timeout limit in Claude Code that was causing Context7 tool calls to fail mid-response. Update: <code>npm install -g @upstash/context7-mcp</code></div>
@@ -633,34 +643,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/claude-code-security" target="_blank">Claude Security — AI Vulnerability Finding &amp; Fixing Tool Now in Public Beta (Apr 30)</a></div>
-          <div class="desc">Anthropic launched Claude Security in public beta: an AI-powered tool that finds and fixes software vulnerabilities across your codebase. Available to Claude Pro, Max, Team, and Enterprise users via claude.ai. Works across languages and frameworks. Uses the same agentic infrastructure as Claude Code.</div>
-          <div class="date">Apr 30, 2026 · Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Anthropic Managed Agents Now in Public Beta — Fully Managed Agentic Harness</a></div>
+          <div class="desc">Anthropic launched Claude Managed Agents in public beta: a fully managed agent harness with secure sandboxing, built-in tools, and SSE streaming — no infrastructure required. Agents run in Anthropic-managed sandboxes with fine-grained permission controls and audit logging. Available via the Claude API.</div>
+          <div class="date">May 2026 · Anthropic API Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.126" target="_blank">Claude Code v2.1.126 — Security Patch, Project Purge &amp; WSL2/SSH OAuth (May 1)</a></div>
-          <div class="desc">Released today: patches a sandbox config bypass (<code>allowManagedDomainsOnly</code>/<code>allowManagedReadPathsOnly</code> silently ignored). Adds <code>claude project purge [path]</code> to wipe all local Claude state, <code>/model</code> picker listing gateway models, and <code>claude auth login</code> accepting OAuth codes pasted in terminal for WSL2/SSH/container workflows. Update: <code>claude update</code></div>
-          <div class="date">May 1, 2026 · Anthropic GitHub Releases · <strong style="color:#d97706;">UPDATE NOW</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Claude Haiku 3 Retired — All API Requests Now Return Errors</a></div>
+          <div class="desc"><code>claude-3-haiku-20240307</code> is now fully retired. All API requests to this model return an error. Migrate to Claude Haiku 4.5 or Sonnet 4.6. Check your integrations immediately if you reference the model ID anywhere in your codebase or config.</div>
+          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">ACTION REQUIRED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 Launched — xhigh Effort Control, Higher-Res Images &amp; New Tokenizer</a></div>
-          <div class="desc">New top-tier model: Opus 4.7 adds an "xhigh" effort level between high and max for finer reasoning/latency control, higher-resolution image processing, and a new tokenizer. Note: the new tokenizer generates up to 35% more tokens for the same input — effective API cost per request may increase by up to 35%. Same $5/$25 per MTok pricing as Opus 4.6.</div>
-          <div class="date">May 2026 · Anthropic</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code May 2026 — Ultrareview Automation, PowerShell Fallback &amp; Bedrock Tier Selection</a></div>
+          <div class="desc">Broad May update: new ultrareview automation workflow, PowerShell 7 fallback on Windows, Bedrock service tier selection, smarter skills and plugin validation, faster startup and cleaner auto-mode messaging. Also fixes CLI, terminal, VS Code, and Bash tool bugs. Update: <code>claude update</code></div>
+          <div class="date">May 2026 · Anthropic GitHub Releases</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Sonnet 4 &amp; Opus 4 Retire June 15, 2026 — Migrate Now</a></div>
-          <div class="desc">Both <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> will be discontinued June 15, 2026. Migrate to Sonnet 4.6 or Opus 4.7. The 1M-token context beta header (<code>context-1m-2025-08-07</code>) was retired Apr 30 for Sonnet 4.5 and Sonnet 4 — requests over 200k now error on those models.</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Sonnet 4 &amp; Opus 4 Retire June 15, 2026 — 44 Days Remaining</a></div>
+          <div class="desc">Both <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> will be discontinued June 15, 2026. Migrate to Sonnet 4.6 or Opus 4.7 now. The 1M-token context beta header (<code>context-1m-2025-08-07</code>) was retired Apr 30 for Sonnet 4.5 and Sonnet 4 — requests over 200k now error on those models.</div>
           <div class="date">Apr–May 2026 · Anthropic API Release Notes · <strong style="color:#d97706;">⚠ Jun 15 deadline</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.29 — Active-Run Steering Default, People-Aware Memory Wiki</a></div>
-          <div class="desc">Latest OpenClaw stable. Active-run steering is now on by default; visible-reply enforcement prevents silent agent loops; spawned subagents carry routing metadata; people-aware memory wiki adds provenance to recalled facts; per-conversation Active Memory filters available. See OpenClaw Updates panel for full history.</div>
-          <div class="date">Apr 29, 2026 · OpenClaw GitHub Releases</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Rate Limits API Released — Programmatically Query Org &amp; Workspace Limits</a></div>
+          <div class="desc">Anthropic released the Rate Limits API: administrators can now programmatically query rate limits configured for their organization and workspaces. Useful for building quota dashboards, auto-scaling logic, or cost-guard integrations without manual console checks.</div>
+          <div class="date">May 2026 · Anthropic API Release Notes</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Message Batches max_tokens Now 300k — Web Search Tool Now GA</a></div>
-          <div class="desc">The <code>output-300k-2026-03-24</code> beta header enables up to 300,000 output tokens per request on the Message Batches API for Opus 4.6 and Sonnet 4.6. Separately, the web search tool is now generally available — no beta header required.</div>
-          <div class="date">Apr 2026 · Anthropic API Release Notes</div>
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.29 — People-Aware Memory Wiki, Bedrock Opus 4.7 Parity</a></div>
+          <div class="desc">Latest OpenClaw stable (released Apr 29). Active-run steering on by default; people-aware memory wiki with provenance views; per-conversation Active Memory filters; Bedrock now exposes full Claude Opus 4.7 thinking profile; NVIDIA onboarding/catalogs added. See OpenClaw Updates panel for full history.</div>
+          <div class="date">Apr 29, 2026 · OpenClaw GitHub Releases</div>
         </div>
       </div>
     </div>
