@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 2 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 3 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,6 +196,16 @@
       <div id="security-body">
 
         <div class="alert-banner resolved">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-ph6w-f82w-28w6 — Insufficient Startup Warning Allows RCE — 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Insufficient startup warning allowed arbitrary code execution before users were informed of associated risks. Published in the official GitHub Security Advisories for anthropics/claude-code. Patched in current auto-updated versions — run <code>claude update</code>. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-ph6w-f82w-28w6" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-vhw5-3g5m-8ggf — Subdomain Spoofing Bypasses Trusted Domain Allowlist — 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Attacker-controlled subdomains like <code>modelcontextprotocol.io.attacker.com</code> bypassed Claude Code's trusted-domain verification, causing Claude Code to silently issue requests to attacker-controlled servers — potentially leaking session context or credentials. Related to CVE-2026-24052. Patched in current auto-updated versions. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-vhw5-3g5m-8ggf" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-top:10px;">
           <div class="alert-title"><span class="badge fixed">Resolved</span> Sandbox Config Bypass — allowManagedDomainsOnly &amp; allowManagedReadPathsOnly Ignored — May 1, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">Fixed in v2.1.126 (today): <code>allowManagedDomainsOnly</code> and <code>allowManagedReadPathsOnly</code> security restrictions were silently ignored when a higher-priority configuration source (e.g. enterprise managed settings) lacked a <code>sandbox</code> block entirely — meaning domain and path allowlists could be bypassed without warning. Update immediately via <code>claude update</code>. <a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.126" style="color:var(--teal-light);">GitHub Release v2.1.126</a></div>
         </div>
@@ -328,6 +338,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.2-beta.1 — Memory Wiki Provenance, Bedrock Opus 4.7 xhigh Thinking &amp; Slack Block Kit</a></div>
+          <div class="desc">Latest beta (May 2026). Memory grows into a people-aware wiki with provenance views, per-conversation Active Memory filters, partial recall on timeout, and bounded REM preview diagnostics. Amazon Bedrock now exposes the full Claude Opus 4.7 thinking profile (xhigh, adaptive, max). tokenjuice plugin compiles against published host types. Slack messaging gains merged presentation/interactive blocks with Block Kit fallback text capped at Slack's send limit.</div>
+          <div class="date">May 2, 2026 · OpenClaw GitHub Releases <span style="color:#d97706;font-weight:600;">BETA</span></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.29 — Active-Run Steering, People-Aware Memory Wiki &amp; Subagent Routing</a></div>
           <div class="desc">Latest stable. Active-run steering is now on by default for all conversations. Visible-reply enforcement prevents silent agent loops. Spawned subagents now carry routing metadata so orchestrators can track lineage. People-aware memory wiki adds provenance views — each remembered fact now shows the person/conversation it came from. Per-conversation Active Memory filters let you scope recall without touching global settings.</div>
@@ -643,34 +658,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Anthropic Managed Agents Now in Public Beta — Fully Managed Agentic Harness</a></div>
-          <div class="desc">Anthropic launched Claude Managed Agents in public beta: a fully managed agent harness with secure sandboxing, built-in tools, and SSE streaming — no infrastructure required. Agents run in Anthropic-managed sandboxes with fine-grained permission controls and audit logging. Available via the Claude API.</div>
+          <div><a href="https://www.infosecurity-magazine.com/news/anthropic-claude-security-for-ai/" target="_blank">Anthropic Launches Claude Security in Public Beta — AI-Powered Vulnerability Scanner for Enterprise</a></div>
+          <div class="desc">Built on Claude Opus 4.7, Claude Security scans enterprise codebases for software vulnerabilities with scheduled and targeted scans, easier audit-system integration, and improved tracking of findings. Available to Claude Enterprise customers via the console. Complements Claude Code for security-conscious organizations.</div>
+          <div class="date">May 2026 · Infosecurity Magazine · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Token Context Window Now GA on Sonnet 4.6 &amp; Opus 4.6 — No Beta Header Required</a></div>
+          <div class="desc">The 1M-token context beta has graduated to general availability on Claude Sonnet 4.6 and Claude Opus 4.6 at standard pricing — no <code>context-1m-2025-08-07</code> beta header needed. The beta header was retired April 30 for Sonnet 4.5 and Sonnet 4; requests over 200k tokens now return an error on those models.</div>
           <div class="date">May 2026 · Anthropic API Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Claude Haiku 3 Retired — All API Requests Now Return Errors</a></div>
-          <div class="desc"><code>claude-3-haiku-20240307</code> is now fully retired. All API requests to this model return an error. Migrate to Claude Haiku 4.5 or Sonnet 4.6. Check your integrations immediately if you reference the model ID anywhere in your codebase or config.</div>
-          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">ACTION REQUIRED</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code May 2026 — Ultrareview Automation, PowerShell Fallback &amp; Bedrock Tier Selection</a></div>
-          <div class="desc">Broad May update: new ultrareview automation workflow, PowerShell 7 fallback on Windows, Bedrock service tier selection, smarter skills and plugin validation, faster startup and cleaner auto-mode messaging. Also fixes CLI, terminal, VS Code, and Bash tool bugs. Update: <code>claude update</code></div>
-          <div class="date">May 2026 · Anthropic GitHub Releases</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Sonnet 4 &amp; Opus 4 Retire June 15, 2026 — 44 Days Remaining</a></div>
-          <div class="desc">Both <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> will be discontinued June 15, 2026. Migrate to Sonnet 4.6 or Opus 4.7 now. The 1M-token context beta header (<code>context-1m-2025-08-07</code>) was retired Apr 30 for Sonnet 4.5 and Sonnet 4 — requests over 200k now error on those models.</div>
-          <div class="date">Apr–May 2026 · Anthropic API Release Notes · <strong style="color:#d97706;">⚠ Jun 15 deadline</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Rate Limits API Released — Programmatically Query Org &amp; Workspace Limits</a></div>
-          <div class="desc">Anthropic released the Rate Limits API: administrators can now programmatically query rate limits configured for their organization and workspaces. Useful for building quota dashboards, auto-scaling logic, or cost-guard integrations without manual console checks.</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Automatic Prompt Caching Added to Claude API — Single cache_control Field</a></div>
+          <div class="desc">New automatic prompt caching lets developers add a single <code>cache_control</code> field to requests; the system automatically caches the last cacheable block and works alongside existing block-level cache control for fine-grained optimization. Available on the Claude API and Azure AI Foundry.</div>
           <div class="date">May 2026 · Anthropic API Release Notes</div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.4.29 — People-Aware Memory Wiki, Bedrock Opus 4.7 Parity</a></div>
-          <div class="desc">Latest OpenClaw stable (released Apr 29). Active-run steering on by default; people-aware memory wiki with provenance views; per-conversation Active Memory filters; Bedrock now exposes full Claude Opus 4.7 thinking profile; NVIDIA onboarding/catalogs added. See OpenClaw Updates panel for full history.</div>
-          <div class="date">Apr 29, 2026 · OpenClaw GitHub Releases</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code Broad May Update — Smart Model Picking, Project Purge &amp; Permissions Hardening</a></div>
+          <div class="desc">/model picker now lists models from gateway <code>/v1/models</code> endpoint when <code>ANTHROPIC_BASE_URL</code> points at a compatible gateway. New <code>claude project purge [path]</code> deletes all Claude Code state for a project. Bedrock service tier selection, improved /resume PR search and MCP handling, expanded OpenTelemetry logging, and fixes for branch, Vertex AI, voice mode, and CLI reliability. Update: <code>claude update</code></div>
+          <div class="date">May 2026 · Anthropic GitHub Releases</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Claude Sonnet 3.7 &amp; Haiku 3.5 Retired — Migrate to Sonnet 4.6 &amp; Haiku 4.5</a></div>
+          <div class="desc"><code>claude-sonnet-3-7</code> and <code>claude-haiku-3-5</code> are retired. All API calls return errors. Migrate codebases and config to <code>claude-sonnet-4-6</code> and <code>claude-haiku-4-5-20251001</code>. Also: <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15 — 43 days remaining.</div>
+          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.2-beta.1 — Memory Wiki, Bedrock Opus 4.7 xhigh Thinking (Latest Beta)</a></div>
+          <div class="desc">Latest OpenClaw (beta, May 2026). People-aware memory wiki with provenance, per-conversation Active Memory filters, Bedrock full Opus 4.7 thinking profile (xhigh/adaptive/max), Slack Block Kit improvements, and plugin compilation against published host types. Stable v2026.4.29 still recommended for production.</div>
+          <div class="date">May 2, 2026 · OpenClaw GitHub Releases</div>
         </div>
       </div>
     </div>
@@ -680,6 +695,16 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://medium.com/@rosgluk/claude-skills-and-skill-md-for-developers-vs-code-jetbrains-cursor-775d96effe58" target="_blank">Claude Skills and SKILL.md: Reusable Skills Across VS Code, JetBrains &amp; Cursor — Medium</a></div>
+          <div class="desc">Covers the new SKILL.md convention for defining reusable Claude Code skills that work across IDE integrations (VS Code, JetBrains, Cursor). Shows how to package domain expertise into slash-command skills that persist across sessions and integrate with the plugin marketplace.</div>
+          <div class="date">Apr 2026 · Medium</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.franksworld.com/2026/05/02/harnessing-claude-code-revolutionizing-workflow-automation-with-comfyui" target="_blank">Harnessing Claude Code + ComfyUI: Hooks-Driven Generative AI Pipeline Automation — FranksWorld</a></div>
+          <div class="desc">Freshest hooks guide (May 2, 2026). Demonstrates wiring Claude Code hooks to ComfyUI for fully automated generative AI pipeline triggering — PostToolUse hooks kick off image/video generation jobs. Shows how hooks' 25 event types (up from 12 before March 2026) can orchestrate multi-tool AI workflows.</div>
+          <div class="date">May 2, 2026 · FranksWorld</div>
+        </div>
         <div class="news-item">
           <div><a href="https://www.gecko.security/blog/claude-code-security-review-guide" target="_blank">Claude Code Security Review: Complete Developer Guide (April 2026) — Gecko Security</a></div>
           <div class="desc">End-to-end security review guide covering: audit of hooks and MCP server configs, deny-rule effectiveness testing, plugin directory inspection, API key rotation hygiene, workspace trust settings, and a ready-to-run Claude Code slash command that automates the full review. Updated for the April 2026 advisory landscape.</div>
@@ -699,16 +724,6 @@
           <div><a href="https://www.backslash.security/blog/claude-code-security-best-practices" target="_blank">Claude Code Security Best Practices — Backslash Security</a></div>
           <div class="desc">Comprehensive 2026 guide: disable all hooks by default, explicitly allowlist safe MCP servers, use deny rules for <code>curl</code>/<code>fetch</code>/<code>.env</code> access, keep transcript retention short (7–14 days), sandbox in VM/container, and never run as root. Layered defense across OS, filesystem, and secrets management.</div>
           <div class="date">Apr 2026 · Backslash Security</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://medium.com/@emergentcap/hardening-claude-code-a-security-review-framework-and-the-prompt-that-does-it-for-you-c546831f2cec" target="_blank">Hardening Claude Code: A Security Review Framework &amp; the Prompt That Does It For You — Medium</a></div>
-          <div class="desc">Practical framework for auditing Claude Code deployments: permissions audit, MCP server inventory, hook inspection, CLAUDE.md review for injected instructions, API key rotation hygiene, and a ready-to-run Claude prompt that automates the entire review.</div>
-          <div class="date">Apr 2026 · Tim McAllister / Medium</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.pixelmojo.io/blogs/claude-code-hooks-production-quality-ci-cd-patterns" target="_blank">Claude Code Hooks: All 12 Events with Examples — Pixelmojo</a></div>
-          <div class="desc">Production patterns for all 12 Claude Code hook events (Apr 2026): PreToolUse is the only hook that can block actions — use it for security gates and mandatory review enforcement. Covers CI/CD integration, lint enforcement, secrets scanning, and token-budget guards. Hooks guarantee execution unlike prompt instructions.</div>
-          <div class="date">Apr 2026 · Pixelmojo</div>
         </div>
       </div>
     </div>
