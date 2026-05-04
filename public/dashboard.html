@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 3 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 4 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -338,6 +338,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.2 — npm-First Plugin Cutover, External Plugin Install &amp; Faster Startup</a></div>
+          <div class="desc">Latest stable. Full npm-first plugin cutover: external plugin installation, update, doctor repair, and dependency reporting from the CLI. Artifact metadata covers stale configured installs, missing package payloads, and beta-channel plugin fallback. Faster gateway and agent startup. More resilient Control UI and WebChat. Builds on the beta.1 Memory Wiki provenance and Bedrock Opus 4.7 xhigh thinking work.</div>
+          <div class="date">May 2026 · OpenClaw GitHub Releases <span style="color:#16a34a;font-weight:600;">NEW</span></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.2-beta.1 — Memory Wiki Provenance, Bedrock Opus 4.7 xhigh Thinking &amp; Slack Block Kit</a></div>
           <div class="desc">Latest beta (May 2026). Memory grows into a people-aware wiki with provenance views, per-conversation Active Memory filters, partial recall on timeout, and bounded REM preview diagnostics. Amazon Bedrock now exposes the full Claude Opus 4.7 thinking profile (xhigh, adaptive, max). tokenjuice plugin compiles against published host types. Slack messaging gains merged presentation/interactive blocks with Block Kit fallback text capped at Slack's send limit.</div>
@@ -567,6 +572,11 @@
           <div class="desc">New unified Google Workspace MCP server covering Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Tasks, Contacts, and Chat — 100+ tools via one MCP integration. All actions require explicit user approval.</div>
           <div class="date">Apr 6, 2026 · workspacemcp.com</div>
         </div>
+        <div class="news-item">
+          <div><a href="https://github.com/thedotmack/claude-mem" target="_blank">claude-mem Reaches 46.1K GitHub Stars — Auto-Capture &amp; Compressed Memory for Claude Sessions</a></div>
+          <div class="desc">Community memory plugin that automatically captures Claude coding session activity, compresses it with AI, and injects relevant context into future sessions. One of the fastest-growing Claude Code ecosystem projects. Not to be confused with MemPalace — this is a lighter-weight alternative focused on session continuity.</div>
+          <div class="date">May 2026 · github.com/thedotmack/claude-mem · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
       </div>
     </div>
 
@@ -658,34 +668,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.infosecurity-magazine.com/news/anthropic-claude-security-for-ai/" target="_blank">Anthropic Launches Claude Security in Public Beta — AI-Powered Vulnerability Scanner for Enterprise</a></div>
-          <div class="desc">Built on Claude Opus 4.7, Claude Security scans enterprise codebases for software vulnerabilities with scheduled and targeted scans, easier audit-system integration, and improved tracking of findings. Available to Claude Enterprise customers via the console. Complements Claude Code for security-conscious organizations.</div>
-          <div class="date">May 2026 · Infosecurity Magazine · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Claude Opus 4.7 Now GA — Flagship Model for Complex Reasoning &amp; Agentic Coding</a></div>
+          <div class="desc">Claude Opus 4.7 is Anthropic's most capable generally available model, built for deep reasoning and complex agentic coding tasks. Priced at $5/$25 per MTok (in/out). Includes breaking API changes vs Opus 4.6 — review migration notes before upgrading production systems.</div>
+          <div class="date">May 2026 · Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">1M Token Context Window Now GA on Sonnet 4.6 &amp; Opus 4.6 — No Beta Header Required</a></div>
-          <div class="desc">The 1M-token context beta has graduated to general availability on Claude Sonnet 4.6 and Claude Opus 4.6 at standard pricing — no <code>context-1m-2025-08-07</code> beta header needed. The beta header was retired April 30 for Sonnet 4.5 and Sonnet 4; requests over 200k tokens now return an error on those models.</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Anthropic Managed Agents Now in Public Beta — Secure Sandboxing &amp; SSE Streaming</a></div>
+          <div class="desc">Fully managed agent harness with built-in secure sandboxing, memory, and SSE streaming. Enable via <code>managed-agents-2026-04-01</code> beta header. Memory for Managed Agents also in public beta under the same header. Reduces infrastructure overhead for production agentic deployments.</div>
           <div class="date">May 2026 · Anthropic API Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Automatic Prompt Caching Added to Claude API — Single cache_control Field</a></div>
-          <div class="desc">New automatic prompt caching lets developers add a single <code>cache_control</code> field to requests; the system automatically caches the last cacheable block and works alongside existing block-level cache control for fine-grained optimization. Available on the Claude API and Azure AI Foundry.</div>
-          <div class="date">May 2026 · Anthropic API Release Notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code Broad May Update — Smart Model Picking, Project Purge &amp; Permissions Hardening</a></div>
-          <div class="desc">/model picker now lists models from gateway <code>/v1/models</code> endpoint when <code>ANTHROPIC_BASE_URL</code> points at a compatible gateway. New <code>claude project purge [path]</code> deletes all Claude Code state for a project. Bedrock service tier selection, improved /resume PR search and MCP handling, expanded OpenTelemetry logging, and fixes for branch, Vertex AI, voice mode, and CLI reliability. Update: <code>claude update</code></div>
-          <div class="date">May 2026 · Anthropic GitHub Releases</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Claude Sonnet 3.7 &amp; Haiku 3.5 Retired — Migrate to Sonnet 4.6 &amp; Haiku 4.5</a></div>
-          <div class="desc"><code>claude-sonnet-3-7</code> and <code>claude-haiku-3-5</code> are retired. All API calls return errors. Migrate codebases and config to <code>claude-sonnet-4-6</code> and <code>claude-haiku-4-5-20251001</code>. Also: <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15 — 43 days remaining.</div>
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 42 Days Remaining</a></div>
+          <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Sonnet 3.7 and Haiku 3.5 are already retired — API calls return errors. Haiku 4.5 is the new budget tier.</div>
           <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.2-beta.1 — Memory Wiki, Bedrock Opus 4.7 xhigh Thinking (Latest Beta)</a></div>
-          <div class="desc">Latest OpenClaw (beta, May 2026). People-aware memory wiki with provenance, per-conversation Active Memory filters, Bedrock full Opus 4.7 thinking profile (xhigh/adaptive/max), Slack Block Kit improvements, and plugin compilation against published host types. Stable v2026.4.29 still recommended for production.</div>
-          <div class="date">May 2, 2026 · OpenClaw GitHub Releases</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Message Batches API: max_tokens Raised to 300k + Automatic Prompt Caching</a></div>
+          <div class="desc">The <code>output-300k-2026-03-24</code> beta header unlocks 300k max_tokens on Message Batches API for Opus 4.6 and Sonnet 4.6. Also: new automatic prompt caching — add a single <code>cache_control</code> field and the system caches the last cacheable block automatically, working alongside block-level cache control.</div>
+          <div class="date">May 2026 · Anthropic API Release Notes</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code May Update — project purge, ultrareview &amp; alwaysLoad MCP Config</a></div>
+          <div class="desc">New commands: <code>claude project purge [path]</code> deletes project state, <code>claude ultrareview</code> for non-interactive review, <code>claude plugin prune</code> cleans orphaned dependencies. MCP servers now support <code>alwaysLoad</code> config. Skills reference current effort via <code>${CLAUDE_EFFORT}</code>. Type-to-filter in /skills. Update: <code>claude update</code></div>
+          <div class="date">May 2026 · Anthropic GitHub Releases</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.infosecurity-magazine.com/news/anthropic-claude-security-for-ai/" target="_blank">Anthropic Launches Claude Security in Public Beta — AI-Powered Vulnerability Scanner for Enterprise</a></div>
+          <div class="desc">Built on Claude Opus 4.7, Claude Security scans enterprise codebases for vulnerabilities with scheduled and targeted scans, easier audit-system integration, and improved tracking of findings. Available to Claude Enterprise customers via the console.</div>
+          <div class="date">May 2026 · Infosecurity Magazine</div>
         </div>
       </div>
     </div>
