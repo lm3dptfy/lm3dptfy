@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 5 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 6 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -332,7 +332,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.128</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.131</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -344,7 +344,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current">2026.4.2</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.4</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -358,6 +358,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.4 — Google Meet/Voice Twilio Dial-In, File Transfer Plugin &amp; Plugin Management Fixes</a></div>
+          <div class="desc">Released May 6, 2026. Google Meet/Voice Call improvements: Twilio dial-in with Gemini voice bridge, paced audio, and barge-in queue clearing. New File Transfer Plugin adds <code>file_fetch</code>, <code>dir_list</code>, <code>dir_fetch</code>, and <code>file_write</code> tools with per-node path policies. Plugin management now removes stale plugin copies on update. Update via your OpenClaw update mechanism.</div>
+          <div class="date">May 6, 2026 · OpenClaw GitHub Releases <span style="color:#16a34a;font-weight:600;">NEW</span></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.2 — npm-First Plugin Cutover, External Plugin Install &amp; Faster Startup</a></div>
           <div class="desc">Latest stable. Full npm-first plugin cutover: external plugin installation, update, doctor repair, and dependency reporting from the CLI. Artifact metadata covers stale configured installs, missing package payloads, and beta-channel plugin fallback. Faster gateway and agent startup. More resilient Control UI and WebChat. Builds on the beta.1 Memory Wiki provenance and Bedrock Opus 4.7 xhigh thinking work.</div>
@@ -688,14 +693,19 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.128 — Latest Release (May 2026)</a></div>
-          <div class="desc">Newest npm release of Claude Code. Recent changelog highlights: <code>CLAUDE_CODE_HIDE_CWD</code> env var to hide working directory in startup logo, expanded <code>--from-pr</code> to accept GitLab, Bitbucket, and GitHub Enterprise PR URLs, <code>claude plugin tag</code> to create release git tags, and <code>duration_ms</code> added to PostToolUse hook inputs. Update: <code>claude update</code></div>
-          <div class="date">May 5, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.131 — Latest npm Release (May 6, 2026)</a></div>
+          <div class="desc">Newest npm release bumps to v2.1.131. Recent changelog highlights: <code>CLAUDE_CODE_HIDE_CWD</code> env var, <code>--from-pr</code> expanded to GitLab/Bitbucket/GitHub Enterprise, <code>/team-onboarding</code> command, OS CA certificate store trusted by default, and <code>duration_ms</code> added to PostToolUse hook inputs. Update: <code>claude update</code></div>
+          <div class="date">May 6, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 41 Days Remaining</a></div>
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 40 Days Remaining</a></div>
           <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Sonnet 3.7 and Haiku 3.5 are already retired. The 1M token context beta for Sonnet 4.5 and Sonnet 4 was retired April 30 — requests over 200k now return errors.</div>
-          <div class="date">May 5, 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
+          <div class="date">May 6, 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://openclaw.com.au/updates" target="_blank">OpenClaw v2026.5.4 Released — Twilio Dial-In, File Transfer Plugin</a></div>
+          <div class="desc">OpenClaw's latest stable drops today. New Google Meet/Voice Twilio dial-in with Gemini voice bridge, paced audio and barge-in queue clearing, a File Transfer Plugin with per-node path policies, and plugin management fixes that remove stale copies. Update via OpenClaw's built-in updater.</div>
+          <div class="date">May 6, 2026 · OpenClaw · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Claude Opus 4.7 Now GA — Flagship Model with Breaking API Changes vs 4.6</a></div>
@@ -709,13 +719,8 @@
         </div>
         <div class="news-item">
           <div><a href="https://www.securityweek.com/anthropic-unveils-claude-security-to-counter-ai-powered-exploit-surge/" target="_blank">Anthropic Launches Claude Security — AI-Powered Vulnerability Scanner for Enterprise</a></div>
-          <div class="desc">Built on Claude Opus 4.7, Claude Security scans enterprise codebases for vulnerabilities with scheduled and targeted scans, audit-system integration, and tracking of findings. Nothing applied without human approval. Available to Claude Enterprise customers via the console. Directly addresses the surge in AI-assisted exploit development.</div>
+          <div class="desc">Built on Claude Opus 4.7, Claude Security scans enterprise codebases for vulnerabilities with scheduled and targeted scans, audit-system integration, and tracking of findings. Nothing applied without human approval. Available to Claude Enterprise customers via the console.</div>
           <div class="date">May 2026 · SecurityWeek / Anthropic</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-plugins-official" target="_blank">Anthropic Official Claude Plugins Directory — 32K Active Plugins, 7K+ MCP Servers</a></div>
-          <div class="desc">The official Anthropic-managed directory of high-quality Claude Code plugins now tracks 32,018 active plugins and 282,356 components across the ecosystem. MCP servers are the fourth-largest component type. New lazy-loading MCP Tool Search cuts context usage by up to 95% when running many MCP servers simultaneously.</div>
-          <div class="date">May 2026 · github.com/anthropics/claude-plugins-official</div>
         </div>
       </div>
     </div>
