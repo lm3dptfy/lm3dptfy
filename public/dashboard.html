@@ -195,6 +195,16 @@
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
 
+        <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-5p5x-5294-qhp3 — Local Privilege Escalation via Directory Junction in CoworkVMService — May 6, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">High severity. An attacker with local filesystem write access can plant a Windows directory junction that causes the Claude Code CoworkVMService to write to an arbitrary privileged path, enabling local privilege escalation. Affects Windows installations with CoworkVMService active. Update immediately via <code>claude update</code> and monitor GitHub advisory for patch confirmation. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-5p5x-5294-qhp3" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-3rwf-2g6p-c2f9 — SSH Host Key Verification Bypass Enables MitM on Remote Sessions — May 6, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">High severity. Claude Code's remote session implementation does not strictly verify SSH host keys, allowing a network attacker to perform a man-in-the-middle attack on SSH-tunneled remote Claude Code sessions — potentially intercepting or injecting commands. Avoid using Claude Code remote sessions over untrusted networks until patched. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-3rwf-2g6p-c2f9" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
         <div class="alert-banner resolved">
           <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-4q92-rfm6-2cqx — Permission Deny Bypass Through Symbolic Links — Feb 6, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">Claude Code failed to strictly enforce deny rules configured in settings.json when accessing files through symbolic links — a symlink pointing outside the workspace could bypass filesystem restrictions. Fixed in v2.1.7. All auto-updated users are protected. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-4q92-rfm6-2cqx" style="color:var(--teal-light);">GitHub Advisory</a></div>
@@ -344,7 +354,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.6</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.7</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -359,9 +369,14 @@
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.6 — Codex OAuth Routing Fix &amp; Fetch Error Prevention (May 8)</a></div>
-          <div class="desc">Released today. Fixes Codex OAuth routing breakage introduced in v2026.5.5: the doctor --fix repair was incorrectly rewriting valid <code>openai-codex/*</code> ChatGPT/Codex OAuth routes to <code>openai/*</code>, breaking OAuth-only GPT-5.5 setups. Also improves fetch handling across plugins, debug proxy, and web requests — reducing header metadata errors. Update via your OpenClaw update mechanism.</div>
-          <div class="date">May 8, 2026 · OpenClaw GitHub Releases <span style="color:#16a34a;font-weight:600;">NEW</span></div>
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.7 — Plugin Publish Retry, OpenAI Model Routing &amp; Channel Fixes (May 7)</a></div>
+          <div class="desc">Latest stable (May 7). Plugin publishing now has retry logic for transient failures. OpenAI model routing fixes prevent incorrect route rewrites introduced in 2026.5.5. Cron, channel (Discord, Telegram, LINE), and control UI stability fixes included. Update via your OpenClaw update mechanism.</div>
+          <div class="date">May 7, 2026 · OpenClaw GitHub Releases <span style="color:#16a34a;font-weight:600;">NEW</span></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.6 — Codex OAuth Routing Fix &amp; Fetch Error Prevention (May 6)</a></div>
+          <div class="desc">Fixes Codex OAuth routing breakage introduced in v2026.5.5: the doctor --fix repair was incorrectly rewriting valid <code>openai-codex/*</code> ChatGPT/Codex OAuth routes to <code>openai/*</code>, breaking OAuth-only GPT-5.5 setups. Also improves fetch handling across plugins, debug proxy, and web requests — reducing header metadata errors.</div>
+          <div class="date">May 6, 2026 · OpenClaw GitHub Releases</div>
         </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.4 — Google Meet/Voice Twilio Dial-In, File Transfer Plugin &amp; Plugin Management Fixes</a></div>
@@ -557,6 +572,11 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
+        <div class="news-item">
+          <div><a href="https://github.com/obra/superpowers" target="_blank">Superpowers v5.1.0 — Worktree Skills Rewrite, Codex Marketplace Mirror &amp; Legacy Shim Removal (May 4)</a></div>
+          <div class="desc">Released May 4, 2026. Removes legacy slash commands and <code>superpowers:code-reviewer</code> agent. Worktree skills rewritten with environment detection and user consent flows. New mirror tooling syncs with OpenAI Codex plugin marketplace. Bootstrap content caching for OpenCode. Contributor guidelines updated in CLAUDE.md. Install: <code>/plugin install superpowers@claude-plugins-official</code></div>
+          <div class="date">May 4, 2026 · github.com/obra/superpowers <span style="color:#16a34a;font-weight:600;">NEW</span></div>
+        </div>
         <div class="news-item">
           <div><a href="https://context7mcp.com/" target="_blank">Context7 "ContextCrush" — Critical Context Poisoning Vulnerability (Patched Feb 2026)</a></div>
           <div class="desc">A critical context poisoning vulnerability in Context7 MCP was discovered and patched in February 2026. Attackers could craft library documentation responses that injected instructions into the LLM context window, redirecting agent behavior. Ensure you're on v2.1.8+ (<code>npm install -g @upstash/context7-mcp</code>) and on HTTP or stdio transport (SSE transport deprecated).</div>
