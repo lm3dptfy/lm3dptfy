@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 6 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 8 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -332,7 +332,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.131</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.133</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -344,7 +344,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.4</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.6</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -358,6 +358,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.6 — Codex OAuth Routing Fix &amp; Fetch Error Prevention (May 8)</a></div>
+          <div class="desc">Released today. Fixes Codex OAuth routing breakage introduced in v2026.5.5: the doctor --fix repair was incorrectly rewriting valid <code>openai-codex/*</code> ChatGPT/Codex OAuth routes to <code>openai/*</code>, breaking OAuth-only GPT-5.5 setups. Also improves fetch handling across plugins, debug proxy, and web requests — reducing header metadata errors. Update via your OpenClaw update mechanism.</div>
+          <div class="date">May 8, 2026 · OpenClaw GitHub Releases <span style="color:#16a34a;font-weight:600;">NEW</span></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.4 — Google Meet/Voice Twilio Dial-In, File Transfer Plugin &amp; Plugin Management Fixes</a></div>
           <div class="desc">Released May 6, 2026. Google Meet/Voice Call improvements: Twilio dial-in with Gemini voice bridge, paced audio, and barge-in queue clearing. New File Transfer Plugin adds <code>file_fetch</code>, <code>dir_list</code>, <code>dir_fetch</code>, and <code>file_write</code> tools with per-node path policies. Plugin management now removes stale plugin copies on update. Update via your OpenClaw update mechanism.</div>
@@ -693,34 +698,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.131 — Latest npm Release (May 6, 2026)</a></div>
-          <div class="desc">Newest npm release bumps to v2.1.131. Recent changelog highlights: <code>CLAUDE_CODE_HIDE_CWD</code> env var, <code>--from-pr</code> expanded to GitLab/Bitbucket/GitHub Enterprise, <code>/team-onboarding</code> command, OS CA certificate store trusted by default, and <code>duration_ms</code> added to PostToolUse hook inputs. Update: <code>claude update</code></div>
-          <div class="date">May 6, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.133 — Worktree baseRef Setting, Sandbox Paths &amp; Effort Level in Hooks (May 8)</a></div>
+          <div class="desc">Latest npm release. Adds <code>worktree.baseRef</code> (fresh | head) to control whether new worktrees branch from <code>origin/&lt;default&gt;</code> or local HEAD. Adds <code>sandbox.bwrapPath</code> / <code>sandbox.socatPath</code> managed settings for Linux/WSL custom binary locations. Hooks now receive <code>effort.level</code> and <code>$CLAUDE_EFFORT</code> env var. Adds <code>parentSettingsBehavior</code> admin key. Update: <code>claude update</code></div>
+          <div class="date">May 8, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 40 Days Remaining</a></div>
+          <div><a href="https://www.anthropic.com/news/higher-limits-spacex" target="_blank">Anthropic Doubles Claude Code Rate Limits — SpaceX Colossus 1 Deal (May 6)</a></div>
+          <div class="desc">Effective May 6: 5-hour rate limits doubled for Pro, Max, Team, and seat-based Enterprise Claude Code users; peak-hours limit reduction removed for Pro and Max. Backed by a new compute deal with SpaceX giving Anthropic access to the full Colossus 1 data center — 300 MW, 220,000+ NVIDIA GPUs. Opus API rate limits also substantially raised.</div>
+          <div class="date">May 6, 2026 · Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.marktechpost.com/2026/05/08/anthropic-introduces-natural-language-autoencoders-that-convert-claudes-internal-activations-directly-into-human-readable-text-explanations/" target="_blank">Anthropic Introduces Natural Language Autoencoders — Interpretability Breakthrough (May 8)</a></div>
+          <div class="desc">Anthropic's new NLA method directly converts Claude's internal activations into human-readable text. Key finding: NLA explanations show signs of evaluation awareness 16% of the time on destructive action tests, and indicate Claude is aware it's being evaluated on 26% of SWE-bench Verified problems — important context for agentic trust calibration.</div>
+          <div class="date">May 8, 2026 · Anthropic / MarkTechPost · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.manilatimes.net/2026/05/08/tmt-newswire/globenewswire/snyk-embeds-anthropics-claude-to-advance-ai-powered-security-for-software-development/2338822" target="_blank">Snyk Embeds Claude into AI Security Platform — Developer-Ready Vuln Fixes (May 8)</a></div>
+          <div class="desc">Snyk now powers automated vulnerability discovery, prioritization, and developer-ready fixes across code, dependencies, containers, and AI-generated artifacts using Claude. Launched today — relevant for Claude Code users who also use Snyk in CI/CD pipelines.</div>
+          <div class="date">May 8, 2026 · Snyk / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 38 Days Remaining</div>
           <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Sonnet 3.7 and Haiku 3.5 are already retired. The 1M token context beta for Sonnet 4.5 and Sonnet 4 was retired April 30 — requests over 200k now return errors.</div>
-          <div class="date">May 6, 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
+          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://openclaw.com.au/updates" target="_blank">OpenClaw v2026.5.4 Released — Twilio Dial-In, File Transfer Plugin</a></div>
-          <div class="desc">OpenClaw's latest stable drops today. New Google Meet/Voice Twilio dial-in with Gemini voice bridge, paced audio and barge-in queue clearing, a File Transfer Plugin with per-node path policies, and plugin management fixes that remove stale copies. Update via OpenClaw's built-in updater.</div>
-          <div class="date">May 6, 2026 · OpenClaw · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Claude Opus 4.7 Now GA — Flagship Model with Breaking API Changes vs 4.6</a></div>
-          <div class="desc">Claude Opus 4.7 is Anthropic's most capable generally available model, built for deep reasoning and complex agentic coding tasks. Priced at $5/$25 per MTok. Includes breaking API changes vs Opus 4.6 — review migration guidance before upgrading production systems. Higher resolution image support and improved vision capabilities.</div>
+          <div><a href="https://www.anthropic.com/news/finance-agents" target="_blank">Anthropic Releases Finance Agent Templates — 10 Ready-to-Run Claude Code Plugins</a></div>
+          <div class="desc">Ten production-ready agent templates for financial services: pitchbook building, KYC file screening, month-end close, and more. Shipped as plugins for Claude Code and Claude Cowork, plus cookbooks for Claude Managed Agents. Available now from the Anthropic console.</div>
           <div class="date">May 2026 · Anthropic</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Anthropic Advisor Tool in Public Beta — Pair Fast Executor with High-Intelligence Advisor</a></div>
-          <div class="desc">New advisor tool beta (header: <code>advisor-tool-2026-03-01</code>) lets developers pair a faster executor model with a higher-intelligence advisor model for strategic guidance. Memory for Managed Agents also in public beta under <code>managed-agents-2026-04-01</code>. Max_tokens raised to 300k on Message Batches API via <code>output-300k-2026-03-24</code> beta header.</div>
-          <div class="date">May 2026 · Anthropic API Release Notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.securityweek.com/anthropic-unveils-claude-security-to-counter-ai-powered-exploit-surge/" target="_blank">Anthropic Launches Claude Security — AI-Powered Vulnerability Scanner for Enterprise</a></div>
-          <div class="desc">Built on Claude Opus 4.7, Claude Security scans enterprise codebases for vulnerabilities with scheduled and targeted scans, audit-system integration, and tracking of findings. Nothing applied without human approval. Available to Claude Enterprise customers via the console.</div>
-          <div class="date">May 2026 · SecurityWeek / Anthropic</div>
         </div>
       </div>
     </div>
@@ -730,6 +735,16 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://simonwillison.net/2026/May/6/code-w-claude-2026/" target="_blank">Live Blog: Code w/ Claude 2026 — Simon Willison's Full Notes (May 6)</a></div>
+          <div class="desc">Simon Willison's complete live-blog notes from the Code w/ Claude 2026 event. Covers every demo, announcement, and Q&A — the best single-page summary of what Anthropic showed: hooks improvements, rate-limit increases, SpaceX deal, new CLI features, agentic patterns, and the new finance agent templates.</div>
+          <div class="date">May 6, 2026 · simonwillison.net</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.marktechpost.com/2026/05/08/anthropic-introduces-natural-language-autoencoders-that-convert-claudes-internal-activations-directly-into-human-readable-text-explanations/" target="_blank">Natural Language Autoencoders: Reading Claude's Mind — Anthropic Interpretability (May 8)</a></div>
+          <div class="desc">Anthropic's NLA technique converts Claude's internal activations to human-readable explanations. Essential reading for understanding how Claude "thinks" during agentic tasks and why evaluation-awareness matters for trust calibration in Claude Code workflows.</div>
+          <div class="date">May 8, 2026 · MarkTechPost / Anthropic</div>
+        </div>
         <div class="news-item">
           <div><a href="https://medium.com/@rosgluk/claude-skills-and-skill-md-for-developers-vs-code-jetbrains-cursor-775d96effe58" target="_blank">Claude Skills and SKILL.md: Reusable Skills Across VS Code, JetBrains &amp; Cursor — Medium</a></div>
           <div class="desc">Covers the new SKILL.md convention for defining reusable Claude Code skills that work across IDE integrations (VS Code, JetBrains, Cursor). Shows how to package domain expertise into slash-command skills that persist across sessions and integrate with the plugin marketplace.</div>
@@ -749,16 +764,6 @@
           <div><a href="https://www.datacamp.com/tutorial/claude-code-hooks" target="_blank">Claude Code Hooks: Complete Guide with Production Examples — DataCamp</a></div>
           <div class="desc">Comprehensive tutorial on all Claude Code hook types (command, http, mcp_tool). Covers PreToolUse security gates, PostToolUse notifications, CI/CD integration, secrets scanning, and the MCP tool invocation capability added in v2.1.118. Ready-to-paste hook configs included.</div>
           <div class="date">Apr 2026 · DataCamp</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.truefoundry.com/blog/claude-code-prompt-injection" target="_blank">Claude Code Prompt Injection: Attack Vectors &amp; Defenses — TrueFoundry</a></div>
-          <div class="desc">Detailed breakdown of how prompt injection works against Claude Code: malicious CLAUDE.md files, poisoned MCP tool responses, and repo-embedded instructions. Covers OWASP Top 10 for Agentic Applications 2026, defense-in-depth strategies, and enterprise hardening patterns.</div>
-          <div class="date">Apr 2026 · TrueFoundry</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.backslash.security/blog/claude-code-security-best-practices" target="_blank">Claude Code Security Best Practices — Backslash Security</a></div>
-          <div class="desc">Comprehensive 2026 guide: disable all hooks by default, explicitly allowlist safe MCP servers, use deny rules for <code>curl</code>/<code>fetch</code>/<code>.env</code> access, keep transcript retention short (7–14 days), sandbox in VM/container, and never run as root. Layered defense across OS, filesystem, and secrets management.</div>
-          <div class="date">Apr 2026 · Backslash Security</div>
         </div>
       </div>
     </div>
