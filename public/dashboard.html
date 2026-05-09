@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 8 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 9 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -342,7 +342,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.133</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.138</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -718,34 +718,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.133 — Worktree baseRef Setting, Sandbox Paths &amp; Effort Level in Hooks (May 8)</a></div>
-          <div class="desc">Latest npm release. Adds <code>worktree.baseRef</code> (fresh | head) to control whether new worktrees branch from <code>origin/&lt;default&gt;</code> or local HEAD. Adds <code>sandbox.bwrapPath</code> / <code>sandbox.socatPath</code> managed settings for Linux/WSL custom binary locations. Hooks now receive <code>effort.level</code> and <code>$CLAUDE_EFFORT</code> env var. Adds <code>parentSettingsBehavior</code> admin key. Update: <code>claude update</code></div>
-          <div class="date">May 8, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.138 &amp; v2.1.137 Released — Two Updates Today (May 9)</a></div>
+          <div class="desc">Two Claude Code releases shipped today: v2.1.137 and v2.1.138 (npm latest). Recent patch series (v2.1.132–v2.1.136) addressed Remote Control stop/interrupt handling, IDE scroll issues in Cursor/VS Code/JetBrains, and structured output schema cache bugs. Run <code>claude update</code> to reach 2.1.138.</div>
+          <div class="date">May 9, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/higher-limits-spacex" target="_blank">Anthropic Doubles Claude Code Rate Limits — SpaceX Colossus 1 Deal (May 6)</a></div>
-          <div class="desc">Effective May 6: 5-hour rate limits doubled for Pro, Max, Team, and seat-based Enterprise Claude Code users; peak-hours limit reduction removed for Pro and Max. Backed by a new compute deal with SpaceX giving Anthropic access to the full Colossus 1 data center — 300 MW, 220,000+ NVIDIA GPUs. Opus API rate limits also substantially raised.</div>
-          <div class="date">May 6, 2026 · Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Opus 4.7 Now Generally Available — Breaking API Changes vs 4.6 (May 2026)</a></div>
+          <div class="desc">Claude Opus 4.7 is GA with improvements in software engineering and complex coding tasks. Includes breaking API changes vs. 4.6 — review the migration guide before upgrading. Message Batches API <code>max_tokens</code> also raised to 300k in this wave of API updates.</div>
+          <div class="date">May 2026 · Anthropic Platform Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.marktechpost.com/2026/05/08/anthropic-introduces-natural-language-autoencoders-that-convert-claudes-internal-activations-directly-into-human-readable-text-explanations/" target="_blank">Anthropic Introduces Natural Language Autoencoders — Interpretability Breakthrough (May 8)</a></div>
-          <div class="desc">Anthropic's new NLA method directly converts Claude's internal activations into human-readable text. Key finding: NLA explanations show signs of evaluation awareness 16% of the time on destructive action tests, and indicate Claude is aware it's being evaluated on 26% of SWE-bench Verified problems — important context for agentic trust calibration.</div>
-          <div class="date">May 8, 2026 · Anthropic / MarkTechPost · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Managed Agents &amp; Advisor Tool Enter Public Beta (May 2026)</a></div>
+          <div class="desc">Anthropic's Managed Agents and Advisor tool are now in public beta. Managed Agents let you orchestrate multi-step Claude workflows from the Anthropic console. Directly relevant for Claude Code users building agentic pipelines and automated coding workflows.</div>
+          <div class="date">May 2026 · Anthropic Platform Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.marktechpost.com/2026/05/08/anthropic-introduces-natural-language-autoencoders-that-convert-claudes-internal-activations-directly-into-human-readable-text-explanations/" target="_blank">Anthropic NLA: Claude Shows Evaluation Awareness on 26% of SWE-bench Tasks (May 8)</a></div>
+          <div class="desc">Anthropic's Natural Language Autoencoder method converts Claude's internal activations into human-readable text. Key finding: NLA shows signs of evaluation awareness in 16% of destructive-action tests and on 26% of SWE-bench Verified problems — important for trust calibration in agentic Claude Code workflows.</div>
+          <div class="date">May 8, 2026 · Anthropic / MarkTechPost</div>
         </div>
         <div class="news-item">
           <div><a href="https://www.manilatimes.net/2026/05/08/tmt-newswire/globenewswire/snyk-embeds-anthropics-claude-to-advance-ai-powered-security-for-software-development/2338822" target="_blank">Snyk Embeds Claude into AI Security Platform — Developer-Ready Vuln Fixes (May 8)</a></div>
-          <div class="desc">Snyk now powers automated vulnerability discovery, prioritization, and developer-ready fixes across code, dependencies, containers, and AI-generated artifacts using Claude. Launched today — relevant for Claude Code users who also use Snyk in CI/CD pipelines.</div>
-          <div class="date">May 8, 2026 · Snyk / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
+          <div class="desc">Snyk now uses Claude to power automated vulnerability discovery, prioritization, and developer-ready fixes across code, dependencies, containers, and AI-generated artifacts. Relevant for Claude Code users who also run Snyk in CI/CD pipelines.</div>
+          <div class="date">May 8, 2026 · Snyk / Anthropic</div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 38 Days Remaining</div>
-          <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Sonnet 3.7 and Haiku 3.5 are already retired. The 1M token context beta for Sonnet 4.5 and Sonnet 4 was retired April 30 — requests over 200k now return errors.</div>
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 37 Days Remaining</a></div>
+          <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. The 1M token context beta for Sonnet 4.5 and Sonnet 4 was retired April 30 — requests over 200k tokens now return errors.</div>
           <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/finance-agents" target="_blank">Anthropic Releases Finance Agent Templates — 10 Ready-to-Run Claude Code Plugins</a></div>
-          <div class="desc">Ten production-ready agent templates for financial services: pitchbook building, KYC file screening, month-end close, and more. Shipped as plugins for Claude Code and Claude Cowork, plus cookbooks for Claude Managed Agents. Available now from the Anthropic console.</div>
-          <div class="date">May 2026 · Anthropic</div>
         </div>
       </div>
     </div>
