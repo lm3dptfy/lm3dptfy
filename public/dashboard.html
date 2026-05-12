@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 10 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 12 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -342,7 +342,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.138</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.139</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -723,33 +723,33 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.138 Confirmed Latest — Ctrl+R Global History, Zip Plugin Loading &amp; Worktree Settings (May 10)</a></div>
-          <div class="desc">v2.1.138 remains latest on npm (confirmed May 10). Recent patch series added: Ctrl+R reverse-search now defaults to all prompts across every project (Ctrl+S to narrow to current), zip and URL plugin loading (<code>--plugin-dir</code> accepts .zip, new <code>--plugin-url</code> flag), and a <code>worktree.baseRef</code> setting (fresh | head). Fixes terminal tearing in iTerm2+tmux and LSP binary detection issues. Run <code>claude update</code>.</div>
-          <div class="date">May 10, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.139 Now Latest on npm — May 12, 2026</a></div>
+          <div class="desc">v2.1.139 confirmed latest on npm as of today. Patch builds on the 2.1.138 Ctrl+R global history and zip plugin-loading series. Run <code>claude update</code> to get the latest. Windows IDE extension issues from v2.1.136 remain fully resolved since v2.1.137.</div>
+          <div class="date">May 12, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/pipeboard-co/meta-ads-mcp" target="_blank">Meta Launches Official Ads MCP for Claude — 29 Tools, No Developer App (Apr 29)</a></div>
-          <div class="desc">Meta's official Meta Ads MCP server and CLI cover all 29 ad management tools across Facebook, Instagram, and Audience Network — query campaigns, edit budgets, manage audiences, and run Pixel/CAPI diagnostics. No Developer App approval required. Free during open beta. Install CLI: <code>npm install -g @meta/ads-cli</code>.</div>
-          <div class="date">Apr 29, 2026 · Meta / Pipeboard · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-5p5x-5294-qhp3" target="_blank">⚠ Active: GHSA-5p5x-5294-qhp3 — Windows CoworkVMService Privilege Escalation (May 6)</a></div>
+          <div class="desc">High-severity advisory: Windows directory junction attack against Claude Code's CoworkVMService enables local privilege escalation. Still active — no confirmed patch tag yet. Run <code>claude update</code> and monitor the advisory. Avoid running Claude Code on shared Windows systems until resolved.</div>
+          <div class="date">May 6, 2026 · GitHub Advisory · <strong style="color:#d97706;">⚠ ACTIVE</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Opus 4.7 Generally Available — Breaking API Changes vs 4.6</a></div>
-          <div class="desc">Claude Opus 4.7 is GA with improvements in software engineering and complex coding tasks plus higher-resolution vision. Includes breaking API changes vs. 4.6 — review the migration guide before upgrading integrations. Message Batches API <code>max_tokens</code> raised to 300k.</div>
-          <div class="date">May 2026 · Anthropic Platform Release Notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Managed Agents &amp; Advisor Tool Enter Public Beta — Multi-Step Agentic Workflows</a></div>
-          <div class="desc">Anthropic's Managed Agents and Advisor tool are now in public beta. Managed Agents orchestrate multi-step Claude workflows from the Anthropic console; the Advisor tool pairs a fast executor with a high-intelligence advisor model for strategic mid-generation guidance.</div>
-          <div class="date">May 2026 · Anthropic Platform Release Notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 36 Days Remaining</a></div>
-          <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Requests over 200k tokens to the retired 1M context beta already return errors.</div>
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 34 Days Remaining</a></div>
+          <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate integrations to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Requests over 200k tokens to the retired 1M context beta already return errors. Claude Haiku 3 is already retired.</div>
           <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
         </div>
         <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Opus 4.7 GA — Breaking API Changes vs 4.6, 300k Batch Tokens</a></div>
+          <div class="desc">Claude Opus 4.7 is generally available with improvements in software engineering and complex coding. Includes breaking API changes vs 4.6 — review the migration guide before upgrading. Message Batches API <code>max_tokens</code> raised to 300k. Fine-grained tool streaming now GA on all models (no beta header).</div>
+          <div class="date">May 2026 · Anthropic Platform Release Notes</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Managed Agents &amp; Advisor Tool in Public Beta — Multi-Step Agentic Workflows</a></div>
+          <div class="desc">Anthropic's Managed Agents and Advisor tool are now in public beta. Managed Agents orchestrate multi-step Claude workflows from the Anthropic console; the Advisor tool pairs a fast executor with a high-intelligence advisor for strategic mid-generation guidance. Available on AWS with full API feature set.</div>
+          <div class="date">May 2026 · Anthropic Platform Release Notes</div>
+        </div>
+        <div class="news-item">
           <div><a href="https://www.marktechpost.com/2026/05/08/anthropic-introduces-natural-language-autoencoders-that-convert-claudes-internal-activations-directly-into-human-readable-text-explanations/" target="_blank">Anthropic NLA: Evaluation Awareness Detected in 26% of SWE-bench Tasks (May 8)</a></div>
-          <div class="desc">Anthropic's Natural Language Autoencoder method converts Claude's internal activations into human-readable text. NLA shows signs of evaluation awareness in 16% of destructive-action tests and on 26% of SWE-bench Verified problems — critical data for trust calibration in agentic Claude Code workflows.</div>
+          <div class="desc">Anthropic's Natural Language Autoencoder converts Claude's internal activations into human-readable text. NLA shows evaluation awareness in 16% of destructive-action tests and 26% of SWE-bench Verified tasks — critical data for trust calibration in agentic Claude Code deployments.</div>
           <div class="date">May 8, 2026 · Anthropic / MarkTechPost</div>
         </div>
       </div>
@@ -760,6 +760,11 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://securityboulevard.com/2026/05/claude-code-for-engineers-a-practitioners-playbook-for-software-qa-and-security-teams/" target="_blank">Claude Code for Engineers: A Practitioner's Playbook for QA &amp; Security Teams — Security Boulevard</a></div>
+          <div class="desc">Comprehensive May 2026 guide covering Claude Code in professional security and QA contexts: permission model hardening, deny-rule best practices, MCP server vetting, and agentic workflow safety patterns. Directly addresses the April advisory wave and post-source-leak hardening recommendations.</div>
+          <div class="date">May 2026 · Security Boulevard · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://medium.com/@emergentcap/hardening-claude-code-a-security-review-framework-and-the-prompt-that-does-it-for-you-c546831f2cec" target="_blank">Hardening Claude Code: A Security Review Framework + the Prompt That Does It For You — Medium</a></div>
           <div class="desc">Tim McAllister's practical 7-phase hardening framework: endpoint protections, exfiltration pattern checks (CVE-2025-55284 DNS exfiltration), supply chain audit, deny-rule verification, API key hygiene, MCP config inspection, and workspace trust lockdown — with a ready-to-run Claude Code prompt that automates the full review.</div>
@@ -784,11 +789,6 @@
           <div><a href="https://medium.com/@rosgluk/claude-skills-and-skill-md-for-developers-vs-code-jetbrains-cursor-775d96effe58" target="_blank">Claude Skills and SKILL.md: Reusable Skills Across VS Code, JetBrains &amp; Cursor — Medium</a></div>
           <div class="desc">Covers the new SKILL.md convention for defining reusable Claude Code skills that work across IDE integrations (VS Code, JetBrains, Cursor). Shows how to package domain expertise into slash-command skills that persist across sessions and integrate with the plugin marketplace.</div>
           <div class="date">Apr 2026 · Medium</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.franksworld.com/2026/05/02/harnessing-claude-code-revolutionizing-workflow-automation-with-comfyui" target="_blank">Harnessing Claude Code + ComfyUI: Hooks-Driven Generative AI Pipeline Automation — FranksWorld</a></div>
-          <div class="desc">Freshest hooks guide (May 2, 2026). Demonstrates wiring Claude Code hooks to ComfyUI for fully automated generative AI pipeline triggering — PostToolUse hooks kick off image/video generation jobs. Shows how hooks' 25 event types (up from 12 before March 2026) can orchestrate multi-tool AI workflows.</div>
-          <div class="date">May 2, 2026 · FranksWorld</div>
         </div>
       </div>
     </div>
