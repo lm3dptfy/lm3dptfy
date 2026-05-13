@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 12 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 13 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -342,7 +342,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.139</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.140</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -723,9 +723,9 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.139 Now Latest on npm — May 12, 2026</a></div>
-          <div class="desc">v2.1.139 confirmed latest on npm as of today. Patch builds on the 2.1.138 Ctrl+R global history and zip plugin-loading series. Run <code>claude update</code> to get the latest. Windows IDE extension issues from v2.1.136 remain fully resolved since v2.1.137.</div>
-          <div class="date">May 12, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.140 Now Latest on npm — May 12–13, 2026</a></div>
+          <div class="desc">v2.1.140 confirmed latest on npm. Key changes: <code>subagent_type</code> matching now case/separator-insensitive (e.g. "Code Reviewer" resolves to <code>code-reviewer</code>), <code>/goal</code> no longer silently hangs when <code>disableAllHooks</code> is set, settings hot-reload symlink regression fixed, <code>claude --bg</code> idle-exit connection drop fixed, remote managed settings now retry on 401. Run <code>claude update</code>.</div>
+          <div class="date">May 12–13, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-5p5x-5294-qhp3" target="_blank">⚠ Active: GHSA-5p5x-5294-qhp3 — Windows CoworkVMService Privilege Escalation (May 6)</a></div>
@@ -733,18 +733,18 @@
           <div class="date">May 6, 2026 · GitHub Advisory · <strong style="color:#d97706;">⚠ ACTIVE</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 34 Days Remaining</a></div>
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 33 Days Remaining</a></div>
           <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate integrations to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Requests over 200k tokens to the retired 1M context beta already return errors. Claude Haiku 3 is already retired.</div>
-          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
+          <div class="date">May 13, 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Opus 4.7 GA — Breaking API Changes vs 4.6, 300k Batch Tokens</a></div>
-          <div class="desc">Claude Opus 4.7 is generally available with improvements in software engineering and complex coding. Includes breaking API changes vs 4.6 — review the migration guide before upgrading. Message Batches API <code>max_tokens</code> raised to 300k. Fine-grained tool streaming now GA on all models (no beta header).</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Opus 4.7 GA — Breaking API Changes vs 4.6, New Tokenizer, 300k Batch Tokens</a></div>
+          <div class="desc">Claude Opus 4.7 is generally available at the same $5/$25 per MTok pricing as 4.6. Breaking changes vs 4.6: new tokenizer uses up to 35% more tokens for the same input, high-resolution image support raised to 2576px/3.75MP, thinking content omitted by default (opt-in required). Message Batches API <code>max_tokens</code> cap raised to 300k. Review migration guide before upgrading.</div>
           <div class="date">May 2026 · Anthropic Platform Release Notes</div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Managed Agents &amp; Advisor Tool in Public Beta — Multi-Step Agentic Workflows</a></div>
-          <div class="desc">Anthropic's Managed Agents and Advisor tool are now in public beta. Managed Agents orchestrate multi-step Claude workflows from the Anthropic console; the Advisor tool pairs a fast executor with a high-intelligence advisor for strategic mid-generation guidance. Available on AWS with full API feature set.</div>
+          <div class="desc">Anthropic's Managed Agents and Advisor tool are now in public beta. Managed Agents orchestrate multi-step Claude workflows from the Anthropic console; the Advisor tool pairs a fast executor with a high-intelligence advisor for strategic mid-generation guidance. Available on AWS with full API feature set including prompt caching, code execution, and web tools.</div>
           <div class="date">May 2026 · Anthropic Platform Release Notes</div>
         </div>
         <div class="news-item">
