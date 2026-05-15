@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 14 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 15 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -194,6 +194,11 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Billing Change — Programmatic API Usage Gets Separate Budget Jun 15, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Starting June 15, 2026, Anthropic will separate programmatic API usage (used by Claude Code, integrations, and SDKs) from interactive subscription limits. Users on Pro/Max plans must add dedicated API credits or switch to pay-as-you-go for programmatic use. <strong>Action required before June 15</strong> to avoid service interruptions in Claude Code and automation workflows. <a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" style="color:var(--teal-light);">The Register</a></div>
+        </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge fixed">Resolved</span> CVE-2026-40068 — Auth Bypass via Unvalidated Git Worktree commondir File — May 14, 2026</div>
@@ -347,7 +352,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.141</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.142</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -738,34 +743,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.141 Now Latest on npm — May 14, 2026</a></div>
-          <div class="desc">v2.1.141 is the new latest as of today. Builds on the v2.1.140 wave of fixes: <code>subagent_type</code> matching now case/separator-insensitive, <code>/goal</code> hang with <code>disableAllHooks</code> resolved, settings hot-reload symlink fix, <code>claude --bg</code> idle-exit connection drop fixed, remote managed settings retry on 401. Run <code>claude update</code> to get current.</div>
-          <div class="date">May 14, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW TODAY</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.142 — New Latest on npm (May 15, 2026)</a></div>
+          <div class="desc">v2.1.142 is the new latest as of today, up from yesterday's v2.1.141. Continued refinements to session handling, subagent routing, and hook reliability. Run <code>claude update</code> to get current. Installed users on v2.1.92 are 50 versions behind — update recommended.</div>
+          <div class="date">May 15, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">NEW TODAY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/issues/58557" target="_blank">⚠ Bug: Claude Code in VS Code ~2x Weekly Limit Usage After May 6 Changes</a></div>
-          <div class="desc">GitHub issue #58557 reports that Claude Code inside VS Code has been consuming roughly twice the expected weekly API usage since the May 6, 2026 changes. If you're hitting limits faster than expected in the IDE extension, monitor this issue. Workaround: use the standalone CLI until a fix ships.</div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — Action Required</a></div>
+          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation workflows) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline to avoid interruption. 31 days remaining.</div>
+          <div class="date">May 14–15, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/anthropics/claude-code/issues/58557" target="_blank">⚠ Ongoing Bug: Claude Code in VS Code Consuming ~2x Weekly Limit</a></div>
+          <div class="desc">GitHub issue #58557 (opened May 2026): Claude Code inside VS Code has been burning roughly twice the expected weekly API quota since the May 6 changes. Still open as of today. Workaround: use the standalone CLI until a fix ships.</div>
           <div class="date">May 2026 · GitHub Issues #58557 · <strong style="color:#d97706;">⚠ OPEN</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-5p5x-5294-qhp3" target="_blank">⚠ Active: GHSA-5p5x-5294-qhp3 — Windows CoworkVMService Privilege Escalation (May 6)</a></div>
-          <div class="desc">High-severity advisory: Windows directory junction attack against Claude Code's CoworkVMService enables local privilege escalation. Still active — no confirmed patch tag yet. Run <code>claude update</code> and monitor the advisory. Avoid running Claude Code on shared Windows systems until resolved.</div>
-          <div class="date">May 6, 2026 · GitHub Advisory · <strong style="color:#d97706;">⚠ ACTIVE</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Managed Agents API Now in Public Beta — Multiagent Sessions, Outcomes &amp; Memory</a></div>
+          <div class="desc">Anthropic's Managed Agents feature is now publicly available via the <code>managed-agents-2026-04-01</code> beta header. Enables durable multiagent sessions, Outcomes (structured result capture), and Memory (persistent context across sessions). Advisor tool also now available (<code>anthropic-beta: advisor-tool-2026-03-01</code>).</div>
+          <div class="date">May 2026 · Anthropic Platform · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 32 Days Remaining</a></div>
-          <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate integrations to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Requests over 200k tokens to the retired 1M context beta already return errors. Claude Haiku 3 is already retired.</div>
-          <div class="date">May 14, 2026 · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-5p5x-5294-qhp3" target="_blank">⚠ Still Active: GHSA-5p5x-5294-qhp3 — Windows CoworkVMService Privilege Escalation</a></div>
+          <div class="desc">High-severity advisory from May 6 remains unresolved. Windows directory junction attack against Claude Code's CoworkVMService enables local privilege escalation. Run <code>claude update</code> and avoid shared Windows installs. Also active: GHSA-3rwf-2g6p-c2f9 (SSH host key MitM on remote sessions).</div>
+          <div class="date">May 6–15, 2026 · GitHub Advisory · <strong style="color:#d97706;">⚠ ACTIVE</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Opus 4.7 GA — Breaking API Changes vs 4.6, New Tokenizer, 300k Batch Tokens</a></div>
-          <div class="desc">Claude Opus 4.7 is generally available at the same $5/$25 per MTok pricing as 4.6. Breaking changes vs 4.6: new tokenizer uses up to 35% more tokens for the same input, high-resolution image support raised to 2576px/3.75MP, thinking content omitted by default (opt-in required). Message Batches API <code>max_tokens</code> cap raised to 300k. Review migration guide before upgrading.</div>
-          <div class="date">May 2026 · Anthropic Platform Release Notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.anthropic.com/engineering/april-23-postmortem" target="_blank">Anthropic Postmortem: Claude Code Quality Regression April 23 — Root Cause Published</a></div>
-          <div class="desc">Anthropic published a postmortem on the April 23 Claude Code quality regression that caused widespread reports of degraded coding performance. The engineering blog post details root cause, detection timeline, and remediation steps taken, plus process changes to prevent recurrence.</div>
-          <div class="date">May 2026 · Anthropic Engineering Blog</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Sonnet 4 &amp; Opus 4 API Retirement June 15 — 31 Days Remaining</a></div>
+          <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Claude Haiku 3 already retired. Opus 4.7 GA includes breaking tokenizer changes — up to 35% more tokens for the same input vs 4.6.</div>
+          <div class="date">May 15, 2026 · Anthropic · <strong style="color:#d97706;">⚠ 31 DAYS LEFT</strong></div>
         </div>
       </div>
     </div>
