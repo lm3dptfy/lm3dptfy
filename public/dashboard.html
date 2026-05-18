@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 17 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 18 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -194,6 +194,11 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner resolved" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> TrustFall / Deeplink RCE — Arbitrary Code Execution via Malicious claude-cli:// Deeplinks — May 12, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Disclosed May 12 by researcher Joernchen (0day.click). Maliciously crafted <code>claude-cli://</code> deeplinks could inject arbitrary settings — including shell commands — into a victim's Claude Code instance, enabling RCE without any user confirmation. Attack required only convincing a user to click a link. Fixed in v2.1.118. All auto-updated users are protected; verify with <code>claude --version</code>. <a href="https://cyberpress.org/claude-code-rce-vulnerability/" style="color:var(--teal-light);">CyberPress</a> · <a href="https://www.darkreading.com/application-security/trustfall-exposes-claude-code-execution-risk" style="color:var(--teal-light);">Dark Reading</a></div>
+        </div>
 
         <div class="alert-banner" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Billing Change — Programmatic API Usage Gets Separate Budget Jun 15, 2026</div>
@@ -743,33 +748,33 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 Generally Available — Same Price, Major SWE Gains</a></div>
-          <div class="desc">Claude Opus 4.7 is now GA on the API (<code>claude-opus-4-7</code>). Notable improvements over Opus 4.6 on advanced software engineering tasks, especially the hardest problems. Pricing unchanged: $5/M input, $25/M output. Fast mode in Claude Code now defaults to Opus 4.7. Note: up to 35% more tokens vs 4.6 tokenizer — audit costs before migrating.</div>
-          <div class="date">May 2026 · Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.143 — Plugin Dependency Enforcement &amp; PowerShell Bypass (May 15)</a></div>
+          <div class="desc">v2.1.143 (May 15) adds <code>claude plugin disable</code> enforcement when another plugin depends on the target, projected context cost in the plugin marketplace browse pane, a <code>worktree.bgIsolation: "none"</code> setting, PowerShell <code>-ExecutionPolicy Bypass</code>, background session model/effort persistence after idle-wake, and Shift+Tab auto-mode cycling in agent sessions. Fixes a corrupt <code>.credentials.json</code> hang on startup. Run <code>claude update</code> if below 2.1.143.</div>
+          <div class="date">May 15, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">LATEST</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.143 Latest + May 12 Regression Fixes</a></div>
-          <div class="desc">v2.1.143 is today's latest on npm. Recent notable fixes (v2.1.136–2.1.143): symlinked settings files causing spurious ConfigChange hooks (May 12), <code>claude --bg</code> "connection dropped" on idle-exit, markdown table rendering regression, and agent panel hidden during subagent runs. Users on v2.1.92 are 51 versions behind — run <code>claude update</code>.</div>
-          <div class="date">May 17, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">LATEST</strong></div>
+          <div><a href="https://www.bloomberg.com/news/articles/2026-05-12/anthropic-in-talks-to-raise-30-billion-at-900-billion-valuation" target="_blank">Anthropic in Talks to Raise $30B at $900B Valuation — Bloomberg</a></div>
+          <div class="desc">Anthropic is in early talks with investors to raise at least $30 billion in fresh financing at a valuation exceeding $900 billion — over 3× its previous $61.5B valuation. Run-rate revenue has surpassed $30B. Company also signed a $1.8B computing deal with Akamai and expanded its AWS commitment to $100B over 10 years.</div>
+          <div class="date">May 12, 2026 · Bloomberg / Fortune · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 29 Days Remaining</a></div>
-          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation workflows) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline to avoid interruption. 29 days remaining.</div>
-          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 29 DAYS</strong></div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 28 Days Remaining</a></div>
+          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation workflows) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline to avoid interruption. <strong>28 days remaining.</strong></div>
+          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 28 DAYS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠ Sonnet 4 &amp; Opus 4 API Retirement June 15 — 29 Days Remaining</a></div>
-          <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Claude Haiku 3 already retired. Opus 4.7 tokenizer change adds up to 35% more tokens for equivalent input vs 4.6 — audit batch jobs before cutover.</div>
-          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ 29 DAYS LEFT</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠ Sonnet 4 &amp; Opus 4 API Model Retirement June 15 — 28 Days Remaining</a></div>
+          <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Claude Haiku 3 already retired. Opus 4.7 tokenizer adds up to 35% more tokens vs 4.6 — audit batch jobs before cutover.</div>
+          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ 28 DAYS LEFT</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://letsdatascience.com/news/anthropic-increases-claude-code-and-api-usage-limits-735fd0ac" target="_blank">Anthropic Increases Claude API Rate Limits up to 1500% for Tier 1</a></div>
-          <div class="desc">Blog post from May 6: Anthropic substantially raised per-minute token limits across tiers. Tier 1 saw ~1500% increase in max input tokens/minute and ~900% in output tokens/minute for Opus models. Claude Platform on AWS also launched this week — full Messages, Files, Batches, and Managed Agents APIs via native AWS endpoints.</div>
-          <div class="date">May 6, 2026 · Anthropic / Let's Data Science · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://fortune.com/2026/05/08/anthropic-80fold-growth-quarter-renting-elon-musk-data-center/" target="_blank">Anthropic Revenue Grew 80× in One Quarter — Now Renting Musk's xAI Data Center</a></div>
+          <div class="desc">Anthropic's revenue grew 80-fold in a single quarter driven by Claude Code enterprise adoption. The company is now renting capacity from Elon Musk's xAI Memphis supercluster to handle demand while its own AWS infrastructure scales up. Claude Code is cited as the primary enterprise growth driver.</div>
+          <div class="date">May 8, 2026 · Fortune · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/issues/58557" target="_blank">⚠ Ongoing Bug: Claude Code in VS Code Consuming ~2x Weekly Limit</a></div>
-          <div class="desc">GitHub issue #58557: Claude Code inside VS Code has been burning roughly twice the expected weekly API quota since the May 6 changes. Still open as of today. Workaround: use the standalone CLI until a fix ships. Also open: MCP regression on Windows in VS Code (#59957).</div>
+          <div><a href="https://github.com/anthropics/claude-code/issues/58557" target="_blank">⚠ Ongoing Bug: Claude Code in VS Code Consuming ~2x Weekly Quota</a></div>
+          <div class="desc">GitHub issue #58557: Claude Code inside VS Code has been burning roughly twice the expected weekly API quota since the May 6 rate-limit changes. Still unresolved as of May 18. Workaround: use standalone CLI. Also open: MCP regression on Windows in VS Code (#59957). With billing split coming June 15, over-quota spend is especially costly now.</div>
           <div class="date">May 2026 · GitHub Issues #58557 · <strong style="color:#d97706;">⚠ STILL OPEN</strong></div>
         </div>
       </div>
