@@ -221,6 +221,11 @@
         </div>
 
         <div class="alert-banner resolved">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-ff64-7w26-62rf — Sandbox Escape via Persistent Config Injection in settings.json — Feb 6, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">High severity. A malicious repository could write a crafted <code>.claude/settings.json</code> that persisted dangerous tool approvals into the user's global config, escaping the workspace sandbox across future sessions — including sessions in unrelated projects. Fixed in current auto-updated versions. Run <code>claude update</code>. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-ff64-7w26-62rf" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
+
+        <div class="alert-banner resolved">
           <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-4q92-rfm6-2cqx — Permission Deny Bypass Through Symbolic Links — Feb 6, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">Claude Code failed to strictly enforce deny rules configured in settings.json when accessing files through symbolic links — a symlink pointing outside the workspace could bypass filesystem restrictions. Fixed in v2.1.7. All auto-updated users are protected. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-4q92-rfm6-2cqx" style="color:var(--teal-light);">GitHub Advisory</a></div>
         </div>
@@ -369,7 +374,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.7</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.12</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -383,6 +388,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.12 — Telegram Worker Isolation, Externalized Providers &amp; Fallback Backends (May 14)</a></div>
+          <div class="desc">Latest stable. Telegram ingress moved to an isolated worker with a durable local spool for resilience under high load. Amazon Bedrock, Slack, OpenShell sandbox, and Anthropic Vertex are now externalized as independently deployable provider plugins. Adds <code>acp.fallbacks</code> config for backup runtime backends when the primary is unreachable. Update via your OpenClaw update mechanism.</div>
+          <div class="date">May 14, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.7 — Plugin Publish Retry, OpenAI Model Routing &amp; Channel Fixes (May 7)</a></div>
           <div class="desc">Latest stable (May 7). Plugin publishing now has retry logic for transient failures. OpenAI model routing fixes prevent incorrect route rewrites introduced in 2026.5.5. Cron, channel (Discord, Telegram, LINE), and control UI stability fixes included. Update via your OpenClaw update mechanism.</div>
@@ -534,6 +544,11 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
+        <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.3.5 — Recovery Mode, Atomic Writes &amp; Multi-Tenant Fixes (May 10)</a></div>
+          <div class="desc">Released May 10. Adds recovery mode for corrupted palaces — run <code>mempalace recover</code> to rebuild indexes from raw memory files. All file writes are now atomic (write-to-temp + rename) to prevent corruption on unclean shutdown. Windows multi-tenant path handling fixed. MCP search stability improved after bulk memory mining operations. GitHub/PyPI only — npm stable remains v2.0.0.</div>
+          <div class="date">May 10, 2026 · MemPalace GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.3.4 — Local LLM Setup Guide, Cross-Project Topics &amp; Storage Optimization (May 1)</a></div>
           <div class="desc">Released today. Adds a local LLM integration for guided first-run setup (no API key required to get started), cross-project topic connections enabling knowledge sharing between different projects, and storage optimization reducing disk usage for large memory sets. PyPI/GitHub only — npm stable remains v2.0.0.</div>
