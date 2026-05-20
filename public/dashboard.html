@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 19 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 20 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -362,7 +362,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.144</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.145</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -374,7 +374,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.12</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.18</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -388,6 +388,16 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.19 — defineToolPlugin, Plugin Init/Build/Validate &amp; Typed Tool Plugins (May 19)</a></div>
+          <div class="desc">Latest beta. Introduces <code>defineToolPlugin</code> for type-safe plugin authoring, plus <code>openclaw plugin init</code>, <code>build</code>, and <code>validate</code> CLI commands for the full plugin development lifecycle. Typed tool plugins allow strict schema validation at plugin load time. Builds on 2026.5.18 QA-Lab work.</div>
+          <div class="date">May 19, 2026 · OpenClaw GitHub Releases · <strong style="color:#d97706;">BETA</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.18 — QA-Lab Codex-vs-Pi Runtime Parity &amp; Tool-Fixture Coverage (May 18)</a></div>
+          <div class="desc">Latest stable. QA-Lab push for Codex-vs-Pi runtime parity ensures plugin behavior is consistent across Codex and Pi-based model backends. Expanded tool-fixture test coverage catches regressions in tool routing, model fallback, and plugin lifecycle hooks before they reach production. Update via your OpenClaw update mechanism.</div>
+          <div class="date">May 18, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.12 — Telegram Worker Isolation, Externalized Providers &amp; Fallback Backends (May 14)</a></div>
           <div class="desc">Latest stable. Telegram ingress moved to an isolated worker with a durable local spool for resilience under high load. Amazon Bedrock, Slack, OpenShell sandbox, and Anthropic Vertex are now externalized as independently deployable provider plugins. Adds <code>acp.fallbacks</code> config for backup runtime backends when the primary is unreachable. Update via your OpenClaw update mechanism.</div>
@@ -768,33 +778,33 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.144 — Background Session /resume, Per-Session /model &amp; 75s Startup Fix (May 19)</a></div>
-          <div class="desc">Released today. <code>/resume</code> now lists background sessions (started via <code>claude --bg</code>) alongside interactive ones, marked with bg. <code>/model</code> changes the model for the current session only — press 'd' in the picker to set a new default. <code>/plugin browse</code> shows when each plugin was last updated and projected per-turn context cost. "Extra usage" renamed to "usage credits" (<code>/usage-credits</code>, old <code>/extra-usage</code> still works). Fixed startup hanging up to 75s when api.anthropic.com is unreachable — side-channel calls now timeout after 15s. Fixed garbled terminal output after missed resize events. Run <code>claude update</code>.</div>
-          <div class="date">May 19, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">LATEST — TODAY</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.145 — New Build Available (May 20)</a></div>
+          <div class="desc">v2.1.145 is the latest on npm as of today. Follows yesterday's v2.1.144 which shipped <code>/resume</code> background session listing, per-session <code>/model</code> switching, <code>/plugin browse</code> cost projections, and a fix for the 75s startup hang when api.anthropic.com is unreachable. Run <code>claude update</code> to pull the latest build.</div>
+          <div class="date">May 20, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">LATEST — TODAY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://claude.com/code-with-claude/london" target="_blank">Code with Claude London — Livestreaming Today, May 19, 2026</a></div>
-          <div class="desc">Anthropic's Code with Claude world tour hits London today. The San Francisco event (May 6) covered managed agents, proactive workflows, and partner deployments at GitHub, Vercel, Datadog, and Bun. Tokyo follows June 10. All three events are livestreamed.</div>
-          <div class="date">May 19, 2026 · Anthropic / claude.com · <strong style="color:#16a34a;">TODAY</strong></div>
+          <div><a href="https://claude.com/code-with-claude/london" target="_blank">Code with Claude London — Recap (May 19) · Tokyo Next — June 10</a></div>
+          <div class="desc">Anthropic's Code with Claude world tour hit London yesterday. The San Francisco event (May 6) covered managed agents, proactive workflows, and partner deployments at GitHub, Vercel, Datadog, and Bun. Tokyo is the final stop on June 10. All events are livestreamed.</div>
+          <div class="date">May 19, 2026 · Anthropic / claude.com</div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.bloomberg.com/news/articles/2026-05-12/anthropic-in-talks-to-raise-30-billion-at-900-billion-valuation" target="_blank">Anthropic in Talks to Raise $30B at $900B Valuation — Bloomberg</a></div>
-          <div class="desc">Anthropic is in early talks with investors to raise at least $30 billion in fresh financing at a valuation exceeding $900 billion — over 3× its previous $61.5B valuation. Run-rate revenue has surpassed $30B. Company also signed a $1.8B computing deal with Akamai and expanded its AWS commitment to $100B over 10 years.</div>
-          <div class="date">May 12, 2026 · Bloomberg / Fortune</div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 26 Days Remaining</a></div>
+          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation workflows) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline to avoid interruption. <strong>26 days remaining.</strong></div>
+          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 26 DAYS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 27 Days Remaining</a></div>
-          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation workflows) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline to avoid interruption. <strong>27 days remaining.</strong></div>
-          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 27 DAYS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠ Sonnet 4 &amp; Opus 4 API Model Retirement June 15 — 27 Days Remaining</a></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠ Sonnet 4 &amp; Opus 4 API Model Retirement June 15 — 26 Days Remaining</a></div>
           <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Claude Haiku 3 already retired. Opus 4.7 tokenizer adds up to 35% more tokens vs 4.6 — audit batch jobs before cutover.</div>
-          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ 27 DAYS LEFT</strong></div>
+          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ 26 DAYS LEFT</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.18 Stable + v2026.5.19 Beta — Plugin Authoring Overhaul</a></div>
+          <div class="desc">OpenClaw shipped two releases in two days: stable v2026.5.18 brings Codex-vs-Pi runtime parity and expanded tool-fixture test coverage; beta v2026.5.19 introduces <code>defineToolPlugin</code>, <code>plugin init/build/validate</code> CLI commands, and typed tool plugin schemas. Update your OpenClaw instance.</div>
+          <div class="date">May 18–19, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://github.com/anthropics/claude-code/issues/58557" target="_blank">⚠ Ongoing Bug: Claude Code in VS Code Consuming ~2x Weekly Quota</a></div>
-          <div class="desc">GitHub issue #58557: Claude Code inside VS Code has been burning roughly twice the expected weekly API quota since the May 6 rate-limit changes. Still unresolved as of May 19. Workaround: use standalone CLI. Also open: MCP regression on Windows in VS Code (#59957). With billing split coming June 15, over-quota spend is especially costly now.</div>
+          <div class="desc">GitHub issue #58557: Claude Code inside VS Code has been burning roughly twice the expected weekly API quota since the May 6 rate-limit changes. Still unresolved. Workaround: use standalone CLI. Also open: MCP regression on Windows in VS Code (#59957). With billing split coming June 15, over-quota spend is especially costly now.</div>
           <div class="date">May 2026 · GitHub Issues #58557 · <strong style="color:#d97706;">⚠ STILL OPEN</strong></div>
         </div>
       </div>
