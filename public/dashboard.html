@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 21 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 22 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -367,7 +367,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.146</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.148</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -783,9 +783,9 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.146 — /code-review Command, MCP Auto-Retry &amp; Windows Fixes (May 21)</a></div>
-          <div class="desc">Released today: <code>/simplify</code> renamed to <code>/code-review</code> with optional effort level (e.g. <code>/code-review high</code>). Auto mode no longer suppresses AskUserQuestion when a skill relies on it. MCP servers now auto-retry up to 3 times on transient startup errors. Fixes Windows PowerShell tool "command line is invalid" regression (winget/Store installs), MCP pagination dropping items past page 1, and full-screen strobing in background sessions on Windows Terminal. <code>/terminal-setup</code> now enables iTerm2 clipboard access so <code>/copy</code> works. Claude.ai connectors with the same upstream URL are deduplicated. Terminal tab titles now use your configured language. Run <code>claude update</code>.</div>
-          <div class="date">May 21, 2026 · Anthropic GitHub Releases · <strong style="color:#16a34a;">LATEST — TODAY</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.148 — Latest on npm (May 22)</a></div>
+          <div class="desc">v2.1.148 is a hotfix for a critical regression introduced in v2.1.147 where the Bash tool returned exit code 127 on every command, breaking most agentic workflows. v2.1.147 shipped pinned background sessions (stay alive when idle, restart in-place on update), renamed <code>/simplify</code> to <code>/code-review</code> with GitHub PR inline comment support, improved auto-updater retry logic, and faster diff rendering for large files. Run <code>claude update</code> immediately.</div>
+          <div class="date">May 22, 2026 · npm @anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST TODAY</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662" target="_blank">⚠ SOCKS5 Sandbox Bypass — Anthropic Silently Patched Without CVE — The Register (May 20)</a></div>
@@ -803,14 +803,14 @@
           <div class="date">May 2026 · Anthropic / AI Business · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 25 Days Remaining</a></div>
-          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation workflows) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline to avoid interruption. <strong>25 days remaining.</strong></div>
-          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 25 DAYS</strong></div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 24 Days Remaining</a></div>
+          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation workflows) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline to avoid interruption. <strong>24 days remaining.</strong></div>
+          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 24 DAYS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠ Sonnet 4 &amp; Opus 4 API Model Retirement June 15 — 25 Days Remaining</a></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">⚠ Sonnet 4 &amp; Opus 4 API Model Retirement June 15 — 24 Days Remaining</a></div>
           <div class="desc"><code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retire June 15, 2026. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-7</code>. Claude Haiku 3 already retired. Opus 4.7 tokenizer adds up to 35% more tokens vs 4.6 — audit batch jobs before cutover.</div>
-          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ 25 DAYS LEFT</strong></div>
+          <div class="date">May 2026 · Anthropic · <strong style="color:#d97706;">⚠ 24 DAYS LEFT</strong></div>
         </div>
       </div>
     </div>
