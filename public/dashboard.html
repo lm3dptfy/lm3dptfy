@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 24 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 25 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -788,29 +788,29 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code v2.1.149–2.1.150 — Security Fixes, /diff Keyboard Scrolling &amp; /usage Breakdown (May 22–23)</a></div>
-          <div class="desc">v2.1.149 (May 22) patched four security issues: PowerShell permission bypass via built-in cd, sandbox write allowlist not enforced in git worktrees, PowerShell wildcard allow rules not pre-approving native executables, and <code>find</code> exhausting macOS vnode table. Also added: /diff scrollable with keyboard (arrows, j/k, Space, Home/End), /usage per-category cost breakdown (skills, subagents, plugins, MCP), GFM task-list checkbox rendering, and <code>allowAllClaudeAiMcps</code> enterprise setting. v2.1.150 (May 23) is internal-infrastructure only. Run <code>claude update</code>.</div>
+          <div><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code v2.1.150 — Current Latest (May 23); v2.1.148 Fixed Bash Exit-Code 127 Regression</a></div>
+          <div class="desc">v2.1.150 (May 23) is the current latest — internal infrastructure only; no user-facing changes. v2.1.149 (May 22) patched four security issues including PowerShell permission bypass and macOS vnode exhaustion. v2.1.148 (May 22) fixed a critical regression from v2.1.147 where the Bash tool returned exit code 127 for every command on some systems. Pinned background sessions now stay alive when idle. Run <code>claude update</code> to get to v2.1.150.</div>
           <div class="date">May 22–23, 2026 · Claude Code Changelog · <strong style="color:#16a34a;">LATEST</strong></div>
         </div>
         <div class="news-item">
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 21 Days Remaining</a></div>
+          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-7</code> now. <strong>21 days remaining.</strong></div>
+          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 21 DAYS</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662" target="_blank">⚠ SOCKS5 Sandbox Bypass — Anthropic Silently Patched Without CVE — The Register (May 20)</a></div>
-          <div class="desc">Researcher Aonan Guan disclosed that all Claude Code versions v2.0.24–v2.1.89 allowed network allowlist bypass via SOCKS5 null-byte injection — crafted hostnames bypass JavaScript's <code>endsWith()</code> check but libc resolves only the pre-null portion, enabling credential and source-code exfiltration. Anthropic patched silently in v2.1.90, closed the HackerOne report as a duplicate, and issued no CVE. If you ran a wildcard allowlist before v2.1.90, rotate all reachable credentials.</div>
+          <div class="desc">Researcher Aonan Guan disclosed that all Claude Code versions v2.0.24–v2.1.89 allowed network allowlist bypass via SOCKS5 null-byte injection — crafted hostnames bypass JavaScript's <code>endsWith()</code> check but libc resolves only the pre-null portion, enabling credential and source-code exfiltration. Anthropic patched silently in v2.1.90, closed the HackerOne report as a duplicate, and issued no CVE. Rotate all credentials if you ran a wildcard allowlist before v2.1.90.</div>
           <div class="date">May 20, 2026 · The Register / oddguan.com · <strong style="color:#d97706;">⚠ SEE SECURITY ALERTS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 Now Available — API, Bedrock, Vertex, Foundry &amp; AWS</a></div>
-          <div class="desc">Claude Opus 4.7 is live across the Claude API, Amazon Bedrock, Google Vertex AI, Microsoft Foundry, and the new Claude Platform on AWS. Substantially better vision; stronger at complex long-running agentic tasks. Tokenizer change: up to 35% more tokens vs Opus 4.6 — audit any batch jobs. Same pricing as Opus 4.6: $5/M input, $25/M output.</div>
+          <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 — New Tokenizer, Higher-Res Images &amp; Stronger Agentic Performance</a></div>
+          <div class="desc">Claude Opus 4.7 is GA across API, Bedrock, Vertex, Foundry, and the new Claude Platform on AWS. New tokenizer generates up to 35% more tokens for the same input vs Opus 4.6 — audit batch jobs before migrating. Max image resolution raised to 2576 px / 3.75 MP. Thinking content is now opt-in only. Same pricing as Opus 4.6: $5/M input, $25/M output.</div>
           <div class="date">May 2026 · Anthropic · <strong style="color:#16a34a;">NEW MODEL</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Cache Diagnostics &amp; Task Budgets in Public Beta — New Claude API Features</a></div>
-          <div class="desc">Two new developer features in public beta: (1) Cache Diagnostics — pass <code>diagnostics.previous_message_id</code> on Messages requests to understand where the prompt cache prefix diverged from the previous turn; (2) Task Budgets — guide Claude's token spend across longer agentic runs. Also new: Claude Platform on AWS with IAM authentication and AWS billing for the Messages, Files, and Batches APIs.</div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Cache Diagnostics, Task Budgets &amp; MCP Tunnels in Public Beta</a></div>
+          <div class="desc">New developer features: (1) Cache Diagnostics — pass <code>diagnostics.previous_message_id</code> to see where the prompt cache prefix diverged; (2) Task Budgets — guide Claude's token spend in long agentic runs; (3) MCP Tunnels Research Preview — connect Claude Code to MCP servers in private networks without public exposure. Managed Agents can now update MCP tool configs in active sessions.</div>
           <div class="date">May 2026 · Anthropic Platform Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 22 Days Remaining</a></div>
-          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-7</code> now. <strong>22 days remaining.</strong></div>
-          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 22 DAYS</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://venturebeat.com/orchestration/anthropic-just-shipped-an-openclaw-killer-called-claude-code-channels" target="_blank">Claude Code Channels — Native Telegram &amp; Discord Integration from Anthropic</a></div>
