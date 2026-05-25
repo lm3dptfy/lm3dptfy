@@ -384,7 +384,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.18</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.22</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -398,6 +398,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.22 — Discord Voice Following, Teams Reactions &amp; Gateway Pre-Warming (May 24)</a></div>
+          <div class="desc">Latest stable (May 24, 2026). Gateway pre-warms provider auth-state at startup, short-circuiting per-provider discovery on model listing calls for faster startup. Discord: voice channel following for configured users, multi-user handoff, DAVE recovery, and per-session IDENTITY/USER/SOUL profile context injection. Teams: message pinning/unpinning, emoji reactions, read markers, and member info via Graph API. iMessage: thumb-approval reactions. Media: adaptive image compression with model-aware quality settings. Node.js minimum bumped to 22.19. Update via your OpenClaw update mechanism.</div>
+          <div class="date">May 24, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.5.19 — defineToolPlugin, Plugin Init/Build/Validate &amp; Typed Tool Plugins (May 19)</a></div>
           <div class="desc">Latest beta. Introduces <code>defineToolPlugin</code> for type-safe plugin authoring, plus <code>openclaw plugin init</code>, <code>build</code>, and <code>validate</code> CLI commands for the full plugin development lifecycle. Typed tool plugins allow strict schema validation at plugin load time. Builds on 2026.5.18 QA-Lab work.</div>
@@ -622,6 +627,11 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
+        <div class="news-item">
+          <div><a href="https://github.com/upstash/context7" target="_blank">Context7 @upstash/context7-pi@0.1.0 Released Today (May 25)</a></div>
+          <div class="desc">A new Context7 package variant — <code>@upstash/context7-pi</code> v0.1.0 — published today on npm. The Pi variant is part of the Context7 MCP server family by Upstash. The main <code>@upstash/context7-mcp</code> remains at v2.2.3 (April 29). Update the main package: <code>npm install -g @upstash/context7-mcp</code> and watch for Pi variant docs.</div>
+          <div class="date">May 25, 2026 · github.com/upstash/context7 · <strong style="color:#16a34a;">NEW TODAY</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">MCP Tunnels Research Preview — Connect Private-Network MCP Servers to Claude Code (May 2026)</a></div>
           <div class="desc">Anthropic launched MCP Tunnels as a Research Preview: you can now securely connect Claude Code to MCP servers running in private networks or behind firewalls without exposing them publicly. Also new: Claude Managed Agents now support live updates to MCP server and tool configs in active sessions. Large MCP tool outputs exceeding 100K tokens auto-spill to a sandboxed file.</div>
