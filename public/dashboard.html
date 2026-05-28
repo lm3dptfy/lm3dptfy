@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 27 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 28 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -194,6 +194,11 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner resolved" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge new">New</span> Anthropic Ships Official Security-Guidance Plugin for Diff Reviews — May 27, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Anthropic announced a security-guidance plugin (May 27, 2026) that reviews diffs for injection flaws, unsafe deserialization, and insecure DOM APIs. Install via the Claude Code plugin marketplace. Complements existing security practices — run it on PRs before merge to catch classes of vulnerabilities that standard linters miss. <a href="https://www.helpnetsecurity.com/2026/05/27/anthropic-claude-code-security-guidance-plugin/" style="color:var(--teal-light);">Help Net Security</a></div>
+        </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge fixed">Resolved</span> v2.1.149 Security Fixes — PowerShell Bypass, Sandbox Write Allowlist &amp; macOS vnode Exhaustion — May 22, 2026</div>
@@ -372,7 +377,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.152</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.153</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -798,33 +803,33 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.152 — Latest npm Release (May 27, 2026)</a></div>
-          <div class="desc">v2.1.152 is now the latest on npm as of today. Recent changes across the 2.1.149–2.1.152 window: <code>/simplify</code> renamed to <code>/code-review</code> (correctness bugs at a chosen effort level + inline GitHub PR comments), auto-updater retry with OS-level error categorization, PowerShell permission bypass fix, macOS <code>find</code> vnode exhaustion fix, GFM task-list checkbox rendering in markdown output, and <code>/diff</code> keyboard scrolling. Run <code>claude update</code> to get current.</div>
-          <div class="date">May 27, 2026 · npm / Claude Code Changelog · <strong style="color:#16a34a;">LATEST</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.153 — Latest npm Release (May 28, 2026)</a></div>
+          <div class="desc">v2.1.153 is now the latest on npm as of today — up from v2.1.152 (yesterday). The 2.1.149–2.1.153 window includes: <code>/simplify</code> renamed to <code>/code-review</code> (effort-level flags, inline GitHub PR comments via <code>--comment</code>), <code>/reload-skills</code> command, auto-updater retry with OS-level error categorization, PowerShell permission bypass fix, macOS <code>find</code> vnode exhaustion fix, 16 bug fixes, and GFM task-list checkbox rendering. Run <code>claude update</code>.</div>
+          <div class="date">May 28, 2026 · npm / Claude Code Changelog · <strong style="color:#16a34a;">LATEST TODAY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 19 Days Remaining</a></div>
-          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-7</code> now. <strong>19 days remaining.</strong></div>
-          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 19 DAYS</strong></div>
+          <div><a href="https://www.helpnetsecurity.com/2026/05/27/anthropic-claude-code-security-guidance-plugin/" target="_blank">Anthropic Ships Official Security-Guidance Plugin for Claude Code (May 27)</a></div>
+          <div class="desc">Anthropic released a security-guidance plugin that automatically reviews diffs for injection flaws, unsafe deserialization, and insecure DOM APIs — filling a gap between standard linters and full security audits. Install via the Claude Code plugin marketplace and run it on PRs before merge.</div>
+          <div class="date">May 27, 2026 · Help Net Security / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://status.claude.com/" target="_blank">Opus 4.7 Elevated Error Rates — Resolved May 25, 2026</a></div>
-          <div class="desc">On May 25, 2026, Anthropic's status page reported elevated error rates specifically on Claude Opus 4.7. The incident was resolved the same day. No current incidents as of May 27. If you are running agentic workflows on Opus 4.7, verify your error handling includes retry logic with exponential backoff for 529/503 responses.</div>
-          <div class="date">May 25, 2026 · status.claude.com · <strong style="color:#16a34a;">RESOLVED</strong></div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Usage Splits from Subscription — 18 Days Remaining</a></div>
+          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-7</code> now. <strong>18 days remaining.</strong></div>
+          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 18 DAYS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662" target="_blank">⚠ SOCKS5 Sandbox Bypass — Anthropic Silently Patched Without CVE — The Register (May 20)</a></div>
-          <div class="desc">Researcher Aonan Guan disclosed that all Claude Code versions v2.0.24–v2.1.89 allowed network allowlist bypass via SOCKS5 null-byte injection — crafted hostnames bypass JavaScript's <code>endsWith()</code> check but libc resolves only the pre-null portion, enabling credential and source-code exfiltration. Anthropic patched silently in v2.1.90, closed the HackerOne report as a duplicate, and issued no CVE. Rotate all credentials if you ran a wildcard allowlist before v2.1.90.</div>
+          <div><a href="https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662" target="_blank">⚠ SOCKS5 Sandbox Bypass — Anthropic Silently Patched Without CVE (May 20)</a></div>
+          <div class="desc">Researcher Aonan Guan disclosed that all Claude Code versions v2.0.24–v2.1.89 allowed network allowlist bypass via SOCKS5 null-byte injection — crafted hostnames bypass JavaScript's <code>endsWith()</code> check but libc resolves only the pre-null portion, enabling credential and source-code exfiltration. Anthropic patched silently in v2.1.90 with no CVE assigned. Rotate all credentials if you ran a wildcard allowlist before v2.1.90.</div>
           <div class="date">May 20, 2026 · The Register / oddguan.com · <strong style="color:#d97706;">⚠ SEE SECURITY ALERTS</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Cache Diagnostics, Task Budgets &amp; MCP Tunnels in Research Preview</a></div>
-          <div class="desc">New developer features: (1) Cache Diagnostics — pass <code>diagnostics.previous_message_id</code> to see where the prompt cache prefix diverged; (2) Task Budgets — guide Claude's token spend in long agentic runs; (3) MCP Tunnels Research Preview — connect Claude Code to MCP servers in private networks without public exposure. Managed Agents now update MCP tool configs in active sessions. Large MCP tool outputs exceeding 100K tokens auto-spill to a sandboxed file.</div>
+          <div class="desc">New developer features: (1) Cache Diagnostics — pass <code>diagnostics.previous_message_id</code> to see where the prompt cache prefix diverged; (2) Task Budgets — guide Claude's token spend in long agentic runs; (3) MCP Tunnels Research Preview — connect Claude Code to MCP servers in private networks without public exposure. Managed Agents now update MCP tool configs in active sessions.</div>
           <div class="date">May 2026 · Anthropic Platform Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.anthropic.com/news/claude-opus-4-7" target="_blank">Claude Opus 4.7 — New Tokenizer, Higher-Res Images &amp; Stronger Agentic Performance</a></div>
-          <div class="desc">Claude Opus 4.7 is GA across API, Bedrock, Vertex, Foundry, and the Claude Platform on AWS. New tokenizer generates up to 35% more tokens for the same input vs Opus 4.6 — audit batch jobs before migrating. Max image resolution raised to 2576 px / 3.75 MP. Thinking content is now opt-in only. Same pricing as Opus 4.6: $5/M input, $25/M output.</div>
+          <div class="desc">Claude Opus 4.7 is GA across API, Bedrock, Vertex, Foundry, and the Claude Platform on AWS. New tokenizer generates up to 35% more tokens for the same input vs Opus 4.6 — audit batch jobs before migrating. Max image resolution raised to 2576 px / 3.75 MP. Thinking content is now opt-in only. Pricing: $5/M input, $25/M output.</div>
           <div class="date">May 2026 · Anthropic · <strong style="color:#16a34a;">NEW MODEL</strong></div>
         </div>
       </div>
@@ -835,6 +840,11 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://code.claude.com/docs/en/security" target="_blank">Claude Code Security — Official Anthropic Guidance (Updated May 2026)</a></div>
+          <div class="desc">Anthropic's updated official security docs: disable all hooks by default, explicitly allowlist only vetted MCP servers, use deny rules to block <code>curl</code>/<code>fetch</code>/<code>.env</code> access, keep transcripts 7–14 days, run Claude Code in a VM or container, never run as root. Updated alongside the new security-guidance plugin release on May 27.</div>
+          <div class="date">May 27, 2026 · code.claude.com · <strong style="color:#16a34a;">UPDATED</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://www.datacamp.com/tutorial/claude-code-hooks" target="_blank">Claude Code Hooks: A Practical Guide to Workflow Automation — DataCamp</a></div>
           <div class="desc">Hands-on tutorial covering all 27 hook events (as of April 2026), including the new prompt-type hooks that delegate decisions to Claude Haiku and agent hooks that spawn subagents with up to 50 tool-use turns. Includes real-world patterns: auto-formatting on file save, deny-rule pre-flight checks, and session-start environment validation.</div>
@@ -859,11 +869,6 @@
           <div><a href="https://medium.com/@emergentcap/hardening-claude-code-a-security-review-framework-and-the-prompt-that-does-it-for-you-c546831f2cec" target="_blank">Hardening Claude Code: A Security Review Framework + the Prompt That Does It For You — Medium</a></div>
           <div class="desc">Tim McAllister's practical 7-phase hardening framework: endpoint protections, exfiltration pattern checks (CVE-2025-55284 DNS exfiltration), supply chain audit, deny-rule verification, API key hygiene, MCP config inspection, and workspace trust lockdown — with a ready-to-run Claude Code prompt that automates the full review.</div>
           <div class="date">May 2026 · Medium / Tim McAllister</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://adversa.ai/blog/top-agentic-ai-security-resources-may-2026/" target="_blank">Top Agentic AI Security Resources — May 2026 — Adversa AI</a></div>
-          <div class="desc">Adversa AI's curated roundup of the best agentic AI security resources from May 2026: OWASP Top 10 for Agentic Applications, OpenSSF guidelines, Claude Code-specific advisories, and hands-on red-team playbooks. Essential reading after the April advisory wave.</div>
-          <div class="date">May 2026 · Adversa AI</div>
         </div>
       </div>
     </div>
