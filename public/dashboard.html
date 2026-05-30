@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 29 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 30 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -377,7 +377,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.156</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.158</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -389,7 +389,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.27</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.29</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -403,6 +403,16 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.5.29-alpha.1 — Agent Recovery, Channel Safety &amp; Leaner Runtime (May 30)</a></div>
+          <div class="desc">Today's alpha: subagents keep cwd/workspace separation, hook context stays prompt-local, session locks release on timeout abort, stale restart continuations avoided, Codex app-server/helper failures no longer tear down shared runtime state. Channel delivery hardened across Matrix, iMessage, Slack, Discord, WhatsApp, Telegram, and Teams service URL trust checks. Cold and warm agent turns faster, peak RSS lower, published tarball much smaller.</div>
+          <div class="date">May 30, 2026 · OpenClaw GitHub Releases · <strong style="color:#d97706;">ALPHA TODAY</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.5.28-beta.3 — Channel Delivery Safety (May 29)</a></div>
+          <div class="desc">Beta.3 fix: additional channel delivery safety improvements across Matrix, iMessage, Slack, Discord, and Teams. Patch on top of the beta.2 Opus 4.8 and iOS Pro UI refresh.</div>
+          <div class="date">May 29, 2026 · OpenClaw GitHub Releases · <strong style="color:#d97706;">BETA</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.5.28-beta.2 — Opus 4.8 Support, iOS Pro UI Refresh &amp; Channel Delivery Safety (May 29)</a></div>
           <div class="desc">Today's beta: Agent/Codex runtime improvements; enhanced channel delivery safety across Matrix, iMessage, Slack, Discord, and Teams; iOS Pro UI refresh; stricter input validation; and expanded provider support including Claude Opus 4.8, Fal Krea images, NVIDIA models, and encrypted PDF extraction.</div>
@@ -833,34 +843,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.156 — Opus 4.8 Thinking Block Hotfix (May 29, TODAY)</a></div>
-          <div class="desc">Today's release fixes Opus 4.8 thinking blocks being modified in transit, causing API errors on extended thinking calls. Patches data-in-flight corruption introduced when Opus 4.8 launched in v2.1.154. Run <code>claude update</code> immediately if you use Opus 4.8 with extended thinking.</div>
-          <div class="date">May 29, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">LATEST TODAY</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.158 — Auto Mode on Bedrock, Vertex &amp; Foundry (May 30, TODAY)</a></div>
+          <div class="desc">Today's release: Auto mode is now available on Amazon Bedrock, Google Vertex AI, and Foundry for both Opus 4.7 and Opus 4.8. Opt in by setting <code>CLAUDE_CODE_ENABLE_AUTO_MODE=1</code>. Lets Claude automatically select the best model for each subtask across cloud provider deployments.</div>
+          <div class="date">May 30, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">LATEST TODAY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.154 — Dynamic Workflows, Opus 4.8 Default, Fast Mode &amp; Background Shell (May 28)</a></div>
-          <div class="desc">Major release: Dynamic Workflows launch hundreds of parallel sub-agents per session (Enterprise/Team/Max); Opus 4.8 is now the <code>/effort xhigh</code> default; Fast Mode runs at 2.5× speed at 2× cost; background shell commands via <code>! &lt;command&gt;</code>; lean system prompt as default; plugin marketplace shows directory-aware suggestions. One of the largest Claude Code feature drops of 2026.</div>
-          <div class="date">May 28, 2026 · GitHub Releases / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.157 — .claude/skills Auto-Loading &amp; /plugin Autocomplete (May 29)</a></div>
+          <div class="desc">Plugins placed in <code>.claude/skills</code> directories are now automatically loaded without any explicit registration step — drop a skill file in and it's live. Also adds shell-style autocomplete for <code>/plugin</code> command arguments, making plugin management faster from the CLI.</div>
+          <div class="date">May 29, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://9to5mac.com/2026/05/28/anthropic-upgrades-claude-with-new-opus-4-8-model-heres-whats-new/" target="_blank">Claude Opus 4.8 Launches — 1M Context, 69.2% Agentic Coding Score (May 28)</a></div>
-          <div class="desc">Anthropic's most capable GA model: 1M token context window, 128K max output tokens, agentic coding accuracy raised from 64.3% to 69.2%. Extended thinking is now opt-in only. New tokenizer generates up to 35% more tokens for same input vs Opus 4.7 — audit batch jobs before migrating. Available across API, Bedrock, Vertex AI.</div>
-          <div class="date">May 28, 2026 · Anthropic / 9to5Mac · <strong style="color:#16a34a;">NEW MODEL</strong></div>
+          <div><a href="https://www.helpnetsecurity.com/2026/05/25/anthropic-security-compliance-integrations-claude/" target="_blank">Anthropic Adds 28 Enterprise Security &amp; Compliance Integrations for Claude (May 25)</a></div>
+          <div class="desc">Claude now connects with 28 security and compliance platforms via the new Claude Compliance API: Cloudflare, CrowdStrike, Datadog, Okta, Palo Alto Networks, Snyk, Wiz, Zscaler, Microsoft Purview, IBM Guardium, and more. IT teams get programmatic access to conversation content and activity logs, flowing AI activity directly into existing SIEM and DLP dashboards.</div>
+          <div class="date">May 25, 2026 · Help Net Security / SecurityWeek · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Splits from Subscription — 17 Days Remaining</a></div>
-          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>17 days remaining.</strong></div>
-          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 17 DAYS</strong></div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Splits from Subscription — 16 Days Remaining</a></div>
+          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>16 days remaining.</strong></div>
+          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 16 DAYS</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.technologyreview.com/2026/05/21/1137735/anthropics-code-with-claude-showed-off-codings-future-whether-you-like-it-or-not/" target="_blank">Code with Claude Conference — Agentic Coding's Future on Display (May 21)</a></div>
+          <div class="desc">Anthropic's Code with Claude developer conference showcased multi-agent workflows, Dynamic Workflows in preview, and agentic pair-programming patterns with Opus 4.8. MIT Technology Review noted the event revealed how AI-directed coding is evolving well beyond autocomplete into full autonomous development loops.</div>
+          <div class="date">May 21, 2026 · MIT Technology Review · <strong style="color:#16a34a;">RECAP</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662" target="_blank">SOCKS5 Sandbox Bypass — Anthropic Patched Silently Without CVE (May 20)</a></div>
           <div class="desc">All Claude Code versions v2.0.24–v2.1.89 (~5.5 months) allowed network allowlist bypass via SOCKS5 null-byte injection: crafted hostnames bypass JavaScript's <code>endsWith()</code> check but libc resolves only the pre-null portion, enabling credential and source-code exfiltration. Patched silently in v2.1.90 — no CVE assigned. Rotate all credentials if you ran a wildcard allowlist before upgrading to v2.1.90+.</div>
           <div class="date">May 20, 2026 · The Register / oddguan.com · <strong style="color:#d97706;">⚠ SEE SECURITY ALERTS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://plugins.jetbrains.com/plugin/27310-claude-code-beta-" target="_blank">Claude Code JetBrains Plugin Officially Released (May 11)</a></div>
-          <div class="desc">The official Claude Code [Beta] plugin for JetBrains IDEs (IntelliJ, PyCharm, WebStorm, etc.) is now in the JetBrains Marketplace. Wraps the Claude Code CLI with native IDE integration: chat panel, file references, background task support, and checkpoint-based undo. Install via JetBrains Plugin Manager.</div>
-          <div class="date">May 11, 2026 · JetBrains Marketplace · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
     </div>
