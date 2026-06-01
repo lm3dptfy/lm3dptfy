@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->May 31 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 1 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -377,7 +377,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.158</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.159</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -843,9 +843,14 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.158 — Auto Mode on Bedrock, Vertex &amp; Foundry (May 30)</a></div>
-          <div class="desc">Latest release: Auto mode is now available on Amazon Bedrock, Google Vertex AI, and Foundry for both Opus 4.7 and Opus 4.8. Set <code>CLAUDE_CODE_ENABLE_AUTO_MODE=1</code> to opt in. Lets Claude automatically select the best model for each subtask across cloud provider deployments.</div>
-          <div class="date">May 30, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">LATEST</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.159 — Latest on npm (Jun 1)</a></div>
+          <div class="desc">v2.1.159 is now live on npm as of today. Continues the rapid release cadence from 2.1.158 (Auto mode on Bedrock/Vertex/Foundry) and 2.1.157 (.claude/skills auto-loading, /plugin autocomplete). Update now: <code>claude update</code>.</div>
+          <div class="date">Jun 1, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST TODAY</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Splits from Subscription — 14 Days Remaining</a></div>
+          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>14 days remaining.</strong></div>
+          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 14 DAYS</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://ghacks.net/2026/05/30/anthropic-releases-claude-opus-4-8-with-effort-controls-and-dynamic-workflows-for-claude-code/" target="_blank">Claude Opus 4.8 Released — 4× Better Code Quality, Dynamic Workflows, Fast Mode Price Cut (May 28)</a></div>
@@ -853,14 +858,9 @@
           <div class="date">May 28, 2026 · Anthropic / gHacks · <strong style="color:#16a34a;">NEW MODEL</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.157 — .claude/skills Auto-Loading &amp; /plugin Autocomplete (May 29)</a></div>
-          <div class="desc">Plugins placed in <code>.claude/skills</code> directories are now automatically loaded without any explicit registration step. Also adds shell-style autocomplete for <code>/plugin</code> arguments and the <code>claude plugin init</code> command to scaffold new plugins.</div>
-          <div class="date">May 29, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Splits from Subscription — 15 Days Remaining</a></div>
-          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>15 days remaining.</strong></div>
-          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 15 DAYS</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.158 — Auto Mode on Bedrock, Vertex &amp; Foundry (May 30)</a></div>
+          <div class="desc">Auto mode is now available on Amazon Bedrock, Google Vertex AI, and Foundry for both Opus 4.7 and Opus 4.8. Set <code>CLAUDE_CODE_ENABLE_AUTO_MODE=1</code> to opt in. Also fixes: --resume not reporting background subagents, Opus 4.8 thinking block modifications causing API errors.</div>
+          <div class="date">May 30, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.helpnetsecurity.com/2026/05/25/anthropic-security-compliance-integrations-claude/" target="_blank">Anthropic Adds 28 Enterprise Security &amp; Compliance Integrations for Claude (May 25)</a></div>
