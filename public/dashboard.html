@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 1 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 2 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -194,6 +194,11 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner resolved" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> v2.1.160 — Shell Startup File Write Prompt Added — Jun 2, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Claude Code v2.1.160 now prompts users before writing to shell startup files (<code>.zshenv</code>, <code>.zlogin</code>, <code>.bash_login</code>). Prior versions silently modified shell init files, enabling persistent command injection if a malicious repo could steer Claude Code into appending an entry. Additionally fixes MCP stateful server handling and improves background session restart-in-place behavior. Update via <code>claude update</code>. <a href="https://github.com/anthropics/claude-code/releases" style="color:var(--teal-light);">Claude Code Releases</a></div>
+        </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge new">New</span> Anthropic Ships Official Security-Guidance Plugin for Diff Reviews — May 27, 2026</div>
@@ -377,7 +382,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.159</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.160</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -389,7 +394,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.5.29</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.6.1-beta.2</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -403,6 +408,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.1-beta.2 — Android Talk Mode GA, Skill Workshop &amp; Tailscale Serve (Jun 2)</a></div>
+          <div class="desc">Beta.2 of the June 1 build: Android Talk Mode reaches feature parity with iOS and desktop via Gateway voice relay. New Skill Workshop UI in the control panel for authoring, testing, and publishing plugin skills. Tailscale Serve support for exposing the OpenClaw Gateway on private tailnets without port forwarding. Continued improvements to the <code>defineToolPlugin</code> API scaffolding and plugin validation toolchain.</div>
+          <div class="date">Jun 2, 2026 · OpenClaw GitHub Releases · <strong style="color:#d97706;">BETA TODAY</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.5.29-alpha.1 — Agent Recovery, Channel Safety &amp; Leaner Runtime (May 30)</a></div>
           <div class="desc">Today's alpha: subagents keep cwd/workspace separation, hook context stays prompt-local, session locks release on timeout abort, stale restart continuations avoided, Codex app-server/helper failures no longer tear down shared runtime state. Channel delivery hardened across Matrix, iMessage, Slack, Discord, WhatsApp, Telegram, and Teams service URL trust checks. Cold and warm agent turns faster, peak RSS lower, published tarball much smaller.</div>
@@ -843,14 +853,14 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.159 — Latest on npm (Jun 1)</a></div>
-          <div class="desc">v2.1.159 is now live on npm as of today. Continues the rapid release cadence from 2.1.158 (Auto mode on Bedrock/Vertex/Foundry) and 2.1.157 (.claude/skills auto-loading, /plugin autocomplete). Update now: <code>claude update</code>.</div>
-          <div class="date">Jun 1, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST TODAY</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.160 — Shell Startup Write Prompt &amp; MCP Stateful Server Fixes (Jun 2)</a></div>
+          <div class="desc">v2.1.160 is live on npm today. Adds a user confirmation prompt before writing to shell startup files (<code>.zshenv</code>, <code>.zlogin</code>, <code>.bash_login</code>) — closes a persistent-command-injection surface. Fixes MCP stateful server handling and pinned background sessions restarting in-place on update. Run: <code>claude update</code></div>
+          <div class="date">Jun 2, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST TODAY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Splits from Subscription — 14 Days Remaining</a></div>
-          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>14 days remaining.</strong></div>
-          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 14 DAYS</strong></div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Splits from Subscription — 13 Days Remaining</a></div>
+          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>13 days remaining.</strong></div>
+          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 13 DAYS</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://ghacks.net/2026/05/30/anthropic-releases-claude-opus-4-8-with-effort-controls-and-dynamic-workflows-for-claude-code/" target="_blank">Claude Opus 4.8 Released — 4× Better Code Quality, Dynamic Workflows, Fast Mode Price Cut (May 28)</a></div>
@@ -881,6 +891,11 @@
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
         <div class="news-item">
+          <div><a href="https://claudelab.net/en/articles/claude-code/claude-code-hooks-automation-master-guide" target="_blank">Claude Lab: 18 Hook Events &amp; Production Workflow Automation — Master Guide</a></div>
+          <div class="desc">Comprehensive reference covering all hook event types in Claude Code: PreToolUse, PostToolUse, SessionStart, Stop, SubagentStop. Covers command hooks, prompt hooks (delegate logic to Claude Haiku), and agent hooks (spawn multi-step subagents). Includes production patterns for auto-formatting, deny-rule pre-flight checks, and automated code review workflows.</div>
+          <div class="date">2026 · claudelab.net · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://9to5mac.com/2026/05/28/anthropic-upgrades-claude-with-new-opus-4-8-model-heres-whats-new/" target="_blank">Claude Opus 4.8 &amp; Dynamic Workflows — What Agentic Engineers Need to Know (May 28)</a></div>
           <div class="desc">With Opus 4.8 and Dynamic Workflows landing in Claude Code v2.1.154, agentic coding patterns are changing fast. Key changes: Opus 4.8 is now the <code>/effort xhigh</code> default (1M context, 128K output, extended thinking opt-in); Dynamic Workflows spin up hundreds of sub-agents per session; Fast Mode at 2.5× speed. Start here to understand what moved and how to configure for your workload.</div>
           <div class="date">May 28, 2026 · 9to5Mac / Anthropic · <strong style="color:#16a34a;">NEW — READ FIRST</strong></div>
@@ -904,11 +919,6 @@
           <div><a href="https://www.backslash.security/blog/claude-code-security-best-practices" target="_blank">Claude Code Security Best Practices — Backslash Security</a></div>
           <div class="desc">Practical security guide covering the full Claude Code attack surface: MCP server vetting, deny-rule enforcement, workspace trust lockdown, API key hygiene, and the critical private-data + untrusted-content + external-comms trifecta that enables prompt injection data exfiltration. Directly informed by 2026's CVE wave.</div>
           <div class="date">May 2026 · Backslash Security · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://checkmarx.com/learn/ai-security/claude-code-security-top-6-risks-controls-and-best-practices/" target="_blank">Claude Code Security: Top 6 Risks, Controls &amp; Best Practices — Checkmarx</a></div>
-          <div class="desc">Checkmarx's definitive enterprise guide to Claude Code security: permission model architecture, supply chain vetting, MCP server trust, deny-rule verification, and the six highest-risk attack surfaces identified in 2026 CVEs. A must-read for security teams deploying Claude Code at scale.</div>
-          <div class="date">May 2026 · Checkmarx</div>
         </div>
       </div>
     </div>
