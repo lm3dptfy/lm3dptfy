@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 2 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 3 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -382,7 +382,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.160</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.161</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -394,7 +394,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.6.1-beta.2</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.6.1-beta.2</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available · alpha.3 pre-release</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -408,6 +408,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.1-alpha.3 — Agent Recovery, Plugin Timers &amp; Workboard Orchestration (Jun 3)</a></div>
+          <div class="desc">Latest pre-release alpha: agents and CLI-backed runtimes recover more cleanly from interrupted tool calls, stale session bindings, and compaction handoffs. Provider and plugin requests now bound more timers and retry paths before they can hang a run. Workboard adds orchestration primitives and agent coordination tools for multi-agent planning. iOS adds hosted push relay defaults and guarded WebSocket ping for reliable mobile sessions.</div>
+          <div class="date">Jun 3, 2026 · OpenClaw GitHub Releases · <strong style="color:#d97706;">ALPHA PRE-RELEASE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.1-beta.2 — Android Talk Mode GA, Skill Workshop &amp; Tailscale Serve (Jun 2)</a></div>
           <div class="desc">Beta.2 of the June 1 build: Android Talk Mode reaches feature parity with iOS and desktop via Gateway voice relay. New Skill Workshop UI in the control panel for authoring, testing, and publishing plugin skills. Tailscale Serve support for exposing the OpenClaw Gateway on private tailnets without port forwarding. Continued improvements to the <code>defineToolPlugin</code> API scaffolding and plugin validation toolchain.</div>
@@ -577,6 +582,11 @@
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
         <div class="news-item">
+          <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy 1.1.10-beta.7 Pre-Release Available on npm (May 22)</a></div>
+          <div class="desc">Beta releases up to 1.1.10-beta.7 are available on npm. Stable latest remains <strong>v1.1.8</strong> — do not install betas in production without testing. To track betas: <code>npm info happy versions --json | python3 -c "import json,sys; [print(v) for v in json.load(sys.stdin) if 'beta' in v]"</code>. Install stable: <code>npm install -g happy</code></div>
+          <div class="date">May 22, 2026 · npm · <strong style="color:#d97706;">BETA — stable is still 1.1.8</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://github.com/slopus/happy/issues/880" target="_blank">⚠ Supply-Chain Watch: Happy npm Package Ownership Transfer (#880)</a></div>
           <div class="desc">GitHub issue #880 (opened Mar 18, 2026) discusses donating/transferring the <code>happy</code> npm package to a new maintainer. A mishandled npm ownership transfer is a supply-chain risk — a new owner could publish a malicious version. Monitor this issue and pin your version (<code>npm install -g happy@1.1.8</code>) until ownership is stable.</div>
           <div class="date">Mar 18, 2026 · github.com/slopus/happy · <strong style="color:#d97706;">WATCH</strong></div>
@@ -672,6 +682,11 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
+        <div class="news-item">
+          <div><a href="https://github.com/anthropics/claude-code/issues/51040" target="_blank">⚠ Google Workspace MCP (Gmail/Drive/Calendar) — Write &amp; Modify Operations Missing (Open Issue)</a></div>
+          <div class="desc">Open GitHub issue: Claude.ai's first-party connectors for Gmail, Drive, and Calendar expose only read and create tools. Move, rename, delete/trash operations are missing, making them effectively read-only for modification workflows. Third-party MCP server alternatives available for full CRUD access. Monitor the issue for updates.</div>
+          <div class="date">2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">KNOWN LIMITATION</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases" target="_blank">ctx7 CLI v0.4.4 — Machine-Readable Skills List with --json Flag (May 22)</a></div>
           <div class="desc">Context7's CLI gains a <code>--json</code> flag for <code>ctx7 skills list</code>, producing machine-readable output with skill names, absolute paths, and agent types (universal, claude, cursor, antigravity). Useful for tooling that consumes Context7 skill metadata programmatically. Update: <code>npm install -g @upstash/context7-mcp</code></div>
@@ -853,34 +868,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.161 — 22 Changes, Latest on npm (Jun 2)</a></div>
+          <div class="desc">v2.1.161 published June 2 with 22 changes. Builds on v2.1.160's shell-startup write prompt (closes persistent-command-injection surface), <code>/simplify</code> renamed to <code>/code-review</code>, automatic plugin loading from <code>.claude/skills</code>, and improved background agent session handling. Update: <code>claude update</code></div>
+          <div class="date">Jun 2, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/" target="_blank">Anthropic Confidentially Files for IPO — $965B Valuation, $47B Revenue Run Rate (Jun 1)</a></div>
+          <div class="desc">Anthropic filed its IPO prospectus with the SEC on June 1, following a $65B Series H at a $965B valuation — surpassing OpenAI's $852B. Revenue run rate hit $47B in 2026, up from $10B last year. A $1T+ debut is now considered the base case. Claude and Claude Code power the business. <a href="https://techcrunch.com/2026/06/01/anthropic-files-to-go-public/" style="color:var(--teal-light);">TechCrunch</a> · <a href="https://www.cnbc.com/2026/06/01/anthropic-ipo-s1-prospectus.html" style="color:var(--teal-light);">CNBC</a></div>
+          <div class="date">Jun 1, 2026 · Fortune / TechCrunch / CNBC · <strong style="color:#16a34a;">MAJOR NEWS</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.techradar.com/news/live/claude-outage-june-2026" target="_blank">Claude Global Outage Jun 2 — Sub-Agent Infinite Loop Bug Drained Quotas in Minutes</a></div>
+          <div class="desc">A critical bug in Claude Code's sub-agent system caused agents to multiply exponentially in an infinite loop, spiking token consumption and taking down the Claude API, Console, and Claude Code platform for ~5h 45m (06:04–11:49 UTC). Users reported days-worth of usage allowances consumed in minutes. Issue identified and fixed June 2; monitoring ongoing. <a href="https://status.claude.com/" style="color:var(--teal-light);">status.claude.com</a></div>
+          <div class="date">Jun 2, 2026 · TechRadar / The National · <strong style="color:#d97706;">INCIDENT — RESOLVED</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://techcrunch.com/2026/06/02/anthropic-scales-claude-mythos-to-critical-infrastructure-in-15-countries/" target="_blank">Project Glasswing Expanded — Claude Security for Codebase Scans, 150+ Orgs (Jun 2)</a></div>
+          <div class="desc">Anthropic expanded Project Glasswing to 150+ new organizations across 15+ countries. Partners have found 10,000+ high/critical-severity flaws using Claude Mythos Preview. New: Claude Code Security (limited research preview) scans codebases and suggests targeted patches. Glasswing partners include critical infrastructure operators.</div>
+          <div class="date">Jun 2, 2026 · TechCrunch / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.anthropic.com/research/deprecation-updates-opus-3" target="_blank">⚠ Jun 15 Deadline: API Billing Split + Sonnet 4 &amp; Opus 4 Retire — 12 Days</a></div>
+          <div class="desc">Two breaking changes hit June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. Requests over 200K tokens on old IDs return errors. <strong>12 days remaining.</strong></div>
+          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 12 DAYS</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.160 — Shell Startup Write Prompt &amp; MCP Stateful Server Fixes (Jun 2)</a></div>
-          <div class="desc">v2.1.160 is live on npm today. Adds a user confirmation prompt before writing to shell startup files (<code>.zshenv</code>, <code>.zlogin</code>, <code>.bash_login</code>) — closes a persistent-command-injection surface. Fixes MCP stateful server handling and pinned background sessions restarting in-place on update. Run: <code>claude update</code></div>
-          <div class="date">Jun 2, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST TODAY</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: Programmatic API Splits from Subscription — 13 Days Remaining</a></div>
-          <div class="desc">Starting June 15, Anthropic separates programmatic API usage (Claude Code, SDK integrations, automation) from interactive subscription limits. Pro/Max users must add API credits or switch to pay-as-you-go before the deadline. <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> also retire June 15 — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>13 days remaining.</strong></div>
-          <div class="date">May 14, 2026 · The Register / Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 13 DAYS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://ghacks.net/2026/05/30/anthropic-releases-claude-opus-4-8-with-effort-controls-and-dynamic-workflows-for-claude-code/" target="_blank">Claude Opus 4.8 Released — 4× Better Code Quality, Dynamic Workflows, Fast Mode Price Cut (May 28)</a></div>
-          <div class="desc">Opus 4.8 is now the Claude Code default at <code>/effort xhigh</code>: 4× less likely to leave code flaws unflagged vs Opus 4.7, same $5/$25 per-million-token pricing, 1M context, 128K output. Dynamic Workflows (research preview) orchestrate hundreds of sub-agents per session. Fast Mode now at 2× standard rate for 2.5× the speed.</div>
-          <div class="date">May 28, 2026 · Anthropic / gHacks · <strong style="color:#16a34a;">NEW MODEL</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.158 — Auto Mode on Bedrock, Vertex &amp; Foundry (May 30)</a></div>
-          <div class="desc">Auto mode is now available on Amazon Bedrock, Google Vertex AI, and Foundry for both Opus 4.7 and Opus 4.8. Set <code>CLAUDE_CODE_ENABLE_AUTO_MODE=1</code> to opt in. Also fixes: --resume not reporting background subagents, Opus 4.8 thinking block modifications causing API errors.</div>
-          <div class="date">May 30, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.helpnetsecurity.com/2026/05/25/anthropic-security-compliance-integrations-claude/" target="_blank">Anthropic Adds 28 Enterprise Security &amp; Compliance Integrations for Claude (May 25)</a></div>
-          <div class="desc">Claude now connects with 28 security and compliance platforms via the new Claude Compliance API: Cloudflare, CrowdStrike, Datadog, Okta, Palo Alto Networks, Snyk, Wiz, Zscaler, Microsoft Purview, IBM Guardium, and more. Conversation content and activity logs flow directly into existing SIEM and DLP dashboards.</div>
-          <div class="date">May 25, 2026 · Help Net Security / SecurityWeek · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.theregister.com/security/2026/05/20/even-claude-agrees-hole-in-its-sandbox-was-real-and-dangerous/5243662" target="_blank">SOCKS5 Sandbox Bypass — Patched Silently in v2.1.90, No CVE Assigned (May 20)</a></div>
-          <div class="desc">All Claude Code releases v2.0.24–v2.1.89 (~5.5 months) were vulnerable to SOCKS5 hostname null-byte injection, bypassing the network allowlist entirely. Patched silently in v2.1.90 without a CVE. Rotate all credentials if you ran a wildcard allowlist on any credential-bearing system before upgrading.</div>
-          <div class="date">May 20, 2026 · The Register / oddguan.com · <strong style="color:#d97706;">⚠ SEE SECURITY ALERTS</strong></div>
+          <div class="desc">v2.1.160 added a confirmation prompt before writing to shell startup files (<code>.zshenv</code>, <code>.zlogin</code>, <code>.bash_login</code>, <code>~/.config/git/</code>) — closes a persistent-command-injection surface. <strong>Breaking behavioral change for unattended setups.</strong> Also fixes MCP stateful server handling and background session restart-in-place behavior. Update: <code>claude update</code></div>
+          <div class="date">Jun 2, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
     </div>
