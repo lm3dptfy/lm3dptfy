@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 3 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 4 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -382,7 +382,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.161</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.162</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -868,9 +868,9 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.161 — 22 Changes, Latest on npm (Jun 2)</a></div>
-          <div class="desc">v2.1.161 published June 2 with 22 changes. Builds on v2.1.160's shell-startup write prompt (closes persistent-command-injection surface), <code>/simplify</code> renamed to <code>/code-review</code>, automatic plugin loading from <code>.claude/skills</code>, and improved background agent session handling. Update: <code>claude update</code></div>
-          <div class="date">Jun 2, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.162 — Now Latest on npm (Jun 4)</a></div>
+          <div class="desc">v2.1.162 is now the latest on npm. Recent fixes across v2.1.160–162 include: shell startup write prompt added (closes persistent-command-injection surface), <code>/simplify</code> renamed to <code>/code-review</code> with correctness bug scanning at configurable effort levels and inline GitHub PR comment support, <code>--resume</code> fixes for background subagent visibility, fullscreen mode rendering fixes, and MCP stateful server handling improvements. Update: <code>claude update</code></div>
+          <div class="date">Jun 4, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/" target="_blank">Anthropic Confidentially Files for IPO — $965B Valuation, $47B Revenue Run Rate (Jun 1)</a></div>
@@ -878,24 +878,24 @@
           <div class="date">Jun 1, 2026 · Fortune / TechCrunch / CNBC · <strong style="color:#16a34a;">MAJOR NEWS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.techradar.com/news/live/claude-outage-june-2026" target="_blank">Claude Global Outage Jun 2 — Sub-Agent Infinite Loop Bug Drained Quotas in Minutes</a></div>
-          <div class="desc">A critical bug in Claude Code's sub-agent system caused agents to multiply exponentially in an infinite loop, spiking token consumption and taking down the Claude API, Console, and Claude Code platform for ~5h 45m (06:04–11:49 UTC). Users reported days-worth of usage allowances consumed in minutes. Issue identified and fixed June 2; monitoring ongoing. <a href="https://status.claude.com/" style="color:var(--teal-light);">status.claude.com</a></div>
-          <div class="date">Jun 2, 2026 · TechRadar / The National · <strong style="color:#d97706;">INCIDENT — RESOLVED</strong></div>
+          <div><a href="https://www.anthropic.com/research/deprecation-updates-opus-3" target="_blank">⚠ Jun 15 Deadline: API Billing Split + Sonnet 4 &amp; Opus 4 Retire — 11 Days</a></div>
+          <div class="desc">Two breaking changes hit June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. Requests over 200K tokens on old IDs return errors. <strong>11 days remaining.</strong></div>
+          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 11 DAYS</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.techradar.com/news/live/claude-outage-june-2026" target="_blank">Claude Global Outage Jun 2 — Sub-Agent Infinite Loop Bug Resolved</a></div>
+          <div class="desc">A critical bug in Claude Code's sub-agent system caused agents to multiply exponentially in an infinite loop, spiking token consumption and taking down the Claude API, Console, and Claude Code platform for ~5h 45m (06:04–11:49 UTC). Fully resolved; usage quotas were not restored. Monitor <a href="https://status.claude.com/" style="color:var(--teal-light);">status.claude.com</a> for any recurrence.</div>
+          <div class="date">Jun 2, 2026 · TechRadar · <strong style="color:#16a34a;">RESOLVED</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">MCP Tool Search — Lazy Loading Cuts Context Usage 95%, Opus 4.8 Now Default in Claude Code</a></div>
+          <div class="desc">Claude Code's new MCP Tool Search feature enables lazy loading for MCP servers, reducing context usage by up to 95% — allowing users to run many MCP servers simultaneously. Opus 4.8 with dynamic workflows (orchestrating tens to hundreds of background agents) is now available in Claude Code. Fast mode at 2.5× speed is 3× cheaper than previous models.</div>
+          <div class="date">Jun 2026 · Anthropic Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://techcrunch.com/2026/06/02/anthropic-scales-claude-mythos-to-critical-infrastructure-in-15-countries/" target="_blank">Project Glasswing Expanded — Claude Security for Codebase Scans, 150+ Orgs (Jun 2)</a></div>
           <div class="desc">Anthropic expanded Project Glasswing to 150+ new organizations across 15+ countries. Partners have found 10,000+ high/critical-severity flaws using Claude Mythos Preview. New: Claude Code Security (limited research preview) scans codebases and suggests targeted patches. Glasswing partners include critical infrastructure operators.</div>
           <div class="date">Jun 2, 2026 · TechCrunch / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.anthropic.com/research/deprecation-updates-opus-3" target="_blank">⚠ Jun 15 Deadline: API Billing Split + Sonnet 4 &amp; Opus 4 Retire — 12 Days</a></div>
-          <div class="desc">Two breaking changes hit June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. Requests over 200K tokens on old IDs return errors. <strong>12 days remaining.</strong></div>
-          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 12 DAYS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.160 — Shell Startup Write Prompt &amp; MCP Stateful Server Fixes (Jun 2)</a></div>
-          <div class="desc">v2.1.160 added a confirmation prompt before writing to shell startup files (<code>.zshenv</code>, <code>.zlogin</code>, <code>.bash_login</code>, <code>~/.config/git/</code>) — closes a persistent-command-injection surface. <strong>Breaking behavioral change for unattended setups.</strong> Also fixes MCP stateful server handling and background session restart-in-place behavior. Update: <code>claude update</code></div>
-          <div class="date">Jun 2, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
     </div>
