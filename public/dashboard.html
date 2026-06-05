@@ -189,6 +189,116 @@
 
   <div class="dash-grid">
 
+    <!-- VERSION STATUS -->
+    <div class="panel" id="versions-panel">
+      <div class="panel-label"><span class="section-icon">⚡</span> Version Status</div>
+      <div class="panel-desc">Installed vs. latest available.</div>
+      <div id="versions-body">
+        <div class="ver-row">
+          <span class="name">Claude Code</span>
+          <span class="nums">installed <span class="current">2.1.165</span> · latest <span class="latest">2.1.165</span></span>
+        </div>
+        <div class="ver-row">
+          <span class="name">Happy</span>
+          <span class="nums">installed <span class="current">1.1.8</span> · latest <span class="latest">1.1.8</span></span>
+        </div>
+        <div class="ver-row">
+          <span class="name">MemPalace</span>
+          <span class="nums">installed <span class="current">2.0.0</span> · latest <span class="latest">2.0.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">v3.3.6 on GitHub/PyPI</span></span>
+        </div>
+        <div class="ver-row">
+          <span class="name">OpenClaw</span>
+          <span class="nums">installed <span class="current">2026.6.1</span> · latest <span class="latest">2026.6.1</span></span>
+        </div>
+        <div class="ver-row">
+          <span class="name">Claude Model</span>
+          <span class="nums"><span class="current">claude-sonnet-4-6</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPDATE COMMANDS -->
+    <div class="panel full-width" id="commands-panel">
+      <div class="panel-label"><span class="section-icon">💻</span> Update Commands</div>
+      <div class="panel-desc">Click any block to copy to clipboard.</div>
+
+      <div class="cmd-block">
+        <div class="cmd-label">Update Claude Code</div>
+        <span class="copy-hint">click to copy</span>
+        <code>claude update</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check Claude Code version</div>
+        <span class="copy-hint">click to copy</span>
+        <code>claude --version</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check Claude Code latest on npm</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm info @anthropic-ai/claude-code dist-tags.latest</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Verify no axios in Claude Code (supply chain check)</div>
+        <span class="copy-hint">click to copy</span>
+        <code>grep -r "axios" /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/ 2>/dev/null | wc -l</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">List Claude Code dependencies</div>
+        <span class="copy-hint">click to copy</span>
+        <code>ls /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check GitHub security advisories for Claude Code</div>
+        <span class="copy-hint">click to copy</span>
+        <code>gh api repos/anthropics/claude-code/security-advisories --jq '.[0:5] | .[] | {cve_id, summary, severity, published_at}'</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Rotate Anthropic API key (open settings)</div>
+        <span class="copy-hint">click to copy</span>
+        <code>open https://console.anthropic.com/settings/keys</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">View all installed MCP servers</div>
+        <span class="copy-hint">click to copy</span>
+        <code>cat ~/.claude/settings.json | python3 -m json.tool | grep -A2 '"mcpServers"'</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">List Claude Code plugins</div>
+        <span class="copy-hint">click to copy</span>
+        <code>ls ~/.claude/plugins/ 2>/dev/null || echo "No plugins directory found"</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Audit Claude Code permissions (show current mode)</div>
+        <span class="copy-hint">click to copy</span>
+        <code>cat ~/.claude/settings.json | python3 -c "import json,sys; d=json.load(sys.stdin); print('Mode:', d.get('permissions',{}).get('defaultMode','not set'))"</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Update Happy</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm install -g happy</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check Happy version</div>
+        <span class="copy-hint">click to copy</span>
+        <code>happy --version</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Update MemPalace</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm install -g mempalace</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check MemPalace latest on npm</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm info mempalace dist-tags.latest</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check npm latest for Claude Code, Happy, and MemPalace</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm info @anthropic-ai/claude-code dist-tags.latest &amp;&amp; npm info happy dist-tags.latest &amp;&amp; npm info mempalace dist-tags.latest</code>
+      </div>
+    </div>
+
     <!-- SECURITY ALERTS -->
     <div class="panel full-width" id="security-panel">
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
@@ -199,7 +309,6 @@
           <div class="alert-title"><span class="badge warn">Advisory</span> Claude Code GitHub Action — Supply Chain Attack via Prompt Injection (Fixed claude-code-action v1.0.94) — Jun 4, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">RyotaK of GMO Flatt Security disclosed that the official <code>claude-code-action</code> GitHub Action incorrectly trusted any actor whose name ended in <code>[bot]</code>, allowing any registered GitHub App to trigger workflows. Attackers crafted issues containing indirect prompt injection payloads that caused Claude to extract GitHub Actions OIDC credentials and exchange them for write-access tokens — enabling arbitrary code injection into any public repository running the action. A secondary vector: the official example issue-triage workflow shipped with <code>allowed_non_write_users: "*"</code>, allowing anyone to trigger it, and Claude posted task summaries to the publicly visible workflow summary panel, creating an exfiltration channel. Anthropic rated the issues CVSS 7.8 and paid a bug bounty. Fixed in <code>claude-code-action@v1.0.94</code> — update your GitHub Actions workflows immediately. <a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" style="color:var(--teal-light);">The Hacker News</a> · <a href="https://cybersecuritynews.com/claude-codes-github-actions-vulnerability/" style="color:var(--teal-light);">CyberSecurityNews</a></div>
         </div>
-
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge fixed">Resolved</span> v2.1.160 — Shell Startup File Write Prompt Added — Jun 2, 2026</div>
@@ -381,33 +490,42 @@
       </div>
     </div>
 
-    <!-- VERSION STATUS -->
-    <div class="panel" id="versions-panel">
-      <div class="panel-label"><span class="section-icon">⚡</span> Version Status</div>
-      <div class="panel-desc">Installed vs. latest available.</div>
-      <div id="versions-body">
-        <div class="ver-row">
-          <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current">2.1.165</span> · latest <span class="latest">2.1.165</span></span>
+    <!-- AI NEWS -->
+    <div class="panel" id="news-panel">
+      <div class="panel-label"><span class="section-icon">📡</span> AI Headlines</div>
+      <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
+      <div id="news-body">
+        <div class="news-item">
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.165 &amp; v2.1.163 — Hooks additionalContext, /plugin list, requiredMinimumVersion (Jun 4–5)</a></div>
+          <div class="desc">v2.1.163 (Jun 4): <code>Stop</code>/<code>SubagentStop</code> hooks can now return <code>hookSpecificOutput.additionalContext</code> to keep the turn going without triggering a hook error. New <code>/plugin list</code> command with <code>--enabled</code>/<code>--disabled</code> filters. Added <code>requiredMinimumVersion</code>/<code>requiredMaximumVersion</code> managed settings so orgs can lock Claude Code to an approved range. "c to copy" shortcut in <code>/btw</code>. 15+ bug fixes including <code>$TMPDIR</code> regression from v2.1.154 and Windows OneDrive EEXIST errors. v2.1.165 (Jun 5): reliability improvements. Update: <code>claude update</code></div>
+          <div class="date">Jun 4–5, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST v2.1.165</strong></div>
         </div>
-        <div class="ver-row">
-          <span class="name">Happy</span>
-          <span class="nums">installed <span class="current">1.1.8</span> · latest <span class="latest">1.1.8</span></span>
+        <div class="news-item">
+          <div><a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" target="_blank">Claude Code GitHub Action Supply Chain Flaw — Fix in claude-code-action v1.0.94 (Jun 4)</a></div>
+          <div class="desc">RyotaK (GMO Flatt Security) disclosed that the official <code>claude-code-action</code> incorrectly trusted any <code>[bot]</code> actor, enabling any registered GitHub App to inject prompt payloads via crafted issues — exfiltrating OIDC secrets and gaining write access to repositories. CVSS 7.8. Fixed in <code>claude-code-action@v1.0.94</code>. Update your GitHub Actions workflows immediately. See Security Alerts panel for full details.</div>
+          <div class="date">Jun 4, 2026 · The Hacker News / CyberSecurityNews · <strong style="color:#d97706;">SECURITY — UPDATE REQUIRED</strong></div>
         </div>
-        <div class="ver-row">
-          <span class="name">MemPalace</span>
-          <span class="nums">installed <span class="current">2.0.0</span> · latest <span class="latest">2.0.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">v3.3.6 on GitHub/PyPI</span></span>
+        <div class="news-item">
+          <div><a href="https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/" target="_blank">Anthropic Confidentially Files for IPO — $965B Valuation (Jun 1)</a></div>
+          <div class="desc">Anthropic filed its IPO prospectus with the SEC on June 1, following a $65B Series H at a $965B valuation — surpassing OpenAI's $852B. Revenue run rate hit $47B in 2026. Claude and Claude Code power the business. A $1T+ debut is now considered the base case.</div>
+          <div class="date">Jun 1, 2026 · Fortune / TechCrunch / CNBC · <strong style="color:#16a34a;">MAJOR NEWS</strong></div>
         </div>
-        <div class="ver-row">
-          <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current">2026.6.1</span> · latest <span class="latest">2026.6.1</span></span>
+        <div class="news-item">
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: API Billing Split + Sonnet 4 &amp; Opus 4 Model IDs Retire — 10 Days</a></div>
+          <div class="desc">Two breaking changes hit June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>10 days remaining.</strong></div>
+          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 10 DAYS</strong></div>
         </div>
-        <div class="ver-row">
-          <span class="name">Claude Model</span>
-          <span class="nums"><span class="current">claude-sonnet-4-6</span></span>
+        <div class="news-item">
+          <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">MCP Tool Search — Lazy Loading Cuts Context Usage 95%, Opus 4.8 Now Default in Claude Code</a></div>
+          <div class="desc">Claude Code's new MCP Tool Search feature enables lazy loading for MCP servers, reducing context usage by up to 95% — allowing users to run many MCP servers simultaneously without blowing context budgets. Opus 4.8 with Dynamic Workflows (orchestrating tens to hundreds of background agents) is now available as the default engine in Claude Code at 2.5× speed.</div>
+          <div class="date">Jun 2026 · Anthropic Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://techcrunch.com/2026/06/02/anthropic-scales-claude-mythos-to-critical-infrastructure-in-15-countries/" target="_blank">Project Glasswing Expanded — Claude Security Scanning for 150+ Orgs &amp; Critical Infrastructure (Jun 2)</a></div>
+          <div class="desc">Anthropic expanded Project Glasswing to 150+ new organizations across 15+ countries. Partners have found 10,000+ high/critical-severity flaws using Claude Mythos Preview. New: Claude Code Security (limited research preview) scans codebases and suggests targeted patches. Glasswing partners include critical infrastructure operators in energy, finance, and healthcare.</div>
+          <div class="date">Jun 2, 2026 · TechCrunch / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
-    </div>
 
     <!-- OPENCLAW NEWS -->
     <div class="panel" id="openclaw-panel">
@@ -790,126 +908,6 @@
         </div>
       </div>
     </div>
-
-    <!-- UPDATE COMMANDS -->
-    <div class="panel full-width" id="commands-panel">
-      <div class="panel-label"><span class="section-icon">💻</span> Update Commands</div>
-      <div class="panel-desc">Click any block to copy to clipboard.</div>
-
-      <div class="cmd-block">
-        <div class="cmd-label">Update Claude Code</div>
-        <span class="copy-hint">click to copy</span>
-        <code>claude update</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Check Claude Code version</div>
-        <span class="copy-hint">click to copy</span>
-        <code>claude --version</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Check Claude Code latest on npm</div>
-        <span class="copy-hint">click to copy</span>
-        <code>npm info @anthropic-ai/claude-code dist-tags.latest</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Verify no axios in Claude Code (supply chain check)</div>
-        <span class="copy-hint">click to copy</span>
-        <code>grep -r "axios" /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/ 2>/dev/null | wc -l</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">List Claude Code dependencies</div>
-        <span class="copy-hint">click to copy</span>
-        <code>ls /opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/node_modules/</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Check GitHub security advisories for Claude Code</div>
-        <span class="copy-hint">click to copy</span>
-        <code>gh api repos/anthropics/claude-code/security-advisories --jq '.[0:5] | .[] | {cve_id, summary, severity, published_at}'</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Rotate Anthropic API key (open settings)</div>
-        <span class="copy-hint">click to copy</span>
-        <code>open https://console.anthropic.com/settings/keys</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">View all installed MCP servers</div>
-        <span class="copy-hint">click to copy</span>
-        <code>cat ~/.claude/settings.json | python3 -m json.tool | grep -A2 '"mcpServers"'</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">List Claude Code plugins</div>
-        <span class="copy-hint">click to copy</span>
-        <code>ls ~/.claude/plugins/ 2>/dev/null || echo "No plugins directory found"</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Audit Claude Code permissions (show current mode)</div>
-        <span class="copy-hint">click to copy</span>
-        <code>cat ~/.claude/settings.json | python3 -c "import json,sys; d=json.load(sys.stdin); print('Mode:', d.get('permissions',{}).get('defaultMode','not set'))"</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Update Happy</div>
-        <span class="copy-hint">click to copy</span>
-        <code>npm install -g happy</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Check Happy version</div>
-        <span class="copy-hint">click to copy</span>
-        <code>happy --version</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Update MemPalace</div>
-        <span class="copy-hint">click to copy</span>
-        <code>npm install -g mempalace</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Check MemPalace latest on npm</div>
-        <span class="copy-hint">click to copy</span>
-        <code>npm info mempalace dist-tags.latest</code>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label">Check npm latest for Claude Code, Happy, and MemPalace</div>
-        <span class="copy-hint">click to copy</span>
-        <code>npm info @anthropic-ai/claude-code dist-tags.latest &amp;&amp; npm info happy dist-tags.latest &amp;&amp; npm info mempalace dist-tags.latest</code>
-      </div>
-    </div>
-
-    <!-- AI NEWS -->
-    <div class="panel" id="news-panel">
-      <div class="panel-label"><span class="section-icon">📡</span> AI Headlines</div>
-      <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
-      <div id="news-body">
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.165 &amp; v2.1.163 — Hooks additionalContext, /plugin list, requiredMinimumVersion (Jun 4–5)</a></div>
-          <div class="desc">v2.1.163 (Jun 4): <code>Stop</code>/<code>SubagentStop</code> hooks can now return <code>hookSpecificOutput.additionalContext</code> to keep the turn going without triggering a hook error. New <code>/plugin list</code> command with <code>--enabled</code>/<code>--disabled</code> filters. Added <code>requiredMinimumVersion</code>/<code>requiredMaximumVersion</code> managed settings so orgs can lock Claude Code to an approved range. "c to copy" shortcut in <code>/btw</code>. 15+ bug fixes including <code>$TMPDIR</code> regression from v2.1.154 and Windows OneDrive EEXIST errors. v2.1.165 (Jun 5): reliability improvements. Update: <code>claude update</code></div>
-          <div class="date">Jun 4–5, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST v2.1.165</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" target="_blank">Claude Code GitHub Action Supply Chain Flaw — Fix in claude-code-action v1.0.94 (Jun 4)</a></div>
-          <div class="desc">RyotaK (GMO Flatt Security) disclosed that the official <code>claude-code-action</code> incorrectly trusted any <code>[bot]</code> actor, enabling any registered GitHub App to inject prompt payloads via crafted issues — exfiltrating OIDC secrets and gaining write access to repositories. CVSS 7.8. Fixed in <code>claude-code-action@v1.0.94</code>. Update your GitHub Actions workflows immediately. See Security Alerts panel for full details.</div>
-          <div class="date">Jun 4, 2026 · The Hacker News / CyberSecurityNews · <strong style="color:#d97706;">SECURITY — UPDATE REQUIRED</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/" target="_blank">Anthropic Confidentially Files for IPO — $965B Valuation (Jun 1)</a></div>
-          <div class="desc">Anthropic filed its IPO prospectus with the SEC on June 1, following a $65B Series H at a $965B valuation — surpassing OpenAI's $852B. Revenue run rate hit $47B in 2026. Claude and Claude Code power the business. A $1T+ debut is now considered the base case.</div>
-          <div class="date">Jun 1, 2026 · Fortune / TechCrunch / CNBC · <strong style="color:#16a34a;">MAJOR NEWS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: API Billing Split + Sonnet 4 &amp; Opus 4 Model IDs Retire — 10 Days</a></div>
-          <div class="desc">Two breaking changes hit June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>10 days remaining.</strong></div>
-          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 10 DAYS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">MCP Tool Search — Lazy Loading Cuts Context Usage 95%, Opus 4.8 Now Default in Claude Code</a></div>
-          <div class="desc">Claude Code's new MCP Tool Search feature enables lazy loading for MCP servers, reducing context usage by up to 95% — allowing users to run many MCP servers simultaneously without blowing context budgets. Opus 4.8 with Dynamic Workflows (orchestrating tens to hundreds of background agents) is now available as the default engine in Claude Code at 2.5× speed.</div>
-          <div class="date">Jun 2026 · Anthropic Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://techcrunch.com/2026/06/02/anthropic-scales-claude-mythos-to-critical-infrastructure-in-15-countries/" target="_blank">Project Glasswing Expanded — Claude Security Scanning for 150+ Orgs &amp; Critical Infrastructure (Jun 2)</a></div>
-          <div class="desc">Anthropic expanded Project Glasswing to 150+ new organizations across 15+ countries. Partners have found 10,000+ high/critical-severity flaws using Claude Mythos Preview. New: Claude Code Security (limited research preview) scans codebases and suggests targeted patches. Glasswing partners include critical infrastructure operators in energy, finance, and healthcare.</div>
-          <div class="date">Jun 2, 2026 · TechCrunch / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-      </div>
-
 
     <!-- LEARNING RESOURCES -->
     <div class="panel" id="learning-panel">
