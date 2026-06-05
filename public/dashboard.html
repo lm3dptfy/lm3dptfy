@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 4 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 5 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -194,6 +194,12 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge warn">Advisory</span> Claude Code GitHub Action — Supply Chain Attack via Prompt Injection (Fixed claude-code-action v1.0.94) — Jun 4, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">RyotaK of GMO Flatt Security disclosed that the official <code>claude-code-action</code> GitHub Action incorrectly trusted any actor whose name ended in <code>[bot]</code>, allowing any registered GitHub App to trigger workflows. Attackers crafted issues containing indirect prompt injection payloads that caused Claude to extract GitHub Actions OIDC credentials and exchange them for write-access tokens — enabling arbitrary code injection into any public repository running the action. A secondary vector: the official example issue-triage workflow shipped with <code>allowed_non_write_users: "*"</code>, allowing anyone to trigger it, and Claude posted task summaries to the publicly visible workflow summary panel, creating an exfiltration channel. Anthropic rated the issues CVSS 7.8 and paid a bug bounty. Fixed in <code>claude-code-action@v1.0.94</code> — update your GitHub Actions workflows immediately. <a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" style="color:var(--teal-light);">The Hacker News</a> · <a href="https://cybersecuritynews.com/claude-codes-github-actions-vulnerability/" style="color:var(--teal-light);">CyberSecurityNews</a></div>
+        </div>
+
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge fixed">Resolved</span> v2.1.160 — Shell Startup File Write Prompt Added — Jun 2, 2026</div>
@@ -382,7 +388,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.162</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
+          <span class="nums">version <span class="current stale">2.1.92</span> → <span class="latest">2.1.165</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available — run <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -394,7 +400,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.6.1-beta.2</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available · alpha.3 pre-release</span></span>
+          <span class="nums">version <span class="current stale">2026.4.2</span> → <span class="latest">2026.6.2</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">⚠ update available</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -408,6 +414,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.2 — Safer Plugin Installs, Channel Reliability &amp; Runtime Recovery (Jun 5)</a></div>
+          <div class="desc">New stable: plugin and skill installs now use an operator install policy (replacing the old dangerous-code scanner), with clearer CLI, ClawHub, and doctor surfaces. Channel reliability hardened across Telegram, Feishu, Discord, WhatsApp, and outbound delivery. Agents and CLI-backed runtimes recover more cleanly from interrupted tool calls, stale session bindings, and compaction handoffs. Mobile delivery steadier across iOS realtime Talk, Slack, Discord, Teams, Google Chat, and Meet. Windows Hub promoted with verified release assets and refreshed setup guidance.</div>
+          <div class="date">Jun 5, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.1-alpha.3 — Agent Recovery, Plugin Timers &amp; Workboard Orchestration (Jun 3)</a></div>
           <div class="desc">Latest pre-release alpha: agents and CLI-backed runtimes recover more cleanly from interrupted tool calls, stale session bindings, and compaction handoffs. Provider and plugin requests now bound more timers and retry paths before they can hang a run. Workboard adds orchestration primitives and agent coordination tools for multi-agent planning. iOS adds hosted push relay defaults and guarded WebSocket ping for reliable mobile sessions.</div>
@@ -868,43 +879,48 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.162 — Now Latest on npm (Jun 4)</a></div>
-          <div class="desc">v2.1.162 is now the latest on npm. Recent fixes across v2.1.160–162 include: shell startup write prompt added (closes persistent-command-injection surface), <code>/simplify</code> renamed to <code>/code-review</code> with correctness bug scanning at configurable effort levels and inline GitHub PR comment support, <code>--resume</code> fixes for background subagent visibility, fullscreen mode rendering fixes, and MCP stateful server handling improvements. Update: <code>claude update</code></div>
-          <div class="date">Jun 4, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.165 &amp; v2.1.163 — Hooks additionalContext, /plugin list, requiredMinimumVersion (Jun 4–5)</a></div>
+          <div class="desc">v2.1.163 (Jun 4): <code>Stop</code>/<code>SubagentStop</code> hooks can now return <code>hookSpecificOutput.additionalContext</code> to keep the turn going without triggering a hook error. New <code>/plugin list</code> command with <code>--enabled</code>/<code>--disabled</code> filters. Added <code>requiredMinimumVersion</code>/<code>requiredMaximumVersion</code> managed settings so orgs can lock Claude Code to an approved range. "c to copy" shortcut in <code>/btw</code>. 15+ bug fixes including <code>$TMPDIR</code> regression from v2.1.154 and Windows OneDrive EEXIST errors. v2.1.165 (Jun 5): reliability improvements. Update: <code>claude update</code></div>
+          <div class="date">Jun 4–5, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST v2.1.165</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/" target="_blank">Anthropic Confidentially Files for IPO — $965B Valuation, $47B Revenue Run Rate (Jun 1)</a></div>
-          <div class="desc">Anthropic filed its IPO prospectus with the SEC on June 1, following a $65B Series H at a $965B valuation — surpassing OpenAI's $852B. Revenue run rate hit $47B in 2026, up from $10B last year. A $1T+ debut is now considered the base case. Claude and Claude Code power the business. <a href="https://techcrunch.com/2026/06/01/anthropic-files-to-go-public/" style="color:var(--teal-light);">TechCrunch</a> · <a href="https://www.cnbc.com/2026/06/01/anthropic-ipo-s1-prospectus.html" style="color:var(--teal-light);">CNBC</a></div>
+          <div><a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" target="_blank">Claude Code GitHub Action Supply Chain Flaw — Fix in claude-code-action v1.0.94 (Jun 4)</a></div>
+          <div class="desc">RyotaK (GMO Flatt Security) disclosed that the official <code>claude-code-action</code> incorrectly trusted any <code>[bot]</code> actor, enabling any registered GitHub App to inject prompt payloads via crafted issues — exfiltrating OIDC secrets and gaining write access to repositories. CVSS 7.8. Fixed in <code>claude-code-action@v1.0.94</code>. Update your GitHub Actions workflows immediately. See Security Alerts panel for full details.</div>
+          <div class="date">Jun 4, 2026 · The Hacker News / CyberSecurityNews · <strong style="color:#d97706;">SECURITY — UPDATE REQUIRED</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/" target="_blank">Anthropic Confidentially Files for IPO — $965B Valuation (Jun 1)</a></div>
+          <div class="desc">Anthropic filed its IPO prospectus with the SEC on June 1, following a $65B Series H at a $965B valuation — surpassing OpenAI's $852B. Revenue run rate hit $47B in 2026. Claude and Claude Code power the business. A $1T+ debut is now considered the base case.</div>
           <div class="date">Jun 1, 2026 · Fortune / TechCrunch / CNBC · <strong style="color:#16a34a;">MAJOR NEWS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/research/deprecation-updates-opus-3" target="_blank">⚠ Jun 15 Deadline: API Billing Split + Sonnet 4 &amp; Opus 4 Retire — 11 Days</a></div>
-          <div class="desc">Two breaking changes hit June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. Requests over 200K tokens on old IDs return errors. <strong>11 days remaining.</strong></div>
-          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 11 DAYS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.techradar.com/news/live/claude-outage-june-2026" target="_blank">Claude Global Outage Jun 2 — Sub-Agent Infinite Loop Bug Resolved</a></div>
-          <div class="desc">A critical bug in Claude Code's sub-agent system caused agents to multiply exponentially in an infinite loop, spiking token consumption and taking down the Claude API, Console, and Claude Code platform for ~5h 45m (06:04–11:49 UTC). Fully resolved; usage quotas were not restored. Monitor <a href="https://status.claude.com/" style="color:var(--teal-light);">status.claude.com</a> for any recurrence.</div>
-          <div class="date">Jun 2, 2026 · TechRadar · <strong style="color:#16a34a;">RESOLVED</strong></div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: API Billing Split + Sonnet 4 &amp; Opus 4 Model IDs Retire — 10 Days</a></div>
+          <div class="desc">Two breaking changes hit June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>10 days remaining.</strong></div>
+          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 10 DAYS</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">MCP Tool Search — Lazy Loading Cuts Context Usage 95%, Opus 4.8 Now Default in Claude Code</a></div>
-          <div class="desc">Claude Code's new MCP Tool Search feature enables lazy loading for MCP servers, reducing context usage by up to 95% — allowing users to run many MCP servers simultaneously. Opus 4.8 with dynamic workflows (orchestrating tens to hundreds of background agents) is now available in Claude Code. Fast mode at 2.5× speed is 3× cheaper than previous models.</div>
+          <div class="desc">Claude Code's new MCP Tool Search feature enables lazy loading for MCP servers, reducing context usage by up to 95% — allowing users to run many MCP servers simultaneously without blowing context budgets. Opus 4.8 with Dynamic Workflows (orchestrating tens to hundreds of background agents) is now available as the default engine in Claude Code at 2.5× speed.</div>
           <div class="date">Jun 2026 · Anthropic Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://techcrunch.com/2026/06/02/anthropic-scales-claude-mythos-to-critical-infrastructure-in-15-countries/" target="_blank">Project Glasswing Expanded — Claude Security for Codebase Scans, 150+ Orgs (Jun 2)</a></div>
-          <div class="desc">Anthropic expanded Project Glasswing to 150+ new organizations across 15+ countries. Partners have found 10,000+ high/critical-severity flaws using Claude Mythos Preview. New: Claude Code Security (limited research preview) scans codebases and suggests targeted patches. Glasswing partners include critical infrastructure operators.</div>
+          <div><a href="https://techcrunch.com/2026/06/02/anthropic-scales-claude-mythos-to-critical-infrastructure-in-15-countries/" target="_blank">Project Glasswing Expanded — Claude Security Scanning for 150+ Orgs &amp; Critical Infrastructure (Jun 2)</a></div>
+          <div class="desc">Anthropic expanded Project Glasswing to 150+ new organizations across 15+ countries. Partners have found 10,000+ high/critical-severity flaws using Claude Mythos Preview. New: Claude Code Security (limited research preview) scans codebases and suggests targeted patches. Glasswing partners include critical infrastructure operators in energy, finance, and healthcare.</div>
           <div class="date">Jun 2, 2026 · TechCrunch / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
-    </div>
+
 
     <!-- LEARNING RESOURCES -->
     <div class="panel" id="learning-panel">
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><a href="https://flatt.tech/research/posts/poisoning-claude-code-one-github-issue-to-break-the-supply-chain/" target="_blank">Poisoning Claude Code: One GitHub Issue to Break the Supply Chain — GMO Flatt Security (Jun 4)</a></div>
+          <div class="desc">Deep technical write-up by RyotaK of GMO Flatt Security detailing how a single crafted GitHub issue can trigger indirect prompt injection in Claude Code GitHub Actions, extract OIDC credentials, and gain write access to repositories. Essential reading for any team using <code>claude-code-action</code> in their CI/CD pipeline. Covers the full attack chain, CVSS 7.8 rating, and remediations in <code>claude-code-action@v1.0.94</code>.</div>
+          <div class="date">Jun 4, 2026 · flatt.tech · <strong style="color:#16a34a;">NEW — ESSENTIAL</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://claudelab.net/en/articles/claude-code/claude-code-hooks-automation-master-guide" target="_blank">Claude Lab: 18 Hook Events &amp; Production Workflow Automation — Master Guide</a></div>
           <div class="desc">Comprehensive reference covering all hook event types in Claude Code: PreToolUse, PostToolUse, SessionStart, Stop, SubagentStop. Covers command hooks, prompt hooks (delegate logic to Claude Haiku), and agent hooks (spawn multi-step subagents). Includes production patterns for auto-formatting, deny-rule pre-flight checks, and automated code review workflows.</div>
@@ -924,11 +940,6 @@
           <div><a href="https://code.claude.com/docs/en/security" target="_blank">Claude Code Security — Official Anthropic Guidance (Updated May 2026)</a></div>
           <div class="desc">Anthropic's updated official security docs: disable all hooks by default, explicitly allowlist only vetted MCP servers, use deny rules to block <code>curl</code>/<code>fetch</code>/<code>.env</code> access, keep transcripts 7–14 days, run Claude Code in a VM or container, never run as root. Updated alongside the new security-guidance plugin release on May 27.</div>
           <div class="date">May 27, 2026 · code.claude.com · <strong style="color:#16a34a;">UPDATED</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.datacamp.com/tutorial/claude-code-hooks" target="_blank">Claude Code Hooks: A Practical Guide to Workflow Automation — DataCamp</a></div>
-          <div class="desc">Hands-on tutorial covering all 27 hook events (as of April 2026), including the new prompt-type hooks that delegate decisions to Claude Haiku and agent hooks that spawn subagents with up to 50 tool-use turns. Includes real-world patterns: auto-formatting on file save, deny-rule pre-flight checks, and session-start environment validation.</div>
-          <div class="date">May 2026 · DataCamp · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.backslash.security/blog/claude-code-security-best-practices" target="_blank">Claude Code Security Best Practices — Backslash Security</a></div>
