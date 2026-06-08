@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 7 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 8 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -208,7 +208,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.6.2</span></span>
+          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.6.5</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -496,33 +496,33 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.168 — New npm Latest (Jun 7)</a></div>
-          <div class="desc">v2.1.168 is now the latest on npm — up from v2.1.167 shipped yesterday. Adds fallback model support, broader deny-rule glob patterns, stronger cross-session message security, and improved thinking controls. Previous notable changes in v2.1.163+: <code>Stop</code>/<code>SubagentStop</code> hooks can now return <code>hookSpecificOutput.additionalContext</code>; new <code>/plugin list --enabled/--disabled</code> command; <code>requiredMinimumVersion</code>/<code>requiredMaximumVersion</code> org lock settings; JetBrains terminal flicker fix. Update: <code>claude update</code></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.168 — Fallback Models, Deny-Rule Glob Support &amp; Cross-Session Security (Jun 7)</a></div>
+          <div class="desc">v2.1.168 is the current latest on npm. Key additions: <code>fallbackModel</code> settings supporting up to three fallback models, broader glob pattern support in deny rules, hardened cross-session message security, <code>/plugin list --enabled/--disabled</code> command, and <code>requiredMinimumVersion</code>/<code>requiredMaximumVersion</code> org lock settings. Fix in v2.1.163: Opus 4.8 thinking block errors resolved. Update: <code>claude update</code></div>
           <div class="date">Jun 7, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST v2.1.168</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://code.claude.com/docs/en/vs-code" target="_blank">Claude Code VS Code Extension v0.17.1 — Auto Node.js Detection Fixes Startup Error (Jun 6)</a></div>
-          <div class="desc">Version 0.17.1 of the Claude Code VS Code extension (released Jun 6) adds automatic Node.js detection that reads your shell's real PATH, fixing the persistent "Node.js not found" error on startup for users with non-standard or nvm-managed Node installs. The extension now leads the VS Code Marketplace with 5.2M installs — up from 4.9M for Codex. Update via the Extensions panel in VS Code.</div>
-          <div class="date">Jun 6, 2026 · VS Code Marketplace / Claude Code Docs · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.5 — Parallel Web Search, Stronger Channel Safety &amp; MCP Recovery (Jun 8)</a></div>
+          <div class="desc">New stable release: Parallel web search support added, stronger channel safety hardening, richer MCP and Anthropic provider recovery, improved Google Vertex and Matrix handling, more durable auth and plugin installs, and safer upgrade, service, and CI paths. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Jun 8, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE TODAY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.microsoft.com/en-us/security/blog/2026/06/05/securing-ci-cd-in-agentic-world-claude-code-github-action-case/" target="_blank">Microsoft Security Blog: Securing CI/CD in the Agentic World — Claude Code GitHub Action as Case Study (Jun 5)</a></div>
-          <div class="desc">Microsoft's Security Blog published a deep analysis using the Claude Code GitHub Action supply chain attack (Jun 4) as a case study for the "Rule of Two": an AI workflow should never simultaneously hold (1) untrusted input processing, (2) access to secrets, and (3) the ability to change state externally. Essential reading for any team using Claude Code in CI/CD pipelines.</div>
-          <div class="date">Jun 5, 2026 · Microsoft Security Blog · <strong style="color:#16a34a;">NEW — MUST READ</strong></div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ 7 Days: API Billing Split &amp; claude-sonnet-4-20250514 / claude-opus-4-20250514 Model IDs Retire — Jun 15</a></div>
+          <div class="desc">Two breaking changes on June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>7 days remaining.</strong></div>
+          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 7 DAYS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ Jun 15 Deadline: API Billing Split + Sonnet 4 &amp; Opus 4 Model IDs Retire — 8 Days</a></div>
-          <div class="desc">Two breaking changes hit June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>8 days remaining.</strong></div>
-          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 8 DAYS</strong></div>
+          <div><a href="https://9to5mac.com/2026/05/28/anthropic-upgrades-claude-with-new-opus-4-8-model-heres-whats-new/" target="_blank">Anthropic Upgrades Claude with Opus 4.8 — Stronger Coding, Reasoning &amp; 1M Context (May 28)</a></div>
+          <div class="desc">Claude Opus 4.8 improves over Opus 4.7 in coding, agentic skills, and reasoning at the same price. Now the <code>/effort xhigh</code> default in Claude Code (1M context, 128K output, extended thinking opt-in). Anthropic also deprecated <code>claude-opus-4-1-20250805</code> — retirement August 5, 2026.</div>
+          <div class="date">May 28, 2026 · 9to5Mac / Anthropic · <strong style="color:#16a34a;">NEW MODEL</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.2 Stable — Safer Plugin Installs &amp; Channel Reliability (Jun 5)</a></div>
-          <div class="desc">OpenClaw ships 2026.6.2 stable: plugin and skill installs now use an operator install policy (replacing the old dangerous-code scanner), hardened channel delivery across Telegram, Feishu, Discord, and WhatsApp, cleaner agent/CLI recovery from interrupted tool calls, and improved mobile delivery across iOS, Slack, Teams, and Google Chat. Update via your OpenClaw update mechanism.</div>
-          <div class="date">Jun 5, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE</strong></div>
+          <div><a href="https://www.microsoft.com/en-us/security/blog/2026/06/05/securing-ci-cd-in-agentic-world-claude-code-github-action-case/" target="_blank">Microsoft Security Blog: Securing CI/CD in the Agentic World — Claude Code Case Study (Jun 5)</a></div>
+          <div class="desc">Microsoft's Security Blog analyzes the Claude Code GitHub Action supply chain attack as a case study for the "Rule of Two": no AI workflow should simultaneously process untrusted input, hold secrets, and change external state. Must-read for any team running Claude Code in CI/CD.</div>
+          <div class="date">Jun 5, 2026 · Microsoft Security Blog · <strong style="color:#16a34a;">MUST READ</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/" target="_blank">Anthropic Confidentially Files for IPO — $965B Valuation (Jun 1)</a></div>
-          <div class="desc">Anthropic filed its IPO prospectus with the SEC on June 1, following a $65B Series H at a $965B valuation — surpassing OpenAI's $852B. Revenue run rate hit $47B in 2026. Claude and Claude Code power the business. A $1T+ debut is now considered the base case.</div>
+          <div class="desc">Anthropic filed its IPO prospectus with the SEC on June 1, following a $65B Series H at a $965B valuation. Revenue run rate hit $47B in 2026. Claude and Claude Code are core revenue drivers. A $1T+ market debut is considered the base case.</div>
           <div class="date">Jun 1, 2026 · Fortune / TechCrunch / CNBC · <strong style="color:#16a34a;">MAJOR NEWS</strong></div>
         </div>
       </div>
@@ -532,6 +532,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.5 — Parallel Web Search, Stronger Channel Safety &amp; MCP Recovery (Jun 8)</a></div>
+          <div class="desc">Broad stable release: new Parallel web search support, stronger channel safety hardening, richer MCP and Anthropic provider recovery, improved Google Vertex and Matrix handling, more durable auth and plugin installs, and safer upgrade, service, and CI paths. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Jun 8, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.2 — Safer Plugin Installs, Channel Reliability &amp; Runtime Recovery (Jun 5)</a></div>
           <div class="desc">New stable: plugin and skill installs now use an operator install policy (replacing the old dangerous-code scanner), with clearer CLI, ClawHub, and doctor surfaces. Channel reliability hardened across Telegram, Feishu, Discord, WhatsApp, and outbound delivery. Agents and CLI-backed runtimes recover more cleanly from interrupted tool calls, stale session bindings, and compaction handoffs. Mobile delivery steadier across iOS realtime Talk, Slack, Discord, Teams, Google Chat, and Meet. Windows Hub promoted with verified release assets and refreshed setup guidance.</div>
