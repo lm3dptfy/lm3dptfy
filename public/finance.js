@@ -23,30 +23,81 @@ document.querySelectorAll('.tab[data-tab]').forEach((btn) => {
 });
 
 // ---- Budget ----
+const TYPE_OPTS = ['income', 'bill', 'debt', 'spending'];
+const cap = (s) => s[0].toUpperCase() + s.slice(1);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+let lastRules = [];
+
 async function refreshBudget() {
   const d = await api('/budget');
   if (!d) return;
   const s = d.summary;
+  lastRules = d.typeRules || [];
   $('safeToday').textContent = money(s.safeToSpendPerDay);
   $('safeSub').textContent = `${money(s.safeToSpendRemaining)} left for ${s.daysLeft} day(s) in ${s.month}`;
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
-  $('income').value = d.settings.expectedMonthlyIncome || '';
+  $('tBill').textContent = money(s.byType.bill);
+  $('tDebt').textContent = money(s.byType.debt);
+  $('tSpend').textContent = money(s.byType.spending);
   $('savings').value = d.settings.savingsTargetMonthly || '';
   $('recs').innerHTML = d.recommendations.length
     ? d.recommendations.map((x) => `<li class="rec ${x.type}">${x.message}</li>`).join('')
     : '<li>All good — nothing to flag.</li>';
   $('subs').innerHTML = d.recurring.filter((x) => x.kind === 'expense')
-    .map((x) => `<li>${x.description} — ${money(Math.abs(x.amount))}/mo (${x.occurrences}x)</li>`).join('')
+    .map((x) => `<li>${esc(x.description)} — ${money(Math.abs(x.amount))}/mo (${x.occurrences}x)</li>`).join('')
     || '<li>None detected yet.</li>';
-  const totals = {};
-  for (const t of d.transactions) if (t.amount < 0) totals[t.category] = (totals[t.category] || 0) - t.amount;
-  const labels = Object.keys(totals);
-  setChart('catChart', { type: 'bar', data: { labels, datasets: [{ label: 'Spent', data: labels.map((l) => totals[l].toFixed(2)) }] }, options: { plugins: { legend: { display: false } } } });
+  setChart('catChart', {
+    type: 'bar',
+    data: { labels: ['Bills', 'Debt', 'Spending'], datasets: [{ data: [s.byType.bill, s.byType.debt, s.byType.spending], backgroundColor: ['#f59e0b', '#f87171', '#60a5fa'] }] },
+    options: { plugins: { legend: { display: false } } },
+  });
+  renderTxns(d.transactions);
+  renderRules(lastRules);
 }
 
+function renderTxns(txns) {
+  $('txnList').innerHTML = txns.slice(0, 200).map((t) => {
+    const opts = TYPE_OPTS.map((ty) => `<option value="${ty}" ${t.type === ty ? 'selected' : ''}>${cap(ty)}</option>`).join('');
+    const amt = (t.amount < 0 ? '-' : '+') + '$' + Math.abs(t.amount).toFixed(2);
+    return `<div class="txn-row" data-desc="${esc(t.description)}">
+      <span class="txn-date">${esc(t.date)}</span>
+      <span class="txn-desc" title="${esc(t.description)}">${esc(t.description)}</span>
+      <span class="txn-amt ${t.amount < 0 ? 'neg' : 'pos'}">${amt}</span>
+      <select class="txn-type">${opts}</select>
+    </div>`;
+  }).join('') || '<p class="sub">No transactions yet — connect your bank and sync.</p>';
+  $('txnList').querySelectorAll('.txn-row').forEach((row) => {
+    row.querySelector('.txn-type').addEventListener('change', async (e) => {
+      await api('/learn-type', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ description: row.dataset.desc, type: e.target.value }) });
+      refreshBudget();
+    });
+  });
+}
+
+function renderRules(rules) {
+  $('rulesList').innerHTML = rules.length
+    ? rules.map((r, i) => `<div class="rule-row"><span class="txn-desc">contains "<strong>${esc(r.match)}</strong>" → ${esc(r.type)}</span><button class="rule-del" data-i="${i}">✕</button></div>`).join('')
+    : '<p class="sub">No rules yet.</p>';
+  $('rulesList').querySelectorAll('.rule-del').forEach((b) => {
+    b.onclick = () => saveRules(rules.filter((_, i) => i !== Number(b.dataset.i)));
+  });
+}
+
+async function saveRules(rules) {
+  const d = await api('/type-rules', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rules }) });
+  if (d) refreshBudget();
+}
+
+$('ruleAdd').onclick = () => {
+  const match = $('ruleMatch').value.trim();
+  if (!match) return;
+  $('ruleMatch').value = '';
+  saveRules([...lastRules, { match: match.toLowerCase(), type: $('ruleType').value }]);
+};
+
 $('saveSettings').onclick = async () => {
-  await api('/settings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ expectedMonthlyIncome: Number($('income').value), savingsTargetMonthly: Number($('savings').value) }) });
+  await api('/settings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ savingsTargetMonthly: Number($('savings').value) }) });
   refreshBudget();
 };
 

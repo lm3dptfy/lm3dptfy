@@ -11,6 +11,7 @@ const DEFAULTS = {
     settings: { currentAge: 0, retirementAge: 0, monthlyContribution: null, goalAmount: null },
     snapshots: [],
   },
+  typeRules: [],
 };
 
 function createStore(path) {
@@ -24,6 +25,7 @@ function createStore(path) {
         ...parsed,
         simplefin: { ...base.simplefin, ...(parsed.simplefin || {}) },
         retirement: { ...base.retirement, ...(parsed.retirement || {}) },
+        typeRules: Array.isArray(parsed.typeRules) ? parsed.typeRules : [],
       };
     } catch {
       return structuredClone(DEFAULTS);
@@ -54,6 +56,8 @@ function createStore(path) {
       data.retirement.snapshots.sort((a, b) => a.date.localeCompare(b.date));
       persist();
     },
+    getTypeRules: () => data.typeRules,
+    setTypeRules: (rules) => { data.typeRules = rules; persist(); },
   };
 }
 

@@ -4,7 +4,7 @@
 const { createStore } = require('./store');
 const { claimAccessUrl, fetchSimplefinAccounts, simplefinToTransactions } = require('./simplefin');
 const {
-  parseCsv, normalizeTransactions, categorizeAll, DEFAULT_RULES, detectRecurring,
+  parseCsv, normalizeTransactions, typeAll, learnRule, sanitizeRules, detectRecurring,
   computeBudget, recommend, computeProjection, generateRetirementGuidance,
 } = require('./core');
 
@@ -19,7 +19,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     if (!accessUrl) return { imported: 0, skipped: 'not connected' };
     const startDate = lastSync || Math.floor(Date.now() / 1000) - 90 * 24 * 3600;
     const accountSet = await fetchSimplefinAccounts(accessUrl, { startDate, fetchImpl: sfFetch });
-    const txns = categorizeAll(simplefinToTransactions(accountSet), DEFAULT_RULES);
+    const txns = simplefinToTransactions(accountSet);
     store.addTransactions(txns);
     store.setSimplefin({ lastSync: Math.floor(Date.now() / 1000) });
     return { imported: txns.length };
@@ -33,17 +33,33 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
 
   app.post('/api/finance/import', guard, (req, res) => {
     const csv = (req.body && req.body.csv) || '';
-    const txns = categorizeAll(normalizeTransactions(parseCsv(csv)), DEFAULT_RULES);
+    const txns = normalizeTransactions(parseCsv(csv));
     store.addTransactions(txns);
     res.json({ imported: txns.length });
   });
 
   app.get('/api/finance/budget', guard, (req, res) => {
-    const txns = store.getTransactions();
+    const rules = store.getTypeRules();
+    const typed = typeAll(store.getTransactions(), rules);
     const settings = store.getSettings();
-    const summary = computeBudget(txns, settings, new Date());
-    const recurring = detectRecurring(txns);
-    res.json({ settings, summary, recurring, recommendations: recommend(txns, summary, recurring), transactions: txns });
+    const summary = computeBudget(typed, settings, new Date());
+    const recurring = detectRecurring(typed);
+    // newest first for the editable list
+    const transactions = [...typed].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules });
+  });
+
+  // Learn a type from one transaction (remembers it for that merchant).
+  app.post('/api/finance/learn-type', guard, (req, res) => {
+    const { description, type } = req.body || {};
+    store.setTypeRules(learnRule(store.getTypeRules(), description, type));
+    res.json({ ok: true, typeRules: store.getTypeRules() });
+  });
+
+  // Replace the whole merchant-rules table.
+  app.post('/api/finance/type-rules', guard, (req, res) => {
+    store.setTypeRules(sanitizeRules(req.body && req.body.rules));
+    res.json({ ok: true, typeRules: store.getTypeRules() });
   });
 
   // ---- SimpleFIN ----

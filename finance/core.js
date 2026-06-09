@@ -1,5 +1,5 @@
 'use strict';
-// Pure finance logic (CommonJS port of the money-command-center modules).
+// Pure finance logic (CommonJS).
 const { createHash } = require('node:crypto');
 
 // ---------- CSV ----------
@@ -39,68 +39,125 @@ function normalizeTransactions(rows) {
     let amount = amtI !== -1 ? num(r[amtI]) : num(r[creditI]) - num(r[debitI]);
     amount = Math.round(amount * 100) / 100;
     const id = createHash('sha1').update(`${date}|${amount}|${description}`).digest('hex');
-    return { id, date, description, amount, category: 'Uncategorized' };
+    return { id, date, description, amount };
   });
 }
 
-// ---------- Categorize ----------
-const DEFAULT_RULES = [
-  { match: /starbucks|coffee|restaurant|doordash|uber eats|grubhub|mcdonald/i, category: 'Food & Drink' },
-  { match: /netflix|spotify|hulu|disney|prime video|hbo|youtube premium|patreon/i, category: 'Subscriptions' },
-  { match: /uber|lyft|shell|chevron|exxon|gas|parking/i, category: 'Transport' },
-  { match: /amazon|target|walmart|costco/i, category: 'Shopping' },
-  { match: /rent|mortgage|landlord/i, category: 'Housing' },
-  { match: /electric|water|comcast|xfinity|at&t|verizon|utility/i, category: 'Bills & Utilities' },
-  { match: /kroger|safeway|whole foods|trader joe|grocery/i, category: 'Groceries' },
-];
-function categorizeAll(txns, rules = DEFAULT_RULES) {
-  return txns.map((t) => {
-    if (t.amount > 0) return { ...t, category: 'Income' };
-    const rule = rules.find((r) => r.match.test(t.description));
-    return { ...t, category: rule ? rule.category : 'Uncategorized' };
-  });
+// ---------- Type classification (Income / Bill / Debt / Spending) ----------
+const TYPES = ['income', 'bill', 'debt', 'spending'];
+const DEBT_RE = /\bloan\b|credit\s*card\s*p|card\s*pmt|crd\s*pmt|cardmember|student\s*loan|auto\s*loan|kashable|affirm|klarna|lending|installment|sofi|upstart/i;
+const BILL_RE = /electric|water|gas\s*(co|company|bill)|comcast|xfinity|spectrum|at&t|verizon|t-?mobile|internet|insurance|geico|state\s*farm|allstate|progressive|rent|mortgage|netflix|spotify|hulu|disney|hbo|youtube\s*premium|patreon|utilit|energy|gexa|electricity|phone\s*bill/i;
+
+function merchantKey(desc) {
+  return String(desc || '').trim().toLowerCase().replace(/\s*#?\d+$/, '').replace(/\s+/g, ' ').trim();
+}
+
+function classifyType(t, rules = []) {
+  const d = String(t.description || '').toLowerCase();
+  for (const r of rules) { if (r.match && d.includes(String(r.match).toLowerCase())) return r.type; }
+  if (t.amount > 0) return 'income';
+  if (DEBT_RE.test(t.description)) return 'debt';
+  if (BILL_RE.test(t.description)) return 'bill';
+  return 'spending';
+}
+
+function typeAll(txns, rules = []) {
+  return txns.map((t) => ({ ...t, type: classifyType(t, rules) }));
+}
+
+// Upsert a learned rule from a single transaction's description.
+function learnRule(rules, description, type) {
+  const match = merchantKey(description);
+  if (!match || !TYPES.includes(type)) return rules;
+  const next = rules.filter((r) => r.match !== match);
+  next.push({ match, type });
+  return next;
+}
+
+function sanitizeRules(rules) {
+  if (!Array.isArray(rules)) return [];
+  const out = [], seen = new Set();
+  for (const r of rules) {
+    const match = String(r && r.match || '').trim().toLowerCase();
+    const type = r && r.type;
+    if (!match || !TYPES.includes(type) || seen.has(match)) continue;
+    seen.add(match);
+    out.push({ match, type });
+  }
+  return out;
+}
+
+// ---------- Income (auto-detected) ----------
+function round(n) { return Math.round(n * 100) / 100; }
+function monthKey(d) { return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`; }
+
+// Typical full-month income from income-typed deposits. Excludes the current
+// (incomplete) month when earlier months exist, so payday timing doesn't skew it.
+function computeMonthlyIncome(typedTxns, today = new Date()) {
+  const byMonth = {};
+  for (const t of typedTxns) {
+    if (t.type !== 'income') continue;
+    const m = (t.date || '').slice(0, 7);
+    if (!m) continue;
+    byMonth[m] = (byMonth[m] || 0) + t.amount;
+  }
+  let months = Object.keys(byMonth).sort();
+  if (months.length === 0) return 0;
+  const cur = monthKey(today);
+  if (months.length > 1 && months[months.length - 1] === cur) months = months.slice(0, -1);
+  const total = months.reduce((s, m) => s + byMonth[m], 0);
+  return round(total / months.length);
+}
+
+// ---------- Budget ----------
+function computeBudget(typedTxns, settings, today = new Date()) {
+  const month = monthKey(today);
+  const inMonth = typedTxns.filter((t) => (t.date || '').slice(0, 7) === month);
+  const byType = { income: 0, bill: 0, debt: 0, spending: 0 };
+  for (const t of inMonth) {
+    if (t.type === 'income') byType.income += t.amount;
+    else byType[t.type] = (byType[t.type] || 0) + (t.amount < 0 ? -t.amount : 0);
+  }
+  for (const k of TYPES) byType[k] = round(byType[k]);
+  const inflows = byType.income;
+  const outflows = round(byType.bill + byType.debt + byType.spending);
+  const monthlyIncome = computeMonthlyIncome(typedTxns, today);
+
+  const year = today.getUTCFullYear(), monthIdx = today.getUTCMonth();
+  const daysInMonth = new Date(Date.UTC(year, monthIdx + 1, 0)).getUTCDate();
+  const daysLeft = daysInMonth - today.getUTCDate() + 1;
+  const savingsTarget = settings.savingsTargetMonthly || 0;
+  const safeToSpendRemaining = round(monthlyIncome - savingsTarget - outflows);
+  const safeToSpendPerDay = round(Math.max(0, safeToSpendRemaining) / daysLeft);
+
+  return { month, monthlyIncome, savingsTarget, inflows, outflows, byType, daysInMonth, daysLeft, safeToSpendRemaining, safeToSpendPerDay };
 }
 
 // ---------- Recurring ----------
-function recKey(desc) { return desc.trim().toLowerCase().replace(/\s*#?\d+$/, '').replace(/\s+/g, ' '); }
 function detectRecurring(txns) {
   const groups = new Map();
-  for (const t of txns) { const k = recKey(t.description); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(t); }
+  for (const t of txns) { const k = merchantKey(t.description); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(t); }
   const result = [];
   for (const items of groups.values()) {
     if (items.length < 2) continue;
     const avg = items.reduce((s, t) => s + t.amount, 0) / items.length;
     if (!items.every((t) => Math.abs(t.amount - avg) <= Math.abs(avg) * 0.05)) continue;
-    result.push({ description: items[0].description, amount: Math.round(avg * 100) / 100, occurrences: items.length, kind: avg < 0 ? 'expense' : 'income' });
+    result.push({ description: items[0].description, amount: round(avg), occurrences: items.length, kind: avg < 0 ? 'expense' : 'income' });
   }
   return result;
 }
 
-// ---------- Budget ----------
-function round(n) { return Math.round(n * 100) / 100; }
-function monthKey(d) { return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`; }
-function computeBudget(txns, settings, today = new Date()) {
-  const month = monthKey(today);
-  const inMonth = txns.filter((t) => (t.date || '').slice(0, 7) === month);
-  const inflows = round(inMonth.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0));
-  const outflows = round(inMonth.filter((t) => t.amount < 0).reduce((s, t) => s - t.amount, 0));
-  const year = today.getUTCFullYear(), monthIdx = today.getUTCMonth();
-  const daysInMonth = new Date(Date.UTC(year, monthIdx + 1, 0)).getUTCDate();
-  const daysLeft = daysInMonth - today.getUTCDate() + 1;
-  const safeToSpendRemaining = round(settings.expectedMonthlyIncome - settings.savingsTargetMonthly - outflows);
-  const safeToSpendPerDay = round(Math.max(0, safeToSpendRemaining) / daysLeft);
-  return { month, inflows, outflows, daysInMonth, daysLeft, expectedIncome: settings.expectedMonthlyIncome, savingsTarget: settings.savingsTargetMonthly, safeToSpendRemaining, safeToSpendPerDay };
-}
-
 // ---------- Recommendations ----------
-function recommend(txns, summary, recurring = []) {
+function recommend(typedTxns, summary, recurring = []) {
   const recs = [];
   if (summary.safeToSpendRemaining < 0)
     recs.push({ type: 'overspend', message: `You're $${Math.abs(summary.safeToSpendRemaining).toFixed(2)} over budget this month. Ease up on discretionary spending to protect your $${summary.savingsTarget} savings.` });
+  if (summary.byType && summary.byType.debt > 0)
+    recs.push({ type: 'debt', message: `$${summary.byType.debt.toFixed(2)} went to debt payments this month. Paying debt down faster is a guaranteed return — worth prioritizing.` });
   for (const r of recurring.filter((x) => x.kind === 'expense'))
-    recs.push({ type: 'subscription', message: `Recurring charge detected: ${r.description} (~$${Math.abs(r.amount).toFixed(2)}/mo, ${r.occurrences}x). Still using it?` });
-  if (summary.safeToSpendRemaining > summary.savingsTarget)
-    recs.push({ type: 'savings', message: `You have a surplus this month. Consider increasing your savings target — that money can feed your retirement contributions.` });
+    recs.push({ type: 'subscription', message: `Recurring charge: ${r.description} (~$${Math.abs(r.amount).toFixed(2)}/mo, ${r.occurrences}x). Still using it?` });
+  if (summary.safeToSpendRemaining > summary.savingsTarget && summary.savingsTarget >= 0)
+    recs.push({ type: 'savings', message: `You have a surplus this month. Consider raising your savings target — that money can feed your retirement contributions.` });
   return recs;
 }
 
@@ -140,6 +197,8 @@ function generateRetirementGuidance({ currentAge, retirementAge, effectiveContri
 }
 
 module.exports = {
-  parseCsv, normalizeTransactions, categorizeAll, DEFAULT_RULES, detectRecurring,
-  computeBudget, recommend, computeProjection, DEFAULT_RATES, generateRetirementGuidance, IRA_ANNUAL_CAP,
+  parseCsv, normalizeTransactions,
+  TYPES, classifyType, typeAll, learnRule, sanitizeRules, merchantKey,
+  computeMonthlyIncome, computeBudget, detectRecurring, recommend,
+  computeProjection, DEFAULT_RATES, generateRetirementGuidance, IRA_ANNUAL_CAP,
 };

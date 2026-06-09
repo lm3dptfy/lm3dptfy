@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Finances — LM3DPTFY</title>
-  <link rel="stylesheet" href="/finance.css?v=4" />
+  <link rel="stylesheet" href="/finance.css?v=5" />
   <script src="/chart.min.js"></script>
 </head>
 <body>
@@ -36,7 +36,7 @@
     </section>
     <section class="card">
       <h2>Setup</h2>
-      <label>Expected monthly income $<input id="income" type="number" /></label>
+      <p class="sub">💡 Income is detected automatically from your deposits — no need to enter it.</p>
       <label>Monthly savings target $<input id="savings" type="number" /></label>
       <button id="saveSettings">Save</button>
     </section>
@@ -53,11 +53,37 @@
       <span id="sfMsg"></span>
     </section>
     <section class="grid">
-      <div class="card"><h2>This month</h2><p>In: <strong id="inflows">$—</strong></p><p>Out: <strong id="outflows">$—</strong></p></div>
-      <div class="card"><h2>Spending by category</h2><canvas id="catChart"></canvas></div>
+      <div class="card"><h2>This month</h2>
+        <p>Income (detected): <strong id="inflows">$—</strong></p>
+        <p>Out: <strong id="outflows">$—</strong></p>
+        <p class="sub">Bills <strong id="tBill">$—</strong> · Debt <strong id="tDebt">$—</strong> · Spending <strong id="tSpend">$—</strong></p>
+      </div>
+      <div class="card"><h2>Spending by type</h2><canvas id="catChart"></canvas></div>
     </section>
     <section class="card"><h2>Recommendations</h2><ul id="recs"></ul></section>
     <section class="card"><h2>Recurring / subscriptions</h2><ul id="subs"></ul></section>
+
+    <section class="card">
+      <h2>Transactions</h2>
+      <p class="sub">Set each one's type. Your choice is remembered for that merchant on every future sync.</p>
+      <div id="txnList" class="txn-list"></div>
+    </section>
+
+    <section class="card">
+      <h2>Type rules</h2>
+      <p class="sub">If a merchant name contains this text, force its type. (Overrides the automatic guess.)</p>
+      <div id="rulesList"></div>
+      <div class="rule-add">
+        <input id="ruleMatch" placeholder="text in merchant name (e.g. CHASE CARD)" />
+        <select id="ruleType">
+          <option value="income">Income</option>
+          <option value="bill">Bill</option>
+          <option value="debt">Debt</option>
+          <option value="spending">Spending</option>
+        </select>
+        <button id="ruleAdd">Add rule</button>
+      </div>
+    </section>
   </main>
 
   <main id="tab-retirement" class="tabpane hidden">
@@ -92,6 +118,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=3"></script>
+  <script src="/finance.js?v=5"></script>
 </body>
 </html>

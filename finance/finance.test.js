@@ -23,16 +23,51 @@ function buildApp(storeDir, simplefinFetch) {
 
 const ADMIN = { 'content-type': 'application/json', 'x-test-admin': '1' };
 
-test('core math sanity', () => {
-  const b = core.computeBudget(
-    [{ date: '2026-06-01', amount: 5000 }, { date: '2026-06-03', amount: -1700 }],
-    { expectedMonthlyIncome: 5000, savingsTargetMonthly: 600 },
-    new Date('2026-06-10T12:00:00Z')
-  );
+test('budget auto-detects income from deposits', () => {
+  const typed = core.typeAll([
+    { date: '2026-05-01', description: 'PAYROLL', amount: 5000 },
+    { date: '2026-06-01', description: 'PAYROLL', amount: 5000 },
+    { date: '2026-06-03', description: 'STORE', amount: -1700 },
+  ]);
+  const b = core.computeBudget(typed, { savingsTargetMonthly: 600 }, new Date('2026-06-10T12:00:00Z'));
+  assert.equal(b.monthlyIncome, 5000);      // detected, not entered
   assert.equal(b.outflows, 1700);
+  assert.equal(b.byType.spending, 1700);
   assert.equal(b.safeToSpendRemaining, 2700);
   const p = core.computeProjection(0, 100, 43, 44, { low: 0, expected: 0, high: 0 });
   assert.equal(p[1].expected, 1200);
+});
+
+test('type classification + learned merchant rules', () => {
+  const txns = [
+    { description: 'PAYROLL DEPOSIT', amount: 2500 },
+    { description: 'CHASE CARD PMT 1234', amount: -300 },
+    { description: 'NETFLIX.COM', amount: -15.49 },
+    { description: 'CORNER STORE', amount: -8 },
+  ];
+  let typed = core.typeAll(txns, []);
+  assert.equal(typed[0].type, 'income');
+  assert.equal(typed[1].type, 'debt');
+  assert.equal(typed[2].type, 'bill');
+  assert.equal(typed[3].type, 'spending');
+  // teach it that CORNER STORE is a bill -> remembered for that merchant
+  const rules = core.learnRule([], 'CORNER STORE', 'bill');
+  typed = core.typeAll(txns, rules);
+  assert.equal(typed[3].type, 'bill');
+});
+
+test('type rules persist and apply via API', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'fin-'));
+  const app = buildApp(dir);
+  const server = app.listen(0);
+  const base = `http://127.0.0.1:${server.address().port}`;
+  try {
+    await fetch(`${base}/api/finance/import`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ csv: 'Date,Description,Amount\n2026-06-01,CORNER STORE,-8\n' }) });
+    await fetch(`${base}/api/finance/learn-type`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ description: 'CORNER STORE', type: 'bill' }) });
+    const d = await (await fetch(`${base}/api/finance/budget`, { headers: { 'x-test-admin': '1' } })).json();
+    assert.equal(d.transactions[0].type, 'bill');
+    assert.equal(d.typeRules.length, 1);
+  } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }
 });
 
 test('finance routes require admin', async () => {
