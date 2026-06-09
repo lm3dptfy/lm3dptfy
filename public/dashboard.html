@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 8 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 9 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,7 +196,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.168</span></span>
+          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.169</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -496,29 +496,29 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.168 — Fallback Models, Deny-Rule Glob Support &amp; Cross-Session Security (Jun 7)</a></div>
-          <div class="desc">v2.1.168 is the current latest on npm. Key additions: <code>fallbackModel</code> settings supporting up to three fallback models, broader glob pattern support in deny rules, hardened cross-session message security, <code>/plugin list --enabled/--disabled</code> command, and <code>requiredMinimumVersion</code>/<code>requiredMaximumVersion</code> org lock settings. Fix in v2.1.163: Opus 4.8 thinking block errors resolved. Update: <code>claude update</code></div>
-          <div class="date">Jun 7, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST v2.1.168</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.169 — Safe Mode Flag, /cd Command &amp; Multiple Bug Fixes (Jun 8)</a></div>
+          <div class="desc">30 changes: new <code>--safe-mode</code> flag and <code>CLAUDE_CODE_SAFE_MODE</code> env var to run Claude Code with all customizations disabled for debugging; <code>/cd</code> command to change session working directory without breaking the prompt cache; no-op <code>cd</code> no longer triggers a permission prompt. Bug fixes: JetBrains IDE flickering on 2026.1+ (synchronized output enabled), Shift+non-ASCII characters dropped in Kitty keyboard protocol terminals (WezTerm, Ghostty, kitty), PowerShell command validation hanging on Windows, orphaned <code>--bg-pty-host</code> processes spinning at 100% CPU on macOS, voice mode <code>/login</code> after toggling <code>/voice</code>, and silent startup hang when config directory is read-only. Update: <code>claude update</code></div>
+          <div class="date">Jun 8, 2026 · npmjs.com/@anthropic-ai/claude-code · <strong style="color:#16a34a;">LATEST v2.1.169</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.5 — Parallel Web Search, Stronger Channel Safety &amp; MCP Recovery (Jun 8)</a></div>
-          <div class="desc">New stable release: Parallel web search support added, stronger channel safety hardening, richer MCP and Anthropic provider recovery, improved Google Vertex and Matrix handling, more durable auth and plugin installs, and safer upgrade, service, and CI paths. Update via your OpenClaw update mechanism.</div>
-          <div class="date">Jun 8, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE TODAY</strong></div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ 6 Days: API Billing Split &amp; claude-sonnet-4-20250514 / claude-opus-4-20250514 Model IDs Retire — Jun 15</a></div>
+          <div class="desc">Two breaking changes on June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>6 days remaining.</strong></div>
+          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 6 DAYS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ 7 Days: API Billing Split &amp; claude-sonnet-4-20250514 / claude-opus-4-20250514 Model IDs Retire — Jun 15</a></div>
-          <div class="desc">Two breaking changes on June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>7 days remaining.</strong></div>
-          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 7 DAYS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://9to5mac.com/2026/05/28/anthropic-upgrades-claude-with-new-opus-4-8-model-heres-whats-new/" target="_blank">Anthropic Upgrades Claude with Opus 4.8 — Stronger Coding, Reasoning &amp; 1M Context (May 28)</a></div>
-          <div class="desc">Claude Opus 4.8 improves over Opus 4.7 in coding, agentic skills, and reasoning at the same price. Now the <code>/effort xhigh</code> default in Claude Code (1M context, 128K output, extended thinking opt-in). Anthropic also deprecated <code>claude-opus-4-1-20250805</code> — retirement August 5, 2026.</div>
-          <div class="date">May 28, 2026 · 9to5Mac / Anthropic · <strong style="color:#16a34a;">NEW MODEL</strong></div>
+          <div><a href="https://status.claude.com/" target="_blank">Claude Opus 4.8 Fast Mode — Brief Outage Resolved Today (Jun 9)</a></div>
+          <div class="desc">Claude Opus 4.8 Fast Mode saw elevated errors from 7:50 PM PT to 8:30 PM PT on June 9. Third service disruption this month: June 2 (major global outage, 5h45m, all services) and June 5 (claude.ai, API, Claude Code, Cowork, ~3h). The Register noted the June 2 outage coincided with Anthropic's IPO float. Monitor <code>status.claude.com</code> and configure fallback models with <code>fallbackModel</code> settings.</div>
+          <div class="date">Jun 9, 2026 · status.claude.com · <strong style="color:#16a34a;">RESOLVED</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.microsoft.com/en-us/security/blog/2026/06/05/securing-ci-cd-in-agentic-world-claude-code-github-action-case/" target="_blank">Microsoft Security Blog: Securing CI/CD in the Agentic World — Claude Code Case Study (Jun 5)</a></div>
           <div class="desc">Microsoft's Security Blog analyzes the Claude Code GitHub Action supply chain attack as a case study for the "Rule of Two": no AI workflow should simultaneously process untrusted input, hold secrets, and change external state. Must-read for any team running Claude Code in CI/CD.</div>
           <div class="date">Jun 5, 2026 · Microsoft Security Blog · <strong style="color:#16a34a;">MUST READ</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.5 — Parallel Web Search, Stronger Channel Safety &amp; MCP Recovery (Jun 8)</a></div>
+          <div class="desc">Latest stable release: parallel web search support added, stronger channel safety hardening, richer MCP and Anthropic provider recovery, improved Google Vertex and Matrix handling, more durable auth and plugin installs, and safer upgrade, service, and CI paths. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Jun 8, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">LATEST STABLE</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/" target="_blank">Anthropic Confidentially Files for IPO — $965B Valuation (Jun 1)</a></div>
