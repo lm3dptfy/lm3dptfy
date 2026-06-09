@@ -57,7 +57,10 @@ async function refreshBudget() {
 }
 
 function renderTxns(txns) {
-  $('txnList').innerHTML = txns.slice(0, 200).map((t) => {
+  const cutoff = new Date(Date.now() - 31 * 24 * 3600 * 1000).toISOString().slice(0, 10);
+  const recent = txns.filter((t) => (t.date || '') >= cutoff).slice(0, 1000);
+  $('txnNote').textContent = `Last 30 days — ${recent.length} transaction(s). Set each one's type; your choice is remembered for that merchant.`;
+  $('txnList').innerHTML = recent.map((t) => {
     const opts = TYPE_OPTS.map((ty) => `<option value="${ty}" ${t.type === ty ? 'selected' : ''}>${cap(ty)}</option>`).join('');
     const amt = (t.amount < 0 ? '-' : '+') + '$' + Math.abs(t.amount).toFixed(2);
     return `<div class="txn-row" data-desc="${esc(t.description)}">
