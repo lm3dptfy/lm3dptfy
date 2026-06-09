@@ -62,7 +62,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     res.json({ ok: true, typeRules: store.getTypeRules() });
   });
 
-  // TEMP: disk persistence check (no auth; writes only a harmless counter; remove after verifying).
+  // TEMP: disk persistence check (no auth; writes only a harmless counter; remove after verifying). [redeploy probe]
   app.get('/api/finance/_diskcheck', (req, res) => {
     const fs = require('node:fs');
     const p = require('node:path');
