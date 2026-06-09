@@ -4,9 +4,11 @@ const charts = {};
 function setChart(id, config) { if (charts[id]) charts[id].destroy(); charts[id] = new Chart($(id), config); }
 async function api(path, opts) {
   const r = await fetch('/api/finance' + path, opts);
-  if (r.status === 401) { location.href = '/admin.html'; return {}; }
+  if (r.status === 401) { showLogin(); return null; }
   return r.json();
 }
+function showLogin() { $('loginOverlay').classList.remove('hidden'); }
+function hideLogin() { $('loginOverlay').classList.add('hidden'); }
 
 // ---- Tabs ----
 document.querySelectorAll('.tab[data-tab]').forEach((btn) => {
@@ -23,6 +25,7 @@ document.querySelectorAll('.tab[data-tab]').forEach((btn) => {
 // ---- Budget ----
 async function refreshBudget() {
   const d = await api('/budget');
+  if (!d) return;
   const s = d.summary;
   $('safeToday').textContent = money(s.safeToSpendPerDay);
   $('safeSub').textContent = `${money(s.safeToSpendRemaining)} left for ${s.daysLeft} day(s) in ${s.month}`;
@@ -47,20 +50,10 @@ $('saveSettings').onclick = async () => {
   refreshBudget();
 };
 
-$('importBtn').onclick = async () => {
-  let text = $('csvText').value;
-  const file = $('csvFile').files[0];
-  if (file) text = await file.text();
-  if (!text) { $('importMsg').textContent = 'Provide a CSV first.'; return; }
-  const d = await api('/import', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ csv: text }) });
-  $('importMsg').textContent = `Imported ${d.imported} transactions.`;
-  $('csvText').value = '';
-  refreshBudget();
-};
-
 // ---- SimpleFIN ----
 async function refreshSfStatus() {
   const s = await api('/simplefin/status');
+  if (!s) return;
   $('sfStatus').textContent = s.connected
     ? `Connected ✓ — last sync: ${s.lastSync ? new Date(s.lastSync * 1000).toLocaleString() : 'never'}`
     : 'Not connected. Paste a SimpleFIN setup token to enable automatic sync.';
@@ -78,6 +71,7 @@ $('sfConnect').onclick = async () => {
 $('sfSync').onclick = async () => {
   $('sfMsg').textContent = 'Syncing…';
   const r = await fetch('/api/finance/simplefin/sync', { method: 'POST' });
+  if (r.status === 401) { showLogin(); return; }
   const d = await r.json();
   $('sfMsg').textContent = r.ok ? `Synced — imported ${d.imported} new transactions.` : `Sync failed: ${d.error}`;
   refreshSfStatus();
@@ -87,6 +81,7 @@ $('sfSync').onclick = async () => {
 // ---- Retirement ----
 async function refreshRetirement() {
   const d = await api('/retirement');
+  if (!d) return;
   $('projBig').textContent = money(d.projectedAtRetirement);
   $('projSub').textContent = d.settings.retirementAge
     ? `by age ${d.settings.retirementAge}, contributing ${money(d.effectiveContribution)}/mo`
@@ -125,5 +120,23 @@ $('addSnap').onclick = async () => {
   refreshRetirement();
 };
 
-refreshSfStatus();
-refreshBudget();
+// ---- Login ----
+$('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  $('loginMsg').textContent = 'Signing in…';
+  const r = await fetch('/api/login', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ email: $('loginEmail').value, password: $('loginPass').value }),
+  });
+  if (r.ok) { $('loginMsg').textContent = ''; hideLogin(); init(); }
+  else { $('loginMsg').textContent = 'Invalid email or password.'; }
+});
+
+async function init() {
+  const probe = await api('/simplefin/status'); // 401 -> showLogin (overlay stays up)
+  if (!probe) return;
+  hideLogin();
+  await refreshSfStatus();
+  await refreshBudget();
+}
+init();

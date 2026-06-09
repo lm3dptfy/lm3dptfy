@@ -358,8 +358,8 @@ app.get('/apple-touch-icon-precomposed.png', (req, res) => res.redirect(301, '/l
 // ===== Finance section (additive; behind admin login). Does not touch business routes. =====
 const { mountFinance } = require('./finance');
 app.get(['/finances', '/finances.html'], (req, res) => {
-  const loggedIn = req.session && req.session.admin && req.session.admin.email === ADMIN_EMAIL;
-  if (!loggedIn) return res.redirect('/admin.html');
+  // Page shell is served openly; it shows its own login form and all data
+  // comes from /api/finance/* which require admin auth.
   res.setHeader('Cache-Control', 'no-cache');
   res.sendFile(path.join(STATIC_DIR, 'finances.html'));
 });

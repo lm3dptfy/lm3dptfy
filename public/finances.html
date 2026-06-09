@@ -8,6 +8,17 @@
   <script src="/chart.min.js"></script>
 </head>
 <body>
+  <div id="loginOverlay" class="overlay">
+    <form id="loginForm" class="login-card">
+      <h2>💰 Finances</h2>
+      <p class="sub">Sign in with your admin account.</p>
+      <label>Email <input id="loginEmail" type="email" autocomplete="username" /></label>
+      <label>Password <input id="loginPass" type="password" autocomplete="current-password" /></label>
+      <button type="submit">Sign in</button>
+      <p class="sub" id="loginMsg"></p>
+    </form>
+  </div>
+
   <header>
     <h1>💰 Money Command Center</h1>
     <nav>
@@ -37,14 +48,6 @@
       <button id="sfSync">Sync now</button>
       <span id="sfMsg"></span>
       <p class="sub">One-time setup: sign up at SimpleFIN, connect your bank there, paste the token here. Read-only — your bank login never touches this app.</p>
-    </section>
-    <section class="card">
-      <h2>Import transactions (CSV)</h2>
-      <p class="sub">Export a CSV from your bank (Date, Description, Amount) and paste or upload it.</p>
-      <input id="csvFile" type="file" accept=".csv,text/csv" />
-      <textarea id="csvText" placeholder="...or paste CSV here"></textarea>
-      <button id="importBtn">Import</button>
-      <span id="importMsg"></span>
     </section>
     <section class="grid">
       <div class="card"><h2>This month</h2><p>In: <strong id="inflows">$—</strong></p><p>Out: <strong id="outflows">$—</strong></p></div>
