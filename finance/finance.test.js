@@ -45,18 +45,18 @@ test('type classification + learned merchant rules', () => {
     { description: 'NETFLIX.COM', amount: -15.49 },
     { description: 'CORNER STORE', amount: -8 },
   ];
-  let typed = core.typeAll(txns, []);
+  let typed = core.typeAll(txns, [], {});
   assert.equal(typed[0].type, 'income');
   assert.equal(typed[1].type, 'debt');
   assert.equal(typed[2].type, 'bill');
   assert.equal(typed[3].type, 'spending');
-  // teach it that CORNER STORE is a bill -> remembered for that merchant
-  const rules = core.learnRule([], 'CORNER STORE', 'bill');
-  typed = core.typeAll(txns, rules);
+  // teach it that CORNER STORE is a bill -> silent learned map (not a visible rule)
+  const learned = core.learnTypeMap({}, 'CORNER STORE', 'bill');
+  typed = core.typeAll(txns, [], learned);
   assert.equal(typed[3].type, 'bill');
 });
 
-test('type rules persist and apply via API', async () => {
+test('tagging updates the transaction silently (no visible rule)', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'fin-'));
   const app = buildApp(dir);
   const server = app.listen(0);
@@ -65,8 +65,12 @@ test('type rules persist and apply via API', async () => {
     await fetch(`${base}/api/finance/import`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ csv: 'Date,Description,Amount\n2026-06-01,CORNER STORE,-8\n' }) });
     await fetch(`${base}/api/finance/learn-type`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ description: 'CORNER STORE', type: 'bill' }) });
     const d = await (await fetch(`${base}/api/finance/budget`, { headers: { 'x-test-admin': '1' } })).json();
-    assert.equal(d.transactions[0].type, 'bill');
-    assert.equal(d.typeRules.length, 1);
+    assert.equal(d.transactions[0].type, 'bill');   // transaction updated
+    assert.equal(d.typeRules.length, 0);            // but NO visible rule added
+    // an explicit rule, added via the form, DOES show
+    await fetch(`${base}/api/finance/type-rules`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ rules: [{ match: 'netflix', type: 'bill' }] }) });
+    const d2 = await (await fetch(`${base}/api/finance/budget`, { headers: { 'x-test-admin': '1' } })).json();
+    assert.equal(d2.typeRules.length, 1);
   } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }
 });
 

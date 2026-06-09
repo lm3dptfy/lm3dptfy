@@ -52,26 +52,29 @@ function merchantKey(desc) {
   return String(desc || '').trim().toLowerCase().replace(/\s*#?\d+$/, '').replace(/\s+/g, ' ').trim();
 }
 
-function classifyType(t, rules = []) {
+function classifyType(t, rules = [], learned = {}) {
   const d = String(t.description || '').toLowerCase();
+  // 1) explicit user rules (substring match) win
   for (const r of rules) { if (r.match && d.includes(String(r.match).toLowerCase())) return r.type; }
+  // 2) silently-learned per-merchant tags
+  const lt = learned[merchantKey(t.description)];
+  if (lt && TYPES.includes(lt)) return lt;
+  // 3) automatic guess
   if (t.amount > 0) return 'income';
   if (DEBT_RE.test(t.description)) return 'debt';
   if (BILL_RE.test(t.description)) return 'bill';
   return 'spending';
 }
 
-function typeAll(txns, rules = []) {
-  return txns.map((t) => ({ ...t, type: classifyType(t, rules) }));
+function typeAll(txns, rules = [], learned = {}) {
+  return txns.map((t) => ({ ...t, type: classifyType(t, rules, learned) }));
 }
 
-// Upsert a learned rule from a single transaction's description.
-function learnRule(rules, description, type) {
-  const match = merchantKey(description);
-  if (!match || !TYPES.includes(type)) return rules;
-  const next = rules.filter((r) => r.match !== match);
-  next.push({ match, type });
-  return next;
+// Remember a type for a merchant (silent; keyed by normalized merchant name).
+function learnTypeMap(learned, description, type) {
+  const key = merchantKey(description);
+  if (!key || !TYPES.includes(type)) return learned;
+  return { ...learned, [key]: type };
 }
 
 function sanitizeRules(rules) {
@@ -198,7 +201,7 @@ function generateRetirementGuidance({ currentAge, retirementAge, effectiveContri
 
 module.exports = {
   parseCsv, normalizeTransactions,
-  TYPES, classifyType, typeAll, learnRule, sanitizeRules, merchantKey,
+  TYPES, classifyType, typeAll, learnTypeMap, sanitizeRules, merchantKey,
   computeMonthlyIncome, computeBudget, detectRecurring, recommend,
   computeProjection, DEFAULT_RATES, generateRetirementGuidance, IRA_ANNUAL_CAP,
 };

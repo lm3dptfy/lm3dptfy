@@ -12,6 +12,7 @@ const DEFAULTS = {
     snapshots: [],
   },
   typeRules: [],
+  learnedTypes: {},
 };
 
 function createStore(path) {
@@ -26,6 +27,7 @@ function createStore(path) {
         simplefin: { ...base.simplefin, ...(parsed.simplefin || {}) },
         retirement: { ...base.retirement, ...(parsed.retirement || {}) },
         typeRules: Array.isArray(parsed.typeRules) ? parsed.typeRules : [],
+        learnedTypes: (parsed.learnedTypes && typeof parsed.learnedTypes === 'object') ? parsed.learnedTypes : {},
       };
     } catch {
       return structuredClone(DEFAULTS);
@@ -35,6 +37,13 @@ function createStore(path) {
   function persist() {
     mkdirSync(dirname(path), { recursive: true });
     writeFileSync(path, JSON.stringify(data, null, 2));
+  }
+  // One-time migration: earlier versions stored per-merchant tags as visible
+  // typeRules. Move them into the silent learnedTypes map so the table clears.
+  if (Object.keys(data.learnedTypes).length === 0 && Array.isArray(data.typeRules) && data.typeRules.length) {
+    for (const r of data.typeRules) { if (r && r.match && r.type) data.learnedTypes[r.match] = r.type; }
+    data.typeRules = [];
+    persist();
   }
   return {
     getSettings: () => data.settings,
@@ -58,6 +67,8 @@ function createStore(path) {
     },
     getTypeRules: () => data.typeRules,
     setTypeRules: (rules) => { data.typeRules = rules; persist(); },
+    getLearnedTypes: () => data.learnedTypes,
+    setLearnedTypes: (m) => { data.learnedTypes = m; persist(); },
   };
 }
 

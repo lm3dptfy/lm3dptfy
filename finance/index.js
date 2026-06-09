@@ -4,7 +4,7 @@
 const { createStore } = require('./store');
 const { claimAccessUrl, fetchSimplefinAccounts, simplefinToTransactions } = require('./simplefin');
 const {
-  parseCsv, normalizeTransactions, typeAll, learnRule, sanitizeRules, detectRecurring,
+  parseCsv, normalizeTransactions, typeAll, learnTypeMap, sanitizeRules, detectRecurring,
   computeBudget, recommend, computeProjection, generateRetirementGuidance,
 } = require('./core');
 
@@ -40,7 +40,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
 
   app.get('/api/finance/budget', guard, (req, res) => {
     const rules = store.getTypeRules();
-    const typed = typeAll(store.getTransactions(), rules);
+    const typed = typeAll(store.getTransactions(), rules, store.getLearnedTypes());
     const settings = store.getSettings();
     const summary = computeBudget(typed, settings, new Date());
     const recurring = detectRecurring(typed);
@@ -49,11 +49,12 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules });
   });
 
-  // Learn a type from one transaction (remembers it for that merchant).
+  // Learn a type from one transaction (silent; remembers it for that merchant,
+  // does NOT add a visible rule).
   app.post('/api/finance/learn-type', guard, (req, res) => {
     const { description, type } = req.body || {};
-    store.setTypeRules(learnRule(store.getTypeRules(), description, type));
-    res.json({ ok: true, typeRules: store.getTypeRules() });
+    store.setLearnedTypes(learnTypeMap(store.getLearnedTypes(), description, type));
+    res.json({ ok: true });
   });
 
   // Replace the whole merchant-rules table.
