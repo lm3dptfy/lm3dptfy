@@ -5,7 +5,7 @@ const { createStore } = require('./store');
 const { claimAccessUrl, fetchSimplefinAccounts, simplefinToTransactions } = require('./simplefin');
 const {
   parseCsv, normalizeTransactions, typeAll, learnTypeMap, sanitizeRules, detectRecurring,
-  computeBudget, recommend, computeProjection, generateRetirementGuidance,
+  computeBudget, recommend, computeProjection, generateRetirementGuidance, TYPES,
 } = require('./core');
 
 function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
@@ -46,7 +46,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const recurring = detectRecurring(typed);
     // newest first for the editable list
     const transactions = [...typed].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-    res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules });
+    res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES });
   });
 
   // Learn a type from one transaction (silent; remembers it for that merchant,

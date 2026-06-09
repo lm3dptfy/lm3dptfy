@@ -23,23 +23,29 @@ document.querySelectorAll('.tab[data-tab]').forEach((btn) => {
 });
 
 // ---- Budget ----
-const TYPE_OPTS = ['income', 'bill', 'debt', 'spending'];
-const cap = (s) => s[0].toUpperCase() + s.slice(1);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const CAT_COLORS = ['#f59e0b', '#f87171', '#a78bfa', '#34d399', '#60a5fa', '#fbbf24', '#fb7185', '#22d3ee', '#c084fc', '#4ade80', '#f472b6', '#94a3b8'];
+const shortName = (s) => String(s).replace(/\*+/g, ' ').replace(/\s{2,}/g, ' ').trim().slice(0, 22);
 let lastRules = [];
+let CATEGORIES = [];
+
+function catOptions(selected) {
+  return CATEGORIES.map((c) => `<option value="${esc(c)}" ${c === selected ? 'selected' : ''}>${esc(c)}</option>`).join('');
+}
 
 async function refreshBudget() {
   const d = await api('/budget');
   if (!d) return;
   const s = d.summary;
   lastRules = d.typeRules || [];
+  CATEGORIES = d.categories || [];
+  const rt = $('ruleType');
+  if (rt && rt.dataset.filled !== '1') { rt.innerHTML = catOptions('Bills & Utilities'); rt.dataset.filled = '1'; }
+
   $('safeToday').textContent = money(s.safeToSpendPerDay);
   $('safeSub').textContent = `${money(s.safeToSpendRemaining)} left for ${s.daysLeft} day(s) in ${s.month}`;
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
-  $('tBill').textContent = money(s.byType.bill);
-  $('tDebt').textContent = money(s.byType.debt);
-  $('tSpend').textContent = money(s.byType.spending);
   $('savings').value = d.settings.savingsTargetMonthly || '';
   $('recs').innerHTML = d.recommendations.length
     ? d.recommendations.map((x) => `<li class="rec ${x.type}">${x.message}</li>`).join('')
@@ -47,11 +53,24 @@ async function refreshBudget() {
   $('subs').innerHTML = d.recurring.filter((x) => x.kind === 'expense')
     .map((x) => `<li>${esc(x.description)} — ${money(Math.abs(x.amount))}/mo (${x.occurrences}x)</li>`).join('')
     || '<li>None detected yet.</li>';
+
+  // spending by category (exclude Income; only categories with spend)
+  const bc = s.byCategory || {};
+  const spendCats = CATEGORIES.filter((c) => c !== 'Income' && (bc[c] || 0) > 0).sort((a, b) => bc[b] - bc[a]);
   setChart('catChart', {
     type: 'bar',
-    data: { labels: ['Bills', 'Debt', 'Spending'], datasets: [{ data: [s.byType.bill, s.byType.debt, s.byType.spending], backgroundColor: ['#f59e0b', '#f87171', '#60a5fa'] }] },
-    options: { plugins: { legend: { display: false } } },
+    data: { labels: spendCats, datasets: [{ data: spendCats.map((c) => bc[c]), backgroundColor: spendCats.map((_, i) => CAT_COLORS[i % CAT_COLORS.length]) }] },
+    options: { indexAxis: 'y', plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => money(c.parsed.x) } } } },
   });
+
+  // top merchants
+  const tm = s.topMerchants || [];
+  setChart('merchantChart', {
+    type: 'bar',
+    data: { labels: tm.map((m) => shortName(m.name)), datasets: [{ data: tm.map((m) => m.amount), backgroundColor: '#60a5fa' }] },
+    options: { indexAxis: 'y', plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => money(c.parsed.x) } } } },
+  });
+
   renderTxns(d.transactions);
   renderRules(lastRules);
 }
@@ -59,15 +78,14 @@ async function refreshBudget() {
 function renderTxns(txns) {
   const cutoff = new Date(Date.now() - 31 * 24 * 3600 * 1000).toISOString().slice(0, 10);
   const recent = txns.filter((t) => (t.date || '') >= cutoff).slice(0, 1000);
-  $('txnNote').textContent = `Last 30 days — ${recent.length} transaction(s). Set each one's type; your choice is remembered for that merchant.`;
+  $('txnNote').textContent = `Last 30 days — ${recent.length} transaction(s). Set each one's category; your choice is remembered for that merchant.`;
   $('txnList').innerHTML = recent.map((t) => {
-    const opts = TYPE_OPTS.map((ty) => `<option value="${ty}" ${t.type === ty ? 'selected' : ''}>${cap(ty)}</option>`).join('');
     const amt = (t.amount < 0 ? '-' : '+') + '$' + Math.abs(t.amount).toFixed(2);
     return `<div class="txn-row" data-desc="${esc(t.description)}">
       <span class="txn-date">${esc(t.date)}</span>
       <span class="txn-desc" title="${esc(t.description)}">${esc(t.description)}</span>
       <span class="txn-amt ${t.amount < 0 ? 'neg' : 'pos'}">${amt}</span>
-      <select class="txn-type">${opts}</select>
+      <select class="txn-type">${catOptions(t.type)}</select>
     </div>`;
   }).join('') || '<p class="sub">No transactions yet — connect your bank and sync.</p>';
   $('txnList').querySelectorAll('.txn-row').forEach((row) => {

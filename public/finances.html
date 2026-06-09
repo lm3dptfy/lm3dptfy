@@ -34,14 +34,13 @@
       <p class="big" id="safeToday">$—</p>
       <p class="sub" id="safeSub"></p>
     </section>
-    <section class="grid">
-      <div class="card"><h2>This month</h2>
-        <p>Income (detected): <strong id="inflows">$—</strong></p>
-        <p>Out: <strong id="outflows">$—</strong></p>
-        <p class="sub">Bills <strong id="tBill">$—</strong> · Debt <strong id="tDebt">$—</strong> · Spending <strong id="tSpend">$—</strong></p>
-      </div>
-      <div class="card"><h2>Spending by type</h2><canvas id="catChart"></canvas></div>
+    <section class="card">
+      <h2>This month</h2>
+      <p>Income (detected): <strong id="inflows">$—</strong></p>
+      <p>Out: <strong id="outflows">$—</strong></p>
     </section>
+    <section class="card"><h2>Spending by category</h2><canvas id="catChart"></canvas></section>
+    <section class="card"><h2>Top merchants this month</h2><canvas id="merchantChart"></canvas></section>
     <section class="card"><h2>Recommendations</h2><ul id="recs"></ul></section>
     <section class="card"><h2>Recurring / subscriptions</h2><ul id="subs"></ul></section>
 
@@ -118,6 +117,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=6"></script>
+  <script src="/finance.js?v=7"></script>
 </body>
 </html>

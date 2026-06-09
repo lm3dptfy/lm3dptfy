@@ -32,7 +32,7 @@ test('budget auto-detects income from deposits', () => {
   const b = core.computeBudget(typed, { savingsTargetMonthly: 600 }, new Date('2026-06-10T12:00:00Z'));
   assert.equal(b.monthlyIncome, 5000);      // detected, not entered
   assert.equal(b.outflows, 1700);
-  assert.equal(b.byType.spending, 1700);
+  assert.equal(b.byCategory.Other, 1700);
   assert.equal(b.safeToSpendRemaining, 2700);
   const p = core.computeProjection(0, 100, 43, 44, { low: 0, expected: 0, high: 0 });
   assert.equal(p[1].expected, 1200);
@@ -40,15 +40,19 @@ test('budget auto-detects income from deposits', () => {
 
 test('auto-classifier handles real merchants', () => {
   const cases = [
-    ['TOYOTA ACH RTL WEB **********UB', -500, 'debt'],
-    ['PERSONIFY FIN 8885789546 **********', -200, 'debt'],
-    ['YSI*INVITATION HOMES PY 866-5879947 TX', -1800, 'bill'],
-    ['COSERV WEB PMTS **********D7CS', -150, 'bill'],
-    ['OPTIMUM 7706 CABLE PMNT **********', -90, 'bill'],
-    ['ROCKET MONEY PREMIUM **********L0I', -6, 'bill'],
-    ['GOOGLE *GOOGLE ONE 855-836-3987 CA', -2, 'bill'],
-    ['RENDER.COM RENDER.COM CA', -7, 'bill'],
-    ['ACME PAYROLL DIRECT DEP', 5000, 'income'],
+    ['TOYOTA ACH RTL WEB **********UB', -500, 'Debt'],
+    ['PERSONIFY FIN 8885789546 **********', -200, 'Debt'],
+    ['YSI*INVITATION HOMES PY 866-5879947 TX', -1800, 'Housing'],
+    ['COSERV WEB PMTS **********D7CS', -150, 'Bills & Utilities'],
+    ['OPTIMUM 7706 CABLE PMNT **********', -90, 'Bills & Utilities'],
+    ['ROCKET MONEY PREMIUM **********L0I', -6, 'Subscriptions'],
+    ['GOOGLE *GOOGLE ONE 855-836-3987 CA', -2, 'Subscriptions'],
+    ['RENDER.COM RENDER.COM CA', -7, 'Bills & Utilities'],
+    ['KROGER #123 GROCERY', -85, 'Groceries'],
+    ['STARBUCKS STORE 4411', -6, 'Dining'],
+    ['SHELL OIL 12345', -48, 'Auto & Transport'],
+    ['AMAZON.COM*AB12', -33, 'Shopping'],
+    ['ACME PAYROLL DIRECT DEP', 5000, 'Income'],
   ];
   for (const [description, amount, want] of cases) {
     assert.equal(core.classifyType({ description, amount }, [], {}), want, description);
@@ -63,14 +67,14 @@ test('type classification + learned merchant rules', () => {
     { description: 'CORNER STORE', amount: -8 },
   ];
   let typed = core.typeAll(txns, [], {});
-  assert.equal(typed[0].type, 'income');
-  assert.equal(typed[1].type, 'debt');
-  assert.equal(typed[2].type, 'bill');
-  assert.equal(typed[3].type, 'spending');
-  // teach it that CORNER STORE is a bill -> silent learned map (not a visible rule)
-  const learned = core.learnTypeMap({}, 'CORNER STORE', 'bill');
+  assert.equal(typed[0].type, 'Income');
+  assert.equal(typed[1].type, 'Debt');
+  assert.equal(typed[2].type, 'Subscriptions');
+  assert.equal(typed[3].type, 'Other');
+  // teach it that CORNER STORE is Groceries -> silent learned map (not a visible rule)
+  const learned = core.learnTypeMap({}, 'CORNER STORE', 'Groceries');
   typed = core.typeAll(txns, [], learned);
-  assert.equal(typed[3].type, 'bill');
+  assert.equal(typed[3].type, 'Groceries');
 });
 
 test('tagging updates the transaction silently (no visible rule)', async () => {
@@ -80,12 +84,12 @@ test('tagging updates the transaction silently (no visible rule)', async () => {
   const base = `http://127.0.0.1:${server.address().port}`;
   try {
     await fetch(`${base}/api/finance/import`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ csv: 'Date,Description,Amount\n2026-06-01,CORNER STORE,-8\n' }) });
-    await fetch(`${base}/api/finance/learn-type`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ description: 'CORNER STORE', type: 'bill' }) });
+    await fetch(`${base}/api/finance/learn-type`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ description: 'CORNER STORE', type: 'Groceries' }) });
     const d = await (await fetch(`${base}/api/finance/budget`, { headers: { 'x-test-admin': '1' } })).json();
-    assert.equal(d.transactions[0].type, 'bill');   // transaction updated
-    assert.equal(d.typeRules.length, 0);            // but NO visible rule added
+    assert.equal(d.transactions[0].type, 'Groceries');  // transaction updated
+    assert.equal(d.typeRules.length, 0);                // but NO visible rule added
     // an explicit rule, added via the form, DOES show
-    await fetch(`${base}/api/finance/type-rules`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ rules: [{ match: 'netflix', type: 'bill' }] }) });
+    await fetch(`${base}/api/finance/type-rules`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ rules: [{ match: 'netflix', type: 'Subscriptions' }] }) });
     const d2 = await (await fetch(`${base}/api/finance/budget`, { headers: { 'x-test-admin': '1' } })).json();
     assert.equal(d2.typeRules.length, 1);
   } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }

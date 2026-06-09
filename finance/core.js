@@ -43,10 +43,24 @@ function normalizeTransactions(rows) {
   });
 }
 
-// ---------- Type classification (Income / Bill / Debt / Spending) ----------
-const TYPES = ['income', 'bill', 'debt', 'spending'];
-const DEBT_RE = /\bloan\b|credit\s*card\s*p|card\s*pmt|crd\s*pmt|cardmember|student\s*loan|auto\s*loan|kashable|affirm|klarna|lending|installment|sofi|upstart|toyota|personify/i;
-const BILL_RE = /electric|water|gas\s*(co|company|bill)|comcast|xfinity|spectrum|optimum|cable|at&t|verizon|t-?mobile|internet|insurance|geico|state\s*farm|allstate|progressive|rent|mortgage|invitation\s*homes|coserv|netflix|spotify|hulu|disney|hbo|youtube\s*premium|patreon|rocket\s*money|google\s*one|utilit|energy|gexa|electricity|phone\s*bill|render\.com/i;
+// ---------- Category classification ----------
+const TYPES = [
+  'Income', 'Bills & Utilities', 'Housing', 'Debt', 'Groceries', 'Dining',
+  'Auto & Transport', 'Shopping', 'Subscriptions', 'Health', 'Entertainment', 'Other',
+];
+// Ordered rules; first match wins. Income is handled by a positive amount.
+const CATEGORY_RULES = [
+  [/\bloan\b|credit\s*card\s*p|card\s*pmt|crd\s*pmt|cardmember|student\s*loan|auto\s*loan|kashable|affirm|klarna|lending|installment|sofi|upstart|toyota|personify/i, 'Debt'],
+  [/rent|mortgage|invitation\s*homes|landlord|apartment|leasing|property\s*mgmt|hoa\b/i, 'Housing'],
+  [/electric|water|atmos|gas\s*(co|company|service|bill)|coserv|optimum|cable|comcast|xfinity|spectrum|at&t|verizon|t-?mobile|internet|insurance|geico|state\s*farm|allstate|progressive|utilit|energy|gexa|electricity|phone\s*bill|render\.com|waste|sewer|trash/i, 'Bills & Utilities'],
+  [/netflix|spotify|hulu|disney\s*plus|disney\+|hbo|youtube\s*premium|patreon|rocket\s*money|google\s*one|icloud|apple\.com\/bill|prime\s*video|audible|adobe|microsoft|dropbox|membership/i, 'Subscriptions'],
+  [/kroger|safeway|whole\s*foods|trader\s*joe|aldi|h-?e-?b|publix|sprouts|food\s*lion|wegmans|grocery|tom\s*thumb|market\s*street/i, 'Groceries'],
+  [/restaurant|starbucks|coffee|mcdonald|chick-?fil|taco|pizza|doordash|uber\s*eats|grubhub|chipotle|sonic|wendy|burger|cafe|dunkin|panera|subway|domino|whataburger|grill|\bbbq\b|ihop|chili/i, 'Dining'],
+  [/shell|chevron|exxon|valero|conoco|phillips\s*66|quiktrip|racetrac|buc-?ee|\bgas\b|fuel|uber\b|lyft|parking|toll|ntta|transit|autozone|o'reilly|jiffy\s*lube|car\s*wash|firestone|discount\s*tire|\bdmv\b/i, 'Auto & Transport'],
+  [/cvs|walgreens|rite\s*aid|pharmacy|medical|dental|dentist|clinic|hospital|doctor|\bgym\b|fitness|planet\s*fitness|lifetime|optometr|vision/i, 'Health'],
+  [/cinema|\bamc\b|theater|theatre|steampowered|playstation|xbox|nintendo|ticketmaster|stubhub|concert|six\s*flags|\bmovie/i, 'Entertainment'],
+  [/amazon|amzn|target|walmart|wal-?mart|costco|best\s*buy|home\s*depot|lowe'?s|etsy|\bebay\b|ikea|macy|kohl|marshalls|tj\s*maxx|dollar\s*(tree|general)|wayfair|\bshop\b/i, 'Shopping'],
+];
 
 function merchantKey(desc) {
   return String(desc || '').trim().toLowerCase().replace(/\s*#?\d+$/, '').replace(/\s+/g, ' ').trim();
@@ -60,10 +74,9 @@ function classifyType(t, rules = [], learned = {}) {
   const lt = learned[merchantKey(t.description)];
   if (lt && TYPES.includes(lt)) return lt;
   // 3) automatic guess
-  if (t.amount > 0) return 'income';
-  if (DEBT_RE.test(t.description)) return 'debt';
-  if (BILL_RE.test(t.description)) return 'bill';
-  return 'spending';
+  if (t.amount > 0) return 'Income';
+  for (const [re, cat] of CATEGORY_RULES) { if (re.test(t.description)) return cat; }
+  return 'Other';
 }
 
 function typeAll(txns, rules = [], learned = {}) {
@@ -99,7 +112,7 @@ function monthKey(d) { return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 
 function computeMonthlyIncome(typedTxns, today = new Date()) {
   const byMonth = {};
   for (const t of typedTxns) {
-    if (t.type !== 'income') continue;
+    if (t.type !== 'Income') continue;
     const m = (t.date || '').slice(0, 7);
     if (!m) continue;
     byMonth[m] = (byMonth[m] || 0) + t.amount;
@@ -116,14 +129,28 @@ function computeMonthlyIncome(typedTxns, today = new Date()) {
 function computeBudget(typedTxns, settings, today = new Date()) {
   const month = monthKey(today);
   const inMonth = typedTxns.filter((t) => (t.date || '').slice(0, 7) === month);
-  const byType = { income: 0, bill: 0, debt: 0, spending: 0 };
+
+  // per-category totals (Income = inflow; everything else = outflow magnitude)
+  const byCategory = {};
+  for (const k of TYPES) byCategory[k] = 0;
+  const merchants = {};
   for (const t of inMonth) {
-    if (t.type === 'income') byType.income += t.amount;
-    else byType[t.type] = (byType[t.type] || 0) + (t.amount < 0 ? -t.amount : 0);
+    if (t.type === 'Income') { byCategory.Income += t.amount; continue; }
+    const out = t.amount < 0 ? -t.amount : 0;
+    byCategory[t.type] = (byCategory[t.type] || 0) + out;
+    if (out > 0) {
+      const k = merchantKey(t.description);
+      if (!merchants[k]) merchants[k] = { name: t.description, amount: 0 };
+      merchants[k].amount += out;
+    }
   }
-  for (const k of TYPES) byType[k] = round(byType[k]);
-  const inflows = byType.income;
-  const outflows = round(byType.bill + byType.debt + byType.spending);
+  for (const k of TYPES) byCategory[k] = round(byCategory[k]);
+  const inflows = byCategory.Income;
+  const outflows = round(TYPES.filter((k) => k !== 'Income').reduce((s, k) => s + byCategory[k], 0));
+  const topMerchants = Object.values(merchants)
+    .map((m) => ({ name: m.name, amount: round(m.amount) }))
+    .sort((a, b) => b.amount - a.amount)
+    .slice(0, 10);
   const monthlyIncome = computeMonthlyIncome(typedTxns, today);
 
   const year = today.getUTCFullYear(), monthIdx = today.getUTCMonth();
@@ -133,7 +160,7 @@ function computeBudget(typedTxns, settings, today = new Date()) {
   const safeToSpendRemaining = round(monthlyIncome - savingsTarget - outflows);
   const safeToSpendPerDay = round(Math.max(0, safeToSpendRemaining) / daysLeft);
 
-  return { month, monthlyIncome, savingsTarget, inflows, outflows, byType, daysInMonth, daysLeft, safeToSpendRemaining, safeToSpendPerDay };
+  return { month, monthlyIncome, savingsTarget, inflows, outflows, byCategory, topMerchants, daysInMonth, daysLeft, safeToSpendRemaining, safeToSpendPerDay };
 }
 
 // ---------- Recurring ----------
@@ -155,8 +182,8 @@ function recommend(typedTxns, summary, recurring = []) {
   const recs = [];
   if (summary.safeToSpendRemaining < 0)
     recs.push({ type: 'overspend', message: `You're $${Math.abs(summary.safeToSpendRemaining).toFixed(2)} over budget this month. Ease up on discretionary spending to protect your $${summary.savingsTarget} savings.` });
-  if (summary.byType && summary.byType.debt > 0)
-    recs.push({ type: 'debt', message: `$${summary.byType.debt.toFixed(2)} went to debt payments this month. Paying debt down faster is a guaranteed return — worth prioritizing.` });
+  if (summary.byCategory && summary.byCategory.Debt > 0)
+    recs.push({ type: 'debt', message: `$${summary.byCategory.Debt.toFixed(2)} went to debt payments this month. Paying debt down faster is a guaranteed return — worth prioritizing.` });
   for (const r of recurring.filter((x) => x.kind === 'expense'))
     recs.push({ type: 'subscription', message: `Recurring charge: ${r.description} (~$${Math.abs(r.amount).toFixed(2)}/mo, ${r.occurrences}x). Still using it?` });
   if (summary.safeToSpendRemaining > summary.savingsTarget && summary.savingsTarget >= 0)
