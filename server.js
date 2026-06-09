@@ -354,6 +354,18 @@ app.get('/admin', (req, res) => res.redirect('/admin.html'));
 app.get('/favicon.ico', (req, res) => res.redirect(301, '/logo-lm3dptfy-wh.png'));
 app.get('/apple-touch-icon.png', (req, res) => res.redirect(301, '/logo-lm3dptfy-wh.png'));
 app.get('/apple-touch-icon-precomposed.png', (req, res) => res.redirect(301, '/logo-lm3dptfy-wh.png'));
+
+// ===== Finance section (additive; behind admin login). Does not touch business routes. =====
+const { mountFinance } = require('./finance');
+app.get(['/finances', '/finances.html'], requireAdmin, (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(STATIC_DIR, 'finances.html'));
+});
+mountFinance(app, {
+  requireAdmin,
+  storePath: process.env.FINANCE_STORE_PATH || path.join(__dirname, 'finance-data', 'store.json'),
+});
+
 app.use(express.static(STATIC_DIR, {
   maxAge: '7d',
   etag: true,

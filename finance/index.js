@@ -1,0 +1,111 @@
+'use strict';
+// Mounts the finance section onto an existing Express app.
+// Surgical + additive: only registers /api/finance/* routes, all behind requireAdmin.
+const { createStore } = require('./store');
+const { claimAccessUrl, fetchSimplefinAccounts, simplefinToTransactions } = require('./simplefin');
+const {
+  parseCsv, normalizeTransactions, categorizeAll, DEFAULT_RULES, detectRecurring,
+  computeBudget, recommend, computeProjection, generateRetirementGuidance,
+} = require('./core');
+
+function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
+  if (typeof requireAdmin !== 'function') throw new Error('mountFinance requires a requireAdmin middleware');
+  const store = createStore(storePath);
+  const sfFetch = simplefinFetch || globalThis.fetch;
+  const guard = requireAdmin;
+
+  async function runSync() {
+    const { accessUrl, lastSync } = store.getSimplefin();
+    if (!accessUrl) return { imported: 0, skipped: 'not connected' };
+    const startDate = lastSync || Math.floor(Date.now() / 1000) - 90 * 24 * 3600;
+    const accountSet = await fetchSimplefinAccounts(accessUrl, { startDate, fetchImpl: sfFetch });
+    const txns = categorizeAll(simplefinToTransactions(accountSet), DEFAULT_RULES);
+    store.addTransactions(txns);
+    store.setSimplefin({ lastSync: Math.floor(Date.now() / 1000) });
+    return { imported: txns.length };
+  }
+
+  // ---- Budget ----
+  app.post('/api/finance/settings', guard, (req, res) => {
+    store.setSettings(req.body || {});
+    res.json(store.getSettings());
+  });
+
+  app.post('/api/finance/import', guard, (req, res) => {
+    const csv = (req.body && req.body.csv) || '';
+    const txns = categorizeAll(normalizeTransactions(parseCsv(csv)), DEFAULT_RULES);
+    store.addTransactions(txns);
+    res.json({ imported: txns.length });
+  });
+
+  app.get('/api/finance/budget', guard, (req, res) => {
+    const txns = store.getTransactions();
+    const settings = store.getSettings();
+    const summary = computeBudget(txns, settings, new Date());
+    const recurring = detectRecurring(txns);
+    res.json({ settings, summary, recurring, recommendations: recommend(txns, summary, recurring), transactions: txns });
+  });
+
+  // ---- SimpleFIN ----
+  app.post('/api/finance/simplefin/connect', guard, async (req, res) => {
+    try {
+      const accessUrl = await claimAccessUrl(req.body.setupToken, sfFetch);
+      store.setSimplefin({ accessUrl });
+      res.json({ connected: true });
+    } catch (e) {
+      res.status(400).json({ connected: false, error: String(e.message) });
+    }
+  });
+
+  app.post('/api/finance/simplefin/sync', guard, async (req, res) => {
+    if (!store.getSimplefin().accessUrl) return res.status(400).json({ error: 'Not connected' });
+    try { res.json(await runSync()); }
+    catch (e) { res.status(502).json({ error: String(e.message) }); }
+  });
+
+  app.get('/api/finance/simplefin/status', guard, (req, res) => {
+    const sf = store.getSimplefin();
+    res.json({ connected: !!sf.accessUrl, lastSync: sf.lastSync });
+  });
+
+  // ---- Retirement ----
+  app.post('/api/finance/retirement/settings', guard, (req, res) => {
+    store.setRetirementSettings(req.body || {});
+    res.json(store.getRetirementSettings());
+  });
+
+  app.post('/api/finance/retirement/snapshot', guard, (req, res) => {
+    const { date, balance, contributed } = req.body || {};
+    store.addSnapshot({ date, balance: Number(balance), contributed: Number(contributed) });
+    res.json(store.getSnapshots());
+  });
+
+  app.get('/api/finance/retirement', guard, (req, res) => {
+    const rset = store.getRetirementSettings();
+    const snapshots = store.getSnapshots();
+    const latest = snapshots[snapshots.length - 1] || { balance: 0, contributed: 0 };
+    const budgetSavingsTarget = store.getSettings().savingsTargetMonthly || 0;
+    const effectiveContribution = rset.monthlyContribution != null ? rset.monthlyContribution : budgetSavingsTarget;
+    const projection = computeProjection(latest.balance, effectiveContribution, rset.currentAge, rset.retirementAge);
+    const projectedAtRetirement = projection.length ? projection[projection.length - 1].expected : latest.balance;
+    const guidance = generateRetirementGuidance({
+      currentAge: rset.currentAge, retirementAge: rset.retirementAge,
+      effectiveContribution, goalAmount: rset.goalAmount, projectedAtRetirement,
+    });
+    res.json({
+      settings: rset, snapshots, currentBalance: latest.balance, contributedToDate: latest.contributed,
+      effectiveContribution, budgetSavingsTarget, projection, projectedAtRetirement, guidance,
+    });
+  });
+
+  // Background auto-sync every 6h while the server runs.
+  const timer = setInterval(() => {
+    runSync().then((r) => { if (r.imported) console.log(`[finance auto-sync] imported ${r.imported}`); })
+      .catch((e) => console.error('[finance auto-sync] failed:', e.message));
+  }, 6 * 60 * 60 * 1000);
+  if (timer.unref) timer.unref();
+
+  return { store, runSync };
+}
+
+module.exports = { mountFinance };

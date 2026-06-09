@@ -7,3 +7,4 @@ CLAUDE.md
 npm-debug.log*
 settings.json
 requests-cache.json
+finance-data/
