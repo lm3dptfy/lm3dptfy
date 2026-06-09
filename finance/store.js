@@ -13,6 +13,7 @@ const DEFAULTS = {
   },
   typeRules: [],
   learnedTypes: {},
+  migrationsApplied: [],
 };
 
 function createStore(path) {
@@ -28,6 +29,7 @@ function createStore(path) {
         retirement: { ...base.retirement, ...(parsed.retirement || {}) },
         typeRules: Array.isArray(parsed.typeRules) ? parsed.typeRules : [],
         learnedTypes: (parsed.learnedTypes && typeof parsed.learnedTypes === 'object') ? parsed.learnedTypes : {},
+        migrationsApplied: Array.isArray(parsed.migrationsApplied) ? parsed.migrationsApplied : [],
       };
     } catch {
       return structuredClone(DEFAULTS);
@@ -43,6 +45,14 @@ function createStore(path) {
   if (Object.keys(data.learnedTypes).length === 0 && Array.isArray(data.typeRules) && data.typeRules.length) {
     for (const r of data.typeRules) { if (r && r.match && r.type) data.learnedTypes[r.match] = r.type; }
     data.typeRules = [];
+    persist();
+  }
+  // One-time migration: wipe old manual tags so the tuned auto-classifier runs
+  // fresh. Marker ensures it runs exactly once, never touching future tags.
+  if (!data.migrationsApplied.includes('wipe-learned-v1')) {
+    data.learnedTypes = {};
+    data.typeRules = [];
+    data.migrationsApplied.push('wipe-learned-v1');
     persist();
   }
   return {
