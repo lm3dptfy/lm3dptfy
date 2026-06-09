@@ -2,7 +2,11 @@ const $ = (id) => document.getElementById(id);
 const money = (n) => `$${Number(n || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const charts = {};
 function setChart(id, config) { if (charts[id]) charts[id].destroy(); charts[id] = new Chart($(id), config); }
-async function api(path, opts) { return (await fetch('/api/finance' + path, opts)).json(); }
+async function api(path, opts) {
+  const r = await fetch('/api/finance' + path, opts);
+  if (r.status === 401) { location.href = '/admin.html'; return {}; }
+  return r.json();
+}
 
 // ---- Tabs ----
 document.querySelectorAll('.tab[data-tab]').forEach((btn) => {
