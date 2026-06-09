@@ -62,6 +62,21 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     res.json({ ok: true, typeRules: store.getTypeRules() });
   });
 
+  // TEMP: disk persistence check (no auth; writes only a harmless counter; remove after verifying).
+  app.get('/api/finance/_diskcheck', (req, res) => {
+    const fs = require('node:fs');
+    const p = require('node:path');
+    const dir = p.dirname(storePath);
+    const f = p.join(dir, '_diskcheck.json');
+    let d = { count: 0, firstWrite: new Date().toISOString() };
+    try { if (fs.existsSync(f)) d = JSON.parse(fs.readFileSync(f, 'utf8')); } catch {}
+    d.count = (d.count || 0) + 1;
+    d.lastWrite = new Date().toISOString();
+    let writeOk = true, err = null;
+    try { fs.mkdirSync(dir, { recursive: true }); fs.writeFileSync(f, JSON.stringify(d)); } catch (e) { writeOk = false; err = String(e.message); }
+    res.json({ storePath, dir, dirExists: fs.existsSync(dir), writeOk, err, count: d.count, firstWrite: d.firstWrite, lastWrite: d.lastWrite, storeFileExists: fs.existsSync(storePath) });
+  });
+
   // ---- SimpleFIN ----
   app.post('/api/finance/simplefin/connect', guard, async (req, res) => {
     try {
