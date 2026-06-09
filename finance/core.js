@@ -62,6 +62,28 @@ const CATEGORY_RULES = [
   [/amazon|amzn|target|walmart|wal-?mart|costco|best\s*buy|home\s*depot|lowe'?s|etsy|\bebay\b|ikea|macy|kohl|marshalls|tj\s*maxx|dollar\s*(tree|general)|wayfair|\bshop\b/i, 'Shopping'],
 ];
 
+// Roll noisy descriptions up to a clean merchant name for the top-merchants chart
+// (e.g. "PP DOORDASH KROGER 402" and "PP DOORDASH KRYSTAL 40" -> "DoorDash").
+const MERCHANT_ALIASES = [
+  [/doordash/i, 'DoorDash'], [/uber\s*eats/i, 'Uber Eats'], [/\buber\b/i, 'Uber'],
+  [/\blyft\b/i, 'Lyft'], [/grubhub/i, 'Grubhub'], [/instacart/i, 'Instacart'],
+  [/affirm/i, 'Affirm'], [/personify/i, 'Personify'], [/kashable/i, 'Kashable'],
+  [/amazon|amzn/i, 'Amazon'], [/walmart|wal-?mart/i, 'Walmart'], [/\btarget\b/i, 'Target'],
+  [/starbucks/i, 'Starbucks'], [/kroger/i, 'Kroger'], [/costco/i, 'Costco'],
+  [/t-?mobile/i, 'T-Mobile'], [/\bat&t\b|att\s/i, 'AT&T'], [/verizon/i, 'Verizon'],
+  [/usaa/i, 'USAA'], [/netflix/i, 'Netflix'], [/spotify/i, 'Spotify'],
+  [/shell/i, 'Shell'], [/chevron/i, 'Chevron'], [/texaco/i, 'Texaco'], [/exxon/i, 'Exxon'],
+  [/apple\.com|\bapple\b/i, 'Apple'], [/google/i, 'Google'], [/coserv/i, 'CoServ'],
+  [/optimum/i, 'Optimum'], [/invitation\s*homes/i, 'Invitation Homes'], [/toyota/i, 'Toyota'],
+];
+
+function merchantDisplayName(desc) {
+  for (const [re, name] of MERCHANT_ALIASES) if (re.test(desc)) return name;
+  return String(desc || '')
+    .replace(/\*/g, ' ').replace(/\b\d{3,}\b/g, '').replace(/\s{2,}/g, ' ').trim()
+    .replace(/\s+\d+$/, '').slice(0, 28) || String(desc || '');
+}
+
 function merchantKey(desc) {
   return String(desc || '').trim().toLowerCase().replace(/\s*#?\d+$/, '').replace(/\s+/g, ' ').trim();
 }
@@ -139,9 +161,9 @@ function computeBudget(typedTxns, settings, today = new Date()) {
     const out = t.amount < 0 ? -t.amount : 0;
     byCategory[t.type] = (byCategory[t.type] || 0) + out;
     if (out > 0) {
-      const k = merchantKey(t.description);
-      if (!merchants[k]) merchants[k] = { name: t.description, amount: 0 };
-      merchants[k].amount += out;
+      const name = merchantDisplayName(t.description);
+      if (!merchants[name]) merchants[name] = { name, amount: 0 };
+      merchants[name].amount += out;
     }
   }
   for (const k of TYPES) byCategory[k] = round(byCategory[k]);

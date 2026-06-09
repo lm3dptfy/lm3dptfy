@@ -59,6 +59,21 @@ test('auto-classifier handles real merchants', () => {
   }
 });
 
+test('top merchants roll up by alias (DoorDash, Affirm)', () => {
+  const typed = core.typeAll([
+    { date: '2026-06-01', description: 'PP DOORDASH KROGER 402', amount: -50 },
+    { date: '2026-06-02', description: 'PP DOORDASH KRYSTAL 40', amount: -30 },
+    { date: '2026-06-03', description: 'AFFIRM PAY D3XFK280 85', amount: -25 },
+    { date: '2026-06-04', description: 'AFFIRM PAY 5PCM68GU 85', amount: -25 },
+    { date: '2026-06-05', description: 'KROGER 123', amount: -80 },
+  ]);
+  const b = core.computeBudget(typed, { savingsTargetMonthly: 0 }, new Date('2026-06-10T12:00:00Z'));
+  const m = Object.fromEntries(b.topMerchants.map((x) => [x.name, x.amount]));
+  assert.equal(m['DoorDash'], 80);   // 50 + 30 combined
+  assert.equal(m['Affirm'], 50);     // 25 + 25 combined
+  assert.equal(m['Kroger'], 80);
+});
+
 test('type classification + learned merchant rules', () => {
   const txns = [
     { description: 'PAYROLL DEPOSIT', amount: 2500 },
