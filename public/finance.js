@@ -58,7 +58,10 @@ async function refreshSfStatus() {
     ? `Connected ✓ — last sync: ${s.lastSync ? new Date(s.lastSync * 1000).toLocaleString() : 'never'}`
     : 'Not connected. Paste a SimpleFIN setup token to enable automatic sync.';
   $('sfSync').disabled = !s.connected;
+  $('sfConnectArea').classList.toggle('hidden', s.connected);   // hide token box once connected
+  $('sfReconnect').classList.toggle('hidden', !s.connected);
 }
+$('sfReconnect').onclick = (e) => { e.preventDefault(); $('sfConnectArea').classList.remove('hidden'); };
 $('sfConnect').onclick = async () => {
   const setupToken = $('sfToken').value.trim();
   if (!setupToken) { $('sfMsg').textContent = 'Paste a token first.'; return; }
