@@ -45,8 +45,8 @@ function normalizeTransactions(rows) {
 
 // ---------- Type classification (Income / Bill / Debt / Spending) ----------
 const TYPES = ['income', 'bill', 'debt', 'spending'];
-const DEBT_RE = /\bloan\b|credit\s*card\s*p|card\s*pmt|crd\s*pmt|cardmember|student\s*loan|auto\s*loan|kashable|affirm|klarna|lending|installment|sofi|upstart/i;
-const BILL_RE = /electric|water|gas\s*(co|company|bill)|comcast|xfinity|spectrum|at&t|verizon|t-?mobile|internet|insurance|geico|state\s*farm|allstate|progressive|rent|mortgage|netflix|spotify|hulu|disney|hbo|youtube\s*premium|patreon|utilit|energy|gexa|electricity|phone\s*bill/i;
+const DEBT_RE = /\bloan\b|credit\s*card\s*p|card\s*pmt|crd\s*pmt|cardmember|student\s*loan|auto\s*loan|kashable|affirm|klarna|lending|installment|sofi|upstart|toyota|personify/i;
+const BILL_RE = /electric|water|gas\s*(co|company|bill)|comcast|xfinity|spectrum|optimum|cable|at&t|verizon|t-?mobile|internet|insurance|geico|state\s*farm|allstate|progressive|rent|mortgage|invitation\s*homes|coserv|netflix|spotify|hulu|disney|hbo|youtube\s*premium|patreon|rocket\s*money|google\s*one|utilit|energy|gexa|electricity|phone\s*bill|render\.com/i;
 
 function merchantKey(desc) {
   return String(desc || '').trim().toLowerCase().replace(/\s*#?\d+$/, '').replace(/\s+/g, ' ').trim();

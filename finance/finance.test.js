@@ -38,6 +38,23 @@ test('budget auto-detects income from deposits', () => {
   assert.equal(p[1].expected, 1200);
 });
 
+test('auto-classifier handles real merchants', () => {
+  const cases = [
+    ['TOYOTA ACH RTL WEB **********UB', -500, 'debt'],
+    ['PERSONIFY FIN 8885789546 **********', -200, 'debt'],
+    ['YSI*INVITATION HOMES PY 866-5879947 TX', -1800, 'bill'],
+    ['COSERV WEB PMTS **********D7CS', -150, 'bill'],
+    ['OPTIMUM 7706 CABLE PMNT **********', -90, 'bill'],
+    ['ROCKET MONEY PREMIUM **********L0I', -6, 'bill'],
+    ['GOOGLE *GOOGLE ONE 855-836-3987 CA', -2, 'bill'],
+    ['RENDER.COM RENDER.COM CA', -7, 'bill'],
+    ['ACME PAYROLL DIRECT DEP', 5000, 'income'],
+  ];
+  for (const [description, amount, want] of cases) {
+    assert.equal(core.classifyType({ description, amount }, [], {}), want, description);
+  }
+});
+
 test('type classification + learned merchant rules', () => {
   const txns = [
     { description: 'PAYROLL DEPOSIT', amount: 2500 },
