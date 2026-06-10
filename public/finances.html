@@ -13,7 +13,7 @@
   <link rel="apple-touch-icon" href="/finance-icon-180.png" />
   <link rel="icon" type="image/png" href="/finance-icon-192.png" />
   <link rel="manifest" href="/finance.webmanifest" />
-  <link rel="stylesheet" href="/finance.css?v=13" />
+  <link rel="stylesheet" href="/finance.css?v=14" />
   <script src="/chart.min.js"></script>
 </head>
 <body>
@@ -68,11 +68,14 @@
       <h2>💵 Payday view</h2>
       <div class="payday-grid">
         <div><span class="label">Current cash</span><strong id="pdCash">$—</strong></div>
-        <div><span class="label">Bills before payday</span><strong id="pdBills" class="neg">$—</strong></div>
+        <div><span class="label">Bills reserved</span><strong id="pdBills" class="neg">$—</strong></div>
         <div class="pd-safe"><span class="label">Safe to spend</span><strong id="pdSafe">$—</strong></div>
       </div>
       <p class="sub" id="pdSub"></p>
-      <ul id="pdBillsList" class="due-list"></ul>
+      <p class="due-head" id="pdBeforeHead">Before next payday</p>
+      <ul id="pdBeforeList" class="due-list"></ul>
+      <p class="due-head" id="pdAfterHead">After payday — same pay cycle</p>
+      <ul id="pdAfterList" class="due-list"></ul>
     </section>
     <section class="card" id="accountsCard">
       <h2>🏦 Accounts</h2>
@@ -220,6 +223,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=23"></script>
+  <script src="/finance.js?v=24"></script>
 </body>
 </html>

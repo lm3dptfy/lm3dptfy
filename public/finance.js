@@ -44,9 +44,10 @@ async function refreshBudget() {
   const pp = s.payPeriod;
   const pd = s.payday;
   if (pd) {
-    // Hero = current cash − unpaid bills due before the next payday (never spend past this).
+    // Hero = current cash − EVERY unpaid bill through the end of the next pay
+    // cycle (ignores future paycheck) — never spend past this.
     $('safeToday').textContent = money(pd.safeToSpend);
-    $('safeSub').textContent = `${money(pd.currentCash)} cash − ${money(pd.billsBeforePayday)} bills due before your next payday (${pd.nextPayday}, ${pd.daysLeft} day(s) away).`;
+    $('safeSub').textContent = `${money(pd.currentCash)} cash − ${money(pd.reservedTotal)} in bills due through the end of your next pay cycle (by ${pd.cycleEnd}). Every bill is covered by cash you already have.`;
   } else if (pp) {
     $('safeToday').textContent = money(pp.safeToSpendPerDay);
     $('safeSub').textContent = `${money(pp.safeToSpendRemaining)} to spend over ${pp.daysLeft} day(s) until your next payday (${pp.nextPayday}) — after ${money(pp.billsDue)} bills due + ${money(pp.iraSetAside)} to retirement.`;
@@ -114,19 +115,34 @@ async function refreshBudget() {
   renderRules(lastRules);
 }
 
+function billLi(b) {
+  return `<li><span>${esc(b.name)}</span><span class="due-date">${esc(b.date)}</span><span class="neg">-${money(b.amount).slice(1)}</span></li>`;
+}
+
 function renderPayday(pd) {
   const card = $('paydayCard');
   if (!card) return;
   if (!pd) { card.classList.add('hidden'); return; }
   card.classList.remove('hidden');
   $('pdCash').textContent = money(pd.currentCash);
-  $('pdBills').textContent = '-' + money(pd.billsBeforePayday);
+  $('pdBills').textContent = '-' + money(pd.reservedTotal).slice(1);
   $('pdSafe').textContent = money(pd.safeToSpend);
-  $('pdSub').textContent = `Next payday ${pd.nextPayday} — ${pd.daysLeft} day(s) away.`;
-  const unpaid = (pd.billsList || []).filter((b) => !b.paid);
-  $('pdBillsList').innerHTML = unpaid.length
-    ? unpaid.map((b) => `<li><span>${esc(b.name)}</span><span class="due-date">${esc(b.date)}</span><span class="neg">-${money(b.amount).slice(1)}</span></li>`).join('')
-    : '<li class="sub">No bills due before your next payday — all clear.</li>';
+  $('pdSub').textContent = `Next payday ${pd.nextPayday} (${pd.daysLeft} day(s) away). Reserving every bill through ${pd.cycleEnd}, paycheck not counted.`;
+
+  const before = (pd.billsBeforeList || []).filter((b) => !b.paid);
+  $('pdBeforeHead').classList.toggle('hidden', !before.length);
+  $('pdBeforeList').innerHTML = before.map(billLi).join('');
+
+  const after = (pd.billsAfterList || []).filter((b) => !b.paid);
+  $('pdAfterHead').classList.toggle('hidden', !after.length);
+  $('pdAfterList').innerHTML = after.map(billLi).join('');
+
+  if (!before.length && !after.length) {
+    $('pdBeforeHead').classList.remove('hidden');
+    $('pdBeforeHead').textContent = 'No bills due this cycle — all clear.';
+  } else {
+    $('pdBeforeHead').textContent = 'Before next payday';
+  }
 }
 
 function renderAccounts(accts, netCash) {

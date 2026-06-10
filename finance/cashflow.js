@@ -177,7 +177,7 @@ function computeCashflow(typedTxns, opts, today = new Date()) {
   const safeToSpendRemaining = round(income - iraSetAside - billsDue - discretionarySpent);
   const safeToSpendPerDay = round(Math.max(0, safeToSpendRemaining) / daysLeft);
   return {
-    start: startISO, end: iso(end), nextPayday: iso(end), daysLeft,
+    start: startISO, end: iso(end), nextPayday: iso(end), followingPayday: iso(addInterval(end, freq)), daysLeft,
     income, earned, estimate, paycheckReceived: paychecks > 0, otherIncome: round(otherInc),
     iraSetAside, billsDue, billsDueList, discretionarySpent,
     safeToSpendRemaining, safeToSpendPerDay,

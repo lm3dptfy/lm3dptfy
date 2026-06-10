@@ -135,6 +135,27 @@ test('payday view: unpaid bills due before next payday + safe-to-spend math', ()
   assert.equal(Math.round((cash - r.unpaidTotal) * 100) / 100, 2550);
 });
 
+test('payday view: reserves the WHOLE next cycle (bills after payday too)', () => {
+  // biweekly anchor 6/05 -> next payday 6/19, payday-after-next 7/03
+  const c = cf.computeCashflow([], { paySchedule: { frequency: 'biweekly', anchorDate: '2026-06-05' }, bills: [], iraMonthly: 0 },
+    new Date('2026-06-10T12:00:00Z'));
+  assert.equal(c.nextPayday, '2026-06-19');
+  assert.equal(c.followingPayday, '2026-07-03');
+  const bills = [
+    { name: 'Google', amount: 21.31, recurrence: 'monthly', dueDay: 11 }, // before payday
+    { name: 'Rent', amount: 1800, recurrence: 'monthly', dueDay: 28 },     // after payday, same cycle
+    { name: 'CoServ', amount: 200, recurrence: 'monthly', dueDay: 26 },    // after payday, same cycle
+    { name: 'NextCycle', amount: 999, recurrence: 'monthly', dueDay: 5 },  // 7/05 -> beyond cycle end, excluded
+  ];
+  const before = cf.upcomingBillsBeforePayday(bills, '2026-06-10', c.nextPayday, []);
+  const all = cf.upcomingBillsBeforePayday(bills, '2026-06-10', c.followingPayday, []);
+  assert.equal(before.unpaidTotal, 21.31);            // only Google before 6/19
+  assert.equal(all.unpaidTotal, 2021.31);             // Google + CoServ + Rent through 7/02 (NextCycle excluded)
+  // safe to spend reserves the full cycle out of current cash
+  const cash = 3240.04;
+  assert.equal(Math.round((cash - all.unpaidTotal) * 100) / 100, 1218.73);
+});
+
 test('calendar marks bills paid when a matching payment posted (incl. early)', () => {
   // Netflix due the 15th, but paid early on the 3rd -> shows paid
   const paid = cf.billsForMonth([{ name: 'NETFLIX.COM', amount: 16, recurrence: 'monthly', dueDay: 15 }],

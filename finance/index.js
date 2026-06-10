@@ -128,16 +128,30 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
       ? Math.round(summary.accountsView.reduce((s, a) => s + (Number(a.balance) || 0), 0) * 100) / 100
       : null;
 
-    // Payday view: Safe to Spend = current cash − unpaid bills due before next payday.
+    // Payday view: most-conservative model — reserve EVERY unpaid bill due from
+    // today through the end of the next pay cycle (payday-after-next) out of
+    // current cash, ignoring any future paycheck. Safe to Spend = cash − that.
     if (summary.payPeriod && summary.checkingBalance != null) {
-      const bb = upcomingBillsBeforePayday(bills, todayISO, summary.payPeriod.nextPayday, typed);
+      const cash = summary.checkingBalance;
+      const nextPayday = summary.payPeriod.nextPayday;
+      const cycleEnd = summary.payPeriod.followingPayday || nextPayday;
+      // Bills due before the next payday (the immediate ones).
+      const before = upcomingBillsBeforePayday(bills, todayISO, nextPayday, typed);
+      // All bills due through the end of the next cycle (immediate + after payday).
+      const all = upcomingBillsBeforePayday(bills, todayISO, cycleEnd, typed);
+      const afterList = all.list.filter((b) => b.date >= nextPayday);
+      const afterUnpaid = Math.round((all.unpaidTotal - before.unpaidTotal) * 100) / 100;
       summary.payday = {
-        currentCash: summary.checkingBalance,
-        nextPayday: summary.payPeriod.nextPayday,
+        currentCash: cash,
+        nextPayday,
+        cycleEnd,
         daysLeft: summary.payPeriod.daysLeft,
-        billsBeforePayday: bb.unpaidTotal,
-        billsList: bb.list,
-        safeToSpend: Math.round((summary.checkingBalance - bb.unpaidTotal) * 100) / 100,
+        billsBeforePayday: before.unpaidTotal,
+        billsBeforeList: before.list,
+        billsAfterPayday: afterUnpaid,
+        billsAfterList: afterList,
+        reservedTotal: all.unpaidTotal,
+        safeToSpend: Math.round((cash - all.unpaidTotal) * 100) / 100,
       };
     }
 

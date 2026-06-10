@@ -71,7 +71,8 @@ ul { padding-left: 1rem; }
 .payday-grid strong { font-size: 1.35rem; font-weight: 800; }
 .payday-grid .pd-safe strong { color: #22c55e; }
 .neg { color: #f87171; }
-.due-list { list-style: none; margin: .5rem 0 0; padding: 0; }
+.due-head { color: #cbd5e1; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; margin: .75rem 0 0; }
+.due-list { list-style: none; margin: .25rem 0 0; padding: 0; }
 .due-list li { display: flex; align-items: center; gap: .5rem; padding: .35rem 0; border-top: 1px solid #334155; font-size: .9rem; }
 .due-list li span:first-child { flex: 1; }
 .due-list .due-date { color: #94a3b8; font-size: .8rem; }
