@@ -128,6 +128,10 @@ test('calendar marks bills paid when a matching payment posted (incl. early)', (
   const julyRent = cf.billsForMonth([{ name: 'INVITATION HOMES', amount: 1800, recurrence: 'monthly', dueDay: 1 }],
     2026, 6, [{ date: '2026-06-01', description: 'INVITATION HOMES', amount: -1800 }], '2026-07-15');
   assert.equal(julyRent['2026-07-01'][0].paid, false);
+  // Toyota paid early (5/29) for a 6/05 bill, with a different masked suffix -> still matches
+  const toyota = cf.billsForMonth([{ name: 'TOYOTA ACH RTL WEB **********UB', amount: 450, recurrence: 'monthly', dueDay: 5 }],
+    2026, 5, [{ date: '2026-05-29', description: 'TOYOTA ACH RTL WEB **********ZX', amount: -450 }], '2026-06-10');
+  assert.equal(toyota['2026-06-05'][0].paid, true);
 });
 
 test('cashflow: biweekly bill recurrence (calendar + range)', () => {

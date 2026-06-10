@@ -2,7 +2,7 @@
 // Pay-period cash-flow planner: paydays, bills-by-due-date, IRA set-aside, and
 // "safe to spend until next payday".
 
-const { merchantKey } = require('./core');
+const { merchantKey, merchantDisplayName } = require('./core');
 const DAY = 86400000;
 const round = (n) => Math.round(n * 100) / 100;
 const BILL_CATEGORIES = new Set(['Bills & Utilities', 'Housing', 'Debt', 'Subscriptions']);
@@ -92,7 +92,8 @@ function billsDueInRange(bills, start, end) {
 // — so paying early (between paychecks) still counts, but last cycle's payment
 // doesn't bleed into this one.
 function isPaid(bill, occurrenceISO, txns, todayISO) {
-  const key = merchantKey(bill.name);
+  // match by clean merchant name (alias-aware) so varying masked suffixes still match
+  const key = merchantDisplayName(bill.name).toLowerCase();
   if (!key) return false;
   const occ = parseDate(occurrenceISO);
   const prev = (bill.recurrence === 'biweekly')
@@ -103,7 +104,7 @@ function isPaid(bill, occurrenceISO, txns, todayISO) {
   for (const t of txns) {
     if (!t.date || t.amount >= 0) continue;
     if (t.date <= prevISO || t.date > graceISO || t.date > todayISO) continue;
-    if (merchantKey(t.description) === key) return true;
+    if (merchantDisplayName(t.description).toLowerCase() === key) return true;
   }
   return false;
 }

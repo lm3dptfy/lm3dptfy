@@ -256,7 +256,7 @@ function generateRetirementGuidance({ currentAge, retirementAge, effectiveContri
 
 module.exports = {
   parseCsv, normalizeTransactions,
-  TYPES, classifyType, typeAll, learnTypeMap, sanitizeRules, merchantKey,
+  TYPES, classifyType, typeAll, learnTypeMap, sanitizeRules, merchantKey, merchantDisplayName,
   computeMonthlyIncome, computeBudget, detectRecurring, recommend,
   computeProjection, DEFAULT_RATES, generateRetirementGuidance, IRA_ANNUAL_CAP,
 };
