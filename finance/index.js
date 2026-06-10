@@ -269,6 +269,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const { date, hour } = localDateHour(es.timezone || 'America/Chicago');
     if (hour < (es.hour == null ? 7 : es.hour) || es.lastSentDate === date) return;
     try {
+      try { await runSync(); } catch (e) { console.error('[finance] pre-email sync failed:', e.message); }
       const { subject, html } = buildEmail(store, new Date());
       await sendViaResend(es.recipient, subject, html);
       store.setEmailSettings({ lastSentDate: date });
