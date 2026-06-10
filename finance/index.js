@@ -151,6 +151,11 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     res.json({ ok: true, bills: store.getBills() });
   });
 
+  // TEMP: email config check (no secrets exposed; remove after diagnosing).
+  app.get('/api/finance/_emailcfg', (req, res) => {
+    res.json({ resendConfigured: !!process.env.RESEND_API_KEY, emailFrom: process.env.EMAIL_FROM || '(default no-reply@lm3dptfy.online)' });
+  });
+
   // ---- Daily summary email ----
   app.post('/api/finance/email/settings', guard, (req, res) => {
     const { enabled, recipient, hour } = req.body || {};
