@@ -51,7 +51,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const txns = simplefinToTransactions(accountSet);
     store.addTransactions(txns);
     const bal = accountsBalance(accountSet);
-    store.setSimplefin({ lastSync: Math.floor(Date.now() / 1000), balance: bal.balance, availableBalance: bal.available, balanceDate: bal.date, accounts: bal.accounts });
+    store.setSimplefin({ lastSync: Math.floor(Date.now() / 1000), balance: bal.balance, balanceDate: bal.date, accounts: bal.accounts });
     return { imported: txns.length };
   }
 

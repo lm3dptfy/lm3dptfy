@@ -207,7 +207,7 @@ test('budget + simplefin + retirement flow (admin)', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'fin-'));
   const fakeFetch = async (url, opts) => {
     if (url === 'https://example.org/claim/xyz') return { ok: true, text: async () => 'https://u:p@bridge/simplefin' };
-    if (url.includes('/accounts')) return { ok: true, json: async () => ({ accounts: [{ id: 'a', balance: '3283.74', 'available-balance': '3240.04', transactions: [{ id: 't', posted: 1717200000, amount: '-15.49', description: 'NETFLIX.COM' }] }] }) };
+    if (url.includes('/accounts')) return { ok: true, json: async () => ({ accounts: [{ id: 'a', balance: '3283.74', transactions: [{ id: 't', posted: 1717200000, amount: '-15.49', description: 'NETFLIX.COM' }, { id: 'p', posted: 1717200000, amount: '-43.70', description: 'PENDING HOLD', pending: true }] }] }) };
     throw new Error('unexpected ' + url);
   };
   const app = buildApp(dir, fakeFetch);
