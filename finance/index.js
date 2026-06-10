@@ -65,7 +65,9 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const typed = typeAll(store.getTransactions(), rules, store.getLearnedTypes());
     const settings = store.getSettings();
     const summary = computeBudget(typed, settings, new Date());
-    const recurring = detectRecurring(typed);
+    const catByKey = {};
+    for (const t of typed) catByKey[merchantKey(t.description)] = t.type;
+    const recurring = detectRecurring(typed).map((r) => ({ ...r, category: catByKey[merchantKey(r.description)] || 'Other' }));
     // newest first for the editable list
     const transactions = [...typed].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
     const paySchedule = store.getPaySchedule();

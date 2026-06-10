@@ -57,7 +57,7 @@ const CATEGORY_RULES = [
   [/\bloan\b|credit\s*card\s*p|card\s*pmt|crd\s*pmt|cardmember|student\s*loan|auto\s*loan|kashable|affirm|klarna|lending|installment|sofi|upstart|toyota|personify/i, 'Debt'],
   [/rent|mortgage|invitation\s*homes|landlord|apartment|leasing|property\s*mgmt|hoa\b/i, 'Housing'],
   [/electric|water|atmos|gas\s*(co|company|service|bill)|coserv|optimum|cable|comcast|xfinity|spectrum|at&t|verizon|t-?mobile|internet|insurance|geico|state\s*farm|allstate|progressive|utilit|energy|gexa|electricity|phone\s*bill|render\.com|waste|sewer|trash/i, 'Bills & Utilities'],
-  [/netflix|spotify|hulu|disney\s*plus|disney\+|hbo|youtube\s*premium|patreon|rocket\s*money|google\s*one|icloud|apple\.com\/bill|prime\s*video|audible|adobe|microsoft|dropbox|membership/i, 'Subscriptions'],
+  [/netflix|spotify|hulu|disney\s*plus|disney\+|hbo|youtube\s*premium|patreon|rocket\s*money|google\s*one|icloud|apple\.com\/bill|prime\s*video|audible|adobe|microsoft|dropbox|membership|canva|heygen|openai|chatgpt|anthropic|claude|github|notion|figma|grammarly|1password|elevenlabs|midjourney/i, 'Subscriptions'],
   [/kroger|safeway|whole\s*foods|trader\s*joe|aldi|h-?e-?b|publix|sprouts|food\s*lion|wegmans|grocery|tom\s*thumb|market\s*street/i, 'Groceries'],
   [/restaurant|starbucks|coffee|mcdonald|chick-?fil|taco|pizza|doordash|uber\s*eats|grubhub|chipotle|sonic|wendy|burger|cafe|dunkin|panera|subway|domino|whataburger|grill|\bbbq\b|ihop|chili/i, 'Dining'],
   [/shell|chevron|exxon|valero|conoco|phillips\s*66|quiktrip|racetrac|buc-?ee|\bgas\b|fuel|uber\b|lyft|parking|toll|ntta|transit|autozone|o'reilly|jiffy\s*lube|car\s*wash|firestone|discount\s*tire|\bdmv\b/i, 'Auto & Transport'],

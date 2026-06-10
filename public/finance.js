@@ -165,9 +165,10 @@ function renderCalendar(cal) {
 
 // ---- Pay schedule & bills ----
 let lastBills = [];
+const BILL_CATS = ['Bills & Utilities', 'Housing', 'Debt', 'Subscriptions'];
 function populateBillPick(recurring) {
-  const exp = recurring.filter((r) => r.kind === 'expense');
-  $('billPick').innerHTML = '<option value="">— add from a recurring charge —</option>' +
+  const exp = recurring.filter((r) => r.kind === 'expense' && BILL_CATS.includes(r.category));
+  $('billPick').innerHTML = '<option value="">— add from a recurring bill —</option>' +
     exp.map((r) => `<option value="${esc(r.description)}" data-amt="${Math.abs(r.amount)}">${esc(r.description)} — ${money(Math.abs(r.amount))}</option>`).join('');
 }
 function renderBills(bills) {
