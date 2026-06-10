@@ -2,7 +2,7 @@
 // Mounts the finance section onto an existing Express app.
 // Surgical + additive: only registers /api/finance/* routes, all behind requireAdmin.
 const { createStore } = require('./store');
-const { claimAccessUrl, fetchSimplefinAccounts, simplefinToTransactions } = require('./simplefin');
+const { claimAccessUrl, fetchSimplefinAccounts, simplefinToTransactions, accountsBalance } = require('./simplefin');
 const {
   parseCsv, normalizeTransactions, typeAll, learnTypeMap, sanitizeRules, detectRecurring,
   computeBudget, recommend, computeProjection, generateRetirementGuidance, TYPES, merchantKey,
@@ -50,7 +50,8 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const accountSet = await fetchSimplefinAccounts(accessUrl, { startDate, fetchImpl: sfFetch });
     const txns = simplefinToTransactions(accountSet);
     store.addTransactions(txns);
-    store.setSimplefin({ lastSync: Math.floor(Date.now() / 1000) });
+    const bal = accountsBalance(accountSet);
+    store.setSimplefin({ lastSync: Math.floor(Date.now() / 1000), balance: bal.balance, availableBalance: bal.available, balanceDate: bal.date });
     return { imported: txns.length };
   }
 
@@ -91,6 +92,10 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const bills = store.getBills();
     summary.payPeriod = computeCashflow(typed, { paySchedule, bills, iraMonthly: iraMonthlyOf(store) }, new Date());
     summary.iraMonthly = iraMonthlyOf(store);
+    const sf = store.getSimplefin();
+    summary.checkingBalance = sf.availableBalance != null ? sf.availableBalance : sf.balance;
+    summary.checkingPosted = sf.balance;
+    summary.balanceDate = sf.balanceDate;
     // calendar data for the current month
     const now = new Date();
     const y = now.getFullYear(), mi = now.getMonth();

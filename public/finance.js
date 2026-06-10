@@ -63,6 +63,7 @@ async function refreshBudget() {
     $('emailTo').value = d.emailSettings.recipient || '';
     $('emailHour').value = d.emailSettings.hour == null ? 7 : d.emailSettings.hour;
   }
+  if ($('checkingBal')) $('checkingBal').textContent = s.checkingBalance != null ? money(s.checkingBalance) : '— sync your bank —';
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
   if ($('otherIncome')) $('otherIncome').textContent = money(s.otherIncome);

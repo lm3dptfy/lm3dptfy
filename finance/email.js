@@ -44,6 +44,9 @@ function buildEmail(store, now = new Date()) {
   const projection = computeProjection(latest.balance, effContrib, rset.currentAge, rset.retirementAge);
   const projected = projection.length ? projection[projection.length - 1].expected : latest.balance;
 
+  const sf = store.getSimplefin();
+  const checking = sf.availableBalance != null ? sf.availableBalance : sf.balance;
+
   const upcoming = upcomingBills(bills, now, 7);
 
   // biggest discretionary purchase in the last 2 days
@@ -67,6 +70,10 @@ function buildEmail(store, now = new Date()) {
       <div style="font-size:40px;font-weight:800;color:${over ? '#dc2626' : '#059669'}">${money(safe.safeToSpendPerDay)}</div>
       <div style="color:#64748b;font-size:13px">${money(safe.safeToSpendRemaining)} left over ${safe.daysLeft} day(s)${safe.nextPayday ? ` until payday ${safe.nextPayday}` : ' this month'}</div>
     </div>`;
+
+  if (checking != null) {
+    html += `<p style="font-size:15px;margin:0 0 8px">💳 <b>Checking balance:</b> ${money(checking)}${sf.availableBalance != null ? ' (available)' : ''}</p>`;
+  }
 
   if (pp) {
     html += `<h3 style="margin:16px 0 6px">This pay period</h3>
@@ -104,7 +111,7 @@ function buildEmail(store, now = new Date()) {
 
   if (rset.retirementAge) {
     html += `<h3 style="margin:16px 0 6px">Retirement</h3>
-    <p style="font-size:14px;margin:0">Balance ${money(latest.balance)} · on pace for <b>~${money(projected)}</b> by age ${rset.retirementAge}. Stay the course.</p>`;
+    <p style="font-size:14px;margin:0">Retirement balance ${money(latest.balance)} · on pace for <b>~${money(projected)}</b> by age ${rset.retirementAge}. Stay the course.</p>`;
   }
 
   html += `<p style="margin:20px 0 0"><a href="https://www.lm3dptfy.online/finances.html" style="color:#2563eb">Open your dashboard →</a></p>

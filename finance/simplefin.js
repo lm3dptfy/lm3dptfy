@@ -29,6 +29,21 @@ async function fetchSimplefinAccounts(accessUrl, { startDate, fetchImpl = fetch 
   return await res.json();
 }
 
+// Total balance across connected accounts. Returns posted + available (when given).
+function accountsBalance(accountSet) {
+  let balance = 0, available = 0, hasAvail = false, date = null;
+  for (const a of accountSet.accounts || []) {
+    balance += Number(a.balance) || 0;
+    if (a['available-balance'] != null && a['available-balance'] !== '') {
+      available += Number(a['available-balance']) || 0;
+      hasAvail = true;
+    }
+    if (a['balance-date'] && (!date || a['balance-date'] > date)) date = a['balance-date'];
+  }
+  const r = (n) => Math.round(n * 100) / 100;
+  return { balance: r(balance), available: hasAvail ? r(available) : null, date };
+}
+
 function simplefinToTransactions(accountSet) {
   const out = [];
   for (const account of accountSet.accounts || []) {
@@ -43,4 +58,4 @@ function simplefinToTransactions(accountSet) {
   return out;
 }
 
-module.exports = { claimAccessUrl, fetchSimplefinAccounts, simplefinToTransactions };
+module.exports = { claimAccessUrl, fetchSimplefinAccounts, simplefinToTransactions, accountsBalance };

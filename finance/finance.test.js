@@ -207,7 +207,7 @@ test('budget + simplefin + retirement flow (admin)', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'fin-'));
   const fakeFetch = async (url, opts) => {
     if (url === 'https://example.org/claim/xyz') return { ok: true, text: async () => 'https://u:p@bridge/simplefin' };
-    if (url.includes('/accounts')) return { ok: true, json: async () => ({ accounts: [{ id: 'a', transactions: [{ id: 't', posted: 1717200000, amount: '-15.49', description: 'NETFLIX.COM' }] }] }) };
+    if (url.includes('/accounts')) return { ok: true, json: async () => ({ accounts: [{ id: 'a', balance: '3283.74', 'available-balance': '3240.04', transactions: [{ id: 't', posted: 1717200000, amount: '-15.49', description: 'NETFLIX.COM' }] }] }) };
     throw new Error('unexpected ' + url);
   };
   const app = buildApp(dir, fakeFetch);
@@ -223,6 +223,9 @@ test('budget + simplefin + retirement flow (admin)', async () => {
     assert.equal(c.connected, true);
     const s = await (await fetch(`${base}/api/finance/simplefin/sync`, { method: 'POST', headers: { 'x-test-admin': '1' } })).json();
     assert.equal(s.imported, 1);
+    const bud = await (await fetch(`${base}/api/finance/budget`, { headers: { 'x-test-admin': '1' } })).json();
+    assert.equal(bud.summary.checkingBalance, 3240.04);   // available balance pulled from SimpleFIN
+    assert.equal(bud.summary.checkingPosted, 3283.74);
 
     await fetch(`${base}/api/finance/retirement/settings`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ currentAge: 43, retirementAge: 53, monthlyContribution: null, goalAmount: 500000 }) });
     await fetch(`${base}/api/finance/retirement/snapshot`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ date: '2026-06-01', balance: 10000, contributed: 9000 }) });
