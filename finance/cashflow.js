@@ -51,16 +51,36 @@ function paydaysBetween(ps, from, to) {
   return out;
 }
 
-// Which calendar dates in [start, end) does each bill fall on (clamps day to month length).
+// Dates (Date objects) a bill falls on within [from, to] inclusive.
+function billOccurrences(bill, from, to) {
+  const out = [];
+  if ((bill.recurrence === 'biweekly') && bill.anchorDate) {
+    let d = parseDate(bill.anchorDate);
+    while (d.getTime() > from.getTime()) d = new Date(d.getTime() - 14 * DAY);
+    while (d.getTime() < from.getTime()) d = new Date(d.getTime() + 14 * DAY);
+    for (; d.getTime() <= to.getTime(); d = new Date(d.getTime() + 14 * DAY)) out.push(new Date(d));
+  } else {
+    let y = from.getUTCFullYear(), m = from.getUTCMonth();
+    const endY = to.getUTCFullYear(), endM = to.getUTCMonth();
+    while (y < endY || (y === endY && m <= endM)) {
+      const dd = Math.min(bill.dueDay || 1, daysInMonth(y, m));
+      const date = new Date(Date.UTC(y, m, dd));
+      if (date.getTime() >= from.getTime() && date.getTime() <= to.getTime()) out.push(date);
+      m++; if (m > 11) { m = 0; y++; }
+    }
+  }
+  return out;
+}
+
+// Bills due in [start, end) — handles monthly + biweekly recurrence.
 function billsDueInRange(bills, start, end) {
   let total = 0;
   const due = [];
-  for (let d = new Date(start); d < end; d = new Date(d.getTime() + DAY)) {
-    const dom = d.getUTCDate();
-    const last = daysInMonth(d.getUTCFullYear(), d.getUTCMonth());
-    for (const b of bills) {
-      const dd = Math.min(b.dueDay, last);
-      if (dom === dd) { total += Number(b.amount) || 0; due.push({ name: b.name, amount: Number(b.amount) || 0, date: iso(d) }); }
+  const last = new Date(end.getTime() - DAY);
+  for (const b of bills) {
+    for (const d of billOccurrences(b, start, last)) {
+      total += Number(b.amount) || 0;
+      due.push({ name: b.name, amount: Number(b.amount) || 0, date: iso(d) });
     }
   }
   return { total: round(total), due };
@@ -68,12 +88,14 @@ function billsDueInRange(bills, start, end) {
 
 // Bills due across a whole month (for the calendar) keyed by ISO date.
 function billsForMonth(bills, year, monthIdx) {
+  const first = new Date(Date.UTC(year, monthIdx, 1));
+  const last = new Date(Date.UTC(year, monthIdx + 1, 0));
   const map = {};
-  const last = daysInMonth(year, monthIdx);
   for (const b of bills) {
-    const dd = Math.min(b.dueDay, last);
-    const key = iso(new Date(Date.UTC(year, monthIdx, dd)));
-    (map[key] = map[key] || []).push({ name: b.name, amount: Number(b.amount) || 0 });
+    for (const d of billOccurrences(b, first, last)) {
+      const key = iso(d);
+      (map[key] = map[key] || []).push({ name: b.name, amount: Number(b.amount) || 0 });
+    }
   }
   return map;
 }

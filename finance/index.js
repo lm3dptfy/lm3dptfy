@@ -23,12 +23,18 @@ function mode(nums) {
 }
 function sanitizeBills(bills) {
   if (!Array.isArray(bills)) return [];
-  return bills.map((b) => ({
-    id: String(b.id || Math.random().toString(36).slice(2, 9)),
-    name: String(b.name || '').slice(0, 60).trim() || 'Bill',
-    amount: Math.max(0, Math.round((Number(b.amount) || 0) * 100) / 100),
-    dueDay: Math.min(31, Math.max(1, Math.round(Number(b.dueDay) || 1))),
-  })).filter((b) => b.amount > 0);
+  return bills.map((b) => {
+    const recurrence = b.recurrence === 'biweekly' ? 'biweekly' : 'monthly';
+    const out = {
+      id: String(b.id || Math.random().toString(36).slice(2, 9)),
+      name: String(b.name || '').slice(0, 60).trim() || 'Bill',
+      amount: Math.max(0, Math.round((Number(b.amount) || 0) * 100) / 100),
+      recurrence,
+    };
+    if (recurrence === 'biweekly' && b.anchorDate) out.anchorDate = String(b.anchorDate).slice(0, 10);
+    else out.dueDay = Math.min(31, Math.max(1, Math.round(Number(b.dueDay) || 1)));
+    return out;
+  }).filter((b) => b.amount > 0 && (b.dueDay || b.anchorDate));
 }
 
 function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {

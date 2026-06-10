@@ -159,19 +159,31 @@ function renderCalendar(cal) {
   for (let d = 1; d <= days; d++) {
     const iso = `${cal.year}-${String(cal.monthIdx + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
     const bs = bills[iso] || [];
-    cells += `<div class="cal-day${iso === todayISO ? ' today' : ''}">
+    cells += `<div class="cal-day${iso === todayISO ? ' today' : ''}" data-date="${iso}">
       <div class="cal-num">${d}${paydays.has(iso) ? ' 💵' : ''}</div>
       ${bs.map((b) => `<div class="cal-bill" title="${esc(b.name)} ${money(b.amount)}">🧾 ${esc(b.name.slice(0, 12))}</div>`).join('')}
     </div>`;
   }
   $('calendar').innerHTML = cells;
+  $('calendar').onclick = (e) => {
+    const cell = e.target.closest('.cal-day');
+    if (cell && cell.dataset.date) openBillModal(cell.dataset.date);
+  };
 }
 
 // ---- Pay schedule & bills ----
 let lastBills = [];
+let lastCandidates = [];
+let modalDateISO = null;
 function populateBillPick(candidates) {
+  lastCandidates = candidates;
   $('billPick').innerHTML = '<option value="">— add a bill —</option>' +
     candidates.map((r) => `<option value="${esc(r.name)}" data-amt="${r.amount}">${esc(r.name)} — ${money(r.amount)} (${esc(r.category)})</option>`).join('');
+}
+function billSchedLabel(b) {
+  return b.recurrence === 'biweekly'
+    ? `<span class="bill-edit" style="font-size:.78rem;color:#94a3b8">every 2 wks from ${b.anchorDate || '?'}</span>`
+    : `<span class="bill-edit">due <input class="bill-due" type="number" min="1" max="31" value="${b.dueDay || 1}" /></span>`;
 }
 function renderBills(bills) {
   lastBills = bills;
@@ -179,19 +191,50 @@ function renderBills(bills) {
     ? bills.map((b, i) => `<div class="bill-row" data-i="${i}">
         <span class="bill-name" title="${esc(b.name)}">${esc(b.name)}</span>
         <span class="bill-edit">$<input class="bill-amt" type="number" value="${b.amount}" /></span>
-        <span class="bill-edit">due <input class="bill-due" type="number" min="1" max="31" value="${b.dueDay}" /></span>
+        ${billSchedLabel(b)}
         <button class="rule-del bill-del">✕</button>
       </div>`).join('')
-    : '<p class="sub">No bills yet — seed from your recurring charges or add one below.</p>';
+    : '<p class="sub">No bills yet — seed from recurring charges, add one below, or click a calendar date.</p>';
   $('billsList').querySelectorAll('.bill-row').forEach((row) => {
     const i = Number(row.dataset.i);
     row.querySelector('.bill-del').onclick = () => saveBills(lastBills.filter((_, j) => j !== i));
-    const commit = () => saveBills(lastBills.map((b, j) => j === i
-      ? { ...b, amount: Number(row.querySelector('.bill-amt').value), dueDay: Number(row.querySelector('.bill-due').value) } : b));
+    const due = row.querySelector('.bill-due');
+    const commit = () => {
+      const patch = { amount: Number(row.querySelector('.bill-amt').value) };
+      if (due) patch.dueDay = Number(due.value);
+      saveBills(lastBills.map((b, j) => (j === i ? { ...b, ...patch } : b)));
+    };
     row.querySelector('.bill-amt').onchange = commit;
-    row.querySelector('.bill-due').onchange = commit;
+    if (due) due.onchange = commit;
   });
 }
+
+// ---- Calendar: click a date to set a bill due ----
+function openBillModal(dateISO) {
+  modalDateISO = dateISO;
+  $('modalDate').textContent = dateISO;
+  $('modalMsg').textContent = '';
+  const have = new Set(lastBills.map((b) => b.name.toLowerCase()));
+  const opts = lastBills.map((b) => `<option value="${esc(b.name)}" data-amt="${b.amount}">${esc(b.name)} — ${money(b.amount)} (current)</option>`)
+    .concat(lastCandidates.filter((c) => !have.has(c.name.toLowerCase()))
+      .map((c) => `<option value="${esc(c.name)}" data-amt="${c.amount}">${esc(c.name)} — ${money(c.amount)} (${esc(c.category)})</option>`));
+  $('modalBill').innerHTML = opts.join('') || '<option value="">(no bills detected yet)</option>';
+  $('billModal').classList.remove('hidden');
+}
+$('modalCancel').onclick = () => $('billModal').classList.add('hidden');
+$('modalSave').onclick = () => {
+  const sel = $('modalBill');
+  const name = sel.value;
+  if (!name || !modalDateISO) { $('billModal').classList.add('hidden'); return; }
+  const amount = Number(sel.options[sel.selectedIndex].dataset.amt) || 0;
+  const fields = $('modalRec').value === 'biweekly'
+    ? { recurrence: 'biweekly', anchorDate: modalDateISO }
+    : { recurrence: 'monthly', dueDay: Number(modalDateISO.slice(8, 10)) };
+  const idx = lastBills.findIndex((b) => b.name.toLowerCase() === name.toLowerCase());
+  const next = idx >= 0 ? lastBills.map((b, i) => (i === idx ? { ...b, ...fields } : b)) : [...lastBills, { name, amount, ...fields }];
+  $('billModal').classList.add('hidden');
+  saveBills(next);
+};
 async function saveBills(bills) {
   const d = await api('/bills', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ bills }) });
   if (d) refreshBudget();

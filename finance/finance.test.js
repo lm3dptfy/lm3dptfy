@@ -115,6 +115,15 @@ test('cashflow: biweekly safe-to-spend until next payday', () => {
   assert.equal(c.daysLeft, 9);            // 6/10 -> 6/19
 });
 
+test('cashflow: biweekly bill recurrence (calendar + range)', () => {
+  const bills = [{ name: 'Daycare', amount: 200, recurrence: 'biweekly', anchorDate: '2026-06-05' }];
+  const bf = cf.billsForMonth(bills, 2026, 5);
+  assert.ok(bf['2026-06-05'] && bf['2026-06-19']);   // every 14 days
+  assert.ok(!bf['2026-06-12']);
+  const r = cf.billsDueInRange(bills, new Date(Date.UTC(2026, 5, 5)), new Date(Date.UTC(2026, 5, 19)));
+  assert.equal(r.total, 200);                          // only 6/5 in [6/5, 6/19)
+});
+
 test('cashflow uses actual paycheck (with OT) when received this period', () => {
   const ps = { frequency: 'biweekly', anchorDate: '2026-06-05', amount: 2000 };
   const typed = core.typeAll([{ date: '2026-06-06', description: 'EMPLOYER PAYROLL', amount: 2350 }]);

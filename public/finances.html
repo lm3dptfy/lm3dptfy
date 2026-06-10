@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Finances — LM3DPTFY</title>
-  <link rel="stylesheet" href="/finance.css?v=10" />
+  <link rel="stylesheet" href="/finance.css?v=11" />
   <script src="/chart.min.js"></script>
 </head>
 <body>
@@ -17,6 +17,26 @@
       <button type="submit">Sign in</button>
       <p class="sub" id="loginMsg"></p>
     </form>
+  </div>
+
+  <div id="billModal" class="overlay hidden">
+    <div class="login-card">
+      <h2>Bill due <span id="modalDate"></span></h2>
+      <label>Which bill?
+        <select id="modalBill"></select>
+      </label>
+      <label>Repeats
+        <select id="modalRec">
+          <option value="monthly">Monthly — this day each month</option>
+          <option value="biweekly">Every 2 weeks — from this date</option>
+        </select>
+      </label>
+      <div style="margin-top:.6rem;display:flex;gap:.5rem">
+        <button id="modalSave">Set due date</button>
+        <button id="modalCancel" type="button" class="tab">Cancel</button>
+      </div>
+      <p class="sub" id="modalMsg"></p>
+    </div>
   </div>
 
   <header>
@@ -168,6 +188,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=14"></script>
+  <script src="/finance.js?v=15"></script>
 </body>
 </html>
