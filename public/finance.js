@@ -16,8 +16,7 @@ document.querySelectorAll('.tab[data-tab]').forEach((btn) => {
     document.querySelectorAll('.tab[data-tab]').forEach((b) => b.classList.remove('active'));
     btn.classList.add('active');
     const tab = btn.dataset.tab;
-    $('tab-budget').classList.toggle('hidden', tab !== 'budget');
-    $('tab-retirement').classList.toggle('hidden', tab !== 'retirement');
+    ['budget', 'retirement', 'settings'].forEach((t) => $('tab-' + t).classList.toggle('hidden', tab !== t));
     if (tab === 'retirement') refreshRetirement();
   };
 });

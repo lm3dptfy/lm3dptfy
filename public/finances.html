@@ -24,6 +24,7 @@
     <nav>
       <button class="tab active" data-tab="budget">Budget</button>
       <button class="tab" data-tab="retirement">Retirement</button>
+      <button class="tab" data-tab="settings">Settings</button>
       <a class="tab" href="/dashboard.html">← Dashboard</a>
     </nav>
   </header>
@@ -55,7 +56,9 @@
     </section>
     <section class="card"><h2>Recommendations</h2><ul id="recs"></ul></section>
     <section class="card"><h2>Recurring / subscriptions</h2><ul id="subs"></ul></section>
+  </main>
 
+  <main id="tab-settings" class="tabpane hidden">
     <section class="card">
       <h2>Setup</h2>
       <p class="sub">💡 Income is detected automatically from your deposits — no need to enter it.</p>
@@ -165,6 +168,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=13"></script>
+  <script src="/finance.js?v=14"></script>
 </body>
 </html>
