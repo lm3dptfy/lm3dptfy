@@ -70,6 +70,7 @@ ul { padding-left: 1rem; }
 .payday-grid .label { font-size: .75rem; }
 .payday-grid strong { font-size: 1.35rem; font-weight: 800; }
 .payday-grid .pd-safe strong { color: #22c55e; }
+.big.is-neg, .payday-grid .pd-safe strong.is-neg { color: #f87171; }
 .neg { color: #f87171; }
 .due-head { color: #cbd5e1; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; margin: .75rem 0 0; }
 .due-list { list-style: none; margin: .25rem 0 0; padding: 0; }

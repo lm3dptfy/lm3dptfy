@@ -46,8 +46,12 @@ async function refreshBudget() {
   if (pd) {
     // Hero = current cash − EVERY unpaid bill through the end of the next pay
     // cycle (ignores future paycheck) — never spend past this.
+    const short = pd.safeToSpend < 0;
     $('safeToday').textContent = money(pd.safeToSpend);
-    $('safeSub').textContent = `${money(pd.currentCash)} cash − ${money(pd.reservedTotal)} in bills due through the end of your next pay cycle (by ${pd.cycleEnd}). Every bill is covered by cash you already have.`;
+    $('safeToday').classList.toggle('is-neg', short);
+    $('safeSub').textContent = short
+      ? `${money(pd.currentCash)} cash − ${money(pd.reservedTotal)} in bills due by ${pd.cycleEnd}. You're ${money(-pd.safeToSpend)} short — your next paycheck (${pd.nextPayday}) needs to cover the gap before you spend anything.`
+      : `${money(pd.currentCash)} cash − ${money(pd.reservedTotal)} in bills due through the end of your next pay cycle (by ${pd.cycleEnd}). Every bill is covered by cash you already have.`;
   } else if (pp) {
     $('safeToday').textContent = money(pp.safeToSpendPerDay);
     $('safeSub').textContent = `${money(pp.safeToSpendRemaining)} to spend over ${pp.daysLeft} day(s) until your next payday (${pp.nextPayday}) — after ${money(pp.billsDue)} bills due + ${money(pp.iraSetAside)} to retirement.`;
@@ -127,6 +131,7 @@ function renderPayday(pd) {
   $('pdCash').textContent = money(pd.currentCash);
   $('pdBills').textContent = '-' + money(pd.reservedTotal).slice(1);
   $('pdSafe').textContent = money(pd.safeToSpend);
+  $('pdSafe').classList.toggle('is-neg', pd.safeToSpend < 0);
   $('pdSub').textContent = `Next payday ${pd.nextPayday} (${pd.daysLeft} day(s) away). Reserving every bill through ${pd.cycleEnd}, paycheck not counted.`;
 
   const before = (pd.billsBeforeList || []).filter((b) => !b.paid);
