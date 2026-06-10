@@ -399,6 +399,7 @@ async function refreshRetirement() {
   $('retAge').value = d.settings.retirementAge || '';
   $('monthlyContrib').value = d.settings.monthlyContribution ?? '';
   $('goalAmount').value = d.settings.goalAmount ?? '';
+  if ($('fundedExternally')) $('fundedExternally').checked = !!d.settings.fundedExternally;
   $('contribNote').textContent = d.settings.monthlyContribution == null ? `Using your budget savings target: ${money(d.budgetSavingsTarget)}/mo.` : '';
   $('curBalance').textContent = money(d.currentBalance);
   $('curContributed').textContent = money(d.contributedToDate);
@@ -419,7 +420,7 @@ async function refreshRetirement() {
 }
 $('saveRetSettings').onclick = async () => {
   const mc = $('monthlyContrib').value, goal = $('goalAmount').value;
-  await api('/retirement/settings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ currentAge: Number($('curAge').value), retirementAge: Number($('retAge').value), monthlyContribution: mc === '' ? null : Number(mc), goalAmount: goal === '' ? null : Number(goal) }) });
+  await api('/retirement/settings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ currentAge: Number($('curAge').value), retirementAge: Number($('retAge').value), monthlyContribution: mc === '' ? null : Number(mc), goalAmount: goal === '' ? null : Number(goal), fundedExternally: $('fundedExternally').checked }) });
   refreshRetirement();
 };
 $('addSnap').onclick = async () => {

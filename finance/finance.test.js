@@ -252,6 +252,33 @@ test('tagging updates the transaction silently (no visible rule)', async () => {
   } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }
 });
 
+test('retirement funded externally is not reserved from checking safe-to-spend', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'fin-'));
+  const app = buildApp(dir);
+  const server = app.listen(0);
+  const base = `http://127.0.0.1:${server.address().port}`;
+  try {
+    await fetch(`${base}/api/finance/pay-schedule`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ frequency: 'biweekly', anchorDate: '2026-06-05', amount: 2000 }) });
+    await fetch(`${base}/api/finance/retirement/settings`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ currentAge: 43, retirementAge: 53, monthlyContribution: 520 }) });
+
+    // default: contribution IS reserved from the checking-based pay-period math
+    let bud = await (await fetch(`${base}/api/finance/budget`, { headers: ADMIN })).json();
+    assert.ok(bud.summary.payPeriod.iraSetAside > 0);
+    assert.equal(bud.summary.retirementFundedExternally, false);
+
+    // funded from Ally: reserve drops to 0, but the true contribution is unchanged
+    await fetch(`${base}/api/finance/retirement/settings`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ fundedExternally: true }) });
+    bud = await (await fetch(`${base}/api/finance/budget`, { headers: ADMIN })).json();
+    assert.equal(bud.summary.payPeriod.iraSetAside, 0);
+    assert.equal(bud.summary.retirementFundedExternally, true);
+    assert.equal(bud.summary.iraMonthly, 520);
+
+    // ...and the retirement projection still uses the real $520/mo
+    const ret = await (await fetch(`${base}/api/finance/retirement`, { headers: ADMIN })).json();
+    assert.equal(ret.effectiveContribution, 520);
+  } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }
+});
+
 test('finance routes require admin', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'fin-'));
   const app = buildApp(dir);

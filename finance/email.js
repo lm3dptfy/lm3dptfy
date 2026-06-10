@@ -34,7 +34,9 @@ function buildEmail(store, now = new Date()) {
   const settings = store.getSettings();
   const summary = computeBudget(typed, settings, now);
   const bills = store.getBills();
-  const pp = computeCashflow(typed, { paySchedule: store.getPaySchedule(), bills, iraMonthly: iraMonthlyOf(store) }, now);
+  const fundedExternally = !!store.getRetirementSettings().fundedExternally;
+  const iraReserve = fundedExternally ? 0 : iraMonthlyOf(store);
+  const pp = computeCashflow(typed, { paySchedule: store.getPaySchedule(), bills, iraMonthly: iraReserve }, now);
 
   // retirement
   const rset = store.getRetirementSettings();
@@ -84,7 +86,7 @@ function buildEmail(store, now = new Date()) {
     <table style="width:100%;border-collapse:collapse;font-size:14px">
       ${row('Income', money(pp.income))}
       ${row('Bills due', '-' + money(pp.billsDue))}
-      ${row('Retirement set aside', '-' + money(pp.iraSetAside))}
+      ${fundedExternally ? '' : row('Retirement set aside', '-' + money(pp.iraSetAside))}
       ${row('Spent so far', '-' + money(pp.discretionarySpent))}
       ${row('Remaining', money(pp.safeToSpendRemaining), over ? '#dc2626' : '#059669')}
     </table>`;

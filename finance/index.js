@@ -15,6 +15,12 @@ function iraMonthlyOf(store) {
   const r = store.getRetirementSettings();
   return r.monthlyContribution != null ? r.monthlyContribution : (store.getSettings().savingsTargetMonthly || 0);
 }
+// Amount to hold back from the checking-based "safe to spend". Zero when the
+// retirement contribution is funded from a separate account (e.g. Ally), since
+// it never leaves the tracked checking balance.
+function iraReserveOf(store) {
+  return store.getRetirementSettings().fundedExternally ? 0 : iraMonthlyOf(store);
+}
 function mode(nums) {
   const c = {};
   let best = nums[0], bestN = 0;
@@ -90,8 +96,9 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const transactions = [...typed].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
     const paySchedule = store.getPaySchedule();
     const bills = store.getBills();
-    summary.payPeriod = computeCashflow(typed, { paySchedule, bills, iraMonthly: iraMonthlyOf(store) }, new Date());
+    summary.payPeriod = computeCashflow(typed, { paySchedule, bills, iraMonthly: iraReserveOf(store) }, new Date());
     summary.iraMonthly = iraMonthlyOf(store);
+    summary.retirementFundedExternally = !!store.getRetirementSettings().fundedExternally;
     const sf = store.getSimplefin();
     const accts = sf.accounts || [];
     const acct = accts.length
