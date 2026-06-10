@@ -68,6 +68,36 @@
       <a href="#" id="sfReconnect" class="hidden" style="display:block;margin-top:.6rem;color:#94a3b8;font-size:.85rem">Connect a different bank / re-link</a>
       <span id="sfMsg"></span>
     </section>
+
+    <section class="card">
+      <h2>💵 Pay schedule</h2>
+      <label>How often are you paid?
+        <select id="payFreq">
+          <option value="weekly">Weekly</option>
+          <option value="biweekly">Every 2 weeks</option>
+          <option value="semimonthly">Twice a month</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </label>
+      <label>A recent payday (anchor) <input id="payAnchor" type="date" /></label>
+      <label>Amount per paycheck $ <input id="payAmount" type="number" /></label>
+      <button id="savePay">Save</button>
+      <span id="payMsg"></span>
+    </section>
+
+    <section class="card">
+      <h2>🧾 Bills</h2>
+      <p class="sub">Bills count on the day they're <em>due</em> — even if you pay early. Your retirement contribution is set aside automatically.</p>
+      <button id="billsSeed">Seed from recurring charges</button>
+      <div id="billsList"></div>
+      <div class="rule-add">
+        <input id="billName" placeholder="Bill name" />
+        <input id="billAmount" type="number" placeholder="$" />
+        <input id="billDue" type="number" min="1" max="31" placeholder="due day" />
+        <button id="billAdd">Add bill</button>
+      </div>
+    </section>
+
     <section class="card">
       <h2>Type rules</h2>
       <p class="sub">If a merchant name contains this text, force its type. (Overrides the automatic guess.)</p>
@@ -117,6 +147,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=8"></script>
+  <script src="/finance.js?v=9"></script>
 </body>
 </html>

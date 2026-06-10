@@ -7,6 +7,7 @@ const { join } = require('node:path');
 const express = require('express');
 const { mountFinance } = require('./index');
 const core = require('./core');
+const cf = require('./cashflow');
 
 // stub requireAdmin: allow only when header x-test-admin=1
 function fakeAuth(req, res, next) {
@@ -71,6 +72,39 @@ test('Other Income is money-in but excluded from earned-income baseline', () => 
   assert.equal(b.byCategory['Other Income'], 700);
   assert.equal(b.otherIncome, 700);
   assert.equal(b.safeToSpendRemaining, 4700);        // 4000 baseline + 700 other - 0 - 0
+});
+
+test('cashflow: biweekly safe-to-spend until next payday', () => {
+  const ps = { frequency: 'biweekly', anchorDate: '2026-06-05', amount: 2000 };
+  const today = new Date('2026-06-10T12:00:00Z');
+  const period = cf.currentPayPeriod(ps, today);
+  assert.equal(period.start.toISOString().slice(0, 10), '2026-06-05');
+  assert.equal(period.end.toISOString().slice(0, 10), '2026-06-19');
+
+  const typed = core.typeAll([
+    { date: '2026-06-05', description: 'INVITATION HOMES', amount: -1800 }, // Housing (bill cat) -> ignored in discretionary
+    { date: '2026-06-08', description: 'DOORDASH', amount: -50 },           // Dining -> discretionary
+  ]);
+  const c = cf.computeCashflow(typed, {
+    paySchedule: ps,
+    bills: [{ name: 'Rent', amount: 1800, dueDay: 1 }, { name: 'Netflix', amount: 16, dueDay: 15 }],
+    iraMonthly: 520,
+  }, today);
+  assert.equal(c.income, 2000);
+  assert.equal(c.iraSetAside, 240);       // 520 * 12/26
+  assert.equal(c.billsDue, 16);           // only Netflix (15th) falls in 6/5..6/19; rent (1st) does not
+  assert.equal(c.discretionarySpent, 50); // dining only; rent (Housing) excluded
+  assert.equal(c.safeToSpendRemaining, 1694); // 2000 - 240 - 16 - 50
+  assert.equal(c.daysLeft, 9);            // 6/10 -> 6/19
+});
+
+test('cashflow: paydays and bills for a month (calendar data)', () => {
+  const ps = { frequency: 'biweekly', anchorDate: '2026-06-05', amount: 2000 };
+  const pays = cf.paydaysBetween(ps, new Date(Date.UTC(2026, 5, 1)), new Date(Date.UTC(2026, 5, 30)));
+  assert.deepEqual(pays, ['2026-06-05', '2026-06-19']);
+  const bills = cf.billsForMonth([{ name: 'Rent', amount: 1800, dueDay: 1 }, { name: 'Netflix', amount: 16, dueDay: 15 }], 2026, 5);
+  assert.ok(bills['2026-06-01'] && bills['2026-06-01'][0].name === 'Rent');
+  assert.ok(bills['2026-06-15'] && bills['2026-06-15'][0].name === 'Netflix');
 });
 
 test('top merchants roll up by alias (DoorDash, Affirm)', () => {

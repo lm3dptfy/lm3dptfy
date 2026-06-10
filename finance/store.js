@@ -14,6 +14,8 @@ const DEFAULTS = {
   typeRules: [],
   learnedTypes: {},
   migrationsApplied: [],
+  paySchedule: { frequency: 'biweekly', anchorDate: null, amount: 0 },
+  bills: [],
 };
 
 function createStore(path) {
@@ -30,6 +32,8 @@ function createStore(path) {
         typeRules: Array.isArray(parsed.typeRules) ? parsed.typeRules : [],
         learnedTypes: (parsed.learnedTypes && typeof parsed.learnedTypes === 'object') ? parsed.learnedTypes : {},
         migrationsApplied: Array.isArray(parsed.migrationsApplied) ? parsed.migrationsApplied : [],
+        paySchedule: { ...base.paySchedule, ...(parsed.paySchedule || {}) },
+        bills: Array.isArray(parsed.bills) ? parsed.bills : [],
       };
     } catch {
       return structuredClone(DEFAULTS);
@@ -79,6 +83,10 @@ function createStore(path) {
     setTypeRules: (rules) => { data.typeRules = rules; persist(); },
     getLearnedTypes: () => data.learnedTypes,
     setLearnedTypes: (m) => { data.learnedTypes = m; persist(); },
+    getPaySchedule: () => data.paySchedule,
+    setPaySchedule: (p) => { data.paySchedule = { ...data.paySchedule, ...p }; persist(); },
+    getBills: () => data.bills,
+    setBills: (b) => { data.bills = b; persist(); },
   };
 }
 

@@ -5,8 +5,30 @@ const { createStore } = require('./store');
 const { claimAccessUrl, fetchSimplefinAccounts, simplefinToTransactions } = require('./simplefin');
 const {
   parseCsv, normalizeTransactions, typeAll, learnTypeMap, sanitizeRules, detectRecurring,
-  computeBudget, recommend, computeProjection, generateRetirementGuidance, TYPES,
+  computeBudget, recommend, computeProjection, generateRetirementGuidance, TYPES, merchantKey,
 } = require('./core');
+const { computeCashflow } = require('./cashflow');
+
+const BILL_CATS = new Set(['Bills & Utilities', 'Housing', 'Debt', 'Subscriptions']);
+function iraMonthlyOf(store) {
+  const r = store.getRetirementSettings();
+  return r.monthlyContribution != null ? r.monthlyContribution : (store.getSettings().savingsTargetMonthly || 0);
+}
+function mode(nums) {
+  const c = {};
+  let best = nums[0], bestN = 0;
+  for (const n of nums) { c[n] = (c[n] || 0) + 1; if (c[n] > bestN) { bestN = c[n]; best = n; } }
+  return best;
+}
+function sanitizeBills(bills) {
+  if (!Array.isArray(bills)) return [];
+  return bills.map((b) => ({
+    id: String(b.id || Math.random().toString(36).slice(2, 9)),
+    name: String(b.name || '').slice(0, 60).trim() || 'Bill',
+    amount: Math.max(0, Math.round((Number(b.amount) || 0) * 100) / 100),
+    dueDay: Math.min(31, Math.max(1, Math.round(Number(b.dueDay) || 1))),
+  })).filter((b) => b.amount > 0);
+}
 
 function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
   if (typeof requireAdmin !== 'function') throw new Error('mountFinance requires a requireAdmin middleware');
@@ -46,7 +68,11 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const recurring = detectRecurring(typed);
     // newest first for the editable list
     const transactions = [...typed].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-    res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES });
+    const paySchedule = store.getPaySchedule();
+    const bills = store.getBills();
+    summary.payPeriod = computeCashflow(typed, { paySchedule, bills, iraMonthly: iraMonthlyOf(store) }, new Date());
+    summary.iraMonthly = iraMonthlyOf(store);
+    res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES, paySchedule, bills });
   });
 
   // Learn a type from one transaction (silent; remembers it for that merchant,
@@ -61,6 +87,44 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
   app.post('/api/finance/type-rules', guard, (req, res) => {
     store.setTypeRules(sanitizeRules(req.body && req.body.rules));
     res.json({ ok: true, typeRules: store.getTypeRules() });
+  });
+
+  // ---- Pay schedule & bills ----
+  app.post('/api/finance/pay-schedule', guard, (req, res) => {
+    const { frequency, anchorDate, amount } = req.body || {};
+    const ok = ['weekly', 'biweekly', 'semimonthly', 'monthly'];
+    store.setPaySchedule({
+      frequency: ok.includes(frequency) ? frequency : 'biweekly',
+      anchorDate: anchorDate || null,
+      amount: Math.max(0, Math.round((Number(amount) || 0) * 100) / 100),
+    });
+    res.json({ ok: true, paySchedule: store.getPaySchedule() });
+  });
+
+  app.post('/api/finance/bills', guard, (req, res) => {
+    store.setBills(sanitizeBills(req.body && req.body.bills));
+    res.json({ ok: true, bills: store.getBills() });
+  });
+
+  // Seed bills from detected recurring bill-category charges (due day = most common day-of-month).
+  app.post('/api/finance/bills/seed', guard, (req, res) => {
+    const txns = store.getTransactions();
+    const typed = typeAll(txns, store.getTypeRules(), store.getLearnedTypes());
+    const catByKey = {};
+    for (const t of typed) catByKey[merchantKey(t.description)] = t.type;
+    const recurring = detectRecurring(typed).filter((r) => r.kind === 'expense');
+    const bills = [...store.getBills()];
+    const have = new Set(bills.map((b) => b.name.toLowerCase()));
+    for (const r of recurring) {
+      const key = merchantKey(r.description);
+      if (!BILL_CATS.has(catByKey[key])) continue;            // only real bills
+      if (have.has(r.description.toLowerCase())) continue;
+      const days = txns.filter((t) => merchantKey(t.description) === key && t.date).map((t) => Number(t.date.slice(8, 10)));
+      const dueDay = days.length ? mode(days) : 1;
+      bills.push({ id: Math.random().toString(36).slice(2, 9), name: r.description, amount: Math.abs(r.amount), dueDay });
+    }
+    store.setBills(sanitizeBills(bills));
+    res.json({ ok: true, bills: store.getBills() });
   });
 
   // ---- SimpleFIN ----

@@ -42,8 +42,21 @@ async function refreshBudget() {
   const rt = $('ruleType');
   if (rt && rt.dataset.filled !== '1') { rt.innerHTML = catOptions('Bills & Utilities'); rt.dataset.filled = '1'; }
 
-  $('safeToday').textContent = money(s.safeToSpendPerDay);
-  $('safeSub').textContent = `${money(s.safeToSpendRemaining)} left for ${s.daysLeft} day(s) in ${s.month}`;
+  const pp = s.payPeriod;
+  if (pp) {
+    $('safeToday').textContent = money(pp.safeToSpendPerDay);
+    $('safeSub').textContent = `${money(pp.safeToSpendRemaining)} to spend over ${pp.daysLeft} day(s) until your next payday (${pp.nextPayday}) — after ${money(pp.billsDue)} bills due + ${money(pp.iraSetAside)} to retirement.`;
+  } else {
+    $('safeToday').textContent = money(s.safeToSpendPerDay);
+    $('safeSub').textContent = `${money(s.safeToSpendRemaining)} left for ${s.daysLeft} day(s) in ${s.month} — add your pay schedule below for payday-accurate budgeting.`;
+  }
+  // pay schedule + bills config
+  if (d.paySchedule) {
+    $('payFreq').value = d.paySchedule.frequency || 'biweekly';
+    $('payAnchor').value = d.paySchedule.anchorDate || '';
+    $('payAmount').value = d.paySchedule.amount || '';
+  }
+  renderBills(d.bills || []);
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
   if ($('otherIncome')) $('otherIncome').textContent = money(s.otherIncome);
@@ -121,6 +134,41 @@ $('ruleAdd').onclick = () => {
 
 $('saveSettings').onclick = async () => {
   await api('/settings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ savingsTargetMonthly: Number($('savings').value) }) });
+  refreshBudget();
+};
+
+// ---- Pay schedule & bills ----
+let lastBills = [];
+function renderBills(bills) {
+  lastBills = bills;
+  $('billsList').innerHTML = bills.length
+    ? bills.map((b, i) => `<div class="rule-row"><span class="txn-desc">${esc(b.name)} — ${money(b.amount)} · due day ${b.dueDay}</span><button class="rule-del bill-del" data-i="${i}">✕</button></div>`).join('')
+    : '<p class="sub">No bills yet — seed from your recurring charges or add one below.</p>';
+  $('billsList').querySelectorAll('.bill-del').forEach((btn) => {
+    btn.onclick = () => saveBills(lastBills.filter((_, i) => i !== Number(btn.dataset.i)));
+  });
+}
+async function saveBills(bills) {
+  const d = await api('/bills', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ bills }) });
+  if (d) refreshBudget();
+}
+$('billAdd').onclick = () => {
+  const name = $('billName').value.trim();
+  const amount = Number($('billAmount').value);
+  const dueDay = Number($('billDue').value);
+  if (!name || !(amount > 0) || !(dueDay >= 1)) return;
+  $('billName').value = ''; $('billAmount').value = ''; $('billDue').value = '';
+  saveBills([...lastBills, { name, amount, dueDay }]);
+};
+$('billsSeed').onclick = async () => {
+  $('billsSeed').textContent = 'Seeding…';
+  await api('/bills/seed', { method: 'POST' });
+  $('billsSeed').textContent = 'Seed from recurring charges';
+  refreshBudget();
+};
+$('savePay').onclick = async () => {
+  $('payMsg').textContent = 'Saved.';
+  await api('/pay-schedule', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ frequency: $('payFreq').value, anchorDate: $('payAnchor').value, amount: Number($('payAmount').value) }) });
   refreshBudget();
 };
 
