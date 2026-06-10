@@ -285,7 +285,18 @@ async function refreshSfStatus() {
   $('sfSync').disabled = !s.connected;
   $('sfConnectArea').classList.toggle('hidden', s.connected);   // hide token box once connected
   $('sfReconnect').classList.toggle('hidden', !s.connected);
+  const accts = s.accounts || [];
+  if (accts.length > 1) {
+    $('acctPickWrap').classList.remove('hidden');
+    $('acctPick').innerHTML = accts.map((a) => `<option value="${esc(a.id)}" ${a.id === s.checkingAccountId ? 'selected' : ''}>${esc(a.name)} — ${money(a.balance)}${a.available != null ? ` (avail ${money(a.available)})` : ''}</option>`).join('');
+  } else {
+    $('acctPickWrap').classList.add('hidden');
+  }
 }
+$('acctPick').onchange = async () => {
+  await api('/simplefin/account', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: $('acctPick').value }) });
+  refreshBudget();
+};
 $('sfReconnect').onclick = (e) => { e.preventDefault(); $('sfConnectArea').classList.remove('hidden'); };
 $('sfConnect').onclick = async () => {
   const setupToken = $('sfToken').value.trim();

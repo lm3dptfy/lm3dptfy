@@ -89,6 +89,7 @@
     <section class="card">
       <h2>🔗 Connect bank (automatic)</h2>
       <p class="sub" id="sfStatus">Checking connection…</p>
+      <label id="acctPickWrap" class="hidden">Which account is your checking? <select id="acctPick"></select></label>
       <div id="sfConnectArea">
         <label>SimpleFIN setup token <input id="sfToken" type="text" placeholder="paste the token from SimpleFIN" /></label>
         <button id="sfConnect">Connect</button>
@@ -189,6 +190,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=16"></script>
+  <script src="/finance.js?v=17"></script>
 </body>
 </html>

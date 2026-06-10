@@ -29,19 +29,20 @@ async function fetchSimplefinAccounts(accessUrl, { startDate, fetchImpl = fetch 
   return await res.json();
 }
 
-// Total balance across connected accounts. Returns posted + available (when given).
+// Per-account balances (so the user can pick which account is checking).
 function accountsBalance(accountSet) {
+  const r = (n) => Math.round(n * 100) / 100;
+  const accounts = [];
   let balance = 0, available = 0, hasAvail = false, date = null;
   for (const a of accountSet.accounts || []) {
-    balance += Number(a.balance) || 0;
-    if (a['available-balance'] != null && a['available-balance'] !== '') {
-      available += Number(a['available-balance']) || 0;
-      hasAvail = true;
-    }
+    const bal = Number(a.balance) || 0;
+    const avail = (a['available-balance'] != null && a['available-balance'] !== '') ? Number(a['available-balance']) : null;
+    balance += bal;
+    if (avail != null) { available += avail; hasAvail = true; }
     if (a['balance-date'] && (!date || a['balance-date'] > date)) date = a['balance-date'];
+    accounts.push({ id: String(a.id || ''), name: String(a.name || (a.org && a.org.name) || 'Account'), balance: r(bal), available: avail != null ? r(avail) : null });
   }
-  const r = (n) => Math.round(n * 100) / 100;
-  return { balance: r(balance), available: hasAvail ? r(available) : null, date };
+  return { balance: r(balance), available: hasAvail ? r(available) : null, date, accounts };
 }
 
 function simplefinToTransactions(accountSet) {

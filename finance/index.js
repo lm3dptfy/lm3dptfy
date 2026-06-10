@@ -51,7 +51,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const txns = simplefinToTransactions(accountSet);
     store.addTransactions(txns);
     const bal = accountsBalance(accountSet);
-    store.setSimplefin({ lastSync: Math.floor(Date.now() / 1000), balance: bal.balance, availableBalance: bal.available, balanceDate: bal.date });
+    store.setSimplefin({ lastSync: Math.floor(Date.now() / 1000), balance: bal.balance, availableBalance: bal.available, balanceDate: bal.date, accounts: bal.accounts });
     return { imported: txns.length };
   }
 
@@ -93,8 +93,14 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     summary.payPeriod = computeCashflow(typed, { paySchedule, bills, iraMonthly: iraMonthlyOf(store) }, new Date());
     summary.iraMonthly = iraMonthlyOf(store);
     const sf = store.getSimplefin();
-    summary.checkingBalance = sf.availableBalance != null ? sf.availableBalance : sf.balance;
-    summary.checkingPosted = sf.balance;
+    const accts = sf.accounts || [];
+    const acct = accts.length
+      ? (sf.checkingAccountId ? accts.find((a) => a.id === sf.checkingAccountId) : (accts.length === 1 ? accts[0] : null))
+      : null;
+    summary.checkingBalance = acct ? (acct.available != null ? acct.available : acct.balance) : null;
+    summary.checkingPosted = acct ? acct.balance : null;
+    summary.accounts = accts;
+    summary.checkingAccountId = sf.checkingAccountId;
     summary.balanceDate = sf.balanceDate;
     // calendar data for the current month
     const now = new Date();
@@ -203,7 +209,12 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
 
   app.get('/api/finance/simplefin/status', guard, (req, res) => {
     const sf = store.getSimplefin();
-    res.json({ connected: !!sf.accessUrl, lastSync: sf.lastSync });
+    res.json({ connected: !!sf.accessUrl, lastSync: sf.lastSync, accounts: sf.accounts || [], checkingAccountId: sf.checkingAccountId });
+  });
+
+  app.post('/api/finance/simplefin/account', guard, (req, res) => {
+    store.setSimplefin({ checkingAccountId: (req.body && req.body.id) || null });
+    res.json({ ok: true });
   });
 
   // ---- Retirement ----

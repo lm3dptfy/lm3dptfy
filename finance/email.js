@@ -45,7 +45,10 @@ function buildEmail(store, now = new Date()) {
   const projected = projection.length ? projection[projection.length - 1].expected : latest.balance;
 
   const sf = store.getSimplefin();
-  const checking = sf.availableBalance != null ? sf.availableBalance : sf.balance;
+  const accts = sf.accounts || [];
+  const acct = accts.length ? (sf.checkingAccountId ? accts.find((a) => a.id === sf.checkingAccountId) : (accts.length === 1 ? accts[0] : null)) : null;
+  const checking = acct ? (acct.available != null ? acct.available : acct.balance) : null;
+  const checkingIsAvail = acct ? acct.available != null : false;
 
   const upcoming = upcomingBills(bills, now, 7);
 
@@ -72,7 +75,7 @@ function buildEmail(store, now = new Date()) {
     </div>`;
 
   if (checking != null) {
-    html += `<p style="font-size:15px;margin:0 0 8px">💳 <b>Checking balance:</b> ${money(checking)}${sf.availableBalance != null ? ' (available)' : ''}</p>`;
+    html += `<p style="font-size:15px;margin:0 0 8px">💳 <b>Checking balance:</b> ${money(checking)}${checkingIsAvail ? ' (available)' : ''}</p>`;
   }
 
   if (pp) {
