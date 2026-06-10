@@ -151,9 +151,22 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     res.json({ ok: true, bills: store.getBills() });
   });
 
-  // TEMP: email config check (no secrets exposed; remove after diagnosing).
-  app.get('/api/finance/_emailcfg', (req, res) => {
-    res.json({ resendConfigured: !!process.env.RESEND_API_KEY, emailFrom: process.env.EMAIL_FROM || '(default no-reply@lm3dptfy.online)' });
+  // TEMP: email diagnostic (remove after diagnosing). ?send=1 fires one real test.
+  app.get('/api/finance/_emailcfg', async (req, res) => {
+    const from = process.env.EMAIL_FROM || 'LM3DPTFY <no-reply@lm3dptfy.online>';
+    const out = { resendConfigured: !!process.env.RESEND_API_KEY, emailFrom: from };
+    if (req.query.send === '1' && process.env.RESEND_API_KEY) {
+      try {
+        const r = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ from, to: 'rcamoose@gmail.com', subject: 'Finance dashboard — email test', html: '<p>If you got this, your daily summary email works. 🎉</p>' }),
+        });
+        out.sendStatus = r.status;
+        out.sendBody = (await r.text()).slice(0, 400);
+      } catch (e) { out.sendError = String(e.message); }
+    }
+    res.json(out);
   });
 
   // ---- Daily summary email ----
