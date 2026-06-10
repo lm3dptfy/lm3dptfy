@@ -47,8 +47,9 @@ function buildEmail(store, now = new Date()) {
   const sf = store.getSimplefin();
   const accts = sf.accounts || [];
   const acct = accts.length ? (sf.checkingAccountId ? accts.find((a) => a.id === sf.checkingAccountId) : (accts.length === 1 ? accts[0] : null)) : null;
-  const checking = acct ? (acct.available != null ? acct.available : acct.balance) : null;
-  const checkingIsAvail = acct ? acct.available != null : false;
+  const baseBal = acct ? (acct.available != null ? acct.available : acct.balance) : null;
+  const checking = baseBal != null ? Math.round((baseBal + (sf.pendingAdjustment || 0)) * 100) / 100 : null;
+  const checkingIsAvail = !!(sf.pendingAdjustment);
 
   const upcoming = upcomingBills(bills, now, 7);
 

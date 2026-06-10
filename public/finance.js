@@ -64,6 +64,7 @@ async function refreshBudget() {
     $('emailHour').value = d.emailSettings.hour == null ? 7 : d.emailSettings.hour;
   }
   if ($('checkingBal')) $('checkingBal').textContent = s.checkingBalance != null ? money(s.checkingBalance) : '— sync your bank —';
+  if ($('pendingAdj') && document.activeElement !== $('pendingAdj')) $('pendingAdj').value = s.pendingAdjustment ? s.pendingAdjustment : '';
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
   if ($('otherIncome')) $('otherIncome').textContent = money(s.otherIncome);
@@ -292,7 +293,12 @@ async function refreshSfStatus() {
   } else {
     $('acctPickWrap').classList.add('hidden');
   }
+  $('pendingWrap').classList.toggle('hidden', !s.connected);
 }
+$('pendingAdj').onchange = async () => {
+  await api('/simplefin/pending', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ amount: Number($('pendingAdj').value) }) });
+  refreshBudget();
+};
 $('acctPick').onchange = async () => {
   await api('/simplefin/account', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ id: $('acctPick').value }) });
   refreshBudget();

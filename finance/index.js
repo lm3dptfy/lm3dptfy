@@ -97,8 +97,10 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const acct = accts.length
       ? (sf.checkingAccountId ? accts.find((a) => a.id === sf.checkingAccountId) : (accts.length === 1 ? accts[0] : null))
       : null;
-    summary.checkingBalance = acct ? (acct.available != null ? acct.available : acct.balance) : null;
+    const baseBal = acct ? (acct.available != null ? acct.available : acct.balance) : null;
+    summary.checkingBalance = baseBal != null ? Math.round((baseBal + (sf.pendingAdjustment || 0)) * 100) / 100 : null;
     summary.checkingPosted = acct ? acct.balance : null;
+    summary.pendingAdjustment = sf.pendingAdjustment || 0;
     summary.accounts = accts;
     summary.checkingAccountId = sf.checkingAccountId;
     summary.balanceDate = sf.balanceDate;
@@ -168,24 +170,9 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     res.json({ ok: true, bills: store.getBills() });
   });
 
-  // TEMP: balance diagnostic (remove after diagnosing; reveals structure, not amounts).
-  app.get('/api/finance/_baldiag', async (req, res) => {
-    const { accessUrl } = store.getSimplefin();
-    if (!accessUrl) return res.json({ error: 'not connected' });
-    try {
-      const accountSet = await fetchSimplefinAccounts(accessUrl, { startDate: Math.floor(Date.now() / 1000) - 30 * 24 * 3600, fetchImpl: sfFetch });
-      const out = (accountSet.accounts || []).map((a) => {
-        const txns = a.transactions || [];
-        const pend = txns.filter((t) => t.pending);
-        return {
-          name: String(a.name || '').slice(0, 24), balance: a.balance, availBalance: a['available-balance'] ?? null,
-          txnCount: txns.length, pendingCount: pend.length,
-          pendingSum: Math.round(pend.reduce((s, t) => s + Number(t.amount || 0), 0) * 100) / 100,
-          sampleTxnKeys: txns[0] ? Object.keys(txns[0]) : [],
-        };
-      });
-      res.json({ accounts: out });
-    } catch (e) { res.json({ error: String(e.message) }); }
+  app.post('/api/finance/simplefin/pending', guard, (req, res) => {
+    store.setSimplefin({ pendingAdjustment: Math.round((Number(req.body && req.body.amount) || 0) * 100) / 100 });
+    res.json({ ok: true });
   });
 
   // ---- Daily summary email ----
