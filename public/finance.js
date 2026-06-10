@@ -17,7 +17,7 @@ document.querySelectorAll('.tab[data-tab]').forEach((btn) => {
     btn.classList.add('active');
     const tab = btn.dataset.tab;
     ['budget', 'retirement', 'settings'].forEach((t) => $('tab-' + t).classList.toggle('hidden', tab !== t));
-    if (tab === 'retirement') refreshRetirement();
+    if (tab === 'retirement' || tab === 'settings') refreshRetirement();
   };
 });
 
@@ -383,5 +383,6 @@ async function init() {
   hideLogin();
   await refreshSfStatus();
   await refreshBudget();
+  refreshRetirement();
 }
 init();

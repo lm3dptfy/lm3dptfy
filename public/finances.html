@@ -86,6 +86,26 @@
       <label>Monthly savings target $<input id="savings" type="number" /></label>
       <button id="saveSettings">Save</button>
     </section>
+
+    <section class="card">
+      <h2>🎯 Retirement setup</h2>
+      <label>Current age <input id="curAge" type="number" /></label>
+      <label>Retirement age <input id="retAge" type="number" /></label>
+      <label>Monthly contribution $ <input id="monthlyContrib" type="number" placeholder="blank = use savings target" /></label>
+      <label>Goal amount $ <input id="goalAmount" type="number" placeholder="optional" /></label>
+      <button id="saveRetSettings">Save</button>
+      <p class="sub" id="contribNote"></p>
+    </section>
+    <section class="card">
+      <h2>Add a balance snapshot</h2>
+      <p class="sub">Look up your IRA balance and total contributed, and log it here (monthly is plenty).</p>
+      <label>Date <input id="snapDate" type="date" /></label>
+      <label>Current balance $ <input id="snapBalance" type="number" /></label>
+      <label>Total contributed so far $ <input id="snapContributed" type="number" /></label>
+      <button id="addSnap">Add</button>
+      <span id="snapMsg"></span>
+    </section>
+
     <section class="card">
       <h2>🔗 Connect bank (automatic)</h2>
       <p class="sub" id="sfStatus">Checking connection…</p>
@@ -168,24 +188,6 @@
       <p class="big" id="projBig">$—</p>
       <p class="sub" id="projSub"></p>
     </section>
-    <section class="card">
-      <h2>Setup</h2>
-      <label>Current age <input id="curAge" type="number" /></label>
-      <label>Retirement age <input id="retAge" type="number" /></label>
-      <label>Monthly contribution $ <input id="monthlyContrib" type="number" placeholder="blank = use savings target" /></label>
-      <label>Goal amount $ <input id="goalAmount" type="number" placeholder="optional" /></label>
-      <button id="saveRetSettings">Save</button>
-      <p class="sub" id="contribNote"></p>
-    </section>
-    <section class="card">
-      <h2>Add a balance snapshot</h2>
-      <p class="sub">Look up your IRA balance and total contributed, and log it here (monthly is plenty).</p>
-      <label>Date <input id="snapDate" type="date" /></label>
-      <label>Current balance $ <input id="snapBalance" type="number" /></label>
-      <label>Total contributed so far $ <input id="snapContributed" type="number" /></label>
-      <button id="addSnap">Add</button>
-      <span id="snapMsg"></span>
-    </section>
     <section class="grid">
       <div class="card"><h2>Now</h2><p>Balance: <strong id="curBalance">$—</strong></p><p>Contributed: <strong id="curContributed">$—</strong></p><p>Growth: <strong id="curGrowth">$—</strong></p></div>
       <div class="card"><h2>Value over time</h2><canvas id="historyChart"></canvas></div>
@@ -194,6 +196,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=21"></script>
+  <script src="/finance.js?v=22"></script>
 </body>
 </html>
