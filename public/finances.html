@@ -13,7 +13,7 @@
   <link rel="apple-touch-icon" href="/finance-icon-180.png" />
   <link rel="icon" type="image/png" href="/finance-icon-192.png" />
   <link rel="manifest" href="/finance.webmanifest" />
-  <link rel="stylesheet" href="/finance.css?v=12" />
+  <link rel="stylesheet" href="/finance.css?v=13" />
   <script src="/chart.min.js"></script>
 </head>
 <body>
@@ -60,9 +60,24 @@
 
   <main id="tab-budget" class="tabpane">
     <section class="card hero">
-      <p class="label">Safe to spend today</p>
+      <p class="label">Safe to spend</p>
       <p class="big" id="safeToday">$—</p>
       <p class="sub" id="safeSub"></p>
+    </section>
+    <section class="card" id="paydayCard">
+      <h2>💵 Payday view</h2>
+      <div class="payday-grid">
+        <div><span class="label">Current cash</span><strong id="pdCash">$—</strong></div>
+        <div><span class="label">Bills before payday</span><strong id="pdBills" class="neg">$—</strong></div>
+        <div class="pd-safe"><span class="label">Safe to spend</span><strong id="pdSafe">$—</strong></div>
+      </div>
+      <p class="sub" id="pdSub"></p>
+      <ul id="pdBillsList" class="due-list"></ul>
+    </section>
+    <section class="card" id="accountsCard">
+      <h2>🏦 Accounts</h2>
+      <div id="accountsList"></div>
+      <p class="net-cash">Net cash (all accounts) <strong id="netCash">$—</strong></p>
     </section>
     <section class="card">
       <h2 id="calTitle">📅 Calendar</h2>
@@ -72,10 +87,10 @@
     </section>
     <section class="card">
       <h2>This month</h2>
+      <p>Spent this month: <strong id="outflows">$—</strong> <span id="spendDelta" class="sub"></span></p>
       <p>💳 Checking balance (live): <strong id="checkingBal">$—</strong></p>
       <p>Income (earned): <strong id="inflows">$—</strong></p>
       <p>Other income (gifts/reimbursements): <strong id="otherIncome">$—</strong></p>
-      <p>Out: <strong id="outflows">$—</strong></p>
     </section>
     <section class="card"><h2>Spending by category</h2><canvas id="catChart"></canvas></section>
     <section class="card"><h2>Top merchants this month</h2><canvas id="merchantChart"></canvas></section>
@@ -205,6 +220,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=22"></script>
+  <script src="/finance.js?v=23"></script>
 </body>
 </html>

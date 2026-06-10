@@ -131,6 +131,24 @@ function avgPaycheck(typedTxns, today) {
   return round(amts.reduce((a, b) => a + b, 0) / amts.length);
 }
 
+// Unpaid bills due from today through the day before the next payday.
+function upcomingBillsBeforePayday(bills, todayISO, nextPaydayISO, txns) {
+  const from = parseDate(todayISO);
+  const lastDay = new Date(parseDate(nextPaydayISO).getTime() - DAY);
+  const list = [];
+  let unpaidTotal = 0;
+  for (const b of bills) {
+    for (const d of billOccurrences(b, from, lastDay)) {
+      const dateISO = iso(d);
+      const paid = isPaid(b, dateISO, txns, todayISO);
+      list.push({ name: b.name, amount: round(Number(b.amount) || 0), date: dateISO, paid });
+      if (!paid) unpaidTotal += Number(b.amount) || 0;
+    }
+  }
+  list.sort((a, b) => a.date.localeCompare(b.date));
+  return { unpaidTotal: round(unpaidTotal), list };
+}
+
 function computeCashflow(typedTxns, opts, today = new Date()) {
   const ps = opts.paySchedule;
   if (!ps || !ps.anchorDate) return null;
@@ -166,4 +184,4 @@ function computeCashflow(typedTxns, opts, today = new Date()) {
   };
 }
 
-module.exports = { currentPayPeriod, paydaysBetween, billsDueInRange, billsForMonth, computeCashflow };
+module.exports = { currentPayPeriod, paydaysBetween, billsDueInRange, billsForMonth, computeCashflow, upcomingBillsBeforePayday };

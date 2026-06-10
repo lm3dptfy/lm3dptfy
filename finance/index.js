@@ -7,7 +7,7 @@ const {
   parseCsv, normalizeTransactions, typeAll, learnTypeMap, sanitizeRules, detectRecurring,
   computeBudget, recommend, computeProjection, generateRetirementGuidance, TYPES, merchantKey,
 } = require('./core');
-const { computeCashflow, paydaysBetween, billsForMonth } = require('./cashflow');
+const { computeCashflow, paydaysBetween, billsForMonth, upcomingBillsBeforePayday } = require('./cashflow');
 const { buildEmail, sendViaResend, localDateHour } = require('./email');
 
 const BILL_CATS = new Set(['Bills & Utilities', 'Housing', 'Debt', 'Subscriptions']);
@@ -114,6 +114,46 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
       paydays: paySchedule.anchorDate ? paydaysBetween(paySchedule, first, lastD) : [],
       bills: billsForMonth(bills, y, mi, typed, new Date().toISOString().slice(0, 10)),
     };
+    const todayISO = now.toISOString().slice(0, 10);
+
+    // Per-account breakdown + net cash. Checking shows the manual override if set.
+    const checkingId = acct ? acct.id : null;
+    summary.accountsView = accts.map((a) => ({
+      id: a.id,
+      name: a.name,
+      balance: (a.id === checkingId && sf.manualBalance != null) ? sf.manualBalance : a.balance,
+      isChecking: a.id === checkingId,
+    }));
+    summary.netCash = accts.length
+      ? Math.round(summary.accountsView.reduce((s, a) => s + (Number(a.balance) || 0), 0) * 100) / 100
+      : null;
+
+    // Payday view: Safe to Spend = current cash − unpaid bills due before next payday.
+    if (summary.payPeriod && summary.checkingBalance != null) {
+      const bb = upcomingBillsBeforePayday(bills, todayISO, summary.payPeriod.nextPayday, typed);
+      summary.payday = {
+        currentCash: summary.checkingBalance,
+        nextPayday: summary.payPeriod.nextPayday,
+        daysLeft: summary.payPeriod.daysLeft,
+        billsBeforePayday: bb.unpaidTotal,
+        billsList: bb.list,
+        safeToSpend: Math.round((summary.checkingBalance - bb.unpaidTotal) * 100) / 100,
+      };
+    }
+
+    // Spend this month vs. last month (outflows excluding income/transfers).
+    const lm = new Date(Date.UTC(y, mi - 1, 1));
+    const lmKey = `${lm.getUTCFullYear()}-${String(lm.getUTCMonth() + 1).padStart(2, '0')}`;
+    let lastOut = 0;
+    for (const t of typed) {
+      if (!t.date || t.amount >= 0 || t.date.slice(0, 7) !== lmKey) continue;
+      if (t.type === 'Income' || t.type === 'Other Income') continue;
+      lastOut += -t.amount;
+    }
+    summary.lastMonthOut = Math.round(lastOut * 100) / 100;
+    if (summary.outflows != null) {
+      summary.spendDelta = Math.round((summary.outflows - summary.lastMonthOut) * 100) / 100;
+    }
     res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES, paySchedule, bills, billCandidates, emailSettings: store.getEmailSettings() });
   });
 

@@ -42,13 +42,20 @@ async function refreshBudget() {
   if (rt && rt.dataset.filled !== '1') { rt.innerHTML = catOptions('Bills & Utilities'); rt.dataset.filled = '1'; }
 
   const pp = s.payPeriod;
-  if (pp) {
+  const pd = s.payday;
+  if (pd) {
+    // Hero = current cash − unpaid bills due before the next payday (never spend past this).
+    $('safeToday').textContent = money(pd.safeToSpend);
+    $('safeSub').textContent = `${money(pd.currentCash)} cash − ${money(pd.billsBeforePayday)} bills due before your next payday (${pd.nextPayday}, ${pd.daysLeft} day(s) away).`;
+  } else if (pp) {
     $('safeToday').textContent = money(pp.safeToSpendPerDay);
     $('safeSub').textContent = `${money(pp.safeToSpendRemaining)} to spend over ${pp.daysLeft} day(s) until your next payday (${pp.nextPayday}) — after ${money(pp.billsDue)} bills due + ${money(pp.iraSetAside)} to retirement.`;
   } else {
     $('safeToday').textContent = money(s.safeToSpendPerDay);
     $('safeSub').textContent = `${money(s.safeToSpendRemaining)} left for ${s.daysLeft} day(s) in ${s.month} — add your pay schedule below for payday-accurate budgeting.`;
   }
+  renderPayday(pd);
+  renderAccounts(s.accountsView, s.netCash);
   // pay schedule + bills config
   if (d.paySchedule) {
     $('payFreq').value = d.paySchedule.frequency || 'biweekly';
@@ -67,6 +74,15 @@ async function refreshBudget() {
   if ($('balOverride') && document.activeElement !== $('balOverride')) $('balOverride').value = s.manualBalance != null ? s.manualBalance : '';
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
+  if ($('spendDelta')) {
+    if (s.spendDelta == null) {
+      $('spendDelta').textContent = '';
+    } else if (s.spendDelta >= 0) {
+      $('spendDelta').textContent = `${money(s.spendDelta)} above last month (${money(s.lastMonthOut)})`;
+    } else {
+      $('spendDelta').textContent = `${money(-s.spendDelta)} below last month (${money(s.lastMonthOut)})`;
+    }
+  }
   if ($('otherIncome')) $('otherIncome').textContent = money(s.otherIncome);
   $('savings').value = d.settings.savingsTargetMonthly || '';
   $('recs').innerHTML = d.recommendations.length
@@ -96,6 +112,33 @@ async function refreshBudget() {
 
   renderTxns(d.transactions);
   renderRules(lastRules);
+}
+
+function renderPayday(pd) {
+  const card = $('paydayCard');
+  if (!card) return;
+  if (!pd) { card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  $('pdCash').textContent = money(pd.currentCash);
+  $('pdBills').textContent = '-' + money(pd.billsBeforePayday);
+  $('pdSafe').textContent = money(pd.safeToSpend);
+  $('pdSub').textContent = `Next payday ${pd.nextPayday} — ${pd.daysLeft} day(s) away.`;
+  const unpaid = (pd.billsList || []).filter((b) => !b.paid);
+  $('pdBillsList').innerHTML = unpaid.length
+    ? unpaid.map((b) => `<li><span>${esc(b.name)}</span><span class="due-date">${esc(b.date)}</span><span class="neg">-${money(b.amount).slice(1)}</span></li>`).join('')
+    : '<li class="sub">No bills due before your next payday — all clear.</li>';
+}
+
+function renderAccounts(accts, netCash) {
+  const card = $('accountsCard');
+  if (!card) return;
+  if (!accts || !accts.length) { card.classList.add('hidden'); return; }
+  card.classList.remove('hidden');
+  $('accountsList').innerHTML = accts.map((a) => {
+    const neg = (Number(a.balance) || 0) < 0;
+    return `<div class="acct-row"><span>${esc(a.name)}${a.isChecking ? ' 💳' : ''}</span><strong class="${neg ? 'neg' : ''}">${money(a.balance)}</strong></div>`;
+  }).join('');
+  $('netCash').textContent = netCash != null ? money(netCash) : '$—';
 }
 
 function renderTxns(txns) {

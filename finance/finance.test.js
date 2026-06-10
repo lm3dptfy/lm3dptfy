@@ -115,6 +115,26 @@ test('cashflow: biweekly safe-to-spend until next payday', () => {
   assert.equal(c.daysLeft, 9);            // 6/10 -> 6/19
 });
 
+test('payday view: unpaid bills due before next payday + safe-to-spend math', () => {
+  const bills = [
+    { name: 'Toyota', amount: 450, recurrence: 'monthly', dueDay: 12 }, // due before payday, unpaid
+    { name: 'Netflix', amount: 16, recurrence: 'monthly', dueDay: 14 }, // due before payday, paid early
+    { name: 'Rent', amount: 1800, recurrence: 'monthly', dueDay: 25 },  // after payday -> excluded
+  ];
+  const txns = [{ date: '2026-06-09', description: 'NETFLIX.COM', amount: -16 }];
+  // today 6/10, next payday 6/19
+  const r = cf.upcomingBillsBeforePayday(bills, '2026-06-10', '2026-06-19', txns);
+  assert.equal(r.unpaidTotal, 450);             // Toyota counts; Netflix paid; Rent out of window
+  assert.equal(r.list.length, 2);               // Toyota + Netflix (both due in window)
+  const toyota = r.list.find((b) => b.name === 'Toyota');
+  const netflix = r.list.find((b) => b.name === 'Netflix');
+  assert.equal(toyota.paid, false);
+  assert.equal(netflix.paid, true);
+  // Safe to spend = cash - unpaid bills before payday
+  const cash = 3000;
+  assert.equal(Math.round((cash - r.unpaidTotal) * 100) / 100, 2550);
+});
+
 test('calendar marks bills paid when a matching payment posted (incl. early)', () => {
   // Netflix due the 15th, but paid early on the 3rd -> shows paid
   const paid = cf.billsForMonth([{ name: 'NETFLIX.COM', amount: 16, recurrence: 'monthly', dueDay: 15 }],
