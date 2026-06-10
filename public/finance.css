@@ -53,6 +53,7 @@ ul { padding-left: 1rem; }
 .login-card select { width: 100%; background: #0f172a; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; padding: .4rem; margin-top: .2rem; }
 .cal-num { color: #cbd5e1; font-weight: 600; }
 .cal-bill { color: #f59e0b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cal-bill.paid { color: #34d399; }
 .bill-row { display: grid; grid-template-columns: 1fr 110px 96px 28px; gap: .5rem; align-items: center; padding: .3rem 0; border-bottom: 1px solid #243047; font-size: .9rem; }
 .bill-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bill-edit input { width: 64px; padding: .2rem; margin: 0; }

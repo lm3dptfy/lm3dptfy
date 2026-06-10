@@ -115,6 +115,21 @@ test('cashflow: biweekly safe-to-spend until next payday', () => {
   assert.equal(c.daysLeft, 9);            // 6/10 -> 6/19
 });
 
+test('calendar marks bills paid when a matching payment posted (incl. early)', () => {
+  // Netflix due the 15th, but paid early on the 3rd -> shows paid
+  const paid = cf.billsForMonth([{ name: 'NETFLIX.COM', amount: 16, recurrence: 'monthly', dueDay: 15 }],
+    2026, 5, [{ date: '2026-06-03', description: 'NETFLIX.COM', amount: -16 }], '2026-06-10');
+  assert.equal(paid['2026-06-15'][0].paid, true);
+  // Rent: no payment yet -> not paid
+  const unpaid = cf.billsForMonth([{ name: 'RENT', amount: 1800, recurrence: 'monthly', dueDay: 1 }],
+    2026, 5, [], '2026-06-10');
+  assert.equal(unpaid['2026-06-01'][0].paid, false);
+  // Last month's payment must NOT mark next month's occurrence paid
+  const julyRent = cf.billsForMonth([{ name: 'INVITATION HOMES', amount: 1800, recurrence: 'monthly', dueDay: 1 }],
+    2026, 6, [{ date: '2026-06-01', description: 'INVITATION HOMES', amount: -1800 }], '2026-07-15');
+  assert.equal(julyRent['2026-07-01'][0].paid, false);
+});
+
 test('cashflow: biweekly bill recurrence (calendar + range)', () => {
   const bills = [{ name: 'Daycare', amount: 200, recurrence: 'biweekly', anchorDate: '2026-06-05' }];
   const bf = cf.billsForMonth(bills, 2026, 5);

@@ -112,7 +112,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
       year: y, monthIdx: mi,
       monthLabel: now.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }),
       paydays: paySchedule.anchorDate ? paydaysBetween(paySchedule, first, lastD) : [],
-      bills: billsForMonth(bills, y, mi),
+      bills: billsForMonth(bills, y, mi, typed, new Date().toISOString().slice(0, 10)),
     };
     res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES, paySchedule, bills, billCandidates, emailSettings: store.getEmailSettings() });
   });

@@ -2,6 +2,7 @@
 // Pay-period cash-flow planner: paydays, bills-by-due-date, IRA set-aside, and
 // "safe to spend until next payday".
 
+const { merchantKey } = require('./core');
 const DAY = 86400000;
 const round = (n) => Math.round(n * 100) / 100;
 const BILL_CATEGORIES = new Set(['Bills & Utilities', 'Housing', 'Debt', 'Subscriptions']);
@@ -86,15 +87,36 @@ function billsDueInRange(bills, start, end) {
   return { total: round(total), due };
 }
 
-// Bills due across a whole month (for the calendar) keyed by ISO date.
-function billsForMonth(bills, year, monthIdx) {
+// Has a bill been paid for THIS occurrence's cycle? Matches a transaction by
+// merchant within (previous occurrence, this occurrence + 7d grace], up to today
+// — so paying early (between paychecks) still counts, but last cycle's payment
+// doesn't bleed into this one.
+function isPaid(bill, occurrenceISO, txns, todayISO) {
+  const key = merchantKey(bill.name);
+  if (!key) return false;
+  const occ = parseDate(occurrenceISO);
+  const prev = (bill.recurrence === 'biweekly')
+    ? new Date(occ.getTime() - 14 * DAY)
+    : new Date(Date.UTC(occ.getUTCFullYear(), occ.getUTCMonth() - 1, occ.getUTCDate()));
+  const prevISO = iso(prev);
+  const graceISO = iso(new Date(occ.getTime() + 7 * DAY));
+  for (const t of txns) {
+    if (!t.date || t.amount >= 0) continue;
+    if (t.date <= prevISO || t.date > graceISO || t.date > todayISO) continue;
+    if (merchantKey(t.description) === key) return true;
+  }
+  return false;
+}
+
+// Bills due across a whole month (for the calendar) keyed by ISO date, with paid status.
+function billsForMonth(bills, year, monthIdx, txns = [], todayISO = '9999-12-31') {
   const first = new Date(Date.UTC(year, monthIdx, 1));
   const last = new Date(Date.UTC(year, monthIdx + 1, 0));
   const map = {};
   for (const b of bills) {
     for (const d of billOccurrences(b, first, last)) {
       const key = iso(d);
-      (map[key] = map[key] || []).push({ name: b.name, amount: Number(b.amount) || 0 });
+      (map[key] = map[key] || []).push({ name: b.name, amount: Number(b.amount) || 0, paid: isPaid(b, key, txns, todayISO) });
     }
   }
   return map;

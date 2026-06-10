@@ -163,7 +163,7 @@ function renderCalendar(cal) {
     const bs = bills[iso] || [];
     cells += `<div class="cal-day${iso === todayISO ? ' today' : ''}" data-date="${iso}">
       <div class="cal-num">${d}${paydays.has(iso) ? ' 💵' : ''}</div>
-      ${bs.map((b) => `<div class="cal-bill" title="${esc(b.name)} ${money(b.amount)}">🧾 ${esc(b.name.slice(0, 12))}</div>`).join('')}
+      ${bs.map((b) => `<div class="cal-bill ${b.paid ? 'paid' : ''}" title="${esc(b.name)} ${money(b.amount)}${b.paid ? ' — paid' : ' — due'}">${b.paid ? '✅' : '🧾'} ${esc(b.name.slice(0, 12))}</div>`).join('')}
     </div>`;
   }
   $('calendar').innerHTML = cells;
