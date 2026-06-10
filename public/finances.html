@@ -91,8 +91,8 @@
       <p class="sub" id="sfStatus">Checking connection…</p>
       <label id="acctPickWrap" class="hidden">Which account is your checking? <select id="acctPick"></select></label>
       <div id="pendingWrap" class="hidden">
-        <label>Pending charges not shared by your bank? Enter the total (negative) $ <input id="pendingAdj" type="number" placeholder="e.g. -490.08" /></label>
-        <p class="sub">USAA (and some banks) don't report pending holds, so the live balance above is the <em>posted</em> balance. Enter your pending total here to match your bank's available balance.</p>
+        <label>Your current available balance (optional override) $ <input id="balOverride" type="number" placeholder="e.g. 3240.04" /></label>
+        <p class="sub">USAA doesn't share pending or available balances with SimpleFIN, and its posted figure can lag — so type your real available balance here and the dashboard will show that exactly. Leave blank to use the bank's number.</p>
       </div>
       <div id="sfConnectArea">
         <label>SimpleFIN setup token <input id="sfToken" type="text" placeholder="paste the token from SimpleFIN" /></label>
@@ -194,6 +194,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=18"></script>
+  <script src="/finance.js?v=19"></script>
 </body>
 </html>

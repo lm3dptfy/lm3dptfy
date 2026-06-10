@@ -64,7 +64,7 @@ async function refreshBudget() {
     $('emailHour').value = d.emailSettings.hour == null ? 7 : d.emailSettings.hour;
   }
   if ($('checkingBal')) $('checkingBal').textContent = s.checkingBalance != null ? money(s.checkingBalance) : '— sync your bank —';
-  if ($('pendingAdj') && document.activeElement !== $('pendingAdj')) $('pendingAdj').value = s.pendingAdjustment ? s.pendingAdjustment : '';
+  if ($('balOverride') && document.activeElement !== $('balOverride')) $('balOverride').value = s.manualBalance != null ? s.manualBalance : '';
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
   if ($('otherIncome')) $('otherIncome').textContent = money(s.otherIncome);
@@ -295,8 +295,8 @@ async function refreshSfStatus() {
   }
   $('pendingWrap').classList.toggle('hidden', !s.connected);
 }
-$('pendingAdj').onchange = async () => {
-  await api('/simplefin/pending', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ amount: Number($('pendingAdj').value) }) });
+$('balOverride').onchange = async () => {
+  await api('/simplefin/balance', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ amount: $('balOverride').value }) });
   refreshBudget();
 };
 $('acctPick').onchange = async () => {

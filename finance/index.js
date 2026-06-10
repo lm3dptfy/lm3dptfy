@@ -98,9 +98,9 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
       ? (sf.checkingAccountId ? accts.find((a) => a.id === sf.checkingAccountId) : (accts.length === 1 ? accts[0] : null))
       : null;
     const baseBal = acct ? (acct.available != null ? acct.available : acct.balance) : null;
-    summary.checkingBalance = baseBal != null ? Math.round((baseBal + (sf.pendingAdjustment || 0)) * 100) / 100 : null;
+    summary.checkingBalance = sf.manualBalance != null ? sf.manualBalance : baseBal;
     summary.checkingPosted = acct ? acct.balance : null;
-    summary.pendingAdjustment = sf.pendingAdjustment || 0;
+    summary.manualBalance = sf.manualBalance;
     summary.accounts = accts;
     summary.checkingAccountId = sf.checkingAccountId;
     summary.balanceDate = sf.balanceDate;
@@ -170,8 +170,9 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     res.json({ ok: true, bills: store.getBills() });
   });
 
-  app.post('/api/finance/simplefin/pending', guard, (req, res) => {
-    store.setSimplefin({ pendingAdjustment: Math.round((Number(req.body && req.body.amount) || 0) * 100) / 100 });
+  app.post('/api/finance/simplefin/balance', guard, (req, res) => {
+    const a = req.body && req.body.amount;
+    store.setSimplefin({ manualBalance: (a === '' || a == null) ? null : Math.round(Number(a) * 100) / 100 });
     res.json({ ok: true });
   });
 

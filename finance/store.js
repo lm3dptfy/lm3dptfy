@@ -6,7 +6,7 @@ const { dirname } = require('node:path');
 const DEFAULTS = {
   settings: { expectedMonthlyIncome: 0, savingsTargetMonthly: 0 },
   transactions: [],
-  simplefin: { accessUrl: null, lastSync: null, balance: null, availableBalance: null, balanceDate: null, accounts: [], checkingAccountId: null, pendingAdjustment: 0 },
+  simplefin: { accessUrl: null, lastSync: null, balance: null, availableBalance: null, balanceDate: null, accounts: [], checkingAccountId: null, manualBalance: null },
   retirement: {
     settings: { currentAge: 0, retirementAge: 0, monthlyContribution: null, goalAmount: null },
     snapshots: [],
