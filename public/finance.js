@@ -58,7 +58,7 @@ async function refreshBudget() {
   }
   renderBills(d.bills || []);
   renderCalendar(s.calendar);
-  populateBillPick(d.recurring || []);
+  populateBillPick(d.billCandidates || []);
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
   if ($('otherIncome')) $('otherIncome').textContent = money(s.otherIncome);
@@ -165,11 +165,9 @@ function renderCalendar(cal) {
 
 // ---- Pay schedule & bills ----
 let lastBills = [];
-const BILL_CATS = ['Bills & Utilities', 'Housing', 'Debt', 'Subscriptions'];
-function populateBillPick(recurring) {
-  const exp = recurring.filter((r) => r.kind === 'expense' && BILL_CATS.includes(r.category));
-  $('billPick').innerHTML = '<option value="">— add from a recurring bill —</option>' +
-    exp.map((r) => `<option value="${esc(r.description)}" data-amt="${Math.abs(r.amount)}">${esc(r.description)} — ${money(Math.abs(r.amount))}</option>`).join('');
+function populateBillPick(candidates) {
+  $('billPick').innerHTML = '<option value="">— add a bill —</option>' +
+    candidates.map((r) => `<option value="${esc(r.name)}" data-amt="${r.amount}">${esc(r.name)} — ${money(r.amount)} (${esc(r.category)})</option>`).join('');
 }
 function renderBills(bills) {
   lastBills = bills;

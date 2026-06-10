@@ -68,6 +68,16 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const catByKey = {};
     for (const t of typed) catByKey[merchantKey(t.description)] = t.type;
     const recurring = detectRecurring(typed).map((r) => ({ ...r, category: catByKey[merchantKey(r.description)] || 'Other' }));
+    // every merchant with a bill-category charge (latest amount) — for the bill picker
+    const candMap = {};
+    for (const t of typed) {
+      if (t.amount >= 0 || !BILL_CATS.has(t.type)) continue;
+      const k = merchantKey(t.description);
+      if (!candMap[k] || (t.date || '') > (candMap[k].date || '')) {
+        candMap[k] = { name: t.description, amount: Math.round(-t.amount * 100) / 100, category: t.type, date: t.date || '' };
+      }
+    }
+    const billCandidates = Object.values(candMap).map(({ date, ...x }) => x).sort((a, b) => b.amount - a.amount);
     // newest first for the editable list
     const transactions = [...typed].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
     const paySchedule = store.getPaySchedule();
@@ -84,7 +94,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
       paydays: paySchedule.anchorDate ? paydaysBetween(paySchedule, first, lastD) : [],
       bills: billsForMonth(bills, y, mi),
     };
-    res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES, paySchedule, bills });
+    res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES, paySchedule, bills, billCandidates });
   });
 
   // Learn a type from one transaction (silent; remembers it for that merchant,
@@ -120,20 +130,21 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
 
   // Seed bills from detected recurring bill-category charges (due day = most common day-of-month).
   app.post('/api/finance/bills/seed', guard, (req, res) => {
-    const txns = store.getTransactions();
-    const typed = typeAll(txns, store.getTypeRules(), store.getLearnedTypes());
-    const catByKey = {};
-    for (const t of typed) catByKey[merchantKey(t.description)] = t.type;
-    const recurring = detectRecurring(typed).filter((r) => r.kind === 'expense');
+    const typed = typeAll(store.getTransactions(), store.getTypeRules(), store.getLearnedTypes());
+    const groups = {};
+    for (const t of typed) {
+      if (t.amount >= 0 || !BILL_CATS.has(t.type)) continue;
+      const k = merchantKey(t.description);
+      (groups[k] = groups[k] || []).push(t);
+    }
     const bills = [...store.getBills()];
     const have = new Set(bills.map((b) => b.name.toLowerCase()));
-    for (const r of recurring) {
-      const key = merchantKey(r.description);
-      if (!BILL_CATS.has(catByKey[key])) continue;            // only real bills
-      if (have.has(r.description.toLowerCase())) continue;
-      const days = txns.filter((t) => merchantKey(t.description) === key && t.date).map((t) => Number(t.date.slice(8, 10)));
-      const dueDay = days.length ? mode(days) : 1;
-      bills.push({ id: Math.random().toString(36).slice(2, 9), name: r.description, amount: Math.abs(r.amount), dueDay });
+    for (const items of Object.values(groups)) {
+      if (items.length < 2) continue;                          // recurring-ish only
+      const latest = items.reduce((a, b) => ((a.date || '') > (b.date || '') ? a : b));
+      if (have.has(latest.description.toLowerCase())) continue;
+      const days = items.filter((t) => t.date).map((t) => Number(t.date.slice(8, 10)));
+      bills.push({ id: Math.random().toString(36).slice(2, 9), name: latest.description, amount: Math.abs(latest.amount), dueDay: days.length ? mode(days) : 1 });
     }
     store.setBills(sanitizeBills(bills));
     res.json({ ok: true, bills: store.getBills() });
