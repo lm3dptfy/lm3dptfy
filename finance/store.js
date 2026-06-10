@@ -16,6 +16,7 @@ const DEFAULTS = {
   migrationsApplied: [],
   paySchedule: { frequency: 'biweekly', anchorDate: null, amount: 0 },
   bills: [],
+  emailSettings: { enabled: false, recipient: 'rcamoose@gmail.com', hour: 7, timezone: 'America/Chicago', lastSentDate: null },
 };
 
 function createStore(path) {
@@ -34,6 +35,7 @@ function createStore(path) {
         migrationsApplied: Array.isArray(parsed.migrationsApplied) ? parsed.migrationsApplied : [],
         paySchedule: { ...base.paySchedule, ...(parsed.paySchedule || {}) },
         bills: Array.isArray(parsed.bills) ? parsed.bills : [],
+        emailSettings: { ...base.emailSettings, ...(parsed.emailSettings || {}) },
       };
     } catch {
       return structuredClone(DEFAULTS);
@@ -87,6 +89,8 @@ function createStore(path) {
     setPaySchedule: (p) => { data.paySchedule = { ...data.paySchedule, ...p }; persist(); },
     getBills: () => data.bills,
     setBills: (b) => { data.bills = b; persist(); },
+    getEmailSettings: () => data.emailSettings,
+    setEmailSettings: (e) => { data.emailSettings = { ...data.emailSettings, ...e }; persist(); },
   };
 }
 

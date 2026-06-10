@@ -8,6 +8,7 @@ const express = require('express');
 const { mountFinance } = require('./index');
 const core = require('./core');
 const cf = require('./cashflow');
+const email = require('./email');
 
 // stub requireAdmin: allow only when header x-test-admin=1
 function fakeAuth(req, res, next) {
@@ -72,6 +73,22 @@ test('Other Income is money-in but excluded from earned-income baseline', () => 
   assert.equal(b.byCategory['Other Income'], 700);
   assert.equal(b.otherIncome, 700);
   assert.equal(b.safeToSpendRemaining, 4700);        // 4000 baseline + 700 other - 0 - 0
+});
+
+test('email: builds a daily summary with the key sections', () => {
+  const { createStore } = require('./store');
+  const dir = mkdtempSync(join(tmpdir(), 'fin-em-'));
+  const store = createStore(join(dir, 'store.json'));
+  store.setSettings({ savingsTargetMonthly: 600 });
+  store.setPaySchedule({ frequency: 'biweekly', anchorDate: '2026-06-05', amount: 2000 });
+  store.setBills([{ id: '1', name: 'Rent', amount: 1800, dueDay: 12 }]);
+  store.addTransactions([{ id: 'a', date: '2026-06-09', description: 'DD *DOORDASH KROGER', amount: -50 }]);
+  const { subject, html } = email.buildEmail(store, new Date('2026-06-10T12:00:00Z'));
+  assert.match(subject, /Your money/);
+  assert.match(html, /Safe to spend today/);
+  assert.match(html, /This pay period/);
+  assert.match(html, /Rent/);          // upcoming bill (due 12th, within 7 days)
+  rmSync(dir, { recursive: true, force: true });
 });
 
 test('cashflow: biweekly safe-to-spend until next payday', () => {

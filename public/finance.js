@@ -59,6 +59,11 @@ async function refreshBudget() {
   renderBills(d.bills || []);
   renderCalendar(s.calendar);
   populateBillPick(d.billCandidates || []);
+  if (d.emailSettings) {
+    $('emailEnabled').checked = !!d.emailSettings.enabled;
+    $('emailTo').value = d.emailSettings.recipient || '';
+    $('emailHour').value = d.emailSettings.hour == null ? 7 : d.emailSettings.hour;
+  }
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
   if ($('otherIncome')) $('otherIncome').textContent = money(s.otherIncome);
@@ -207,6 +212,20 @@ $('billsSeed').onclick = async () => {
   $('billsSeed').textContent = 'Seed from recurring charges';
   refreshBudget();
 };
+// ---- Daily summary email ----
+$('emailSave').onclick = async () => {
+  await api('/email/settings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ enabled: $('emailEnabled').checked, recipient: $('emailTo').value, hour: Number($('emailHour').value) }) });
+  $('emailMsg').textContent = 'Saved.';
+  refreshBudget();
+};
+$('emailTest').onclick = async () => {
+  $('emailMsg').textContent = 'Sending test…';
+  const r = await fetch('/api/finance/email/test', { method: 'POST' });
+  if (r.status === 401) { showLogin(); return; }
+  const d = await r.json();
+  $('emailMsg').textContent = r.ok ? `Test sent to ${d.sentTo} ✓ — check your inbox.` : `Failed: ${d.error}`;
+};
+
 $('savePay').onclick = async () => {
   $('payMsg').textContent = 'Saved.';
   await api('/pay-schedule', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ frequency: $('payFreq').value, anchorDate: $('payAnchor').value, amount: Number($('payAmount').value) }) });

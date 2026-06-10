@@ -8,6 +8,7 @@ const {
   computeBudget, recommend, computeProjection, generateRetirementGuidance, TYPES, merchantKey,
 } = require('./core');
 const { computeCashflow, paydaysBetween, billsForMonth } = require('./cashflow');
+const { buildEmail, sendViaResend, localDateHour } = require('./email');
 
 const BILL_CATS = new Set(['Bills & Utilities', 'Housing', 'Debt', 'Subscriptions']);
 function iraMonthlyOf(store) {
@@ -94,7 +95,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
       paydays: paySchedule.anchorDate ? paydaysBetween(paySchedule, first, lastD) : [],
       bills: billsForMonth(bills, y, mi),
     };
-    res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES, paySchedule, bills, billCandidates });
+    res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES, paySchedule, bills, billCandidates, emailSettings: store.getEmailSettings() });
   });
 
   // Learn a type from one transaction (silent; remembers it for that merchant,
@@ -148,6 +149,28 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     }
     store.setBills(sanitizeBills(bills));
     res.json({ ok: true, bills: store.getBills() });
+  });
+
+  // ---- Daily summary email ----
+  app.post('/api/finance/email/settings', guard, (req, res) => {
+    const { enabled, recipient, hour } = req.body || {};
+    store.setEmailSettings({
+      enabled: !!enabled,
+      recipient: String(recipient || '').trim() || store.getEmailSettings().recipient,
+      hour: Math.min(23, Math.max(0, Math.round(Number(hour)) || 7)),
+    });
+    res.json({ ok: true, emailSettings: store.getEmailSettings() });
+  });
+
+  app.post('/api/finance/email/test', guard, async (req, res) => {
+    const es = store.getEmailSettings();
+    try {
+      const { subject, html } = buildEmail(store, new Date());
+      await sendViaResend(es.recipient, subject, html);
+      res.json({ ok: true, sentTo: es.recipient });
+    } catch (e) {
+      res.status(502).json({ ok: false, error: String(e.message) });
+    }
   });
 
   // ---- SimpleFIN ----
@@ -208,6 +231,24 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
       .catch((e) => console.error('[finance auto-sync] failed:', e.message));
   }, 6 * 60 * 60 * 1000);
   if (timer.unref) timer.unref();
+
+  // Daily summary email: check periodically; send once/day at/after the chosen hour.
+  async function maybeSendDaily() {
+    const es = store.getEmailSettings();
+    if (!es.enabled || !es.recipient) return;
+    const { date, hour } = localDateHour(es.timezone || 'America/Chicago');
+    if (hour < (es.hour == null ? 7 : es.hour) || es.lastSentDate === date) return;
+    try {
+      const { subject, html } = buildEmail(store, new Date());
+      await sendViaResend(es.recipient, subject, html);
+      store.setEmailSettings({ lastSentDate: date });
+      console.log(`[finance] daily summary emailed to ${es.recipient}`);
+    } catch (e) { console.error('[finance] daily email failed:', e.message); }
+  }
+  const emailTimer = setInterval(maybeSendDaily, 20 * 60 * 1000);
+  if (emailTimer.unref) emailTimer.unref();
+  const bootCheck = setTimeout(maybeSendDaily, 30000);
+  if (bootCheck.unref) bootCheck.unref();
 
   return { store, runSync };
 }

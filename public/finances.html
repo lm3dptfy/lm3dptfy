@@ -106,6 +106,17 @@
     </section>
 
     <section class="card">
+      <h2>📧 Daily summary email</h2>
+      <p class="sub">A morning snapshot — safe-to-spend, upcoming bills, top spending, retirement progress.</p>
+      <label><input id="emailEnabled" type="checkbox" /> Email me a daily summary</label>
+      <label>Send to <input id="emailTo" type="email" /></label>
+      <label>Time (hour, Central 0–23) <input id="emailHour" type="number" min="0" max="23" /></label>
+      <button id="emailSave">Save</button>
+      <button id="emailTest">Send test now</button>
+      <span id="emailMsg"></span>
+    </section>
+
+    <section class="card">
       <h2>Type rules</h2>
       <p class="sub">If a merchant name contains this text, force its type. (Overrides the automatic guess.)</p>
       <div id="rulesList"></div>
@@ -154,6 +165,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=12"></script>
+  <script src="/finance.js?v=13"></script>
 </body>
 </html>
