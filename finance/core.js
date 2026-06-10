@@ -45,9 +45,13 @@ function normalizeTransactions(rows) {
 
 // ---------- Category classification ----------
 const TYPES = [
-  'Income', 'Bills & Utilities', 'Housing', 'Debt', 'Groceries', 'Dining',
-  'Auto & Transport', 'Shopping', 'Subscriptions', 'Health', 'Entertainment', 'Other',
+  'Income', 'Other Income', 'Bills & Utilities', 'Housing', 'Debt', 'Groceries',
+  'Dining', 'Auto & Transport', 'Shopping', 'Subscriptions', 'Health', 'Entertainment', 'Other',
 ];
+// Money-in categories: shown as inflow, but only 'Income' counts as the earned
+// baseline that drives safe-to-spend. 'Other Income' (gifts/reimbursements) nets
+// against the month but never inflates the recurring income figure.
+const INFLOW_TYPES = ['Income', 'Other Income'];
 // Ordered rules; first match wins. Income is handled by a positive amount.
 const CATEGORY_RULES = [
   [/\bloan\b|credit\s*card\s*p|card\s*pmt|crd\s*pmt|cardmember|student\s*loan|auto\s*loan|kashable|affirm|klarna|lending|installment|sofi|upstart|toyota|personify/i, 'Debt'],
@@ -156,8 +160,9 @@ function computeBudget(typedTxns, settings, today = new Date()) {
   const byCategory = {};
   for (const k of TYPES) byCategory[k] = 0;
   const merchants = {};
+  const INFLOW = new Set(INFLOW_TYPES);
   for (const t of inMonth) {
-    if (t.type === 'Income') { byCategory.Income += t.amount; continue; }
+    if (INFLOW.has(t.type)) { byCategory[t.type] += t.amount; continue; }
     const out = t.amount < 0 ? -t.amount : 0;
     byCategory[t.type] = (byCategory[t.type] || 0) + out;
     if (out > 0) {
@@ -168,7 +173,8 @@ function computeBudget(typedTxns, settings, today = new Date()) {
   }
   for (const k of TYPES) byCategory[k] = round(byCategory[k]);
   const inflows = byCategory.Income;
-  const outflows = round(TYPES.filter((k) => k !== 'Income').reduce((s, k) => s + byCategory[k], 0));
+  const otherIncome = byCategory['Other Income'];
+  const outflows = round(TYPES.filter((k) => !INFLOW.has(k)).reduce((s, k) => s + byCategory[k], 0));
   const topMerchants = Object.values(merchants)
     .map((m) => ({ name: m.name, amount: round(m.amount) }))
     .sort((a, b) => b.amount - a.amount)
@@ -179,10 +185,10 @@ function computeBudget(typedTxns, settings, today = new Date()) {
   const daysInMonth = new Date(Date.UTC(year, monthIdx + 1, 0)).getUTCDate();
   const daysLeft = daysInMonth - today.getUTCDate() + 1;
   const savingsTarget = settings.savingsTargetMonthly || 0;
-  const safeToSpendRemaining = round(monthlyIncome - savingsTarget - outflows);
+  const safeToSpendRemaining = round(monthlyIncome + otherIncome - savingsTarget - outflows);
   const safeToSpendPerDay = round(Math.max(0, safeToSpendRemaining) / daysLeft);
 
-  return { month, monthlyIncome, savingsTarget, inflows, outflows, byCategory, topMerchants, daysInMonth, daysLeft, safeToSpendRemaining, safeToSpendPerDay };
+  return { month, monthlyIncome, savingsTarget, inflows, otherIncome, outflows, byCategory, topMerchants, daysInMonth, daysLeft, safeToSpendRemaining, safeToSpendPerDay };
 }
 
 // ---------- Recurring ----------

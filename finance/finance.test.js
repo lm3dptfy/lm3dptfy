@@ -59,6 +59,20 @@ test('auto-classifier handles real merchants', () => {
   }
 });
 
+test('Other Income is money-in but excluded from earned-income baseline', () => {
+  const typed = core.typeAll([
+    { date: '2026-05-01', description: 'PAYROLL', amount: 4000 },
+    { date: '2026-06-01', description: 'PAYROLL', amount: 4000 },
+    { date: '2026-06-03', description: 'CASH APP ROBERT', amount: 700 },
+  ], [], { 'cash app robert': 'Other Income' });
+  assert.equal(typed[2].type, 'Other Income');
+  const b = core.computeBudget(typed, { savingsTargetMonthly: 0 }, new Date('2026-06-10T12:00:00Z'));
+  assert.equal(b.monthlyIncome, 4000);              // reimbursement NOT in earned baseline
+  assert.equal(b.byCategory['Other Income'], 700);
+  assert.equal(b.otherIncome, 700);
+  assert.equal(b.safeToSpendRemaining, 4700);        // 4000 baseline + 700 other - 0 - 0
+});
+
 test('top merchants roll up by alias (DoorDash, Affirm)', () => {
   const typed = core.typeAll([
     { date: '2026-06-01', description: 'PP DOORDASH KROGER 402', amount: -50 },

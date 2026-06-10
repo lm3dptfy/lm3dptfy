@@ -46,6 +46,7 @@ async function refreshBudget() {
   $('safeSub').textContent = `${money(s.safeToSpendRemaining)} left for ${s.daysLeft} day(s) in ${s.month}`;
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
+  if ($('otherIncome')) $('otherIncome').textContent = money(s.otherIncome);
   $('savings').value = d.settings.savingsTargetMonthly || '';
   $('recs').innerHTML = d.recommendations.length
     ? d.recommendations.map((x) => `<li class="rec ${x.type}">${x.message}</li>`).join('')
@@ -56,7 +57,8 @@ async function refreshBudget() {
 
   // spending by category (exclude Income; only categories with spend)
   const bc = s.byCategory || {};
-  const spendCats = CATEGORIES.filter((c) => c !== 'Income' && (bc[c] || 0) > 0).sort((a, b) => bc[b] - bc[a]);
+  const INFLOW = ['Income', 'Other Income'];
+  const spendCats = CATEGORIES.filter((c) => !INFLOW.includes(c) && (bc[c] || 0) > 0).sort((a, b) => bc[b] - bc[a]);
   setChart('catChart', {
     type: 'bar',
     data: { labels: spendCats, datasets: [{ data: spendCats.map((c) => bc[c]), backgroundColor: spendCats.map((_, i) => CAT_COLORS[i % CAT_COLORS.length]) }] },
