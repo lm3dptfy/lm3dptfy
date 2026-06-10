@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Finances — LM3DPTFY</title>
-  <link rel="stylesheet" href="/finance.css?v=5" />
+  <link rel="stylesheet" href="/finance.css?v=10" />
   <script src="/chart.min.js"></script>
 </head>
 <body>
@@ -33,6 +33,12 @@
       <p class="label">Safe to spend today</p>
       <p class="big" id="safeToday">$—</p>
       <p class="sub" id="safeSub"></p>
+    </section>
+    <section class="card">
+      <h2 id="calTitle">📅 Calendar</h2>
+      <p class="sub">💵 payday · 🧾 bill due. Set your pay schedule + bills below to fill it in.</p>
+      <div id="calWeekdays" class="cal-week"></div>
+      <div id="calendar" class="cal-grid"></div>
     </section>
     <section class="card">
       <h2>This month</h2>
@@ -80,22 +86,23 @@
         </select>
       </label>
       <label>A recent payday (anchor) <input id="payAnchor" type="date" /></label>
-      <label>Amount per paycheck $ <input id="payAmount" type="number" /></label>
+      <label>Typical paycheck $ <input id="payAmount" type="number" placeholder="optional" /></label>
+      <p class="sub">Leave blank to use your <em>actual</em> detected paychecks — that way overtime is captured automatically. The typed amount is only an estimate for before payday lands.</p>
       <button id="savePay">Save</button>
       <span id="payMsg"></span>
     </section>
 
     <section class="card">
       <h2>🧾 Bills</h2>
-      <p class="sub">Bills count on the day they're <em>due</em> — even if you pay early. Your retirement contribution is set aside automatically.</p>
+      <p class="sub">Bills count on the day they're <em>due</em> — even if you pay early. Edit the amount or due-day right in the list. Your retirement contribution is set aside automatically.</p>
       <button id="billsSeed">Seed from recurring charges</button>
       <div id="billsList"></div>
       <div class="rule-add">
-        <input id="billName" placeholder="Bill name" />
-        <input id="billAmount" type="number" placeholder="$" />
+        <select id="billPick"><option value="">— add from a recurring charge —</option></select>
         <input id="billDue" type="number" min="1" max="31" placeholder="due day" />
-        <button id="billAdd">Add bill</button>
+        <button id="billAdd">Add</button>
       </div>
+      <p class="sub">Pick a charge (no typing — avoids typos), set its due day, then Add.</p>
     </section>
 
     <section class="card">
@@ -147,6 +154,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=9"></script>
+  <script src="/finance.js?v=10"></script>
 </body>
 </html>

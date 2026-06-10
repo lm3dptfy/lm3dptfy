@@ -7,7 +7,7 @@ const {
   parseCsv, normalizeTransactions, typeAll, learnTypeMap, sanitizeRules, detectRecurring,
   computeBudget, recommend, computeProjection, generateRetirementGuidance, TYPES, merchantKey,
 } = require('./core');
-const { computeCashflow } = require('./cashflow');
+const { computeCashflow, paydaysBetween, billsForMonth } = require('./cashflow');
 
 const BILL_CATS = new Set(['Bills & Utilities', 'Housing', 'Debt', 'Subscriptions']);
 function iraMonthlyOf(store) {
@@ -72,6 +72,16 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const bills = store.getBills();
     summary.payPeriod = computeCashflow(typed, { paySchedule, bills, iraMonthly: iraMonthlyOf(store) }, new Date());
     summary.iraMonthly = iraMonthlyOf(store);
+    // calendar data for the current month
+    const now = new Date();
+    const y = now.getFullYear(), mi = now.getMonth();
+    const first = new Date(Date.UTC(y, mi, 1)), lastD = new Date(Date.UTC(y, mi + 1, 0));
+    summary.calendar = {
+      year: y, monthIdx: mi,
+      monthLabel: now.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }),
+      paydays: paySchedule.anchorDate ? paydaysBetween(paySchedule, first, lastD) : [],
+      bills: billsForMonth(bills, y, mi),
+    };
     res.json({ settings, summary, recurring, recommendations: recommend(typed, summary, recurring), transactions, typeRules: rules, categories: TYPES, paySchedule, bills });
   });
 

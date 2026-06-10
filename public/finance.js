@@ -57,6 +57,8 @@ async function refreshBudget() {
     $('payAmount').value = d.paySchedule.amount || '';
   }
   renderBills(d.bills || []);
+  renderCalendar(s.calendar);
+  populateBillPick(d.recurring || []);
   $('inflows').textContent = money(s.inflows);
   $('outflows').textContent = money(s.outflows);
   if ($('otherIncome')) $('otherIncome').textContent = money(s.otherIncome);
@@ -137,15 +139,54 @@ $('saveSettings').onclick = async () => {
   refreshBudget();
 };
 
+// ---- Calendar ----
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+function renderCalendar(cal) {
+  if (!cal) return;
+  $('calTitle').textContent = `📅 ${cal.monthLabel}`;
+  $('calWeekdays').innerHTML = WEEKDAYS.map((w) => `<div class="cal-wd">${w}</div>`).join('');
+  const startWeekday = new Date(Date.UTC(cal.year, cal.monthIdx, 1)).getUTCDay();
+  const days = new Date(Date.UTC(cal.year, cal.monthIdx + 1, 0)).getUTCDate();
+  const paydays = new Set(cal.paydays || []);
+  const bills = cal.bills || {};
+  const todayISO = new Date().toISOString().slice(0, 10);
+  let cells = '';
+  for (let i = 0; i < startWeekday; i++) cells += '<div class="cal-day empty"></div>';
+  for (let d = 1; d <= days; d++) {
+    const iso = `${cal.year}-${String(cal.monthIdx + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const bs = bills[iso] || [];
+    cells += `<div class="cal-day${iso === todayISO ? ' today' : ''}">
+      <div class="cal-num">${d}${paydays.has(iso) ? ' 💵' : ''}</div>
+      ${bs.map((b) => `<div class="cal-bill" title="${esc(b.name)} ${money(b.amount)}">🧾 ${esc(b.name.slice(0, 12))}</div>`).join('')}
+    </div>`;
+  }
+  $('calendar').innerHTML = cells;
+}
+
 // ---- Pay schedule & bills ----
 let lastBills = [];
+function populateBillPick(recurring) {
+  const exp = recurring.filter((r) => r.kind === 'expense');
+  $('billPick').innerHTML = '<option value="">— add from a recurring charge —</option>' +
+    exp.map((r) => `<option value="${esc(r.description)}" data-amt="${Math.abs(r.amount)}">${esc(r.description)} — ${money(Math.abs(r.amount))}</option>`).join('');
+}
 function renderBills(bills) {
   lastBills = bills;
   $('billsList').innerHTML = bills.length
-    ? bills.map((b, i) => `<div class="rule-row"><span class="txn-desc">${esc(b.name)} — ${money(b.amount)} · due day ${b.dueDay}</span><button class="rule-del bill-del" data-i="${i}">✕</button></div>`).join('')
+    ? bills.map((b, i) => `<div class="bill-row" data-i="${i}">
+        <span class="bill-name" title="${esc(b.name)}">${esc(b.name)}</span>
+        <span class="bill-edit">$<input class="bill-amt" type="number" value="${b.amount}" /></span>
+        <span class="bill-edit">due <input class="bill-due" type="number" min="1" max="31" value="${b.dueDay}" /></span>
+        <button class="rule-del bill-del">✕</button>
+      </div>`).join('')
     : '<p class="sub">No bills yet — seed from your recurring charges or add one below.</p>';
-  $('billsList').querySelectorAll('.bill-del').forEach((btn) => {
-    btn.onclick = () => saveBills(lastBills.filter((_, i) => i !== Number(btn.dataset.i)));
+  $('billsList').querySelectorAll('.bill-row').forEach((row) => {
+    const i = Number(row.dataset.i);
+    row.querySelector('.bill-del').onclick = () => saveBills(lastBills.filter((_, j) => j !== i));
+    const commit = () => saveBills(lastBills.map((b, j) => j === i
+      ? { ...b, amount: Number(row.querySelector('.bill-amt').value), dueDay: Number(row.querySelector('.bill-due').value) } : b));
+    row.querySelector('.bill-amt').onchange = commit;
+    row.querySelector('.bill-due').onchange = commit;
   });
 }
 async function saveBills(bills) {
@@ -153,11 +194,12 @@ async function saveBills(bills) {
   if (d) refreshBudget();
 }
 $('billAdd').onclick = () => {
-  const name = $('billName').value.trim();
-  const amount = Number($('billAmount').value);
-  const dueDay = Number($('billDue').value);
-  if (!name || !(amount > 0) || !(dueDay >= 1)) return;
-  $('billName').value = ''; $('billAmount').value = ''; $('billDue').value = '';
+  const sel = $('billPick');
+  const name = sel.value;
+  if (!name) return;
+  const amount = Number(sel.options[sel.selectedIndex].dataset.amt) || 0;
+  const dueDay = Number($('billDue').value) || 1;
+  sel.value = ''; $('billDue').value = '';
   saveBills([...lastBills, { name, amount, dueDay }]);
 };
 $('billsSeed').onclick = async () => {

@@ -98,6 +98,14 @@ test('cashflow: biweekly safe-to-spend until next payday', () => {
   assert.equal(c.daysLeft, 9);            // 6/10 -> 6/19
 });
 
+test('cashflow uses actual paycheck (with OT) when received this period', () => {
+  const ps = { frequency: 'biweekly', anchorDate: '2026-06-05', amount: 2000 };
+  const typed = core.typeAll([{ date: '2026-06-06', description: 'EMPLOYER PAYROLL', amount: 2350 }]);
+  const c = cf.computeCashflow(typed, { paySchedule: ps, bills: [], iraMonthly: 0 }, new Date('2026-06-10T12:00:00Z'));
+  assert.equal(c.income, 2350);            // actual deposit (with OT) used, not the 2000 estimate
+  assert.equal(c.paycheckReceived, true);
+});
+
 test('cashflow: paydays and bills for a month (calendar data)', () => {
   const ps = { frequency: 'biweekly', anchorDate: '2026-06-05', amount: 2000 };
   const pays = cf.paydaysBetween(ps, new Date(Date.UTC(2026, 5, 1)), new Date(Date.UTC(2026, 5, 30)));

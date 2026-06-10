@@ -78,31 +78,45 @@ function billsForMonth(bills, year, monthIdx) {
   return map;
 }
 
+// Average paycheck from detected Income deposits (last ~100 days) — adapts to OT.
+function avgPaycheck(typedTxns, today) {
+  const cutoff = iso(new Date(startOfDay(today).getTime() - 100 * DAY));
+  const amts = typedTxns.filter((t) => t.type === 'Income' && t.amount > 0 && t.date >= cutoff).map((t) => t.amount);
+  if (!amts.length) return 0;
+  return round(amts.reduce((a, b) => a + b, 0) / amts.length);
+}
+
 function computeCashflow(typedTxns, opts, today = new Date()) {
   const ps = opts.paySchedule;
-  if (!ps || !ps.anchorDate || !(Number(ps.amount) > 0)) return null;
+  if (!ps || !ps.anchorDate) return null;
   const { start, end } = currentPayPeriod(ps, today);
   const t = startOfDay(today);
   const daysLeft = Math.max(1, Math.round((end - t) / DAY));
   const freq = ps.frequency || 'biweekly';
-  const income = round(Number(ps.amount) || 0);
-  const iraSetAside = round((Number(opts.iraMonthly) || 0) * 12 / (PERIODS_PER_YEAR[freq] || 26));
-  const { total: billsDue, due: billsDueList } = billsDueInRange(opts.bills || [], start, end);
-
   const startISO = iso(start), todayISO = iso(t);
-  let discretionarySpent = 0;
+
+  // Income = ACTUAL paychecks deposited this period (captures OT); fall back to an
+  // estimate (typed amount, else detected average) before the check lands.
+  let paychecks = 0, otherInc = 0, discretionarySpent = 0;
   for (const tx of typedTxns) {
     if (!tx.date || tx.date < startISO || tx.date > todayISO) continue;
-    if (tx.amount >= 0 || BILL_CATEGORIES.has(tx.type) || INFLOW.has(tx.type)) continue;
-    discretionarySpent += -tx.amount;
+    if (tx.type === 'Income' && tx.amount > 0) paychecks += tx.amount;
+    else if (tx.type === 'Other Income' && tx.amount > 0) otherInc += tx.amount;
+    else if (tx.amount < 0 && !BILL_CATEGORIES.has(tx.type)) discretionarySpent += -tx.amount;
   }
+  const estimate = Number(ps.amount) > 0 ? round(Number(ps.amount)) : avgPaycheck(typedTxns, today);
+  const earned = paychecks > 0 ? round(paychecks) : estimate;
+  const income = round(earned + otherInc);
   discretionarySpent = round(discretionarySpent);
 
+  const iraSetAside = round((Number(opts.iraMonthly) || 0) * 12 / (PERIODS_PER_YEAR[freq] || 26));
+  const { total: billsDue, due: billsDueList } = billsDueInRange(opts.bills || [], start, end);
   const safeToSpendRemaining = round(income - iraSetAside - billsDue - discretionarySpent);
   const safeToSpendPerDay = round(Math.max(0, safeToSpendRemaining) / daysLeft);
   return {
     start: startISO, end: iso(end), nextPayday: iso(end), daysLeft,
-    income, iraSetAside, billsDue, billsDueList, discretionarySpent,
+    income, earned, estimate, paycheckReceived: paychecks > 0, otherIncome: round(otherInc),
+    iraSetAside, billsDue, billsDueList, discretionarySpent,
     safeToSpendRemaining, safeToSpendPerDay,
   };
 }

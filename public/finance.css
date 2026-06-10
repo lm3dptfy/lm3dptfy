@@ -42,6 +42,22 @@ ul { padding-left: 1rem; }
 .rule-add { display: flex; gap: .5rem; margin-top: .6rem; flex-wrap: wrap; }
 .rule-add input { flex: 1; min-width: 160px; }
 .rule-add select { width: auto; }
+.cal-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
+.cal-wd { text-align: center; color: #94a3b8; font-size: .72rem; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-day { background: #0f172a; border: 1px solid #243047; border-radius: 6px; min-height: 58px; padding: 3px; font-size: .72rem; overflow: hidden; }
+.cal-day.empty { background: transparent; border: 0; }
+.cal-day.today { border-color: #2563eb; }
+.cal-num { color: #cbd5e1; font-weight: 600; }
+.cal-bill { color: #f59e0b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bill-row { display: grid; grid-template-columns: 1fr 110px 96px 28px; gap: .5rem; align-items: center; padding: .3rem 0; border-bottom: 1px solid #243047; font-size: .9rem; }
+.bill-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bill-edit input { width: 64px; padding: .2rem; margin: 0; }
+#billPick { background: #0f172a; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; padding: .25rem; flex: 1; min-width: 160px; }
+@media (max-width: 640px) {
+  .cal-day { min-height: 46px; font-size: .6rem; padding: 2px; }
+  .bill-row { grid-template-columns: 1fr 76px 66px 24px; font-size: .8rem; }
+}
 .rule-add button { margin-top: 0; }
 @media (max-width: 640px) {
   .grid { grid-template-columns: 1fr; }
