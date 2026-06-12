@@ -17,6 +17,19 @@ const DEFAULTS = {
   paySchedule: { frequency: 'biweekly', anchorDate: null, amount: 0 },
   bills: [],
   emailSettings: { enabled: false, recipient: 'rcamoose@gmail.com', hour: 7, timezone: 'America/Chicago', lastSentDate: null },
+  watchlist: {
+    symbol: 'SPCX',
+    name: '',
+    shares: 5,
+    enabled: true,
+    lastPrice: null,
+    lastCheckedISO: null,
+    thresholds: [
+      { id: 'spcx-up-200', level: 200, direction: 'above', enabled: true, lastFiredISO: null },
+      { id: 'spcx-up-250', level: 250, direction: 'above', enabled: true, lastFiredISO: null },
+      { id: 'spcx-dn-170', level: 170, direction: 'below', enabled: true, lastFiredISO: null },
+    ],
+  },
 };
 
 function createStore(path) {
@@ -36,6 +49,7 @@ function createStore(path) {
         paySchedule: { ...base.paySchedule, ...(parsed.paySchedule || {}) },
         bills: Array.isArray(parsed.bills) ? parsed.bills : [],
         emailSettings: { ...base.emailSettings, ...(parsed.emailSettings || {}) },
+        watchlist: { ...base.watchlist, ...(parsed.watchlist || {}) },
       };
     } catch {
       return structuredClone(DEFAULTS);
@@ -91,6 +105,8 @@ function createStore(path) {
     setBills: (b) => { data.bills = b; persist(); },
     getEmailSettings: () => data.emailSettings,
     setEmailSettings: (e) => { data.emailSettings = { ...data.emailSettings, ...e }; persist(); },
+    getWatchlist: () => data.watchlist,
+    setWatchlist: (w) => { data.watchlist = { ...data.watchlist, ...w }; persist(); },
   };
 }
 

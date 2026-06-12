@@ -9,6 +9,7 @@ const {
 } = require('./core');
 const { computeCashflow, paydaysBetween, billsForMonth, upcomingBillsBeforePayday } = require('./cashflow');
 const { buildEmail, sendViaResend, localDateHour } = require('./email');
+const { inMarketWindow, evaluateCrossings, fetchQuote, alertEmail } = require('./watchlist');
 
 const BILL_CATS = new Set(['Bills & Utilities', 'Housing', 'Debt', 'Subscriptions']);
 function iraMonthlyOf(store) {
@@ -59,6 +60,32 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     const bal = accountsBalance(accountSet);
     store.setSimplefin({ lastSync: Math.floor(Date.now() / 1000), balance: bal.balance, balanceDate: bal.date, accounts: bal.accounts });
     return { imported: txns.length };
+  }
+
+  // Read-only stock watcher. Fetches a public quote, emails on threshold
+  // crossings (vs the last checked price), and records the new price. Never
+  // places trades; never touches the brokerage.
+  async function runPriceCheck() {
+    const wl = store.getWatchlist();
+    if (!wl || !wl.enabled || !wl.symbol) return { skipped: 'disabled' };
+    const q = await fetchQuote(wl.symbol, sfFetch);
+    const fired = evaluateCrossings(wl.thresholds, wl.lastPrice, q.price);
+    const nowISO = new Date().toISOString();
+    if (fired.length) {
+      const es = store.getEmailSettings();
+      const to = (es && es.recipient) || 'rcamoose@gmail.com';
+      const firedIds = new Set(fired.map((t) => t.id));
+      for (const t of fired) {
+        try {
+          const { subject, html } = alertEmail(wl.symbol, q.name, q.price, t, wl.shares || 0);
+          await sendViaResend(to, subject, html);
+          console.log(`[finance watch] ${wl.symbol} crossed ${t.direction} ${t.level} -> emailed ${to}`);
+        } catch (e) { console.error('[finance watch] alert email failed:', e.message); }
+      }
+      wl.thresholds = wl.thresholds.map((t) => (firedIds.has(t.id) ? { ...t, lastFiredISO: nowISO } : t));
+    }
+    store.setWatchlist({ lastPrice: q.price, name: q.name, lastCheckedISO: nowISO, thresholds: wl.thresholds });
+    return { price: q.price, fired: fired.map((t) => t.id) };
   }
 
   // ---- Budget ----
@@ -316,6 +343,55 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
     });
   });
 
+  // ---- Stock watcher (read-only alerts) ----
+  function sanitizeThresholds(arr) {
+    if (!Array.isArray(arr)) return null;
+    return arr.map((t, i) => ({
+      id: String(t.id || `t-${Date.now()}-${i}`),
+      level: Math.max(0, Math.round((Number(t.level) || 0) * 100) / 100),
+      direction: t.direction === 'below' ? 'below' : 'above',
+      enabled: t.enabled !== false,
+      lastFiredISO: t.lastFiredISO || null,
+    })).filter((t) => t.level > 0);
+  }
+
+  app.get('/api/finance/watchlist', guard, (req, res) => {
+    const wl = store.getWatchlist();
+    const positionValue = wl.lastPrice != null && wl.shares ? Math.round(wl.lastPrice * wl.shares * 100) / 100 : null;
+    res.json({ ...wl, positionValue });
+  });
+
+  app.post('/api/finance/watchlist', guard, (req, res) => {
+    const b = req.body || {};
+    const patch = {};
+    if (b.symbol != null) patch.symbol = String(b.symbol).toUpperCase().slice(0, 12).trim();
+    if (b.shares != null) patch.shares = Math.max(0, Number(b.shares) || 0);
+    if (b.enabled != null) patch.enabled = !!b.enabled;
+    if (b.thresholds != null) {
+      const t = sanitizeThresholds(b.thresholds);
+      if (t) patch.thresholds = t;
+    }
+    store.setWatchlist(patch);
+    res.json(store.getWatchlist());
+  });
+
+  app.post('/api/finance/watchlist/check', guard, async (req, res) => {
+    try { res.json(await runPriceCheck()); }
+    catch (e) { res.status(502).json({ error: String(e.message) }); }
+  });
+
+  // Background price check every 15 min during market hours.
+  const watchTimer = setInterval(() => {
+    if (!inMarketWindow()) return;
+    runPriceCheck().catch((e) => console.error('[finance watch] failed:', e.message));
+  }, 15 * 60 * 1000);
+  if (watchTimer.unref) watchTimer.unref();
+  // Prime the last price shortly after boot so the first real crossing is detected.
+  const watchBoot = setTimeout(() => {
+    runPriceCheck().catch((e) => console.error('[finance watch] boot check failed:', e.message));
+  }, 45000);
+  if (watchBoot.unref) watchBoot.unref();
+
   // Background auto-sync every 6h while the server runs.
   const timer = setInterval(() => {
     runSync().then((r) => { if (r.imported) console.log(`[finance auto-sync] imported ${r.imported}`); })
@@ -342,7 +418,7 @@ function mountFinance(app, { requireAdmin, storePath, simplefinFetch } = {}) {
   const bootCheck = setTimeout(maybeSendDaily, 30000);
   if (bootCheck.unref) bootCheck.unref();
 
-  return { store, runSync };
+  return { store, runSync, runPriceCheck };
 }
 
 module.exports = { mountFinance };

@@ -82,6 +82,29 @@
       <div id="accountsList"></div>
       <p class="net-cash">Net cash (all accounts) <strong id="netCash">$—</strong></p>
     </section>
+    <section class="card" id="watchCard">
+      <h2>📈 <span id="watchSymbol">SPCX</span> watch</h2>
+      <div class="payday-grid">
+        <div><span class="label">Price</span><strong id="watchPrice">$—</strong></div>
+        <div><span class="label">Your <span id="watchShares">5</span> shares</span><strong id="watchValue">$—</strong></div>
+        <div><span class="label">Checked</span><strong id="watchChecked" style="font-size:.95rem">—</strong></div>
+      </div>
+      <p class="sub" id="watchNote">Read-only price alerts — emails you at your targets. Never places trades.</p>
+      <ul id="watchThresholds" class="due-list"></ul>
+      <div class="rule-add">
+        <input id="watchLevel" type="number" step="0.01" placeholder="price" />
+        <select id="watchDir">
+          <option value="above">when it rises to</option>
+          <option value="below">when it drops below</option>
+        </select>
+        <button id="watchAdd">Add alert</button>
+      </div>
+      <div style="margin-top:.6rem;display:flex;gap:.5rem;align-items:center">
+        <button id="watchCheck">Check price now</button>
+        <label style="margin:0">Shares <input id="watchSharesInput" type="number" step="0.0001" style="width:90px" /></label>
+      </div>
+      <span id="watchMsg" class="sub"></span>
+    </section>
     <section class="card">
       <h2 id="calTitle">📅 Calendar</h2>
       <p class="sub">💵 payday · 🧾 bill due (orange) · ✅ paid (green) · click a date to set a bill due</p>
@@ -224,6 +247,6 @@
     <section class="card"><h2>Guidance</h2><ul id="retGuidance"></ul></section>
   </main>
 
-  <script src="/finance.js?v=26"></script>
+  <script src="/finance.js?v=27"></script>
 </body>
 </html>

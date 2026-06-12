@@ -9,6 +9,7 @@ const { mountFinance } = require('./index');
 const core = require('./core');
 const cf = require('./cashflow');
 const email = require('./email');
+const watch = require('./watchlist');
 
 // stub requireAdmin: allow only when header x-test-admin=1
 function fakeAuth(req, res, next) {
@@ -276,6 +277,78 @@ test('retirement funded externally is not reserved from checking safe-to-spend',
     // ...and the retirement projection still uses the real $520/mo
     const ret = await (await fetch(`${base}/api/finance/retirement`, { headers: ADMIN })).json();
     assert.equal(ret.effectiveContribution, 520);
+  } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('watchlist: threshold crossings fire only when price moves across the level', () => {
+  const ths = [
+    { id: 'up200', level: 200, direction: 'above', enabled: true },
+    { id: 'up250', level: 250, direction: 'above', enabled: true },
+    { id: 'dn170', level: 170, direction: 'below', enabled: true },
+  ];
+  // First check (no previous price) never fires — it primes.
+  assert.deepEqual(watch.evaluateCrossings(ths, null, 169.73), []);
+  // Rising across 200 fires only up200.
+  assert.deepEqual(watch.evaluateCrossings(ths, 195, 201).map((t) => t.id), ['up200']);
+  // A gap up past both 200 and 250 fires both.
+  assert.deepEqual(watch.evaluateCrossings(ths, 180, 260).map((t) => t.id), ['up200', 'up250']);
+  // Sitting above the level (no cross this interval) does NOT re-fire.
+  assert.deepEqual(watch.evaluateCrossings(ths, 205, 210), []);
+  // Dropping across 170 fires dn170.
+  assert.deepEqual(watch.evaluateCrossings(ths, 172, 169).map((t) => t.id), ['dn170']);
+  // Already below 170 and staying below does not fire (no downward cross).
+  assert.deepEqual(watch.evaluateCrossings(ths, 168, 165), []);
+  // Disabled thresholds never fire.
+  assert.deepEqual(watch.evaluateCrossings([{ id: 'x', level: 200, direction: 'above', enabled: false }], 199, 205), []);
+});
+
+test('watchlist: fetchQuote parses Yahoo, alertEmail includes position value', async () => {
+  const fakeFetch = async () => ({
+    ok: true,
+    json: async () => ({ chart: { result: [{ meta: { regularMarketPrice: 201.5, currency: 'USD', longName: 'Space Exploration Technologies Corp.' } }] } }),
+  });
+  const q = await watch.fetchQuote('SPCX', fakeFetch);
+  assert.equal(q.price, 201.5);
+  assert.equal(q.name, 'Space Exploration Technologies Corp.');
+  const { subject, html } = watch.alertEmail('SPCX', q.name, q.price, { level: 200, direction: 'above' }, 5);
+  assert.match(subject, /SPCX hit \$200/);
+  assert.match(html, /\$1,007\.50/);  // 5 shares * 201.50
+});
+
+test('watchlist routes: check primes price, get returns position value, post updates', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'fin-'));
+  const quoteFetch = async (url) => {
+    if (String(url).includes('query1.finance.yahoo.com')) {
+      return { ok: true, json: async () => ({ chart: { result: [{ meta: { regularMarketPrice: 169.73, currency: 'USD', longName: 'Space Exploration Technologies Corp.' } }] } }) };
+    }
+    throw new Error('unexpected ' + url);
+  };
+  const app = buildApp(dir, quoteFetch);
+  const server = app.listen(0);
+  const base = `http://127.0.0.1:${server.address().port}`;
+  try {
+    // Default watchlist is seeded with SPCX + 3 thresholds + 5 shares.
+    let wl = await (await fetch(`${base}/api/finance/watchlist`, { headers: ADMIN })).json();
+    assert.equal(wl.symbol, 'SPCX');
+    assert.equal(wl.shares, 5);
+    assert.equal(wl.thresholds.length, 3);
+
+    // First check primes lastPrice; nothing fires (so no email is attempted).
+    const chk = await (await fetch(`${base}/api/finance/watchlist/check`, { method: 'POST', headers: ADMIN })).json();
+    assert.equal(chk.price, 169.73);
+    assert.deepEqual(chk.fired, []);
+
+    // Now the GET reflects the primed price + position value (5 * 169.73).
+    wl = await (await fetch(`${base}/api/finance/watchlist`, { headers: ADMIN })).json();
+    assert.equal(wl.lastPrice, 169.73);
+    assert.equal(wl.positionValue, 848.65);
+
+    // POST updates shares + thresholds.
+    await fetch(`${base}/api/finance/watchlist`, { method: 'POST', headers: ADMIN, body: JSON.stringify({ shares: 10, thresholds: [{ id: 'up300', level: 300, direction: 'above' }] }) });
+    wl = await (await fetch(`${base}/api/finance/watchlist`, { headers: ADMIN })).json();
+    assert.equal(wl.shares, 10);
+    assert.equal(wl.thresholds.length, 1);
+    assert.equal(wl.thresholds[0].level, 300);
   } finally { server.close(); rmSync(dir, { recursive: true, force: true }); }
 });
 

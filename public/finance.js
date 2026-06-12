@@ -61,6 +61,7 @@ async function refreshBudget() {
   }
   renderPayday(pd);
   renderAccounts(s.accountsView, s.netCash);
+  refreshWatch();
   // pay schedule + bills config
   if (d.paySchedule) {
     $('payFreq').value = d.paySchedule.frequency || 'biweekly';
@@ -161,6 +162,61 @@ function renderAccounts(accts, netCash) {
   }).join('');
   $('netCash').textContent = netCash != null ? money(netCash) : '$—';
 }
+
+async function refreshWatch() {
+  if (!$('watchCard')) return;
+  const w = await api('/watchlist');
+  if (!w) return;
+  $('watchSymbol').textContent = w.symbol || 'SPCX';
+  $('watchShares').textContent = w.shares ?? 0;
+  $('watchPrice').textContent = w.lastPrice != null ? money(w.lastPrice) : '$—';
+  $('watchValue').textContent = w.positionValue != null ? money(w.positionValue) : '$—';
+  $('watchChecked').textContent = w.lastCheckedISO
+    ? new Date(w.lastCheckedISO).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+    : 'not yet';
+  if (document.activeElement !== $('watchSharesInput')) $('watchSharesInput').value = w.shares ?? '';
+  const price = w.lastPrice;
+  $('watchThresholds').innerHTML = (w.thresholds || []).map((t) => {
+    const label = t.direction === 'above' ? `▲ Rise to ${money(t.level)}` : `▼ Drop below ${money(t.level)}`;
+    let status = '<span class="due-date">watching</span>';
+    if (t.lastFiredISO) status = `<span class="due-date">✅ alerted ${new Date(t.lastFiredISO).toLocaleDateString()}</span>`;
+    else if (price != null) {
+      const hit = t.direction === 'above' ? price >= t.level : price <= t.level;
+      if (hit) status = '<span class="due-date">at/past now</span>';
+    }
+    return `<li><span>${label}</span>${status}<span class="watch-del" data-id="${esc(t.id)}" style="cursor:pointer;color:#94a3b8">✕</span></li>`;
+  }).join('') || '<li class="sub">No alerts set.</li>';
+  $('watchThresholds').querySelectorAll('.watch-del').forEach((x) => {
+    x.onclick = async () => {
+      const kept = (w.thresholds || []).filter((t) => t.id !== x.dataset.id);
+      await api('/watchlist', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ thresholds: kept }) });
+      refreshWatch();
+    };
+  });
+}
+
+$('watchAdd').onclick = async () => {
+  const level = Number($('watchLevel').value);
+  if (!level || level <= 0) { $('watchMsg').textContent = 'Enter a price.'; return; }
+  const w = await api('/watchlist');
+  const thresholds = [...(w.thresholds || []), { id: `t-${Date.now()}`, level, direction: $('watchDir').value, enabled: true, lastFiredISO: null }];
+  await api('/watchlist', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ thresholds }) });
+  $('watchLevel').value = '';
+  $('watchMsg').textContent = 'Alert added.';
+  refreshWatch();
+};
+$('watchCheck').onclick = async () => {
+  $('watchMsg').textContent = 'Checking…';
+  const r = await api('/watchlist/check', { method: 'POST' });
+  $('watchMsg').textContent = r && r.price != null
+    ? `Now ${money(r.price)}${r.fired && r.fired.length ? ' — alert email sent!' : ''}`
+    : ((r && r.error) || 'Check failed.');
+  refreshWatch();
+};
+$('watchSharesInput').onchange = async () => {
+  await api('/watchlist', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ shares: Number($('watchSharesInput').value) || 0 }) });
+  refreshWatch();
+};
 
 function renderTxns(txns) {
   const cutoff = new Date(Date.now() - 31 * 24 * 3600 * 1000).toISOString().slice(0, 10);
