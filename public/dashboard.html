@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 12 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 13 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,7 +196,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.175</span></span>
+          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.177</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -208,7 +208,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.6.5</span></span>
+          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.6.6</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -496,9 +496,14 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.175 + v2.1.174 — Two Releases Today (Jun 12)</a></div>
-          <div class="desc">Two versions shipped today: <strong>v2.1.175</strong> (4:23 AM) adds <code>enforceAvailableModels</code> managed setting — when enabled, the <code>availableModels</code> allowlist also constrains the Default model, and user/project settings cannot widen a managed list. <strong>v2.1.174</strong> (1:16 AM) adds <code>wheelScrollAccelerationEnabled</code> for fullscreen, fixes <code>/model</code> picker hiding the Default-resolved family, fixes Bedrock GovCloud region inference prefix, and adds VSCode usage attribution (cache misses, long context, per-skill/agent/MCP breakdowns) to Account &amp; usage dialog. Also: <strong>v2.1.172</strong> (Jun 10) enables sub-agents to spawn their own sub-agents up to 5 levels deep and adds plugin search bar to <code>/plugin</code> marketplace. Run <code>claude update</code> to get current.</div>
-          <div class="date">Jun 12, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">LATEST v2.1.175</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.177 on npm — v2.1.176 Changelog: Session Titles, Bedrock Caching &amp; 10 Bug Fixes (Jun 12)</a></div>
+          <div class="desc"><strong>v2.1.177</strong> is now the latest on npm. <strong>v2.1.176</strong> (Jun 12): session titles now generated in the conversation's language, new <code>footerLinksRegexes</code> setting for regex-matched link badges, improved Bedrock credential caching (cached until <code>Expiration</code>). Bug fixes: <code>availableModels</code> enforcement with alias model redirects, hook <code>if</code> conditions for Read/Edit/Write tool paths, Linux sandbox symlink issues, clipboard copy in tmux over SSH, Remote Control model switching and disconnect notifications, <code>/cd</code> and worktree moves with git branch tracking, background agent search by PR URL, background session respawn, and Windows daemon issues. <strong>v2.1.173</strong> (Jun 11) fixed Fable 5 model names with <code>[1m]</code> suffix normalization and spurious "sandbox dependencies missing" warning on Windows. Run <code>claude update</code>.</div>
+          <div class="date">Jun 12, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">LATEST v2.1.177</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ 2 Days: API Billing Split &amp; claude-sonnet-4-20250514 / claude-opus-4-20250514 Model IDs Retire — Jun 15</a></div>
+          <div class="desc">Two breaking changes on June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>2 days remaining.</strong></div>
+          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 2 DAYS</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.anthropic.com/news/claude-corps" target="_blank">Anthropic Claude Corps — $150M Fellowship + $200M Economic Fund Announced (Jun 11–12)</a></div>
@@ -506,13 +511,8 @@
           <div class="date">Jun 11–12, 2026 · Anthropic / The Register / Washington Post · <strong style="color:#16a34a;">MAJOR NEWS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ 3 Days: API Billing Split &amp; claude-sonnet-4-20250514 / claude-opus-4-20250514 Model IDs Retire — Jun 15</a></div>
-          <div class="desc">Two breaking changes on June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>3 days remaining.</strong></div>
-          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#d97706;">⚠ ACTION REQUIRED — 3 DAYS</strong></div>
-        </div>
-        <div class="news-item">
           <div><a href="https://www.anthropic.com/news/claude-fable-5" target="_blank">Claude Fable 5 &amp; Claude Mythos 5 Launch + Sub-Agents 5 Levels Deep in v2.1.172 (Jun 9–10)</a></div>
-          <div class="desc">Anthropic launched Claude Fable 5 (1M-token context, 128K output, always-on adaptive thinking) June 9. Available on Claude API, Bedrock, Vertex AI, Microsoft Foundry. Claude Opus 4.1 deprecated — retires Aug 5, 2026. Claude Haiku 3 already retired. New ultracode effort setting sets effort to xhigh and auto-decides when to use dynamic workflows. Claude Code v2.1.172 (Jun 10) adds nested sub-agents up to 5 levels deep for complex multi-agent orchestration.</div>
+          <div class="desc">Anthropic launched Claude Fable 5 (1M-token context, 128K output, always-on adaptive thinking) June 9. Available on Claude API, Bedrock, Vertex AI, Microsoft Foundry. Claude Opus 4.1 deprecated — retires Aug 5, 2026. Claude Haiku 3 already retired. New <code>ultracode</code> effort setting sets effort to xhigh and auto-decides when to use dynamic workflows. Claude Code v2.1.172 (Jun 10) adds nested sub-agents up to 5 levels deep for complex multi-agent orchestration.</div>
           <div class="date">Jun 9–10, 2026 · Anthropic · <strong style="color:#16a34a;">MAJOR LAUNCH</strong></div>
         </div>
         <div class="news-item">
@@ -532,6 +532,16 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.7-beta.1 — Channel Delivery, Provider Resilience &amp; Kimi K2.7 Code Support (Jun 13)</a></div>
+          <div class="desc">Today's pre-release: channel delivery tightening across all supported channels; improved provider resilience and retry paths; Slack transcript persistence; <strong>Kimi K2.7 Code</strong> provider support added to the bundled catalog; local setup trust hardening. Update via your OpenClaw update mechanism (beta channel).</div>
+          <div class="date">Jun 13, 2026 · OpenClaw GitHub Releases · <strong style="color:#d97706;">BETA — TODAY</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.6 — Security Hardening, iMessage Recovery &amp; Reduced Control UI Latency (Jun 12)</a></div>
+          <div class="desc">Latest stable (Jun 12): security boundaries tightened across transcripts, sandbox binds, and host environment inheritance; safer Telegram delivery; improved iMessage session recovery; existing-session CDP (Chrome DevTools Protocol) support added; WebSocket validation improvements; cached model metadata for reduced Control UI latency; startup catalog wait removed for faster agent cold starts. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Jun 12, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.5 — Parallel Web Search, Stronger Channel Safety &amp; MCP Recovery (Jun 8)</a></div>
           <div class="desc">Broad stable release: new Parallel web search support, stronger channel safety hardening, richer MCP and Anthropic provider recovery, improved Google Vertex and Matrix handling, more durable auth and plugin installs, and safer upgrade, service, and CI paths. Update via your OpenClaw update mechanism.</div>
@@ -754,6 +764,11 @@
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
         <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.4.0 — Pluggable Vector Backends, Docker Images &amp; ChromaDB Fixes (Jun 6)</a></div>
+          <div class="desc">Major update: pluggable vector backends now supported — choose between Qdrant, pgvector, or sqlite_exact for your deployment. Docker images available for CPU and GPU. Includes migration tool for wing names, fixes embedding compatibility with ChromaDB 1.5.x, and prevents data loss from hash collisions. GitHub/PyPI only — npm stable remains v2.0.0.</div>
+          <div class="date">Jun 6, 2026 · MemPalace GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/blob/main/CHANGELOG.md" target="_blank">MemPalace v3.3.6 — Office Document Mining, Living-Memory Dynamics &amp; Multilingual Embeddings (May 24)</a></div>
           <div class="desc">Office document mining: PDFs, Word, PowerPoint, Excel, and EPUB files now auto-mined into memory. Virtual line numbers for precise in-document recall. Living-memory dynamics with Hebbian potentiation (frequently recalled memories strengthen) and Ebbinghaus decay (unused memories fade naturally). Multilingual embedding via embeddinggemma-300m ONNX. API-tool transcript auto-routing. Critical bug fixes for silent data loss, Windows deadlocks, and tunnel validation. GitHub/PyPI only — npm stable remains v2.0.0.</div>
           <div class="date">May 24, 2026 · MemPalace GitHub / CHANGELOG.md · <strong style="color:#16a34a;">NEW</strong></div>
@@ -816,6 +831,11 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
+        <div class="news-item">
+          <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 @upstash/context7-mcp@3.2.0 — Windows Git Bash Fix &amp; XDG Base Directory Migration (Jun 11)</a></div>
+          <div class="desc">Released Jun 11. Key fix for Claude Code users on Windows Git Bash: path handling was broken, preventing proper tool resolution. CLI migrated to XDG Base Directory spec. Bumped runtime dependencies; enhanced error handling for non-JSON server responses. <code>ctx7@0.5.2</code> ships in the same release. Update: <code>npm install -g @upstash/context7-mcp</code></div>
+          <div class="date">Jun 11, 2026 · github.com/upstash/context7 · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://code.claude.com/docs/en/vs-code" target="_blank">Claude Code VS Code Extension v0.17.1 — Auto Node.js Detection (Jun 6)</a></div>
           <div class="desc">Released Jun 6. Automatic Node.js detection now reads your shell's real PATH so the extension finds Node correctly even with nvm, Homebrew, or non-standard installs — fixes the "Node.js not found" error that affected many users on startup. Leading the VS Code Marketplace at 5.2M installs. Update via the VS Code Extensions panel.</div>
