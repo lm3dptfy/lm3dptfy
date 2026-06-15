@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 14 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 15 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -306,6 +306,11 @@
       <div id="security-body">
 
         <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge warn">Advisory</span> Claude Fable 5 &amp; Mythos 5 Suspended by US Export Control Directive — Jun 12, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">On June 12 at 5:21 PM ET, the US government issued an export-control directive ordering Anthropic to immediately suspend access to Claude Fable 5 and Claude Mythos 5 for all foreign nationals — whether inside or outside the United States, including foreign-national Anthropic employees. Because Anthropic cannot filter users by nationality in real time, <strong>both models are globally disabled</strong> for all customers. Claude Opus 4.8 and all other models remain online. Anthropic believes this is a misunderstanding and is working to restore access. Default in Claude Code falls back to <strong>claude-opus-4-8</strong>. <a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" style="color:var(--teal-light);">CNBC</a> · <a href="https://www.marktechpost.com/2026/06/13/anthropic-disables-claude-fable-5-and-mythos-5-after-us-government-order/" style="color:var(--teal-light);">MarkTechPost</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> Claude Code GitHub Action — Supply Chain Attack via Prompt Injection (Fixed claude-code-action v1.0.94) — Jun 4, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">RyotaK of GMO Flatt Security disclosed that the official <code>claude-code-action</code> GitHub Action incorrectly trusted any actor whose name ended in <code>[bot]</code>, allowing any registered GitHub App to trigger workflows. Attackers crafted issues containing indirect prompt injection payloads that caused Claude to extract GitHub Actions OIDC credentials and exchange them for write-access tokens — enabling arbitrary code injection into any public repository running the action. A secondary vector: the official example issue-triage workflow shipped with <code>allowed_non_write_users: "*"</code>, allowing anyone to trigger it, and Claude posted task summaries to the publicly visible workflow summary panel, creating an exfiltration channel. Anthropic rated the issues CVSS 7.8 and paid a bug bounty. Fixed in <code>claude-code-action@v1.0.94</code> — update your GitHub Actions workflows immediately. <a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" style="color:var(--teal-light);">The Hacker News</a> · <a href="https://cybersecuritynews.com/claude-codes-github-actions-vulnerability/" style="color:var(--teal-light);">CyberSecurityNews</a></div>
         </div>
@@ -336,8 +341,8 @@
         </div>
 
         <div class="alert-banner" style="margin-bottom:10px;">
-          <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Billing Change — Programmatic API Usage Gets Separate Budget Jun 15, 2026</div>
-          <div style="font-size:.85rem;color:var(--ink2);">Starting June 15, 2026, Anthropic will separate programmatic API usage (used by Claude Code, integrations, and SDKs) from interactive subscription limits. Users on Pro/Max plans must add dedicated API credits or switch to pay-as-you-go for programmatic use. <strong>Action required before June 15</strong> to avoid service interruptions in Claude Code and automation workflows. <a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" style="color:var(--teal-light);">The Register</a></div>
+          <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Billing Change — Programmatic API Usage Now Separate (Effective Jun 15, 2026)</div>
+          <div style="font-size:.85rem;color:var(--ink2);">As of today (June 15, 2026), Anthropic has separated programmatic API usage (used by Claude Code, integrations, and SDKs) from interactive subscription limits. Users on Pro/Max plans must have dedicated API credits or pay-as-you-go billing to continue using Claude Code. If your Claude Code sessions are failing, check your API billing at console.anthropic.com. <a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" style="color:var(--teal-light);">The Register</a></div>
         </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
@@ -496,14 +501,19 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
+          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ACTIVE: Claude Fable 5 &amp; Mythos 5 Globally Suspended — US Export Control Directive (Jun 12)</a></div>
+          <div class="desc">The US government issued a national-security export-control order on June 12, forcing Anthropic to suspend Fable 5 and Mythos 5 access for all foreign nationals worldwide — including foreign-national Anthropic employees. Since Anthropic cannot filter by nationality in real time, <strong>both models are down globally</strong>. Opus 4.8 and all other models remain available. Claude Code falls back to <code>claude-opus-4-8</code>. Anthropic says it believes this is a misunderstanding and is working to restore access.</div>
+          <div class="date">Jun 12, 2026 · CNBC / MarkTechPost / Time · <strong style="color:#f87171;">⚠ MODELS DOWN GLOBALLY</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.177 on npm — v2.1.176 Changelog: Session Titles, Bedrock Caching &amp; 10 Bug Fixes (Jun 12)</a></div>
           <div class="desc"><strong>v2.1.177</strong> is now the latest on npm. <strong>v2.1.176</strong> (Jun 12): session titles now generated in the conversation's language, new <code>footerLinksRegexes</code> setting for regex-matched link badges, improved Bedrock credential caching (cached until <code>Expiration</code>). Bug fixes: <code>availableModels</code> enforcement with alias model redirects, hook <code>if</code> conditions for Read/Edit/Write tool paths, Linux sandbox symlink issues, clipboard copy in tmux over SSH, Remote Control model switching and disconnect notifications, <code>/cd</code> and worktree moves with git branch tracking, background agent search by PR URL, background session respawn, and Windows daemon issues. <strong>v2.1.173</strong> (Jun 11) fixed Fable 5 model names with <code>[1m]</code> suffix normalization and spurious "sandbox dependencies missing" warning on Windows. Run <code>claude update</code>.</div>
           <div class="date">Jun 12, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">LATEST v2.1.177</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ TOMORROW: API Billing Split &amp; claude-sonnet-4-20250514 / claude-opus-4-20250514 Model IDs Retire — Jun 15</a></div>
-          <div class="desc">Two breaking changes on June 15: (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> now. <strong>1 day remaining — act today.</strong></div>
-          <div class="date">Jun 15, 2026 deadline · Anthropic · <strong style="color:#f87171;">⚠ ACTION REQUIRED — TOMORROW</strong></div>
+          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ TODAY: API Billing Split &amp; claude-sonnet-4-20250514 / claude-opus-4-20250514 Model IDs Retire — Jun 15</a></div>
+          <div class="desc">Two breaking changes effective today (June 15): (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG to continue using Claude Code. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire today — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> immediately or API calls will fail.</div>
+          <div class="date">Jun 15, 2026 · Anthropic · <strong style="color:#f87171;">⚠ ACTION REQUIRED — TODAY</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.anthropic.com/news/claude-corps" target="_blank">Anthropic Claude Corps — $150M Fellowship + $200M Economic Fund Announced (Jun 11–12)</a></div>
