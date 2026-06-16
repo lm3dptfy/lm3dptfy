@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 15 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 16 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,7 +196,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.177</span></span>
+          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.178</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -304,6 +304,11 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-fg94-h982-f3mm — Out-of-Band Data Exfiltration via Pre-Approved HuggingFace Domain in WebFetch — Jun 13, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Moderate severity. Claude Code's WebFetch tool had <code>huggingface.co</code> in its default pre-approved domain allowlist. A malicious actor could craft specially structured HuggingFace-hosted URLs that cause Claude Code to fetch attacker-controlled content and exfiltrate session data out-of-band — bypassing the normal domain allowlist confirmation. The HuggingFace domain has been removed from the pre-approved list. Update to the latest Claude Code via <code>claude update</code> and review your <code>allowedDomains</code> configuration in <code>settings.json</code>. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-fg94-h982-f3mm" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        </div>
 
         <div class="alert-banner" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> Claude Fable 5 &amp; Mythos 5 Suspended by US Export Control Directive — Jun 12, 2026</div>
@@ -501,33 +506,28 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ACTIVE: Claude Fable 5 &amp; Mythos 5 Globally Suspended — US Export Control Directive (Jun 12)</a></div>
-          <div class="desc">The US government issued a national-security export-control order on June 12, forcing Anthropic to suspend Fable 5 and Mythos 5 access for all foreign nationals worldwide — including foreign-national Anthropic employees. Since Anthropic cannot filter by nationality in real time, <strong>both models are down globally</strong>. Opus 4.8 and all other models remain available. Claude Code falls back to <code>claude-opus-4-8</code>. Anthropic says it believes this is a misunderstanding and is working to restore access.</div>
-          <div class="date">Jun 12, 2026 · CNBC / MarkTechPost / Time · <strong style="color:#f87171;">⚠ MODELS DOWN GLOBALLY</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.178 Now Latest on npm — Run claude update (Jun 16)</a></div>
+          <div class="desc"><strong>v2.1.178</strong> is the new latest on npm as of today's MooseClaw check (up from v2.1.177). Run <code>claude update</code> to get the latest. Recent changelog highlights: v2.1.176 added session titles in conversation language, <code>footerLinksRegexes</code> setting, improved Bedrock credential caching, and 10+ bug fixes. v2.1.173 fixed Fable 5 model names with <code>[1m]</code> suffix normalization. Installed version on this system: 2.1.165 — update recommended.</div>
+          <div class="date">Jun 16, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW LATEST v2.1.178</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.177 on npm — v2.1.176 Changelog: Session Titles, Bedrock Caching &amp; 10 Bug Fixes (Jun 12)</a></div>
-          <div class="desc"><strong>v2.1.177</strong> is now the latest on npm. <strong>v2.1.176</strong> (Jun 12): session titles now generated in the conversation's language, new <code>footerLinksRegexes</code> setting for regex-matched link badges, improved Bedrock credential caching (cached until <code>Expiration</code>). Bug fixes: <code>availableModels</code> enforcement with alias model redirects, hook <code>if</code> conditions for Read/Edit/Write tool paths, Linux sandbox symlink issues, clipboard copy in tmux over SSH, Remote Control model switching and disconnect notifications, <code>/cd</code> and worktree moves with git branch tracking, background agent search by PR URL, background session respawn, and Windows daemon issues. <strong>v2.1.173</strong> (Jun 11) fixed Fable 5 model names with <code>[1m]</code> suffix normalization and spurious "sandbox dependencies missing" warning on Windows. Run <code>claude update</code>.</div>
-          <div class="date">Jun 12, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">LATEST v2.1.177</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-fg94-h982-f3mm" target="_blank">NEW: GHSA-fg94-h982-f3mm — Out-of-Band Data Exfiltration via Pre-Approved HuggingFace Domain (Jun 13)</a></div>
+          <div class="desc">Moderate severity. Claude Code's WebFetch tool had <code>huggingface.co</code> in its pre-approved domain list, allowing a malicious actor to craft HuggingFace-hosted URLs that cause Claude Code to fetch attacker-controlled content and leak session data out-of-band. The HuggingFace domain has been removed from the default allowlist. Update via <code>claude update</code> and review your <code>allowedDomains</code> config in <code>settings.json</code>.</div>
+          <div class="date">Jun 13, 2026 · GitHub Security Advisories · <strong style="color:#d97706;">NEW ADVISORY — UPDATE NOW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" target="_blank">⚠ TODAY: API Billing Split &amp; claude-sonnet-4-20250514 / claude-opus-4-20250514 Model IDs Retire — Jun 15</a></div>
-          <div class="desc">Two breaking changes effective today (June 15): (1) Programmatic API usage (Claude Code, SDK integrations) splits from subscription limits — Pro/Max users need API credits or PAYG to continue using Claude Code. (2) <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> model IDs retire today — migrate to <code>claude-sonnet-4-6</code> / <code>claude-opus-4-8</code> immediately or API calls will fail.</div>
-          <div class="date">Jun 15, 2026 · Anthropic · <strong style="color:#f87171;">⚠ ACTION REQUIRED — TODAY</strong></div>
+          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ STILL ACTIVE: Claude Fable 5 &amp; Mythos 5 Globally Suspended — US Export Control (Jun 12, ongoing)</a></div>
+          <div class="desc">Both models remain globally disabled as of Jun 16. The US government issued a national-security export-control order on June 12 requiring Anthropic to restrict Fable 5 and Mythos 5 to US nationals — but since Anthropic cannot filter by nationality in real time, both models are suspended for all users worldwide. Claude Opus 4.8 remains the fallback in Claude Code. Anthropic is working to restore access.</div>
+          <div class="date">Jun 12, 2026 (ongoing) · CNBC / MarkTechPost · <strong style="color:#f87171;">⚠ MODELS DOWN GLOBALLY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/claude-corps" target="_blank">Anthropic Claude Corps — $150M Fellowship + $200M Economic Fund Announced (Jun 11–12)</a></div>
-          <div class="desc">Anthropic committed $350M across two programs: (1) <strong>Claude Corps</strong> — $150M to embed 1,000 AI-trained fellows at nonprofits for one year ($85K/year + token budget). Applications open now, first cohort starts October 2026. (2) <strong>Economic Futures Research Fund</strong> — $200M to study and evaluate policy responses to AI-driven job displacement. CEO Dario Amodei proposed graduated policy response including UBI funded by taxes on AI companies if displacement becomes severe.</div>
-          <div class="date">Jun 11–12, 2026 · Anthropic / The Register / Washington Post · <strong style="color:#16a34a;">MAJOR NEWS</strong></div>
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.7-beta.1 — Channel Delivery, Kimi K2.7 Code &amp; Provider Resilience (Jun 13)</a></div>
+          <div class="desc">Latest OpenClaw pre-release: channel delivery tightening, improved provider resilience and retry paths, Slack transcript persistence, <strong>Kimi K2.7 Code</strong> provider support added to bundled catalog, and local setup trust hardening. Latest stable remains 2026.6.6 (Jun 12). Update via beta channel if you track pre-releases.</div>
+          <div class="date">Jun 13, 2026 · OpenClaw GitHub Releases · <strong style="color:#d97706;">BETA</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/claude-fable-5" target="_blank">Claude Fable 5 &amp; Claude Mythos 5 Launch + Sub-Agents 5 Levels Deep in v2.1.172 (Jun 9–10)</a></div>
-          <div class="desc">Anthropic launched Claude Fable 5 (1M-token context, 128K output, always-on adaptive thinking) June 9. Available on Claude API, Bedrock, Vertex AI, Microsoft Foundry. Claude Opus 4.1 deprecated — retires Aug 5, 2026. Claude Haiku 3 already retired. New <code>ultracode</code> effort setting sets effort to xhigh and auto-decides when to use dynamic workflows. Claude Code v2.1.172 (Jun 10) adds nested sub-agents up to 5 levels deep for complex multi-agent orchestration.</div>
-          <div class="date">Jun 9–10, 2026 · Anthropic · <strong style="color:#16a34a;">MAJOR LAUNCH</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" target="_blank">Claude Code GitHub Action Supply Chain Fix — Update to claude-code-action@v1.0.94 (Jun 4)</a></div>
-          <div class="desc">RyotaK (GMO Flatt Security) disclosed that the official <code>claude-code-action</code> GitHub Action allowed any GitHub App named <code>*[bot]</code> to trigger CI workflows and extract OIDC write-access tokens via prompt injection from crafted issues. Fixed in <code>claude-code-action@v1.0.94</code>. Update your GitHub Actions workflows immediately if using this action.</div>
+          <div><a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" target="_blank">Claude Code GitHub Action Supply Chain Attack Fixed — Update to claude-code-action@v1.0.94 (Jun 4)</a></div>
+          <div class="desc">RyotaK (GMO Flatt Security) disclosed that <code>claude-code-action</code> allowed any GitHub App named <code>*[bot]</code> to trigger CI workflows and extract OIDC write-access tokens via prompt injection from crafted issues. CVSS 7.8. Fixed in <code>claude-code-action@v1.0.94</code>. Update your GitHub Actions workflows immediately if using this action.</div>
           <div class="date">Jun 4, 2026 · The Hacker News / GMO Flatt Security · <strong style="color:#f87171;">SECURITY — UPDATE NOW</strong></div>
         </div>
         <div class="news-item">
@@ -955,6 +955,11 @@
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
         <div class="news-item">
+          <div><a href="https://checkmarx.com/learn/ai-security/claude-code-security-top-6-risks-controls-and-best-practices/" target="_blank">Checkmarx: Claude Code Security — Top 6 Risks, Controls &amp; Best Practices (Jun 2026)</a></div>
+          <div class="desc">Comprehensive security guide covering the six highest-priority Claude Code risks: prompt injection via MCP/hooks, API key exfiltration, privilege escalation via settings.json, supply chain attacks, trust bypass via git worktrees, and sandbox escape via symlinks. Includes enterprise controls — permission auditing, network sandboxing, managed settings enforcement — and a hardening checklist for teams using Claude Code in production.</div>
+          <div class="date">Jun 2026 · checkmarx.com · <strong style="color:#16a34a;">NEW — RECOMMENDED</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank">Claude Fable 5 &amp; New Mythos Class — Migration Guide &amp; Model Overview (Jun 9)</a></div>
           <div class="desc">Anthropic's official model overview now includes Claude Fable 5 (1M context, 128K output) and the new Mythos 5 class above Opus. Claude Haiku 3 retired; Claude Opus 4.1 deprecating August 5. Check the model deprecations page and update your API calls from <code>claude-sonnet-4-20250514</code> / <code>claude-opus-4-20250514</code> to current IDs before June 15.</div>
           <div class="date">Jun 9, 2026 · platform.claude.com · <strong style="color:#16a34a;">NEW — ACTION REQUIRED</strong></div>
@@ -978,11 +983,6 @@
           <div><a href="https://9to5mac.com/2026/05/28/anthropic-upgrades-claude-with-new-opus-4-8-model-heres-whats-new/" target="_blank">Claude Opus 4.8 &amp; Dynamic Workflows — What Agentic Engineers Need to Know (May 28)</a></div>
           <div class="desc">With Opus 4.8 and Dynamic Workflows landing in Claude Code v2.1.154, agentic coding patterns are changing fast. Key changes: Opus 4.8 is now the <code>/effort xhigh</code> default (1M context, 128K output, extended thinking opt-in); Dynamic Workflows spin up hundreds of sub-agents per session; Fast Mode at 2.5× speed. Start here to understand what moved and how to configure for your workload.</div>
           <div class="date">May 28, 2026 · 9to5Mac / Anthropic · <strong style="color:#16a34a;">NEW — READ FIRST</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/FlorianBruniaux/claude-code-ultimate-guide" target="_blank">Claude Code Ultimate Guide — From Beginner to Power User (GitHub)</a></div>
-          <div class="desc">Comprehensive community reference covering the full Claude Code surface: CLI basics, agentic workflows, CLAUDE.md templates, hooks patterns, MCP configuration, security hardening, and tips from power users. Actively maintained in 2026. Bookmark this if you're going deep on Claude Code.</div>
-          <div class="date">2026 · github.com/FlorianBruniaux · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
     </div>
