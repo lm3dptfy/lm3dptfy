@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 16 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 17 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,7 +196,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.178</span></span>
+          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.179</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -208,7 +208,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.6.6</span></span>
+          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.6.8</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -304,6 +304,11 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner resolved" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> Claude API Model IDs Retired — Jun 15, 2026 (Now in Effect)</div>
+          <div style="font-size:.85rem;color:var(--ink2);">As of June 15, 2026, the legacy model IDs <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> have been retired from the Claude API. Any API calls using these IDs now return an error. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-8</code> respectively. Also effective June 15: Agent SDK billing separates from subscriptions. Check your integration and API keys at <a href="https://console.anthropic.com/settings/keys" style="color:var(--teal-light);">console.anthropic.com</a>. <a href="https://help.make.com/anthropic-claude-model-deprecations-on-june-15-2026" style="color:var(--teal-light);">Make Help Center</a></div>
+        </div>
 
         <div class="alert-banner" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-fg94-h982-f3mm — Out-of-Band Data Exfiltration via Pre-Approved HuggingFace Domain in WebFetch — Jun 13, 2026</div>
@@ -506,34 +511,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.178 Now Latest on npm — Run claude update (Jun 16)</a></div>
-          <div class="desc"><strong>v2.1.178</strong> is the new latest on npm as of today's MooseClaw check (up from v2.1.177). Run <code>claude update</code> to get the latest. Recent changelog highlights: v2.1.176 added session titles in conversation language, <code>footerLinksRegexes</code> setting, improved Bedrock credential caching, and 10+ bug fixes. v2.1.173 fixed Fable 5 model names with <code>[1m]</code> suffix normalization. Installed version on this system: 2.1.165 — update recommended.</div>
-          <div class="date">Jun 16, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW LATEST v2.1.178</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.179 Now Latest on npm — Run claude update (Jun 17)</a></div>
+          <div class="desc"><strong>v2.1.179</strong> is the new latest on npm as of today's MooseClaw check (up from v2.1.178). Run <code>claude update</code> to get the latest. Recent changelog highlights: added <code>enforceAvailableModels</code> managed setting, <code>requiredMinimumVersion</code>/<code>requiredMaximumVersion</code> settings, fixed model picker showing incorrect Sonnet version label, fixed enterprise billing banners, and improved startup memory usage by ~18MB. Installed version on this system: 2.1.165 — update recommended.</div>
+          <div class="date">Jun 17, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW LATEST v2.1.179</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-fg94-h982-f3mm" target="_blank">NEW: GHSA-fg94-h982-f3mm — Out-of-Band Data Exfiltration via Pre-Approved HuggingFace Domain (Jun 13)</a></div>
-          <div class="desc">Moderate severity. Claude Code's WebFetch tool had <code>huggingface.co</code> in its pre-approved domain list, allowing a malicious actor to craft HuggingFace-hosted URLs that cause Claude Code to fetch attacker-controlled content and leak session data out-of-band. The HuggingFace domain has been removed from the default allowlist. Update via <code>claude update</code> and review your <code>allowedDomains</code> config in <code>settings.json</code>.</div>
-          <div class="date">Jun 13, 2026 · GitHub Security Advisories · <strong style="color:#d97706;">NEW ADVISORY — UPDATE NOW</strong></div>
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.8 Released — Richer Delivery, Safer Model Routing &amp; Memory Recovery (Jun 17)</a></div>
+          <div class="desc">New stable: richer Telegram and WhatsApp message delivery, more reliable agent runs, safer model routing, improved usage footers, calmer UI and mobile sessions, and stronger memory and state recovery. Update your OpenClaw installation. Installed version (2026.6.1) is several versions behind — update recommended.</div>
+          <div class="date">Jun 17, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE — TODAY</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ STILL ACTIVE: Claude Fable 5 &amp; Mythos 5 Globally Suspended — US Export Control (Jun 12, ongoing)</a></div>
-          <div class="desc">Both models remain globally disabled as of Jun 16. The US government issued a national-security export-control order on June 12 requiring Anthropic to restrict Fable 5 and Mythos 5 to US nationals — but since Anthropic cannot filter by nationality in real time, both models are suspended for all users worldwide. Claude Opus 4.8 remains the fallback in Claude Code. Anthropic is working to restore access.</div>
+          <div class="desc">Both models remain globally disabled as of Jun 17. The US government's export-control order issued June 12 requires Anthropic to restrict Fable 5 and Mythos 5 to US nationals only — but since Anthropic cannot filter by nationality in real time, both models remain suspended for all users worldwide. Claude Opus 4.8 is the current fallback in Claude Code. Anthropic is working to restore access.</div>
           <div class="date">Jun 12, 2026 (ongoing) · CNBC / MarkTechPost · <strong style="color:#f87171;">⚠ MODELS DOWN GLOBALLY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.7-beta.1 — Channel Delivery, Kimi K2.7 Code &amp; Provider Resilience (Jun 13)</a></div>
-          <div class="desc">Latest OpenClaw pre-release: channel delivery tightening, improved provider resilience and retry paths, Slack transcript persistence, <strong>Kimi K2.7 Code</strong> provider support added to bundled catalog, and local setup trust hardening. Latest stable remains 2026.6.6 (Jun 12). Update via beta channel if you track pre-releases.</div>
-          <div class="date">Jun 13, 2026 · OpenClaw GitHub Releases · <strong style="color:#d97706;">BETA</strong></div>
+          <div><a href="https://help.make.com/anthropic-claude-model-deprecations-on-june-15-2026" target="_blank">Claude API Model IDs Retired as of Jun 15 — Old IDs Now Return Errors</a></div>
+          <div class="desc">Effective June 15, the legacy model IDs <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> have been retired. Any API call using these identifiers now returns an error. Migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-8</code>. Also: Agent SDK billing now runs separately from Pro/Max subscriptions as of June 15 — check <a href="https://console.anthropic.com" style="color:var(--teal-light);">console.anthropic.com</a> if Claude Code sessions are failing.</div>
+          <div class="date">Jun 15, 2026 (now in effect) · Anthropic / Make Help Center · <strong style="color:#d97706;">ACTION REQUIRED if using old model IDs</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" target="_blank">Claude Code GitHub Action Supply Chain Attack Fixed — Update to claude-code-action@v1.0.94 (Jun 4)</a></div>
-          <div class="desc">RyotaK (GMO Flatt Security) disclosed that <code>claude-code-action</code> allowed any GitHub App named <code>*[bot]</code> to trigger CI workflows and extract OIDC write-access tokens via prompt injection from crafted issues. CVSS 7.8. Fixed in <code>claude-code-action@v1.0.94</code>. Update your GitHub Actions workflows immediately if using this action.</div>
-          <div class="date">Jun 4, 2026 · The Hacker News / GMO Flatt Security · <strong style="color:#f87171;">SECURITY — UPDATE NOW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-fg94-h982-f3mm" target="_blank">GHSA-fg94-h982-f3mm — Out-of-Band Data Exfiltration via Pre-Approved HuggingFace Domain (Jun 13)</a></div>
+          <div class="desc">Moderate severity advisory still active. Claude Code's WebFetch tool had <code>huggingface.co</code> in its pre-approved domain list, allowing a malicious actor to craft HuggingFace-hosted URLs that cause Claude Code to fetch attacker-controlled content and leak session data out-of-band. Update via <code>claude update</code> and review your <code>allowedDomains</code> config in <code>settings.json</code>.</div>
+          <div class="date">Jun 13, 2026 · GitHub Security Advisories · <strong style="color:#d97706;">ADVISORY — UPDATE NOW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://fortune.com/2026/06/01/anthropic-confidentially-files-ipo-965-billion-valuation/" target="_blank">Anthropic Confidentially Files for IPO — $965B Valuation (Jun 1)</a></div>
-          <div class="desc">Anthropic filed its IPO prospectus with the SEC on June 1, following a $65B Series H at a $965B valuation. Revenue run rate hit $47B in 2026. Claude and Claude Code are core revenue drivers.</div>
-          <div class="date">Jun 1, 2026 · Fortune / TechCrunch / CNBC · <strong style="color:#16a34a;">MAJOR NEWS</strong></div>
+          <div><a href="https://www.microsoft.com/en-us/security/blog/2026/06/05/securing-ci-cd-in-agentic-world-claude-code-github-action-case/" target="_blank">Microsoft Security: Securing CI/CD in an Agentic World — Claude Code Case Study (Jun 5)</a></div>
+          <div class="desc">Microsoft's Security team breaks down the Claude Code GitHub Action supply chain attack and distills the "Rule of Two" for agentic CI/CD: no AI workflow should simultaneously process untrusted input, hold secrets, and have ability to change external state. Concrete guidance for scoping tokens and isolating AI pipelines. Essential reading for teams running <code>claude-code-action</code>.</div>
+          <div class="date">Jun 5, 2026 · Microsoft Security Blog · <strong style="color:#16a34a;">RECOMMENDED READING</strong></div>
         </div>
       </div>
 
@@ -542,6 +547,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.8 — Richer Telegram &amp; WhatsApp Delivery, Safer Model Routing &amp; Memory Recovery (Jun 17)</a></div>
+          <div class="desc">Latest stable release: richer Telegram and WhatsApp message delivery, more reliable agent runs, safer model routing, improved usage footers, calmer UI and mobile sessions, and stronger memory and state recovery across the platform. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Jun 17, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE — TODAY</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.7-beta.1 — Channel Delivery, Provider Resilience &amp; Kimi K2.7 Code Support (Jun 13)</a></div>
           <div class="desc">Today's pre-release: channel delivery tightening across all supported channels; improved provider resilience and retry paths; Slack transcript persistence; <strong>Kimi K2.7 Code</strong> provider support added to the bundled catalog; local setup trust hardening. Update via your OpenClaw update mechanism (beta channel).</div>
