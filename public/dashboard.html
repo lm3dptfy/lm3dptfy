@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 19 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 20 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -350,9 +350,9 @@
           <div style="font-size:.85rem;color:var(--ink2);">Disclosed May 12 by researcher Joernchen (0day.click). Maliciously crafted <code>claude-cli://</code> deeplinks could inject arbitrary settings — including shell commands — into a victim's Claude Code instance, enabling RCE without any user confirmation. Attack required only convincing a user to click a link. Fixed in v2.1.118. All auto-updated users are protected; verify with <code>claude --version</code>. <a href="https://cyberpress.org/claude-code-rce-vulnerability/" style="color:var(--teal-light);">CyberPress</a> · <a href="https://www.darkreading.com/application-security/trustfall-exposes-claude-code-execution-risk" style="color:var(--teal-light);">Dark Reading</a></div>
         </div>
 
-        <div class="alert-banner" style="margin-bottom:10px;">
-          <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Billing Change — Programmatic API Usage Now Separate (Effective Jun 15, 2026)</div>
-          <div style="font-size:.85rem;color:var(--ink2);">As of today (June 15, 2026), Anthropic has separated programmatic API usage (used by Claude Code, integrations, and SDKs) from interactive subscription limits. Users on Pro/Max plans must have dedicated API credits or pay-as-you-go billing to continue using Claude Code. If your Claude Code sessions are failing, check your API billing at console.anthropic.com. <a href="https://www.theregister.com/ai-ml/2026/05/14/anthropic-tosses-agents-into-the-api-billing-pool/5240748" style="color:var(--teal-light);">The Register</a></div>
+        <div class="alert-banner resolved" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> Anthropic Pauses API Billing Split — Subscription Usage Continues As Before (Jun 20, 2026)</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Update as of Jun 20: Anthropic paused the planned June 15 billing change before it took effect. Claude Code, Agent SDK, and programmatic usage <strong>continue to draw from your subscription limit as before</strong> — the billing split is not live. Your Claude Code sessions should work normally. Monitor <a href="https://console.anthropic.com" style="color:var(--teal-light);">console.anthropic.com</a> for updates if Anthropic reschedules the change. <a href="https://www.digitalapplied.com/blog/anthropic-claude-credit-overhaul-june-15-2026" style="color:var(--teal-light);">Digital Applied</a></div>
         </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
@@ -511,34 +511,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.183 — Auto Mode Safety Guards for Destructive Git Commands &amp; Deprecated Model Warnings (Jun 19)</a></div>
-          <div class="desc"><strong>v2.1.183</strong> is today's latest on npm. Key highlights: auto mode now <strong>blocks destructive git commands</strong> (<code>git reset --hard</code>, <code>git checkout -- .</code>, <code>git clean -fd</code>, <code>git stash drop</code>) unless you explicitly asked to discard local work; blocks <code>git commit --amend</code> for commits not made by the agent this session; blocks <code>terraform destroy</code>/<code>pulumi destroy</code>/<code>cdk destroy</code> unless targeting the specific stack. New: deprecated model warnings on stderr in print mode + in agent frontmatter; <code>attribution.sessionUrl</code> setting to omit claude.ai session links from commits/PRs; <code>/config --help</code> lists all shorthand keys. Fixes: WebSearch returning empty results in subagents; TUI corruption in Windows Terminal under nested subagent load; MCP servers exposing auth-stub tools in headless/SDK mode; tmux pane key-leak on slow rc-file shells; background tasks killed when teammate finishes turn. Installed: 2.1.165 — <code>claude update</code> strongly recommended.</div>
-          <div class="date">Jun 19, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW LATEST TODAY — v2.1.183</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.183 — Current Latest; Auto Mode Safety Guards for Destructive Operations (Jun 19)</a></div>
+          <div class="desc"><strong>v2.1.183</strong> remains the latest npm release as of Jun 20. Auto mode now <strong>blocks destructive git commands</strong> (<code>git reset --hard</code>, <code>git checkout -- .</code>, <code>git clean -fd</code>, <code>git stash drop</code>, <code>git commit --amend</code> for agent-made commits) and <code>terraform/pulumi/cdk destroy</code> unless explicitly requested. New: deprecated model warnings on stderr; <code>attribution.sessionUrl</code> setting; <code>/config --help</code>. Bug fixes: WebSearch empty in subagents, TUI corruption in Windows Terminal, MCP auth-stub tools in headless mode, tmux key-leak, background task kills. Installed: 2.1.165 — <code>claude update</code> strongly recommended.</div>
+          <div class="date">Jun 19, 2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">UPDATE NEEDED — v2.1.183</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ONGOING: Claude Fable 5 &amp; Mythos 5 Globally Suspended — US Export Control (Jun 12, ongoing as of Jun 19)</a></div>
-          <div class="desc">Both models remain globally disabled as of Jun 19. The US export-control directive (Jun 12) ordered Anthropic to restrict Fable 5 and Mythos 5 to US nationals only — but since Anthropic cannot filter by nationality in real time, both models remain suspended worldwide. Claude Opus 4.8 is the active fallback in Claude Code. Anthropic is working to restore access; no ETA confirmed.</div>
+          <div><a href="https://www.digitalapplied.com/blog/anthropic-claude-credit-overhaul-june-15-2026" target="_blank">✅ CORRECTION: Anthropic Pauses API Billing Split — Claude Code Subscription Usage Unaffected (Jun 20)</a></div>
+          <div class="desc">Anthropic paused the planned June 15 billing change before it took effect. The Agent SDK credit split is <strong>not live</strong> — Claude Code and programmatic usage continue to draw from your subscription limit as before. Note: legacy model IDs <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> did retire on Jun 15 and now return errors — migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-8</code> if affected.</div>
+          <div class="date">Jun 20, 2026 · Digital Applied / Anthropic · <strong style="color:#16a34a;">BILLING PAUSED — NO ACTION NEEDED</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ONGOING: Claude Fable 5 &amp; Mythos 5 Globally Suspended — US Export Control (Jun 12, ongoing as of Jun 20)</a></div>
+          <div class="desc">Both models remain globally disabled as of Jun 20. The US export-control directive (Jun 12) ordered Anthropic to restrict Fable 5 and Mythos 5 to US nationals only — but since Anthropic cannot filter by nationality in real time, both models remain suspended worldwide. Claude Opus 4.8 is the active fallback in Claude Code. Anthropic is working to restore access; no ETA confirmed.</div>
           <div class="date">Jun 12, 2026 (ongoing) · CNBC / MarkTechPost · <strong style="color:#f87171;">⚠ MODELS DOWN GLOBALLY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://codersera.com/blog/anthropic-june-2026-billing-change-claude-code/" target="_blank">Anthropic API Billing Split In Effect — Agent SDK &amp; Claude Code on Separate Credits Since Jun 15</a></div>
-          <div class="desc">As of June 15, programmatic Claude usage (Agent SDK, <code>claude -p</code>, Claude Code GitHub Actions, third-party harnesses) is billed separately from your Claude subscription's interactive rate limit. Pro: $20/mo API credit pool; Max 5x: $100/mo; Max 20x: $200/mo — all at full API list prices with no rollover. If your Claude Code sessions are failing, check API billing at <a href="https://console.anthropic.com" style="color:var(--teal-light);">console.anthropic.com</a>. Also: legacy model IDs <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> now return errors — migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-8</code>.</div>
-          <div class="date">Jun 15, 2026 (in effect) · Anthropic / CoderSera · <strong style="color:#d97706;">ACTION REQUIRED — CHECK BILLING</strong></div>
+          <div><a href="https://plugins.jetbrains.com/plugin/30313-claude-code-with-gui" target="_blank">JetBrains Claude Code Plugin v0.19.0 — Session List Panel in Left Sidebar (Jun 16)</a></div>
+          <div class="desc">Version 0.19.0 of the JetBrains plugin adds a session list panel in the left sidebar to browse all Claude sessions. You can now choose where chats open — dedicated editor tab or the sidebar tool window. Complements the existing diff viewer and integrated terminal experience. Update from the JetBrains Marketplace.</div>
+          <div class="date">Jun 16, 2026 · JetBrains Marketplace · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://releasebot.io/updates/anthropic/claude-developer-platform" target="_blank">Anthropic Managed Agents Public Beta — Cron-Based Automation with Vault-Stored Credentials (Jun 2026)</a></div>
-          <div class="desc">Anthropic shipped Managed Agents as a public beta: agents that run on schedules (cron) and securely use CLI tools and authenticated services. Environment variables are stored in a secrets vault scoped to the agent. Pairs with WIF (Workload Identity Federation) to replace static API keys with short-lived credentials. Useful for automated monitoring, CI/CD post-deploy checks, and scheduled code generation tasks without leaving credentials exposed in environment variables.</div>
-          <div class="date">Jun 2026 · Anthropic Developer Platform · <strong style="color:#16a34a;">NEW BETA</strong></div>
+          <div><a href="https://docs.anthropic.com/en/docs/about-claude/model-deprecations" target="_blank">Claude Opus 4.1 Retirement Scheduled — Aug 5, 2026 (Notice Jun 5)</a></div>
+          <div class="desc">Anthropic notified developers that Claude Opus 4.1 will retire from the Claude API on <strong>August 5, 2026</strong>. Additionally, Claude Mythos Preview retires June 30, 2026 — migrate to Claude Mythos 5. Check your API calls and update any hardcoded model IDs before the retirement dates to avoid errors. <code>claude-opus-4-8</code> is the recommended upgrade path from Opus 4.1.</div>
+          <div class="date">Jun 5, 2026 · Anthropic Model Deprecations · <strong style="color:#d97706;">ACTION: Migrate Opus 4.1 before Aug 5</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-fg94-h982-f3mm" target="_blank">GHSA-fg94-h982-f3mm — Out-of-Band Exfiltration via Pre-Approved HuggingFace Domain — Still Unpatched If Below Latest (Jun 13)</a></div>
-          <div class="desc">Moderate severity. Claude Code's WebFetch had <code>huggingface.co</code> in its default pre-approved domain list; a crafted HuggingFace-hosted URL could cause Claude to fetch attacker-controlled content and leak session data out-of-band. The HuggingFace domain has been removed from the pre-approved list in v2.1.183+. Update now via <code>claude update</code> and review <code>allowedDomains</code> in your <code>settings.json</code> to ensure no other overly-broad pre-approvals exist.</div>
-          <div class="date">Jun 13, 2026 · GitHub Security Advisories · <strong style="color:#d97706;">ADVISORY — UPDATE TO 2.1.183+</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://thehackernews.com/2026/06/claude-code-github-action-flaw-let-one.html" target="_blank">Claude Code GitHub Action Supply Chain Attack — Prompt Injection Exfiltrated OIDC Credentials (Jun 4, Fixed)</a></div>
-          <div class="desc">GMO Flatt Security disclosed that the official <code>claude-code-action</code> GitHub Action trusted any actor whose name ended in <code>[bot]</code>, letting crafted GitHub issues trigger indirect prompt injection, steal OIDC credentials, and gain write access to public repositories. Fixed in <code>claude-code-action@v1.0.94</code>. If your workflows use an older pin, update immediately. Also check for <code>allowed_non_write_users: "*"</code> in any issue-triage workflows you run.</div>
-          <div class="date">Jun 4, 2026 · The Hacker News / GMO Flatt Security · <strong style="color:#d97706;">UPDATE claude-code-action to v1.0.94+</strong></div>
+          <div><a href="https://www.microsoft.com/en-us/security/blog/2026/06/05/securing-ci-cd-in-agentic-world-claude-code-github-action-case/" target="_blank">Microsoft Security Blog: Securing CI/CD in an Agentic World — Claude Code Case Study (Jun 5)</a></div>
+          <div class="desc">Microsoft's Security team breaks down the Claude Code GitHub Action supply chain attack (fixed in v1.0.94) and distills the "Rule of Two" for agentic CI/CD: no AI workflow should simultaneously process untrusted input, hold secrets, and have the ability to change external state. Includes concrete controls for scoping tokens, isolating pipelines, and applying least-privilege to AI agent workflows.</div>
+          <div class="date">Jun 5, 2026 · Microsoft Security Blog · <strong style="color:#16a34a;">RECOMMENDED</strong></div>
         </div>
       </div>
 
@@ -547,6 +547,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.6.9-beta.1 — Agent &amp; Codex Runtime Security &amp; Stability (Jun 19)</a></div>
+          <div class="desc">Latest beta: improved stability and security of Agent and Codex runtimes, along with enhancements to channel delivery and session identity. Update via your OpenClaw beta channel to test these improvements ahead of the next stable release.</div>
+          <div class="date">Jun 19, 2026 · OpenClaw GitHub Releases · <strong style="color:#d97706;">BETA — YESTERDAY</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.8 — Richer Telegram &amp; WhatsApp Delivery, Safer Model Routing &amp; Memory Recovery (Jun 17)</a></div>
           <div class="desc">Latest stable release: richer Telegram and WhatsApp message delivery, more reliable agent runs, safer model routing, improved usage footers, calmer UI and mobile sessions, and stronger memory and state recovery across the platform. Update via your OpenClaw update mechanism.</div>
