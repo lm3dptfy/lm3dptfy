@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 21 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 22 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -208,7 +208,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.6.8</span></span>
+          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.6.9</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -511,34 +511,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.185 — Latest on npm; Installed v2.1.165 Is 20 Releases Behind (Jun 21)</a></div>
-          <div class="desc">npm shows <strong>v2.1.185</strong> as latest as of Jun 21 — up 2 more from v2.1.183 yesterday. Installed version is <strong>v2.1.165</strong>, now 20 versions behind. Recent additions include auto mode safety guards blocking destructive git commands (<code>git reset --hard</code>, <code>checkout -- .</code>, <code>clean -fd</code>, <code>stash drop</code>) and <code>terraform/pulumi/cdk destroy</code> unless explicitly requested; deprecated model warnings in agent frontmatter; <code>attribution.sessionUrl</code> setting; <code>/config --help</code>. Bug fixes: WebSearch empty in subagents, TUI corruption in Windows Terminal, MCP auth-stub tools in headless mode, tmux key-leak, background task kills. Run <code>claude update</code> now.</div>
-          <div class="date">Jun 21, 2026 · github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE NEEDED — v2.1.185 · installed: 2.1.165</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.185 — Still Latest on npm; Installed v2.1.165 Is 20 Releases Behind (Jun 22)</a></div>
+          <div class="desc">npm still shows <strong>v2.1.185</strong> as latest as of Jun 22. Installed version is <strong>v2.1.165</strong>, 20 versions behind. Recent additions include auto mode safety guards blocking destructive git commands, Dynamic Workflows for multi-agent coordination, MCP Tool Search with lazy loading (up to 95% context reduction), mid-stream connection drop recovery, and WSL2 mouse-wheel scroll fix. A startup regression (~120ms per launch in fresh environments, introduced in 2.1.169) was also fixed. Run <code>claude update</code> now.</div>
+          <div class="date">Jun 22, 2026 · github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE NEEDED — v2.1.185 · installed: 2.1.165</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ONGOING: Claude Fable 5 &amp; Mythos 5 Remain Globally Suspended — US Export Control (Jun 21)</a></div>
-          <div class="desc">Both models remain globally disabled as of Jun 21. The US export-control directive (Jun 12) ordered Anthropic to restrict Fable 5 and Mythos 5 to US nationals only — but since Anthropic cannot filter by nationality in real time, both models remain suspended worldwide. Claude Opus 4.8 is the active fallback in Claude Code. Anthropic is working to restore access; no ETA confirmed.</div>
+          <div><a href="https://www.infoq.com/news/2026/06/dynamic-workflows-claude-code/" target="_blank">NEW: Claude Code Dynamic Workflows — Parallel Multi-Agent Coordination for Complex Tasks (Jun 2026)</a></div>
+          <div class="desc">Anthropic shipped Dynamic Workflows: Claude Code can now dynamically create orchestration scripts, break work into subtasks, run them in parallel, and validate results before presenting a final answer. Define workflows via <code>workflow.js</code> files — no intermediate results need to pass through a central orchestrator, reducing token usage and improving reliability for long-running tasks. Enable explicitly (ask Claude to create a workflow) or via the new <code>ultracode</code> setting for automatic activation. Progress is saved throughout, allowing interrupted runs to resume.</div>
+          <div class="date">Jun 2026 · InfoQ / Anthropic · <strong style="color:#16a34a;">NEW FEATURE</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ONGOING: Claude Fable 5 &amp; Mythos 5 Remain Globally Suspended — US Export Control (Jun 22)</a></div>
+          <div class="desc">Both models remain globally disabled as of Jun 22. The US export-control directive (Jun 12) ordered Anthropic to restrict Fable 5 and Mythos 5 to US nationals only — but since Anthropic cannot filter by nationality in real time, both models remain suspended worldwide. Claude Opus 4.8 is the active fallback in Claude Code. Anthropic is working to restore access; no ETA confirmed.</div>
           <div class="date">Jun 12, 2026 (ongoing) · CNBC / MarkTechPost · <strong style="color:#f87171;">⚠ MODELS DOWN GLOBALLY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.digitalapplied.com/blog/anthropic-claude-credit-overhaul-june-15-2026" target="_blank">✅ API Billing Split Remains Paused — Claude Code Subscription Usage Unaffected (Jun 21)</a></div>
-          <div class="desc">Anthropic's planned June 15 billing change (separating Agent SDK credits from subscription) remains paused as of Jun 21. Claude Code and programmatic usage continue to draw from your subscription limit as before. Legacy model IDs <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> did retire Jun 15 and return errors — migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-8</code> if affected.</div>
-          <div class="date">Jun 21, 2026 · Digital Applied / Anthropic · <strong style="color:#16a34a;">BILLING PAUSED — NO ACTION NEEDED</strong></div>
+          <div><a href="https://www.digitalapplied.com/blog/anthropic-claude-credit-overhaul-june-15-2026" target="_blank">✅ API Billing Split Remains Paused — Claude Code Subscription Usage Unaffected (Jun 22)</a></div>
+          <div class="desc">Anthropic's planned June 15 billing change (separating Agent SDK credits from subscription) remains paused as of Jun 22. Claude Code and programmatic usage continue to draw from your subscription limit as before. Legacy model IDs <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> did retire Jun 15 — migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-8</code> if you still have hardcoded old IDs.</div>
+          <div class="date">Jun 22, 2026 · Digital Applied / Anthropic · <strong style="color:#16a34a;">BILLING PAUSED — NO ACTION NEEDED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code June Safety Fixes — Subagent Visibility, /bug Fix &amp; Auto Mode Guards</a></div>
-          <div class="desc">June's rolling updates add: auto mode blocks destructive git commands and <code>terraform/pulumi/cdk destroy</code> unless explicitly requested; <code>/bug</code> now requires a description before submitting and no longer uses model-refusal text as the issue title; fixed subagent transcript visibility and live progress; fixed <code>claude agents workers</code> failing with 401 when <code>ANTHROPIC_BASE_URL</code> + <code>ANTHROPIC_AUTH_TOKEN</code> are set via a parent shell; fixed OOM crash when CLI inherits stale WebSocket file descriptors. Run <code>claude update</code>.</div>
-          <div class="date">Jun 2026 · code.claude.com/docs/en/changelog · <strong style="color:#16a34a;">FIXES AVAILABLE</strong></div>
+          <div><a href="https://docs.anthropic.com/en/docs/about-claude/model-deprecations" target="_blank">⏰ Claude Mythos Preview Retires Jun 30 (8 Days) · Claude Opus 4.1 Retires Aug 5</a></div>
+          <div class="desc">Two upcoming retirements: <strong>Claude Mythos Preview</strong> retires <strong>June 30, 2026</strong> — <strong>8 days away</strong>, migrate to Claude Mythos 5. <strong>Claude Opus 4.1</strong> retires <strong>August 5, 2026</strong> — ~6 weeks away, upgrade path is <code>claude-opus-4-8</code>. Claude Haiku 3 already retired — all calls return errors. Check your hardcoded model IDs before the deadlines.</div>
+          <div class="date">Jun 22, 2026 · Anthropic Model Deprecations · <strong style="color:#d97706;">ACTION: Mythos Preview by Jun 30 · Opus 4.1 by Aug 5</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://docs.anthropic.com/en/docs/about-claude/model-deprecations" target="_blank">⏰ Claude Opus 4.1 Retires Aug 5 (6 Weeks Away) · Mythos Preview Retires Jun 30 (9 Days Away)</a></div>
-          <div class="desc">Two upcoming retirements to action now: <strong>Claude Mythos Preview</strong> retires <strong>June 30, 2026</strong> — 9 days away, migrate to Claude Mythos 5. <strong>Claude Opus 4.1</strong> retires <strong>August 5, 2026</strong> — 6 weeks away, upgrade path is <code>claude-opus-4-8</code>. Claude Haiku 3 is already retired — all calls return errors. Check your hardcoded model IDs before the deadlines.</div>
-          <div class="date">Jun 5, 2026 · Anthropic Model Deprecations · <strong style="color:#d97706;">ACTION: Mythos Preview by Jun 30 · Opus 4.1 by Aug 5</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-fg94-h982-f3mm" target="_blank">GHSA-fg94-h982-f3mm — HuggingFace WebFetch Exfiltration Patch Confirmed in v2.1.185</a></div>
-          <div class="desc">The Jun 13 advisory (HuggingFace domain removed from pre-approved WebFetch allowlist to block out-of-band data exfiltration) is confirmed patched in current Claude Code releases. Update to v2.1.185 via <code>claude update</code> and review your <code>allowedDomains</code> in <code>settings.json</code> to ensure no unexpected domains are pre-approved.</div>
-          <div class="date">Jun 13, 2026 · GitHub Advisory GHSA-fg94-h982-f3mm · <strong style="color:#16a34a;">PATCHED IN v2.1.185+</strong></div>
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.9 Stable — Richer Telegram, Transcript Correctness &amp; Calendar Versioning Change (Jun 21)</a></div>
+          <div class="desc">OpenClaw's latest stable (Jun 21) improves Agent and Codex runtime security and stability. Richer Telegram delivery now handles rich HTML, markdown, progress drafts, and sticker paths faithfully. Transcript correctness keeps pending completions, histories, media, and Slack replies intact across retries. Notable: OpenClaw adopts YYYY.M.PATCH calendar versioning starting June 2026 — the third number is now a monthly patch counter, not a calendar day.</div>
+          <div class="date">Jun 21, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE</strong></div>
         </div>
       </div>
 
@@ -547,6 +547,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.9 — Stable Release: Agent Runtime Security, Richer Telegram &amp; Transcript Correctness (Jun 21)</a></div>
+          <div class="desc">Latest stable (Jun 21, 2026): improves stability and security of Agent and Codex runtimes with enhancements to channel delivery and session identity. Richer Telegram delivery now sends rich HTML, preserves markdown and sticker paths, renders progress drafts and command output more faithfully, and normalises HTML tables safely. Reply and transcript correctness: pending completions, non-empty histories, media fields, queued follow-ups, buffered Slack replies, and reasoning deliveries are all kept intact across retries and partial turns. Starting June 2026, OpenClaw uses YYYY.M.PATCH calendar versioning — the third component is now a monthly patch counter. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Jun 21, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.6.9-beta.1 — Agent &amp; Codex Runtime Security &amp; Stability (Jun 19)</a></div>
           <div class="desc">Latest beta: improved stability and security of Agent and Codex runtimes, along with enhancements to channel delivery and session identity. Update via your OpenClaw beta channel to test these improvements ahead of the next stable release.</div>
@@ -975,14 +980,14 @@
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
         <div class="news-item">
-          <div><a href="https://medium.com/@nuno.roberto/claude-code-a-blueprint-for-secure-agentic-ai-deployments-18f775c35361" target="_blank">Claude Code: A Blueprint for Secure Agentic AI Deployments — Nuno Roberto (Jun 2026)</a></div>
-          <div class="desc">Comprehensive practitioner guide covering secure Claude Code deployment from first principles: layered defense architecture (least-privilege Bash, network sandbox, managed settings enforcement), the "Agents Rule of Two" (no workflow should simultaneously process untrusted input AND hold secrets AND change external state), hook hardening, MCP server vetting, and a worked example of a production-hardened CLAUDE.md. Recommended reading before enabling auto mode or connecting MCP servers to sensitive systems.</div>
-          <div class="date">Jun 2026 · Medium / Nuno Roberto · <strong style="color:#16a34a;">NEW — RECOMMENDED</strong></div>
+          <div><a href="https://www.infoq.com/news/2026/06/dynamic-workflows-claude-code/" target="_blank">Claude Code Dynamic Workflows Guide — JavaScript-Defined Parallel Agent Orchestration (Jun 2026)</a></div>
+          <div class="desc">In-depth look at Dynamic Workflows, Claude Code's new capability for coordinating large numbers of AI agents within a single workflow. Covers creating <code>workflow.js</code> orchestration scripts, parallelising subtasks, reducing token usage by eliminating central-orchestrator bottlenecks, resuming interrupted runs from saved progress, and enabling automatic workflow mode via the <code>ultracode</code> setting. Essential reading for anyone running complex multi-file or multi-service tasks in Claude Code.</div>
+          <div class="date">Jun 2026 · InfoQ / Anthropic · <strong style="color:#16a34a;">NEW — RECOMMENDED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code v2.1.183 Official Changelog — Auto Mode Safety Guards, Deprecated Model Warnings &amp; Fixes (Jun 19)</a></div>
-          <div class="desc">Today's release adds auto mode safety guards blocking destructive git operations (<code>reset --hard</code>, <code>checkout -- .</code>, <code>clean -fd</code>, <code>stash drop</code>) and <code>terraform/pulumi/cdk destroy</code> unless explicitly requested; deprecated model warnings in agent frontmatter; <code>attribution.sessionUrl</code> setting; <code>/config --help</code>. Fixes: WebSearch empty in subagents, TUI corruption, MCP auth-stub tool exposure in headless mode, tmux key-leak, background task kills. Read the full changelog before upgrading production environments — run <code>claude update</code>.</div>
-          <div class="date">Jun 19, 2026 · code.claude.com/docs/en/changelog · <strong style="color:#16a34a;">NEW — TODAY</strong></div>
+          <div><a href="https://medium.com/@nuno.roberto/claude-code-a-blueprint-for-secure-agentic-ai-deployments-18f775c35361" target="_blank">Claude Code: A Blueprint for Secure Agentic AI Deployments — Nuno Roberto (Jun 2026)</a></div>
+          <div class="desc">Comprehensive practitioner guide covering secure Claude Code deployment from first principles: layered defense architecture (least-privilege Bash, network sandbox, managed settings enforcement), the "Agents Rule of Two" (no workflow should simultaneously process untrusted input AND hold secrets AND change external state), hook hardening, MCP server vetting, and a worked example of a production-hardened CLAUDE.md. Recommended reading before enabling auto mode or connecting MCP servers to sensitive systems.</div>
+          <div class="date">Jun 2026 · Medium / Nuno Roberto · <strong style="color:#16a34a;">RECOMMENDED</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://code.claude.com/docs/en/hooks-guide" target="_blank">Official Claude Code Hooks Guide — 25 Hook Event Types for Full Session Automation (2026)</a></div>
