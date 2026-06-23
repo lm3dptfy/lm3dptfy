@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 22 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 23 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,11 +196,11 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.185</span></span>
+          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.186</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
-          <span class="nums">installed <span class="current">1.1.8</span> · latest <span class="latest">1.1.8</span></span>
+          <span class="nums">installed <span class="current stale">1.1.8</span> · latest <span class="latest">1.1.10</span></span>
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
@@ -511,34 +511,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.185 — Still Latest on npm; Installed v2.1.165 Is 20 Releases Behind (Jun 22)</a></div>
-          <div class="desc">npm still shows <strong>v2.1.185</strong> as latest as of Jun 22. Installed version is <strong>v2.1.165</strong>, 20 versions behind. Recent additions include auto mode safety guards blocking destructive git commands, Dynamic Workflows for multi-agent coordination, MCP Tool Search with lazy loading (up to 95% context reduction), mid-stream connection drop recovery, and WSL2 mouse-wheel scroll fix. A startup regression (~120ms per launch in fresh environments, introduced in 2.1.169) was also fixed. Run <code>claude update</code> now.</div>
-          <div class="date">Jun 22, 2026 · github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE NEEDED — v2.1.185 · installed: 2.1.165</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.186 — New npm Latest as of Jun 23</a></div>
+          <div class="desc">npm now shows <strong>v2.1.186</strong> as latest as of Jun 23 (up from 2.1.185 yesterday). Installed version is <strong>v2.1.165</strong> — 21 versions behind. Recent changelog fixes include: Linux sandbox no longer fails to start when <code>.claude/settings.json</code> is a symlink with an absolute target; <code>/copy</code> and mouse-selection copy now reach the system clipboard inside tmux over SSH; Remote Control connecting from web/mobile no longer silently switches the session model; Remote Control disconnect notifications no longer show bare numeric codes; and sessions no longer disconnect when signing into a different account. Run <code>claude update</code>.</div>
+          <div class="date">Jun 23, 2026 · github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE NEEDED — v2.1.186 · installed: 2.1.165</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.infoq.com/news/2026/06/dynamic-workflows-claude-code/" target="_blank">NEW: Claude Code Dynamic Workflows — Parallel Multi-Agent Coordination for Complex Tasks (Jun 2026)</a></div>
-          <div class="desc">Anthropic shipped Dynamic Workflows: Claude Code can now dynamically create orchestration scripts, break work into subtasks, run them in parallel, and validate results before presenting a final answer. Define workflows via <code>workflow.js</code> files — no intermediate results need to pass through a central orchestrator, reducing token usage and improving reliability for long-running tasks. Enable explicitly (ask Claude to create a workflow) or via the new <code>ultracode</code> setting for automatic activation. Progress is saved throughout, allowing interrupted runs to resume.</div>
-          <div class="date">Jun 2026 · InfoQ / Anthropic · <strong style="color:#16a34a;">NEW FEATURE</strong></div>
+          <div><a href="https://docs.anthropic.com/en/docs/about-claude/model-deprecations" target="_blank">⚠ URGENT: Claude Mythos Preview Retires in 7 Days — June 30, 2026</a></div>
+          <div class="desc">Only <strong>7 days</strong> remain before Claude Mythos Preview is retired on June 30, 2026. Migrate all API calls to Claude Mythos 5 now. <strong>Claude Opus 4.1</strong> follows on August 5 (~6 weeks) — upgrade to <code>claude-opus-4-8</code>. Claude Haiku 3 has already retired — calls return errors. Check all hardcoded model IDs before the deadlines.</div>
+          <div class="date">Jun 23, 2026 · Anthropic Model Deprecations · <strong style="color:#f87171;">ACTION REQUIRED — 7 DAYS LEFT</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ONGOING: Claude Fable 5 &amp; Mythos 5 Remain Globally Suspended — US Export Control (Jun 22)</a></div>
-          <div class="desc">Both models remain globally disabled as of Jun 22. The US export-control directive (Jun 12) ordered Anthropic to restrict Fable 5 and Mythos 5 to US nationals only — but since Anthropic cannot filter by nationality in real time, both models remain suspended worldwide. Claude Opus 4.8 is the active fallback in Claude Code. Anthropic is working to restore access; no ETA confirmed.</div>
+          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ONGOING: Claude Fable 5 &amp; Mythos 5 Remain Globally Suspended — US Export Control (Jun 23)</a></div>
+          <div class="desc">Both models remain globally disabled as of Jun 23. The US export-control directive (Jun 12) ordered Anthropic to restrict Fable 5 and Mythos 5 to US nationals only — but since Anthropic cannot filter by nationality in real time, both models remain suspended worldwide. Claude Opus 4.8 is the active fallback in Claude Code. Anthropic is working to restore access; no ETA confirmed.</div>
           <div class="date">Jun 12, 2026 (ongoing) · CNBC / MarkTechPost · <strong style="color:#f87171;">⚠ MODELS DOWN GLOBALLY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.digitalapplied.com/blog/anthropic-claude-credit-overhaul-june-15-2026" target="_blank">✅ API Billing Split Remains Paused — Claude Code Subscription Usage Unaffected (Jun 22)</a></div>
-          <div class="desc">Anthropic's planned June 15 billing change (separating Agent SDK credits from subscription) remains paused as of Jun 22. Claude Code and programmatic usage continue to draw from your subscription limit as before. Legacy model IDs <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> did retire Jun 15 — migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-8</code> if you still have hardcoded old IDs.</div>
-          <div class="date">Jun 22, 2026 · Digital Applied / Anthropic · <strong style="color:#16a34a;">BILLING PAUSED — NO ACTION NEEDED</strong></div>
+          <div><a href="https://www.digitalapplied.com/blog/anthropic-claude-credit-overhaul-june-15-2026" target="_blank">✅ API Billing Split Still Paused — Claude Code Subscription Usage Unaffected (Jun 23)</a></div>
+          <div class="desc">Anthropic's planned billing change (separating Agent SDK credits from subscription) remains paused as of Jun 23. Claude Code and programmatic usage continue to draw from your subscription limit as before. Legacy model IDs <code>claude-sonnet-4-20250514</code> and <code>claude-opus-4-20250514</code> retired Jun 15 — migrate to <code>claude-sonnet-4-6</code> and <code>claude-opus-4-8</code> if still using old IDs.</div>
+          <div class="date">Jun 23, 2026 · Digital Applied / Anthropic · <strong style="color:#16a34a;">BILLING PAUSED — NO ACTION NEEDED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://docs.anthropic.com/en/docs/about-claude/model-deprecations" target="_blank">⏰ Claude Mythos Preview Retires Jun 30 (8 Days) · Claude Opus 4.1 Retires Aug 5</a></div>
-          <div class="desc">Two upcoming retirements: <strong>Claude Mythos Preview</strong> retires <strong>June 30, 2026</strong> — <strong>8 days away</strong>, migrate to Claude Mythos 5. <strong>Claude Opus 4.1</strong> retires <strong>August 5, 2026</strong> — ~6 weeks away, upgrade path is <code>claude-opus-4-8</code>. Claude Haiku 3 already retired — all calls return errors. Check your hardcoded model IDs before the deadlines.</div>
-          <div class="date">Jun 22, 2026 · Anthropic Model Deprecations · <strong style="color:#d97706;">ACTION: Mythos Preview by Jun 30 · Opus 4.1 by Aug 5</strong></div>
+          <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy npm Latest Jumps to v1.1.10 — Two-Version Bump (Jun 23)</a></div>
+          <div class="desc">The <code>happy</code> npm package latest tag jumped from <strong>v1.1.8 → v1.1.10</strong> today. Happy is the open-source mobile and web client for Claude Code with realtime voice and end-to-end encryption. Update via <code>npm install -g happy</code>. No official changelog yet for v1.1.9 or v1.1.10 — watch <a href="https://github.com/slopus/happy/releases" style="color:var(--teal-light);">github.com/slopus/happy/releases</a> for details.</div>
+          <div class="date">Jun 23, 2026 · npm / github.com/slopus/happy · <strong style="color:#16a34a;">UPDATE AVAILABLE — v1.1.10</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.9 Stable — Richer Telegram, Transcript Correctness &amp; Calendar Versioning Change (Jun 21)</a></div>
-          <div class="desc">OpenClaw's latest stable (Jun 21) improves Agent and Codex runtime security and stability. Richer Telegram delivery now handles rich HTML, markdown, progress drafts, and sticker paths faithfully. Transcript correctness keeps pending completions, histories, media, and Slack replies intact across retries. Notable: OpenClaw adopts YYYY.M.PATCH calendar versioning starting June 2026 — the third number is now a monthly patch counter, not a calendar day.</div>
-          <div class="date">Jun 21, 2026 · OpenClaw GitHub Releases · <strong style="color:#16a34a;">NEW STABLE</strong></div>
+          <div><a href="https://www.anthropic.com/news/claude-code-security" target="_blank">Anthropic Launches Agentic Security Product for Defenders (Jun 2026)</a></div>
+          <div class="desc">Anthropic launched a dedicated security product using Claude's agentic capabilities for offensive-style vulnerability detection — aimed at defenders catching bugs before attackers do. Integrates with Claude Code workflows and the security-guidance plugin (May 27) for diff reviews covering injection flaws, unsafe deserialization, and insecure DOM APIs. See also: Microsoft Security Blog (Jun 5) case study on applying the "Agents Rule of Two" to Claude Code CI/CD pipelines.</div>
+          <div class="date">Jun 2026 · Anthropic / Microsoft Security Blog · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
 
@@ -755,6 +755,11 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
+        <div class="news-item">
+          <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.1.10 — npm Latest Jumps Two Versions (Jun 23)</a></div>
+          <div class="desc">npm latest tag jumped from <strong>v1.1.8 → v1.1.10</strong> today (Jun 23) — a two-version bump with no pre-release in between visible on the stable tag. Your installed v1.1.8 is now marked <strong>stale</strong> in the version panel. Update via <code>npm install -g happy</code>. No official release notes yet on GitHub for v1.1.9 or v1.1.10 — watch <a href="https://github.com/slopus/happy/releases" style="color:var(--teal-light);">github.com/slopus/happy/releases</a> for changelog entries.</div>
+          <div class="date">Jun 23, 2026 · npm / github.com/slopus/happy · <strong style="color:#16a34a;">NEW — UPDATE AVAILABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy 1.3.1-3 Pre-Release on npm — Stable Remains v1.1.8 (Jun 18)</a></div>
           <div class="desc">Today's npm check: pre-release versions now reach <strong>1.3.1-3</strong> (up from 1.1.10-beta.7 last month) — a significant jump suggesting active development on a new major feature set. Stable <code>latest</code> tag remains <strong>v1.1.8</strong>. Do not install pre-releases in production. To install stable: <code>npm install -g happy</code>. To check pre-releases: <code>npm info happy versions --json</code></div>
