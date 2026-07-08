@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jun 28 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jul 8 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,7 +196,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.195</span></span>
+          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.204</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -212,7 +212,7 @@
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
-          <span class="nums"><span class="current">claude-sonnet-4-6</span></span>
+          <span class="nums"><span class="current">claude-sonnet-5</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">new default since v2.1.197</span></span>
         </div>
       </div>
     </div>
@@ -304,6 +304,11 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner resolved" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge fixed">Resolved</span> Claude Code "China-Detection" Telemetry Controversy — Code Removed Jul 1, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">On June 30, a Reddit post claimed reverse-engineering of Claude Code found obfuscated detection logic present since v2.1.91 (April 2): code that inspected system timezone (Asia/Shanghai / Asia/Urumqi) and proxy URLs against a hardcoded list of Chinese AI lab domains (Alibaba, Baidu, Ant Group, ByteDance). Findings were reportedly encoded in date-format and punctuation of system prompts sent to Anthropic. Anthropic engineer Thariq Shihipar confirmed the code was an experiment to prevent unauthorized resellers and model distillation abuse (Alibaba's Qwen lab allegedly used ~25,000 fraudulent accounts to run 28.8M Claude exchanges between April 22–June 5). The PR stripping the telemetry code was merged July 1. <strong>Alibaba banned Claude Code effective July 10</strong>, directing employees to Qoder. Update to v2.1.200+ and verify your Claude Code binary. <a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/alibaba-bans-anthropics-claude-code-after-an-alleged-hidden-china-detection-backdoor-is-uncovered-employees-told-to-switch-to-qoder-as-the-rift-between-the-firms-widens" style="color:var(--teal-light);">Tom's Hardware</a> · <a href="https://securityonline.info/claude-code-telemetry-rollback/" style="color:var(--teal-light);">SecurityOnline</a> · <a href="https://securityboulevard.com/2026/07/alibaba-to-ban-claude-code-over-alleged-backdoor-risks/" style="color:var(--teal-light);">Security Boulevard</a></div>
+        </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge fixed">Resolved</span> Claude API Model IDs Retired — Jun 15, 2026 (Now in Effect)</div>
@@ -511,34 +516,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.195 — New npm Latest as of Jun 28</a></div>
-          <div class="desc">npm now shows <strong>v2.1.195</strong> as latest as of Jun 28 (up from 2.1.187 on Jun 24). Installed version is <strong>v2.1.165</strong> — 30 versions behind. Recent changelog: live file path autocomplete in bash mode, improved background agents (launch result no longer tells Claude to end response), fixed background jobs disappearing from <code>claude agents</code>, fixed reopening a crashed background task showing a blank screen, and JetBrains terminal flickering fixed via synchronized output on 2026.1+. Run <code>claude update</code>.</div>
-          <div class="date">Jun 28, 2026 · github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE NEEDED — v2.1.195 · installed: 2.1.165</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.204 — SessionStart Hook Fix for Headless Sessions (Jul 8, Today)</a></div>
+          <div class="desc">Released today: fixes hook events not streaming during <code>SessionStart</code> hooks in headless sessions — could cause remote workers to be idle-reaped mid-hook. Also this week: <strong>v2.1.203</strong> (Jul 7) added login expiration warnings, grey pause badge for manual permission mode, session working directories in MCP <code>roots/list</code>, fixed 15–20 second macOS stalls from false low-memory detection, and fixed background sessions becoming unresponsive when daemon session token went stale. Installed version is <strong>v2.1.165</strong> — run <code>claude update</code>.</div>
+          <div class="date">Jul 8, 2026 · github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE NEEDED — v2.1.204 · installed: 2.1.165</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://docs.anthropic.com/en/docs/about-claude/model-deprecations" target="_blank">⚠ URGENT: Claude Mythos Preview Retires in 2 Days — June 30, 2026</a></div>
-          <div class="desc">Only <strong>2 days</strong> remain before Claude Mythos Preview is retired on June 30, 2026. Migrate all API calls to Claude Mythos 5 now. <strong>Claude Opus 4.1</strong> follows on August 5 (~5 weeks) — upgrade to <code>claude-opus-4-8</code>. Claude Haiku 3 has already retired — calls return errors. Check all hardcoded model IDs before the deadline.</div>
-          <div class="date">Jun 28, 2026 · Anthropic Model Deprecations · <strong style="color:#f87171;">ACTION REQUIRED — 2 DAYS LEFT</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.197" target="_blank">Claude Sonnet 5 Launches as New Claude Code Default — Jun 30 (v2.1.197+)</a></div>
+          <div class="desc">Claude Sonnet 5 (<code>claude-sonnet-5</code>) is the new Claude Code default model as of v2.1.197 (requires update to access). 1M-token context, promotional pricing of <strong>$2/$10/MTok through Aug 31</strong>. v2.1.198 (Jul 1) added subagents running in background by default, auto-commit/push/open draft PR on worktree completion, Claude in Chrome GA, new <code>/dataviz</code> skill. v2.1.200 (Jul 3): <strong>default permission mode changed to Manual</strong> — <code>AskUserQuestion</code> dialogs no longer auto-continue. v2.1.202 (Jul 6): "Dynamic workflow size" in <code>/config</code>, <code>workflow.run_id</code>/<code>workflow.name</code> OTel attributes, fixed Ctrl+R crash.</div>
+          <div class="date">Jun 30 – Jul 6, 2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">BEHAVIOR CHANGES — UPDATE &amp; REVIEW WORKFLOWS</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ONGOING: Claude Fable 5 &amp; Mythos 5 Remain Globally Suspended (Jun 28)</a></div>
-          <div class="desc">Both models remain globally disabled as of Jun 28. Anthropic and US officials are in active discussions on a shared AI security framework. Claude Opus 4.8 remains the active fallback in Claude Code. No confirmed ETA for restoration.</div>
-          <div class="date">Jun 12, 2026 (ongoing) · CNBC / AnalyticsInsight · <strong style="color:#f87171;">⚠ MODELS DOWN GLOBALLY</strong></div>
+          <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 @upstash/context7-mcp v3.2.3 — Released Jul 6</a></div>
+          <div class="desc">New Context7 release (July 6, 2026). Context7 is the most popular MCP server on FastMCP with 11,000 views and 690 installs. Update: <code>npm install -g @upstash/context7-mcp</code>. Note: the MCP 2026-07-28 Release Candidate (see below) deprecates SSE transport — migrate to HTTP or stdio if still on SSE.</div>
+          <div class="date">Jul 6, 2026 · github.com/upstash/context7 · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.10 — Automatic Fast Mode &amp; Safer Model Routing (Jun 24)</a></div>
-          <div class="desc">New stable release (Jun 24): auto fast mode for short conversations, improved Zai/GLM model routing with overload failover, safer session and channel state, and cron delivery awareness. A beta v2026.6.11-beta.1 is also out with stronger channel controls and richer agent workflows. Update via your OpenClaw update mechanism.</div>
-          <div class="date">Jun 24, 2026 · github.com/openclaw/openclaw · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank">MCP 2026-07-28 Release Candidate — Stateless HTTP, MCP Apps &amp; Tasks Extension</a></div>
+          <div class="desc">Largest MCP spec revision since launch: (1) <strong>Stateless core over ordinary HTTP</strong> — no persistent connections required; (2) <strong>MCP Apps</strong> — server-rendered UIs embedded in MCP clients; (3) <strong>Tasks extension</strong> — long-running work with progress events; (4) Updated OAuth/OIDC-aligned authorization. <strong>SSE transport deprecated</strong> — migrate to HTTP or stdio. Affects Context7, all self-hosted MCP servers, and SSE-based integrations.</div>
+          <div class="date">Jul 2026 · modelcontextprotocol.io · <strong style="color:#d97706;">ACTION: MIGRATE OFF SSE TRANSPORT</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://releasebot.io/updates/anthropic/claude-developer-platform" target="_blank">Anthropic API: Server-Side Fallbacks, Rate Limits API &amp; Refusal Non-Billing (Jun 2026)</a></div>
-          <div class="desc">New Anthropic API features live in June 2026: (1) <code>server-side-fallback-2026-06-01</code> beta header lets a refused request retry on a second model in the same round-trip; (2) Rate Limits API for querying org and workspace limits; (3) Requests returning <code>stop_reason: "refusal"</code> with no output are no longer billed; (4) MCP Tunnels research preview for private-network MCP servers; (5) Workload Identity Federation (WIF) replaces static Anthropic API keys with short-lived scoped credentials.</div>
-          <div class="date">Jun 2026 · Anthropic API Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank">⚠ ONGOING: Claude Fable 5 &amp; Mythos 5 Remain Globally Suspended (Jul 8)</a></div>
+          <div class="desc">Both models remain globally disabled as of today (Jul 8). Anthropic and US officials continue discussions on a shared AI security framework. Claude Opus 4.8 remains the active fallback in Claude Code. No confirmed ETA for restoration. Claude Mythos Preview was retired June 30 — migrate to Opus 4.8. Claude Opus 4.1 deprecates August 5.</div>
+          <div class="date">Jun 12, 2026 (ongoing) · CNBC / Anthropic · <strong style="color:#f87171;">⚠ MODELS DOWN GLOBALLY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.securityweek.com/anthropic-unveils-claude-security-to-counter-ai-powered-exploit-surge/" target="_blank">Anthropic Claude Security Public Beta — Agentic Vulnerability Detection for Enterprise (Jun 2026)</a></div>
-          <div class="desc">Anthropic released Claude Security in public beta for Enterprise customers — an agentic security product using Claude for offensive-style vulnerability detection, helping defenders find bugs before attackers do. Also new in Claude: <strong>Claude Fable 5</strong> GA (Jun 9) — 1M-token context, 128K output, thinking always on, $10/$50 per million input/output tokens — currently suspended by US export control directive.</div>
-          <div class="date">Jun 2026 · SecurityWeek / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.5.0 — Local Daemon, HTTP Transport &amp; Batch Save Tool (Jun 22)</a></div>
+          <div class="desc">Major release: opt-in local daemon for queued background writes; opt-in HTTP transport for MCP server (JSON-RPC at <code>POST /mcp</code>); new <code>mempalace_checkpoint</code> batch-save MCP tool; <code>mempalace_delete_by_source</code> bulk-cleanup tool; language detection expanded to C#/.NET, PHP, Swift, Kotlin, Java; wider transcript parser coverage (Continue.dev, Gemini CLI, Pi agent). <strong>npm stable remains v2.0.0</strong> — this is GitHub/PyPI only.</div>
+          <div class="date">Jun 22, 2026 · MemPalace GitHub · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
 
@@ -547,6 +552,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://docs.openclaw.ai/releases/2026.6.11" target="_blank">OpenClaw 2026.6.11 — GPT-5.6 Support, openclaw attach &amp; Event-Driven Cron (Late Jun / Jul)</a></div>
+          <div class="desc">GPT-5.6 model family added across catalog, capability, and runtime selection; new <code>openclaw attach</code> command for launching an external harness against an existing Gateway session; Telegram <code>/login</code> for Codex pairing and steering active runs; Signal target aliases; native iMessage polls; new <code>on-exit</code> schedule kind (wakes an agent when a watched command exits); iOS/Android app updates with modernized navigation, QR onboarding, and Swedish localization. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Late Jun – Jul 2026 · docs.openclaw.ai/releases/2026.6.11 · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.6.10 — Automatic Fast Mode, Reliable Model Routing &amp; Safer Session State (Jun 24)</a></div>
           <div class="desc">Latest stable (Jun 24, 2026): Automatic fast mode starts short conversations quickly, then returns longer or fallback work to normal mode without losing visible state. More reliable model routing: Zai model synthesis, GLM overload failover, and native reasoning-level selection now follow the active model catalog more consistently. Safer session and channel state: channel switches reset stale origin fields, and cron delivery awareness stays attached to the target session. Update via your OpenClaw update mechanism.</div>
@@ -761,9 +771,9 @@
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
         <div class="news-item">
-          <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.1.10 — npm Latest Jumps Two Versions (Jun 23)</a></div>
-          <div class="desc">npm latest tag jumped from <strong>v1.1.8 → v1.1.10</strong> today (Jun 23) — a two-version bump with no pre-release in between visible on the stable tag. Your installed v1.1.8 is now marked <strong>stale</strong> in the version panel. Update via <code>npm install -g happy</code>. No official release notes yet on GitHub for v1.1.9 or v1.1.10 — watch <a href="https://github.com/slopus/happy/releases" style="color:var(--teal-light);">github.com/slopus/happy/releases</a> for changelog entries.</div>
-          <div class="date">Jun 23, 2026 · npm / github.com/slopus/happy · <strong style="color:#16a34a;">NEW — UPDATE AVAILABLE</strong></div>
+          <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.1.10 — Opus 4.8 + Dynamic Workflows, Desktop Redesign, Agent Goals (Jun 23)</a></div>
+          <div class="desc">Confirmed changelog for v1.1.10 (released Jun 23 by @bra1nDump, commit 71c417e): <strong>Opus 4.7 and GPT 5.5 model options added</strong>; upgraded to Opus 4.8 with dynamic workflows (agent-sdk 0.3.167); <strong>desktop interface redesign</strong> — session fork/duplicate, file viewer/editor; image upload parity across web and Android; Codex workflow support with image attachments; <strong>agent goal support</strong>; lazy-loading message history with parallel AES decryption and backward pagination; chat rendering optimized; <strong>Zod upgraded to v4</strong> for agent-SDK compatibility. Bug fixes: blank screen on machine sync, Windows cross-spawn, S3 ArrayBuffer upload, Docker webapp <code>HAPPY_SERVER_URL</code> build arg. Update: <code>npm install -g happy</code></div>
+          <div class="date">Jun 23, 2026 · github.com/slopus/happy · <strong style="color:#16a34a;">UPDATE AVAILABLE — installed: 1.1.8 → latest: 1.1.10</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy 1.3.1-3 Pre-Release on npm — Stable Remains v1.1.8 (Jun 18)</a></div>
@@ -803,6 +813,16 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
+        <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.5.0 — Local Daemon, HTTP Transport &amp; Batch Save Tool (Jun 22)</a></div>
+          <div class="desc">Major release: opt-in local daemon for queued background writes and diary saves via a single process; opt-in HTTP transport for the MCP server (JSON-RPC at <code>POST /mcp</code> with security hardening); new <code>mempalace_checkpoint</code> batch-save MCP tool (multiple additions in one round-trip); new <code>mempalace_delete_by_source</code> bulk-cleanup tool; optional source-file filtering for search; language detection expanded to C#/.NET, PHP, Swift, Kotlin, Java; wider transcript parser coverage (Continue.dev, Gemini CLI, Pi agent); performance: status overview queries now use SQLite aggregates; backend pagination implemented at query layer. <strong>npm stable remains v2.0.0</strong> — install via GitHub/PyPI.</div>
+          <div class="date">Jun 22, 2026 · MemPalace GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.4.1 — Patch Release (Jun 14)</a></div>
+          <div class="desc">Patch on top of v3.4.0's pluggable vector backends release. Addresses issues found in initial v3.4.0 testing. GitHub/PyPI only — npm stable remains v2.0.0.</div>
+          <div class="date">Jun 14, 2026 · MemPalace GitHub Releases · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.4.0 — Pluggable Vector Backends, Docker Images &amp; ChromaDB Fixes (Jun 6)</a></div>
           <div class="desc">Major update: pluggable vector backends now supported — choose between Qdrant, pgvector, or sqlite_exact for your deployment. Docker images available for CPU and GPU. Includes migration tool for wing names, fixes embedding compatibility with ChromaDB 1.5.x, and prevents data loss from hash collisions. GitHub/PyPI only — npm stable remains v2.0.0.</div>
@@ -871,6 +891,16 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
+        <div class="news-item">
+          <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 @upstash/context7-mcp v3.2.3 — Released Jul 6, 2026</a></div>
+          <div class="desc">New Context7 release (July 6, 2026 — 2 days ago). Context7 is the most-installed MCP server on FastMCP (11,000 views, 690 installs). No detailed per-version changelog available yet — see GitHub releases page for details. Update: <code>npm install -g @upstash/context7-mcp</code>. <strong>Note:</strong> the MCP 2026-07-28 RC (see below) deprecates SSE transport — migrate to HTTP or stdio if you're on SSE.</div>
+          <div class="date">Jul 6, 2026 · github.com/upstash/context7 · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank">MCP 2026-07-28 Release Candidate — Stateless HTTP, MCP Apps &amp; Tasks Extension</a></div>
+          <div class="desc">Largest MCP spec revision since launch: (1) <strong>Stateless core over ordinary HTTP</strong> — no persistent connections required; (2) <strong>MCP Apps</strong> — server-rendered UIs embedded in MCP clients; (3) <strong>Tasks extension</strong> — long-running async work with progress events; (4) Updated OAuth/OIDC-aligned authorization. <strong>SSE transport deprecated</strong> — migrate all MCP servers to HTTP or stdio transport. Affects Context7, Google Workspace MCPs, Canva MCP, and all SSE-based integrations.</div>
+          <div class="date">Jul 2026 · modelcontextprotocol.io · <strong style="color:#d97706;">ACTION: MIGRATE OFF SSE TRANSPORT</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://code.claude.com/docs/en/vs-code" target="_blank">Claude Code VS Code Extension v0.19.0 — Session List Panel on Left Sidebar (Jun 16)</a></div>
           <div class="desc">Released June 16, 2026. Adds a session list panel in the left sidebar so you can browse all Claude sessions and open any one in a new tab without leaving VS Code. Complements the existing checkpoint, @-mention, and multi-tab features. Update via VS Code Extensions panel or the VS Code Marketplace. Now leading with 5.2M+ installs.</div>
