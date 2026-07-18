@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jul 17 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jul 18 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,7 +196,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.212</span></span>
+          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.214</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -208,7 +208,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.7.1</span></span>
+          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.7.2</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -536,34 +536,34 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.212 — EnterWorktree Confirmation, Background Auto-Upgrade &amp; MCP Timeout Fix (Jul 16, 2026)</a></div>
-          <div class="desc">Today's latest on npm. New: <strong>EnterWorktree now asks for confirmation</strong> before entering a git worktree outside the project's <code>.claude/worktrees/</code> directory; <strong>background agents auto-upgrade</strong> to a new Claude Code version in the background immediately after a <code>claude update</code>; <strong>expired login error</strong> now correctly prompts for <code>/login</code> instead of a misleading model selection error; <strong>MCP servers now honor per-server <code>request_timeout_ms</code></strong> — prevents long-running MCP tool calls from hitting the 60s default; <code>CLAUDE_CODE_EXTRA_BODY</code> env var no longer ignored by background workers; <strong>JetBrains IDE terminal flickering fixed</strong> (IntelliJ, PyCharm, WebStorm on 2026.1+) via synchronized output. Installed: <strong>v2.1.165</strong> — run <code>claude update</code>.</div>
-          <div class="date">Jul 16, 2026 · github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE NEEDED — installed: 2.1.165 · latest: 2.1.212</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.214 — Latest on npm (Jul 18, 2026)</a></div>
+          <div class="desc">npm latest is now <strong>v2.1.214</strong> (up from 2.1.212 yesterday). Incremental patch releases 2.1.213 and 2.1.214 follow the recent EnterWorktree confirmation + background auto-upgrade release. Installed: <strong>v2.1.165</strong> — run <code>claude update</code> to upgrade. The <code>/fork</code> command (copy conversation to new background session) and <code>/subtask</code> (replacement for in-session subagent) landed in the v2.1.212 series.</div>
+          <div class="date">Jul 18, 2026 · github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE NEEDED — installed: 2.1.165 · latest: 2.1.214</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank">MCP Final Spec Ships in 11 Days (Jul 28) — SSE Deprecated, Migrate All Integrations Now</a></div>
-          <div class="desc">The MCP 2026-07-28 release candidate is live and <strong>the final spec ships July 28</strong>. Key changes: MCP is now stateless at the protocol layer (plain HTTP, no sticky sessions); MCP Apps (server-rendered UIs inside clients); Tasks extension for async long-running work; updated OAuth/OIDC authorization; <code>Mcp-Method</code>/<code>Mcp-Name</code> headers for load-balancer routing; <code>ttlMs</code>/<code>cacheScope</code> on list results. <strong>SSE transport formally deprecated and will be removed</strong> — migrate Context7, Google Workspace MCPs, Canva MCP, and any SSE-based integrations to HTTP or stdio transport before July 28.</div>
-          <div class="date">Jul 17, 2026 · modelcontextprotocol.io · <strong style="color:#f87171;">ACTION: 11 DAYS TO MIGRATE OFF SSE</strong></div>
+          <div><a href="https://docs.openclaw.ai/releases/2026.7.2" target="_blank">OpenClaw v2026.7.2 — Stable: Remote Coding Sessions on Cloud Workers &amp; Native Mobile Automation Parity</a></div>
+          <div class="desc">v2026.7.2 is the new stable release. Adds <strong>remote coding sessions on cloud workers</strong>, native mobile automation parity, safer Telegram/Signal channel handling, and Linux/Windows install expansion. Continues the July 2026 feature series building on v2026.7.1's Control UI overhaul and <code>openclaw attach</code>. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Jul 2026 · docs.openclaw.ai · <strong style="color:#16a34a;">NEW STABLE — OPENCLAW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank">MCP Final Spec Ships in 10 Days (Jul 28) — SSE Deprecated, Migrate All Integrations Now</a></div>
+          <div class="desc">The MCP 2026-07-28 release candidate is live and <strong>the final spec ships July 28 — 10 days away</strong>. Key changes: MCP is now stateless at the protocol layer (plain HTTP, no sticky sessions); MCP Apps (server-rendered UIs inside clients); Tasks extension for async long-running work; updated OAuth/OIDC authorization. <strong>SSE transport formally deprecated and will be removed</strong> — migrate Context7, Google Workspace MCPs, Canva MCP, and any SSE-based integrations to HTTP or stdio transport before July 28.</div>
+          <div class="date">Jul 18, 2026 · modelcontextprotocol.io · <strong style="color:#f87171;">ACTION: 10 DAYS TO MIGRATE OFF SSE</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Opus 4.7 Fast Mode Removed in 6 Days (Jul 24) · Opus 4.1 Retires Aug 5 (18 Days) — Act Now</a></div>
+          <div class="desc">Two Anthropic model deprecations with imminent deadlines: (1) <strong>Fast mode for Claude Opus 4.7</strong> is removed on <strong>July 24, 2026 — 6 days away</strong>. Update any workflows targeting Opus 4.7 fast mode immediately. (2) <strong>Claude Opus 4.1</strong> retires from the Claude API on <strong>August 5, 2026</strong> — migrate to <code>claude-opus-4-8</code>. Also new: <code>agent-memory-2026-07-22</code> beta header returns stable server-defined order in memory listing; API key expiration configurable in Claude Console.</div>
+          <div class="date">Jul 18, 2026 · Anthropic Platform Release Notes · <strong style="color:#f87171;">ACTION: OPUS 4.7 FAST MODE IN 6 DAYS · OPUS 4.1 IN 18 DAYS</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.techtimes.com/articles/319874/20260707/claude-code-defaults-human-approval-auto-mode-requires-explicit-opt.htm" target="_blank">Claude Code Manual-First Default — Behavior Change &amp; Migration Notes</a></div>
+          <div class="desc">Claude Code v2.1.200 (Jul 3, 2026) made <strong>Manual mode the new default</strong> across all surfaces — CLI, VS Code extension, JetBrains plugin — requiring human authorization before every file write, shell command, or network call. Auto mode is now opt-in. Existing Auto-mode users are unaffected unless they reset their config. To restore auto mode: set <code>"defaultMode": "auto"</code> in <code>settings.json</code>.</div>
+          <div class="date">Jul 2026 · TechTimes / Anthropic · <strong style="color:#d97706;">BEHAVIOR CHANGE — NEW INSTALLS AFFECTED</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://letsdatascience.com/news/radware-adds-agent-security-for-claude-code-3921d282" target="_blank">Radware Adds Agent Security Wrapper for Claude Code (Jul 2026)</a></div>
-          <div class="desc">Radware launched a dedicated agent security layer for Claude Code deployments, adding runtime guardrails for agentic AI coding sessions. The product monitors outbound network calls, file-system mutations, and tool invocations in real time, and can block or alert on policy violations. Joins a growing category of third-party Claude Code security tooling alongside Cycode and Checkmarx's coverage. Relevant for teams deploying Claude Code in enterprise or regulated environments.</div>
+          <div class="desc">Radware launched a dedicated agent security layer for Claude Code deployments, adding runtime guardrails for agentic AI coding sessions. The product monitors outbound network calls, file-system mutations, and tool invocations in real time, and can block or alert on policy violations. Joins a growing category of third-party Claude Code security tooling alongside Cycode and Checkmarx.</div>
           <div class="date">Jul 2026 · letsdatascience.com · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.techtimes.com/articles/319874/20260707/claude-code-defaults-human-approval-auto-mode-requires-explicit-opt.htm" target="_blank">Claude Code Manual-First Default: Two Weeks In — Behavior Changes &amp; Migration Notes</a></div>
-          <div class="desc">Claude Code v2.1.200 (Jul 3, 2026) made <strong>Manual mode the new default</strong> across all surfaces — CLI, VS Code extension, JetBrains plugin — requiring human authorization before every file write, shell command, or network call. Auto mode is now opt-in. Key behavior changes: all new installs and any install that hasn't set an explicit mode will now prompt for every action. Existing Auto-mode users are unaffected unless they reset their config. Anthropic cites a 17% miss rate in the old Auto-mode classifier as the rationale. To restore auto mode: set <code>"defaultMode": "auto"</code> in <code>settings.json</code>.</div>
-          <div class="date">Jul 17, 2026 · TechTimes / Anthropic · <strong style="color:#d97706;">BEHAVIOR CHANGE — NEW INSTALLS AFFECTED</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Opus 4.1 Retires Aug 5 (19 Days) · Opus 4.7 Fast Mode Removed Jul 24 (7 Days) — Migrate Now</a></div>
-          <div class="desc">Two Anthropic model deprecations with imminent deadlines: (1) <strong>Claude Opus 4.1</strong> retires from the Claude API on <strong>August 5, 2026</strong> — all API calls will return errors after that date. Migrate to <code>claude-opus-4-8</code>. (2) <strong>Fast mode for Claude Opus 4.7</strong> is removed on <strong>July 24, 2026</strong> — 7 days from today. Update any workflows targeting Opus 4.7 fast mode immediately. Also new: <code>agent-memory-2026-07-22</code> beta header returns stable server-defined order in memory listing; API key expiration now configurable in Claude Console; rate limits raised — Sonnet and Haiku now match Opus at all tiers.</div>
-          <div class="date">Jul 2026 · Anthropic Platform Release Notes · <strong style="color:#f87171;">ACTION: OPUS 4.7 FAST MODE IN 7 DAYS · OPUS 4.1 IN 19 DAYS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.microsoft.com/en-us/security/blog/2026/06/05/securing-ci-cd-in-agentic-world-claude-code-github-action-case/" target="_blank">Microsoft Research: Prompt Injection via AI Agent Workflows — CI/CD Still a High-Risk Surface (Jun 2026)</a></div>
-          <div class="desc">Microsoft Threat Intelligence published a case study of the Claude Code GitHub Action prompt injection vulnerability (fixed in v2.1.128, May 2026). Attack chain: attacker-controlled content in a GitHub issue containing an HTML comment with an injection payload → agent reads raw markdown via Read tool → <code>/proc/self/environ</code> accessible → <code>ANTHROPIC_API_KEY</code> and OIDC tokens exfiltrated. Key finding: <em>the Read tool was not subject to the same sandboxing as the Bash subprocess</em>. Takeaway for all agent CI/CD users: treat any pipeline that processes untrusted GitHub content while also holding secrets as high-risk — scope secrets to the minimum needed and audit your <code>allowed_non_write_users</code> config.</div>
-          <div class="date">Jun 5, 2026 · Microsoft Security Blog · <strong style="color:#d97706;">SECURITY GUIDANCE</strong></div>
         </div>
         </div>
       </div>
@@ -573,6 +573,11 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div class="news-item">
+          <div><a href="https://docs.openclaw.ai/releases/2026.7.2" target="_blank">OpenClaw v2026.7.2 — Stable Release: Remote Coding Sessions, Mobile Automation Parity &amp; Channel Safety (Jul 2026)</a></div>
+          <div class="desc">v2026.7.2 is the new stable release. <strong>Remote coding sessions on cloud workers</strong>: run Control UI sessions on cloud infrastructure. <strong>Native mobile automation parity</strong>: iOS and Android now match desktop feature coverage. <strong>Safer channel handling</strong>: improved Telegram durable-ingress and Signal channel allowlist controls that no longer grant unintended owner access. Linux and Windows install expansion. Builds on v2026.7.1's Control UI overhaul, <code>openclaw attach</code>, and ClawRouter. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Jul 2026 · docs.openclaw.ai/releases/2026.7.2 · <strong style="color:#16a34a;">NEW STABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://docs.openclaw.ai/releases/2026.7.1" target="_blank">OpenClaw v2026.7.1 — Stable Release: Control UI Overhaul, Cloud Workers &amp; openclaw attach (Jul 2026)</a></div>
           <div class="desc">v2026.7.1 is the new stable release (3,063 contributions, 532 contributors). <strong>Control UI overhauled</strong>: side-by-side conversations, live Tasks view, usage/cost views, guided setup. <strong>Remote coding sessions</strong>: run Control UI sessions on cloud workers, open Codex and Claude catalog sessions in terminals on their owning hosts, resume OpenCode and Pi sessions in-terminal. <strong><code>openclaw attach</code></strong> gives Claude Code temporary access to a selected OpenClaw session. <strong>Model updates</strong>: GPT-5.6 is the new-setup default; Claude Sonnet 5 and Meta Muse Spark 1.1 added; ClawRouter added. <strong>Mobile automation</strong>: Automations parity on mobile, foreground Voice Wake on Android, camera/location/notification from headless Linux nodes. <strong>Channel safety</strong>: prevent Telegram durable-ingress loss, keep Signal controls responsive, stop channel allowlists from granting owner access. v2026.7.2 beta is also available. Update via your OpenClaw update mechanism.</div>
@@ -806,7 +811,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 17, 2026 — npm stable latest remains <strong>v1.2.0</strong>. No new release today. Update: <code>npm install -g happy</code></div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 18, 2026 — npm stable latest remains <strong>v1.2.0</strong>. No new release today. Update: <code>npm install -g happy</code></div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.2.0 — New Stable Release (Jul 13, 2026)</a></div>
           <div class="desc">npm stable tag promoted to <strong>v1.2.0</strong> (up from v1.1.10). New minor version incorporating fixes and features from the v1.3.x pre-release cycle into a stable build. Installed: v1.1.8 — two versions behind. Update: <code>npm install -g happy</code></div>
@@ -855,7 +860,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 17, 2026 — npm stable remains <strong>v2.0.0</strong>; GitHub/PyPI latest is <strong>v3.5.0</strong> (Jun 22). No new release today.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 18, 2026 — npm stable remains <strong>v2.0.0</strong>; GitHub/PyPI latest is <strong>v3.5.0</strong> (Jun 22). No new release today.</div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.5.0 — Local Daemon, HTTP Transport &amp; Batch Save Tool (Jun 22)</a></div>
           <div class="desc">Major release: opt-in local daemon for queued background writes and diary saves via a single process; opt-in HTTP transport for the MCP server (JSON-RPC at <code>POST /mcp</code> with security hardening); new <code>mempalace_checkpoint</code> batch-save MCP tool (multiple additions in one round-trip); new <code>mempalace_delete_by_source</code> bulk-cleanup tool; optional source-file filtering for search; language detection expanded to C#/.NET, PHP, Swift, Kotlin, Java; wider transcript parser coverage (Continue.dev, Gemini CLI, Pi agent); performance: status overview queries now use SQLite aggregates; backend pagination implemented at query layer. <strong>npm stable remains v2.0.0</strong> — install via GitHub/PyPI.</div>
@@ -934,7 +939,7 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 17, 2026 — Context7 latest remains v3.2.3 (Jul 6). MCP 2026-07-28 final spec ships Jul 28 — migrate SSE transports. No new plugin releases detected today.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 18, 2026 — Context7 latest remains v3.2.3 (Jul 6). MCP 2026-07-28 final spec ships Jul 28 (10 days) — migrate SSE transports. No new plugin releases detected today.</div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 @upstash/context7-mcp v3.2.3 — Released Jul 6, 2026</a></div>
           <div class="desc">New Context7 release (July 6, 2026 — 2 days ago). Context7 is the most-installed MCP server on FastMCP (11,000 views, 690 installs). No detailed per-version changelog available yet — see GitHub releases page for details. Update: <code>npm install -g @upstash/context7-mcp</code>. <strong>Note:</strong> the MCP 2026-07-28 RC (see below) deprecates SSE transport — migrate to HTTP or stdio if you're on SSE.</div>
