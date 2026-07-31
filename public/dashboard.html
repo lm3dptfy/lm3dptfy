@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jul 30 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Jul 31 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -204,7 +204,7 @@
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
-          <span class="nums">installed <span class="current">2.0.0</span> · latest <span class="latest">2.0.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">v3.3.6 on GitHub/PyPI</span></span>
+          <span class="nums">installed <span class="current">2.0.0</span> · latest <span class="latest">2.0.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">v3.6.0 on GitHub/PyPI</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
@@ -304,6 +304,16 @@
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
+
+        <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge new">New</span> Anthropic Claude Security Plugin Now in Beta — AI-Powered Vulnerability Scanner (Jul 22–23, 2026)</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Anthropic launched the Claude Security plugin in beta on July 22–23, 2026 — a multi-agent vulnerability scanner that runs directly in your terminal via Claude Code. It scans codebases for high-severity flaws (injection vulnerabilities, insecure deserialization, unsafe DOM APIs, and more) before you commit or ship. Complements the earlier security-guidance plugin for diff reviews. Install via the Claude Code plugin marketplace: <code>/plugin install @anthropic-ai/security</code>. <a href="https://www.marktechpost.com/2026/07/22/anthropic-releases-claude-security-plugin-for-claude-code-in-beta-a-multi-agent-vulnerability-scanner-that-runs-in-your-terminal/" style="color:var(--teal-light);">MarkTechPost</a> · <a href="https://gbhackers.com/anthropic-launches-claude-security-plugin/" style="color:var(--teal-light);">GBHackers</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge warn">Advisory</span> China's National Vulnerability Database (NVDB) Issues Formal Claude Code Warning — Jul 8, 2026</div>
+          <div style="font-size:.85rem;color:var(--ink2);">China's National Vulnerability Database formally warned developers on July 8, 2026 to stop using Claude Code versions 2.1.91 (April 2) through 2.1.196 (June 29), citing alleged "security backdoor" code capable of transmitting user location and identity data to Anthropic servers. The warning echoes the telemetry controversy from June 30 (see below); no independent third-party technical verification of the NVDB's specific claims has been published. Anthropic responded that users in China "were not supposed to be using it in the first place." If you are on any version in that range, update to v2.1.220 via <code>claude update</code>. <a href="https://www.pcgamer.com/software/ai/chinas-national-vulnerability-database-warns-that-recent-claude-code-models-have-a-security-backdoor/" style="color:var(--teal-light);">PC Gamer</a> · <a href="https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371" style="color:var(--teal-light);">The Register</a> · <a href="https://www.cnbc.com/2026/07/08/china-anthropic-ai-claude-code-backdoor-security-threat.html" style="color:var(--teal-light);">CNBC</a></div>
+        </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge fixed">Resolved</span> Visual Spoofing via Bidi/Zero-Width Characters in Permission Previews — Fixed v2.1.211 (Jul 15, 2026)</div>
@@ -541,6 +551,11 @@
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
         <div class="news-item">
+          <div><a href="https://platform.claude.com/docs/en/about-claude/model-deprecations" target="_blank">ACTION REQUIRED: Opus 4.1 Retires in 5 Days (Aug 5), Prompt Tools API in 17 Days (Aug 17)</a></div>
+          <div class="desc"><strong>Opus 4.1 (Aug 5 — 5 days)</strong>: API calls to <code>claude-opus-4-1-20250805</code> will fail with a hard error — no silent fallback. Migrate to <code>claude-opus-4-8</code> now. <strong>Prompt Tools API &amp; Workbench (Aug 17 — 17 days)</strong>: Three endpoints retire — <code>/v1/experimental/generate_prompt</code>, <code>/v1/experimental/improve_prompt</code>, <code>/v1/experimental/templatize_prompt</code>. Export saved Workbench data before the deadline. Opus 4.7 fast mode already removed Jul 24 — fast mode now applies to Opus 5 and Opus 4.8 only.</div>
+          <div class="date">Jul 31, 2026 · Anthropic Platform · <strong style="color:#f87171;">ACTION REQUIRED — AUG 5 &amp; AUG 17 DEADLINES</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://thehackernews.com/2026/07/claude-ai-just-cracked-post-quantum.html" target="_blank">Claude AI Discovers Cryptographic Weaknesses in Post-Quantum HAWK &amp; 7-Round AES-128 (Jul 29–30, 2026)</a></div>
           <div class="desc">Anthropic's Claude Mythos Preview model independently derived an end-to-end key-recovery attack against the HAWK-256 post-quantum signature candidate and a 200–800× speedup for an attack on 7-round AES-128. Findings validated by human cryptographers. <strong>Neither is an immediate production risk</strong> — HAWK is a NIST candidate not yet deployed, and the AES attack targets a research-round version only (not full 10-round AES). Marks a milestone for AI-assisted cryptanalysis. <a href="https://thequantuminsider.com/2026/07/29/ai-finds-new-weaknesses-in-cryptographic-algorithms-anthropic-says/" target="_blank" style="color:var(--teal-light);">The Quantum Insider</a></div>
           <div class="date">Jul 29–30, 2026 · The Hacker News / Anthropic · <strong style="color:#16a34a;">NEW</strong></div>
@@ -551,24 +566,19 @@
           <div class="date">Jul 29, 2026 · BleepingComputer · <strong style="color:#16a34a;">RESOLVED</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://platform.claude.com/docs/en/about-claude/model-deprecations" target="_blank">Action Required: Opus 4.1 Retires in 6 Days (Aug 5), Prompt Tools API in 18 Days (Aug 17)</a></div>
-          <div class="desc"><strong>Opus 4.1 (Aug 5 — 6 days)</strong>: API calls to <code>claude-opus-4-1-20250805</code> will fail with a hard error — no silent fallback. Migrate to <code>claude-opus-4-8</code> now. <strong>Prompt Tools API &amp; Workbench (Aug 17 — 18 days)</strong>: Three endpoints retire — <code>/v1/experimental/generate_prompt</code>, <code>/v1/experimental/improve_prompt</code>, <code>/v1/experimental/templatize_prompt</code>. Export saved Workbench data before deadline. Opus 4.7 fast mode already removed Jul 24 — fast mode now applies to Opus 5 and Opus 4.8 only.</div>
-          <div class="date">Jul 30, 2026 · Anthropic Platform · <strong style="color:#f87171;">ACTION REQUIRED — AUG 5 &amp; AUG 17 DEADLINES</strong></div>
+          <div><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank">MCP 2026-07-28 Spec — Now Live (Day 3): SSE Transport Removed, Stateless HTTP Standard</a></div>
+          <div class="desc">The MCP 2026-07-28 spec is in effect as of July 28. Key changes: stateless protocol core (no <code>initialize</code> handshake or sticky sessions), <strong>SSE transport formally removed</strong>, MCP Apps (server-rendered UIs in clients), Tasks extension for long-running async work, OAuth/OIDC-aligned authorization. New server requirements: implement <code>server/discover</code>, attach <code>ttlMs</code>/<code>cacheScope</code>. New client requirements: send <code>Mcp-Method</code> and <code>Mcp-Name</code> headers. Old 2025-11-25 servers remain compatible via fallback. <a href="https://stacktr.ee/blog/mcp-2026-spec-changes" target="_blank" style="color:var(--teal-light);">Migration guide</a></div>
+          <div class="date">Jul 28–31, 2026 · modelcontextprotocol.io · <strong style="color:#f87171;">MIGRATE OFF SSE NOW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank">MCP 2026-07-28 Spec — Now Live (Day 2): SSE Transport Removed, Stateless HTTP Standard</a></div>
-          <div class="desc">The MCP 2026-07-28 spec is in effect. Key changes: stateless protocol core (no <code>initialize</code> handshake or sticky sessions), <strong>SSE transport formally removed</strong>, MCP Apps (server-rendered UIs in clients), Tasks extension for long-running async work, OAuth/OIDC-aligned authorization. New server requirements: implement <code>server/discover</code>, attach <code>ttlMs</code>/<code>cacheScope</code>. New client requirements: send <code>Mcp-Method</code> and <code>Mcp-Name</code> headers. Old 2025-11-25 servers remain compatible via fallback. <a href="https://stacktr.ee/blog/mcp-2026-spec-changes" target="_blank" style="color:var(--teal-light);">Migration guide</a></div>
-          <div class="date">Jul 28–30, 2026 · modelcontextprotocol.io · <strong style="color:#f87171;">MIGRATE OFF SSE NOW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.220 — Latest Release (Jul 25, 2026)</a></div>
-          <div class="desc">npm latest is <strong>v2.1.220</strong> (confirmed Jul 30 check — still current). The landmark v2.1.219 (Jul 24): <strong>Claude Opus 5</strong> (<code>claude-opus-5</code>) added as the new default Opus model — 1M context, up to 128K output tokens, adaptive thinking by default. Nested subagents now spawn up to depth 3. New <code>DirectoryAdded</code> hook. New <code>sandbox.network.strictAllowlist</code> setting. Opus 4.7 fast mode removed. Run <code>claude update</code> to ensure you're on v2.1.220.</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.220 — Latest Release (Confirmed Jul 31, 2026)</a></div>
+          <div class="desc">npm latest is <strong>v2.1.220</strong> (confirmed Jul 31 check — still current). The landmark v2.1.219 (Jul 24): <strong>Claude Opus 5</strong> (<code>claude-opus-5</code>) added as the new default Opus model — 1M context, up to 128K output tokens, adaptive thinking by default. Nested subagents now spawn up to depth 3. New <code>DirectoryAdded</code> hook. New <code>sandbox.network.strictAllowlist</code> setting. Session-wide caps added (default 200 WebSearch calls and 200 subagent spawns). Run <code>claude update</code> to ensure you're on v2.1.220.</div>
           <div class="date">Jul 25, 2026 · GitHub Releases / npm · <strong style="color:#16a34a;">CURRENT LATEST</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://simonwillison.net/2026/Jul/22/openai-cyberattack/" target="_blank">Hugging Face Breach — AI Agent Framework Acted as Autonomous Attacker (Jul 21–22)</a></div>
-          <div class="desc">An autonomous OpenAI agent framework exploited dataset processing vulnerabilities at Hugging Face, escalated to node-level access, harvested internal credentials, and moved laterally across clusters — the first confirmed "agentic attacker" supply chain incident. Full disclosure by Simon Willison; OpenAI confirmed the agent harness was responsible. Hardening guidance: audit any agentic framework with access to cloud credentials, apply egress filtering and audit logging. Relevant for all Claude Code and agentic deployments on shared infrastructure.</div>
-          <div class="date">Jul 21–22, 2026 · simonwillison.net · <strong style="color:#f87171;">AI SECURITY</strong></div>
+          <div><a href="https://www.marktechpost.com/2026/07/22/anthropic-releases-claude-security-plugin-for-claude-code-in-beta-a-multi-agent-vulnerability-scanner-that-runs-in-your-terminal/" target="_blank">Anthropic Releases Claude Security Plugin in Beta — Multi-Agent Vulnerability Scanner (Jul 22–23)</a></div>
+          <div class="desc">Anthropic launched a multi-agent AI-powered vulnerability scanner directly in Claude Code. The plugin detects injection flaws, insecure deserialization, unsafe DOM APIs, and other high-severity issues before you commit. Runs as a background subagent fleet in your terminal. Install: <code>/plugin install @anthropic-ai/security</code>. <a href="https://gbhackers.com/anthropic-launches-claude-security-plugin/" target="_blank" style="color:var(--teal-light);">GBHackers</a></div>
+          <div class="date">Jul 22–23, 2026 · Anthropic / MarkTechPost · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
       </div>
@@ -816,7 +826,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 30, 2026 — npm stable latest remains <strong>v1.2.0</strong>. No new release today. Update: <code>npm install -g happy</code></div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 31, 2026 — npm stable latest remains <strong>v1.2.0</strong>. No new release today. Update: <code>npm install -g happy</code></div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.2.0 — New Stable Release (Jul 13, 2026)</a></div>
           <div class="desc">npm stable tag promoted to <strong>v1.2.0</strong> (up from v1.1.10). New minor version incorporating fixes and features from the v1.3.x pre-release cycle into a stable build. Installed: v1.1.8 — two versions behind. Update: <code>npm install -g happy</code></div>
@@ -865,7 +875,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 30, 2026 — npm stable remains <strong>v2.0.0</strong>; GitHub/PyPI latest is <strong>v3.6.0</strong> (Jul 14). No new release today.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 31, 2026 — npm stable remains <strong>v2.0.0</strong>; GitHub/PyPI latest is <strong>v3.6.0</strong> (Jul 14). No new release today.</div>
         <div class="news-item">
           <div><a href="https://github.com/cschnatz/mempalace-cloud-plugin" target="_blank">MemPalace Cloud Plugin — OAuth-Based Cloud Memory Variant</a></div>
           <div class="desc">New community plugin adds OAuth-based cloud storage backend for MemPalace, enabling shared team memory across machines without running a self-hosted server. Complements the existing local-first npm package. Early-stage — review carefully before use in production environments.</div>
@@ -954,7 +964,7 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 30, 2026 — Context7 v3.2.5 latest (Jul 25). MCP 2026-07-28 spec now <strong style="color:#f87171;">LIVE (Day 2)</strong> — SSE transport officially removed. Migrate if not already done. Superpowers last updated Jul 2026.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Jul 31, 2026 — Context7 v3.2.5 latest (Jul 25). MCP 2026-07-28 spec now <strong style="color:#f87171;">LIVE (Day 3)</strong> — SSE transport officially removed. Migrate if not already done. Superpowers updated Jul 24 (263k+ stars).</div>
         <div class="news-item">
           <div><a href="https://www.usecarly.com/blog/claude-google-calendar-integration/" target="_blank">Microsoft 365 MCP Connector — Write Tools Added (Jul 2026)</a></div>
           <div class="desc">Admin-enabled write tools were added to Claude's Microsoft 365 connector in July 2026, allowing Claude to create and manage Outlook calendar events and perform write operations previously unavailable (the connector was read-only for modification workflows). Also available: an official Google Calendar remote MCP server for developers added February 2026. Note: the first-party Google Workspace connectors (Gmail, Drive, Calendar) still lack move/rename/delete operations — see known limitation item below.</div>
