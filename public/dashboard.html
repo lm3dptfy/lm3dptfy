@@ -253,6 +253,54 @@
     .mc-machine-ver-row .mc-tool-ver.ok { color: var(--teal-light); }
     .mc-machine-ver-row .mc-tool-ver.stale { color: #d97706; }
     .mc-machine-empty { font-size: .78rem; color: var(--ink3); font-style: italic; }
+
+    /* Shared clipboard */
+    .mc-clipboard {
+      margin: 14px 0 0;
+      background: var(--teal-dim);
+      border: 1px solid var(--line2);
+      border-radius: var(--r);
+      padding: 14px 16px;
+    }
+    .mc-clipboard-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+    .mc-clipboard textarea {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+      background: var(--bg);
+      border: 1px solid var(--line2);
+      border-radius: var(--r);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: .82rem;
+      padding: 8px 10px;
+      box-sizing: border-box;
+    }
+    .mc-clipboard-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .mc-clipboard-btn {
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 6px 14px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .mc-clipboard-btn.secondary { background: var(--line2); color: var(--ink); }
+    .mc-clipboard-status { font-size: .74rem; color: var(--ink3); font-weight: 400; }
   </style>
 </head>
 <body class="admin-page">
@@ -294,6 +342,18 @@
       <div class="mc-machine-head"><span class="mc-status-dot" id="mcMacDot"></span> 🍎 Mac</div>
       <div class="mc-machine-sub" id="mcMacSub">Checking status&hellip;</div>
       <div id="mcMacVersions"></div>
+    </div>
+  </div>
+
+  <div class="mc-clipboard">
+    <div class="mc-clipboard-head">
+      <span>📋 Shared Clipboard</span>
+      <span class="mc-clipboard-status" id="mcClipStatus"></span>
+    </div>
+    <textarea id="mcClipText" placeholder="Paste text here and click Save. Open this page on any other device to load it."></textarea>
+    <div class="mc-clipboard-actions">
+      <button class="mc-clipboard-btn" id="mcClipSave">Save</button>
+      <button class="mc-clipboard-btn secondary" id="mcClipLoad">Reload</button>
     </div>
   </div>
 
@@ -1233,6 +1293,65 @@
 
     refresh();
     setInterval(refresh, 30000);
+  })();
+
+  // Shared clipboard: save/load text via /api/clipboard, gated by the same
+  // secret used for the heartbeat scripts. Prompts once per browser, then
+  // remembers it in localStorage.
+  (function () {
+    var textEl = document.getElementById('mcClipText');
+    var statusEl = document.getElementById('mcClipStatus');
+    var saveBtn = document.getElementById('mcClipSave');
+    var loadBtn = document.getElementById('mcClipLoad');
+
+    function getSecret(promptIfMissing) {
+      var secret = localStorage.getItem('mc-clip-secret');
+      if (!secret && promptIfMissing) {
+        secret = window.prompt('Enter the shared device secret (same one used for the heartbeat scripts):');
+        if (secret) localStorage.setItem('mc-clip-secret', secret);
+      }
+      return secret;
+    }
+
+    function fmtTime(ms) {
+      if (!ms) return 'never saved';
+      return 'saved ' + new Date(ms).toLocaleTimeString();
+    }
+
+    function load(promptIfMissing) {
+      var secret = getSecret(promptIfMissing);
+      if (!secret) { statusEl.textContent = 'no secret set'; return; }
+      fetch('/api/clipboard', { headers: { Authorization: 'Bearer ' + secret } })
+        .then(function (r) {
+          if (r.status === 401) { localStorage.removeItem('mc-clip-secret'); throw new Error('bad secret'); }
+          return r.json();
+        })
+        .then(function (d) {
+          textEl.value = d.text || '';
+          statusEl.textContent = fmtTime(d.savedAt);
+        })
+        .catch(function () { statusEl.textContent = 'load failed'; });
+    }
+
+    function save() {
+      var secret = getSecret(true);
+      if (!secret) { statusEl.textContent = 'no secret set'; return; }
+      fetch('/api/clipboard', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + secret, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: textEl.value }),
+      })
+        .then(function (r) {
+          if (r.status === 401) { localStorage.removeItem('mc-clip-secret'); throw new Error('bad secret'); }
+          return r.json();
+        })
+        .then(function (d) { statusEl.textContent = fmtTime(d.savedAt); })
+        .catch(function () { statusEl.textContent = 'save failed'; });
+    }
+
+    saveBtn.addEventListener('click', save);
+    loadBtn.addEventListener('click', function () { load(true); });
+    load(false);
   })();
 
   // Carousel: cycles the dashboard panels between Windows Updates / Mac Updates / AI News.

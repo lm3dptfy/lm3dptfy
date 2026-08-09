@@ -630,6 +630,32 @@ versions: m ? m.versions : {},
 res.json(result);
 });
 
+// Cross-device clipboard: save text on one machine, load it on another.
+// Gated by the same HEARTBEAT_SECRET (this is a "my own devices" convenience
+// feature, not a public feature — the dashboard itself has no login).
+// In-memory only: resets on redeploy, same tradeoff as the heartbeat state.
+let clipboard = { text: '', savedAt: null };
+
+function requireClipboardSecret(req, res, next) {
+const auth = req.headers.authorization || '';
+const expected = `Bearer ${process.env.HEARTBEAT_SECRET || ''}`;
+if (!process.env.HEARTBEAT_SECRET || auth !== expected) {
+return res.status(401).json({ error: 'unauthorized' });
+}
+next();
+}
+
+app.get('/api/clipboard', requireClipboardSecret, (req, res) => {
+res.json(clipboard);
+});
+
+app.post('/api/clipboard', requireClipboardSecret, (req, res) => {
+const text = (req.body && typeof req.body.text === 'string') ? req.body.text : '';
+if (text.length > 50000) return res.status(400).json({ error: 'text too long (max 50000 chars)' });
+clipboard = { text, savedAt: Date.now() };
+res.json({ ok: true, savedAt: clipboard.savedAt });
+});
+
 app.get('/api/gallery', async (req, res) => {
 if (!driveClient) return res.json({ ok: true, files: [] });
 try {
