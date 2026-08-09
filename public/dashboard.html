@@ -217,6 +217,25 @@
       </div>
     </div>
 
+    <!-- WEEKLY DIGEST -->
+    <div class="panel" id="weekly-digest-panel">
+      <div class="panel-label"><span class="section-icon">🗓️</span> This Week</div>
+      <div class="panel-desc">Week of Aug 3-9, 2026 — most significant changes.</div>
+      <div id="weekly-digest-body">
+        <ul style="margin:0;padding-left:18px;font-size:.85rem;color:var(--ink2);line-height:1.7;">
+          <li><strong style="color:var(--ink);">Claude Code shipped 5 releases</strong> — v2.1.221 (Aug 4) through v2.1.226 (Aug 8), moving latest from 2.1.220 to 2.1.226.</li>
+          <li><strong style="color:var(--ink);">Security fix:</strong> v2.1.221 (Aug 4) patched a zsh <code>[[ ]]</code> regex-conditional bypass that could run hidden commands without a permission prompt; also fixed credential masking and a plugin-loading regression.</li>
+          <li><strong style="color:var(--ink);">Enterprise security expanded:</strong> Inference Hooks beta for real-time DLP (Aug 5) and beta skill/plugin security scanning (Aug 6) both landed for Enterprise plans.</li>
+          <li><strong style="color:var(--ink);">v2.1.224 (Aug 7)</strong> added self-hosted runner support and JWT-aware sandbox credential masking; <strong>v2.1.225 (Aug 8)</strong> added gateway spend-limit warnings and an untrusted-directory trust prompt for <code>claude agents</code>.</li>
+          <li><strong style="color:var(--ink);">Context7 MCP v4.0.0</strong> (Aug 7) — breaking change: migrated to MCP SDK v2, stateless HTTP, and standard Bearer auth; Redis-backed sessions removed.</li>
+          <li><strong style="color:var(--ink);">MCP 2026-07-28 spec fully in effect</strong> — SSE transport is officially removed (now Day 13); any lagging SSE-based integrations are no longer spec-compliant.</li>
+          <li><strong style="color:var(--ink);">Deadlines:</strong> Claude Opus 4.1 retired Aug 5 (hard errors on old model ID); Prompt Tools API &amp; Workbench retire Aug 17 (8 days out).</li>
+          <li><strong style="color:var(--ink);">OpenClaw 2026.7.1-2</strong> (Aug 4 patch, npm plugin metadata fix) is now current stable and matches this machine's install; beta channel remains ahead at 2026.7.2-beta.7.</li>
+          <li><strong style="color:var(--ink);">Housekeeping:</strong> corrected stale local version numbers in the Versions panel (Claude Code, Happy, MemPalace) after actually re-running <code>--version</code>/<code>tool list</code> checks instead of carrying forward old readings.</li>
+        </ul>
+      </div>
+    </div>
+
     <!-- UPDATE COMMANDS -->
     <div class="panel full-width" id="commands-panel">
       <div class="panel-label"><span class="section-icon">💻</span> Update Commands</div>
