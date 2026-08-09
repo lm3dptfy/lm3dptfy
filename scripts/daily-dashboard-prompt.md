@@ -16,9 +16,10 @@ Follow the **exact existing structure and visual style** already in each file �
 
 3. **Security — two files, kept in sync:**
    - Research current CVEs/advisories affecting Claude Code, MCP, or the tracked ecosystem (GitHub Security Advisories, NVD, Anthropic's own security posts).
-   - **Append** any genuinely new advisory as a new `.alert-banner` at the top of `#security-body` in `security-history.html` (full detail, same format as existing entries there — never delete or shorten existing archive entries, this file only grows).
-   - Recalculate "N days" countdowns and flip banners to `resolved` (in `security-history.html`) once their deadline has passed.
-   - Then update `dashboard.html`'s `#security-body`: keep exactly the **top 3** highlight items, each a **short 1-sentence** summary (not the full archive description) ending with a link to `/security-history.html` for detail on older items. If a new advisory bumped an old highlight out of the top 3, that's fine — it's still preserved in full in the archive.
+   - `security-history.html` has two sections under two `<h2>` headers: **"🔴 Active — Needs Attention"** and **"✅ Resolved / Fixed"** (each header's text includes a count in parens, e.g. `(17)` — update that count whenever you change how many items are in that section). Keep these two sections distinct — never merge them or lose the header split.
+   - **Append** any genuinely new advisory as a new `.alert-banner` at the top of the **Active** section (full detail, same format as existing entries — never delete or shorten existing archive entries, this file only grows).
+   - When an active item's deadline passes or a fix ships: give it the `resolved` class, update its badge to `Resolved`/`Fixed`, and **move the whole block** from the Active section to the top of the Resolved section (don't just relabel it in place — it needs to physically move so Active only ever contains things still worth watching).
+   - Then update `dashboard.html`'s `#security-body`: prioritize **active/unresolved** items for the highlight slots (what needs watching), plus **one** recently-resolved item so there's a visible "this was a problem, now it's fixed" signal. Keep it at 3 items total, each a short 1-sentence summary, ending with a link to `/security-history.html`.
 
 4. **News — two files, kept in sync:**
    - Research the most current, real AI/Claude Code headlines (Claude releases, Anthropic announcements, MCP spec changes, notable ecosystem news). Real URLs only — verify they resolve, never fabricate links.
