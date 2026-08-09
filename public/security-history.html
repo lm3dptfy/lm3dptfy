@@ -35,6 +35,21 @@
     .badge.fixed    { background: var(--teal); color: #fff; }
     .badge.new      { background: #16a34a; color: #fff; }
     .badge.warn     { background: #d97706; color: #fff; }
+
+    /* Live status bar (matches dashboard.html) */
+    .mc-status-bar {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 10px 18px; margin: 20px 0 0;
+      background: var(--teal-dim); border: 1px solid var(--line2); border-radius: var(--r-pill);
+      font-size: .82rem; font-weight: 600; color: var(--ink);
+    }
+    .mc-status-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #6b7280; box-shadow: 0 0 0 3px rgba(107,114,128,.15);
+      flex-shrink: 0; transition: background .2s, box-shadow .2s;
+    }
+    .mc-status-dot.online  { background: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,.2); }
+    .mc-status-dot.offline { background: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,.2); }
   </style>
 </head>
 <body class="admin-page">
@@ -53,6 +68,11 @@
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">Full archive — active and resolved CVEs, supply chain incidents, and advisories.</p>
     </div>
     <a class="back-link" href="/dashboard.html">&larr; Back to dashboard</a>
+  </div>
+
+  <div class="mc-status-bar">
+    <span class="mc-status-dot" id="mcStatusDot"></span>
+    <span id="mcStatusText">Checking status&hellip;</span>
   </div>
 
   <div class="dash-grid">
@@ -311,6 +331,30 @@
         </div>
   </div>
 </div>
+
+<script>
+  (function () {
+    var dot = document.getElementById('mcStatusDot');
+    var text = document.getElementById('mcStatusText');
+    function fmtAgo(sec) {
+      if (sec === null || sec === undefined) return 'never';
+      if (sec < 60) return sec + 's ago';
+      if (sec < 3600) return Math.floor(sec / 60) + 'm ago';
+      return Math.floor(sec / 3600) + 'h ago';
+    }
+    function refresh() {
+      fetch('/api/status').then(function (r) { return r.json(); }).then(function (d) {
+        dot.className = 'mc-status-dot ' + (d.online ? 'online' : 'offline');
+        text.textContent = (d.online ? 'PC Online' : 'PC Offline') + ' — last seen ' + fmtAgo(d.secondsAgo);
+      }).catch(function () {
+        dot.className = 'mc-status-dot offline';
+        text.textContent = 'Status unavailable';
+      });
+    }
+    refresh();
+    setInterval(refresh, 30000);
+  })();
+</script>
 
 </body>
 </html>

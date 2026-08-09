@@ -201,6 +201,33 @@
       background: var(--line2);
     }
     .mc-carousel-dots span.active { background: var(--teal-light); }
+
+    /* Live status bar */
+    .mc-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 18px;
+      margin: 20px 0 0;
+      background: var(--teal-dim);
+      border: 1px solid var(--line2);
+      border-radius: var(--r-pill);
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .mc-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #6b7280;
+      box-shadow: 0 0 0 3px rgba(107,114,128,.15);
+      flex-shrink: 0;
+      transition: background .2s, box-shadow .2s;
+    }
+    .mc-status-dot.online  { background: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,.2); }
+    .mc-status-dot.offline { background: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,.2); }
   </style>
 </head>
 <body class="admin-page">
@@ -230,6 +257,11 @@
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
     <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 9 2026, 1:48 PM CDT<!-- /LAST_UPDATED --></span>
+  </div>
+
+  <div class="mc-status-bar">
+    <span class="mc-status-dot" id="mcStatusDot"></span>
+    <span id="mcStatusText">Checking status&hellip;</span>
   </div>
 
   <div class="mc-carousel-nav">
@@ -1101,6 +1133,33 @@
 </div><!-- /admin-wrap -->
 
 <script>
+  // Live status bar: polls /api/heartbeat-backed /api/status to show whether
+  // the monitored PC has checked in recently.
+  (function () {
+    var dot = document.getElementById('mcStatusDot');
+    var text = document.getElementById('mcStatusText');
+
+    function fmtAgo(sec) {
+      if (sec === null || sec === undefined) return 'never';
+      if (sec < 60) return sec + 's ago';
+      if (sec < 3600) return Math.floor(sec / 60) + 'm ago';
+      return Math.floor(sec / 3600) + 'h ago';
+    }
+
+    function refresh() {
+      fetch('/api/status').then(function (r) { return r.json(); }).then(function (d) {
+        dot.className = 'mc-status-dot ' + (d.online ? 'online' : 'offline');
+        text.textContent = (d.online ? 'PC Online' : 'PC Offline') + ' — last seen ' + fmtAgo(d.secondsAgo);
+      }).catch(function () {
+        dot.className = 'mc-status-dot offline';
+        text.textContent = 'Status unavailable';
+      });
+    }
+
+    refresh();
+    setInterval(refresh, 30000);
+  })();
+
   // Carousel: cycles the dashboard panels between Windows Updates / Mac Updates / AI News.
   // Panels aren't moved in the DOM — each carries data-slide="0|1|2" and we just toggle display.
   (function () {
