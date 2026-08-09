@@ -349,6 +349,12 @@ message: { error: 'Too many requests from this IP. Please try again later.' },
 standardHeaders: true, legacyHeaders: false,
 });
 
+const heartbeatLimiter = rateLimit({
+windowMs: 5 * 60 * 1000, max: 30,
+message: { error: 'Too many heartbeat requests.' },
+standardHeaders: true, legacyHeaders: false,
+});
+
 app.get('/', (req, res) => { res.setHeader('Cache-Control', 'no-cache'); res.sendFile(path.join(STATIC_DIR, 'index.html')); });
 app.get('/admin', (req, res) => res.redirect('/admin.html'));
 app.get('/favicon.ico', (req, res) => res.redirect(301, '/logo-lm3dptfy-wh.png'));
@@ -580,6 +586,33 @@ res.json({ ok: true, env: process.env.NODE_ENV || 'development', emailEnabled: E
 app.get('/api/public/sites', (req, res) => {
 const sites = (settings.supportedSites || []).filter((s) => s.enabled).map((s) => ({ id: s.id, name: s.name, hosts: s.hosts, browseUrl: s.browseUrl }));
 res.json({ ok: true, sites });
+});
+
+// MooseClaw dashboard live-status heartbeat. The monitored PC calls this
+// endpoint every few minutes (outbound-only, no inbound access to the PC
+// needed). /api/status reports whether a heartbeat has been seen recently.
+// In-memory only: resets on redeploy, repopulates within one heartbeat interval.
+let lastHeartbeat = null;
+const HEARTBEAT_STALE_MS = 10 * 60 * 1000; // 10 minutes
+
+app.post('/api/heartbeat', heartbeatLimiter, (req, res) => {
+const auth = req.headers.authorization || '';
+const expected = `Bearer ${process.env.HEARTBEAT_SECRET || ''}`;
+if (!process.env.HEARTBEAT_SECRET || auth !== expected) {
+return res.status(401).json({ error: 'unauthorized' });
+}
+lastHeartbeat = Date.now();
+res.json({ ok: true });
+});
+
+app.get('/api/status', (req, res) => {
+const now = Date.now();
+const online = lastHeartbeat !== null && (now - lastHeartbeat) < HEARTBEAT_STALE_MS;
+res.json({
+online,
+lastHeartbeat,
+secondsAgo: lastHeartbeat ? Math.floor((now - lastHeartbeat) / 1000) : null,
+});
 });
 
 app.get('/api/gallery', async (req, res) => {
