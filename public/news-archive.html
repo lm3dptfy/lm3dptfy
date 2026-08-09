@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI News Archive | MooseClaw Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/png" href="/logo-lm3dptfy-wh.png" />
+  <link rel="stylesheet" href="/style.css?v=8.0" />
+  <style>
+    .dash-grid { display: block; padding: 28px 0 48px; }
+    .panel-label { color: var(--teal-light); }
+    .mc-header {
+      padding: 32px 0 16px; border-bottom: 1px solid var(--line2); margin-bottom: 0;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+    .mc-header h1 { font-size: 1.7rem; font-weight: 700; margin: 0; }
+    .mc-header a.back-link { font-size: .82rem; color: var(--teal-light); text-decoration: none; }
+    .mc-header a.back-link:hover { text-decoration: underline; }
+    .news-item {
+      padding: 10px 0; border-bottom: 1px solid var(--line); font-size: .88rem;
+    }
+    .news-item:last-child { border-bottom: none; }
+    .news-item a { color: var(--teal-light); text-decoration: none; font-weight: 500; }
+    .news-item a:hover { text-decoration: underline; }
+    .news-item .desc { color: var(--ink2); font-size: .82rem; margin-top: 2px; }
+    .news-item .date { color: var(--ink3); font-size: .76rem; margin-top: 2px; }
+  </style>
+</head>
+<body class="admin-page">
+
+<nav class="nav scrolled" id="mainNav">
+  <a class="nav-logo" href="/">
+    <img src="/logo-lm3dptfy-wh.png" alt="LM3DPTFY logo" />
+    <div class="nav-logo-text"><strong>LM3DPTFY</strong><span>MooseClaw Dashboard</span></div>
+  </a>
+</nav>
+
+<div class="admin-wrap">
+  <div class="mc-header">
+    <div>
+      <h1>📡 AI News Archive</h1>
+      <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">Full history — Anthropic, Claude, and the AI ecosystem.</p>
+    </div>
+    <a class="back-link" href="/dashboard.html">&larr; Back to dashboard</a>
+  </div>
+
+  <div class="dash-grid">
+    <div id="news-body">
+      <div class="news-item">
+        <div><a href="https://dev.classmethod.jp/en/articles/20260808-cc-updates-v2-1-226/" target="_blank">Claude Code v2.1.225 &amp; v2.1.226 Released (Aug 8, 2026) — Gateway Spend-Limit, Agent Trust Prompt &amp; Bug Fixes</a></div>
+        <div class="desc">Two releases shipped Aug 8: <strong>v2.1.225</strong> adds gateway spend-limit support to usage warnings (shows cap name, reset time, operator message; requires gateway v2.1.225+); adds workspace trust prompt for <code>claude agents</code> in untrusted directories; fixes a transient 401 error when swapping a long-lived <code>CLAUDE_CODE_OAUTH_TOKEN</code> with a short-lived token; fixes MCP OAuth keychain timeouts on macOS; fixes auto mode incorrectly counting safety-filter refusals toward the consecutive-block limit. <strong>v2.1.226</strong> is a maintenance-only release (bug fixes, no new features). Run <code>claude update</code> now.</div>
+        <div class="date">Aug 8, 2026 · Anthropic / npm · <strong style="color:#f87171;">NEW — RUN claude update</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 MCP v4.0.0 — Breaking Change: MCP SDK v2, Stateless HTTP &amp; Bearer Auth (Aug 7, 2026)</a></div>
+        <div class="desc">Context7 v4.0.0 (released ~Aug 7) migrates to the MCP v2 SDK and the 2026-07-28 protocol spec. <strong>Breaking changes:</strong> HTTP serving is now stateless (Redis-backed sessions removed); API key config changes from a custom header to <code>Authorization: Bearer &lt;key&gt;</code> standard format (<code>ctx7 setup</code> handles this automatically for new installs). If you have a custom MCP proxy, credential manager, or pinned client that relied on the old auth header or Redis session state, update your config before upgrading. Context7 remains the #1 server on MCP.Directory. Update: <code>npm install -g @upstash/context7-mcp</code></div>
+        <div class="date">Aug 7, 2026 · github.com/upstash/context7 · <strong style="color:#dc2626;">BREAKING — UPDATE CONFIG BEFORE UPGRADING</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://platform.claude.com/docs/en/about-claude/model-deprecations" target="_blank">URGENT: Prompt Tools API &amp; Workbench Retire August 17 — 8 Days</a></div>
+        <div class="desc">Three Anthropic API endpoints are removed on <strong>August 17, 2026 (8 days)</strong>: <code>/v1/experimental/generate_prompt</code>, <code>/v1/experimental/improve_prompt</code>, <code>/v1/experimental/templatize_prompt</code>. After that date, calls return hard errors. Also: Claude Opus 4.1 was retired August 5 — calls to <code>claude-opus-4-1-20250805</code> now fail. Migrate to <code>claude-opus-4-8</code> if you haven't already. Check all integrations at console.anthropic.com.</div>
+        <div class="date">Aug 2026 · Anthropic Platform · <strong style="color:#dc2626;">URGENT — PROMPT TOOLS API RETIRES AUG 17</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank">MCP 2026-07-28 Spec Live (Day 12) — SSE Transport Removed, All Integrations Must Migrate</a></div>
+        <div class="desc">Day 12 of the MCP 2026-07-28 spec. SSE transport is officially gone. Any server or client still on SSE is no longer spec-compliant. Context7 v4.0.0 has fully migrated. Check Google Workspace MCPs (Gmail/Drive/Calendar), Canva MCP, Three.js MCP, and any custom SSE-based integrations. New spec requires <code>Mcp-Method</code>/<code>Mcp-Name</code> headers from clients and a <code>server/discover</code> endpoint on servers. Mid-conversation tool changes are in beta via <code>mid-conversation-tool-changes-2026-07-01</code> header.</div>
+        <div class="date">Jul 28 / Aug 9, 2026 · modelcontextprotocol.io · <strong style="color:#f87171;">MIGRATE OFF SSE NOW</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://qz.com/anthropic-custom-ai-chip-design-team-claude-080526" target="_blank">Anthropic Building In-House Custom Chip Design Team (Aug 8, 2026)</a></div>
+        <div class="desc">Anthropic is assembling an in-house chip design team to run Claude faster and more cost-efficiently, reducing dependence on third-party hardware vendors. The move mirrors similar efforts by Google (TPUs) and Amazon (Trainium/Inferentia) to gain cost advantages in inference at scale. Impact on Claude Code users: lower inference latency and potential cost reductions over the next 12–18 months.</div>
+        <div class="date">Aug 8, 2026 · Quartz · <strong style="color:#16a34a;">NEW</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Developer Platform — Budget Caps, Advisor Support, Geo Control &amp; GitHub-Loaded Skills for Managed Agents (Aug 7, 2026)</a></div>
+        <div class="desc">Four Managed Agents updates shipped Aug 7: <strong>budget caps</strong> — a hard spend cap per session that pauses with a <code>budget_reached</code> stop reason when hit; <strong>advisor support</strong> — configure a <code>{"type": "advisor"}</code> roster entry naming a model the primary thread can consult mid-turn; <strong>geo control</strong> — set <code>inference_geo</code> to <code>us</code> (in-region, 1.1x billing) or <code>global</code> (standard rate, runs wherever capacity allows); <strong>GitHub-loaded skills</strong> — skills in a mounted repo's root <code>.claude/skills</code> directory are now auto-discovered at session start.</div>
+        <div class="date">Aug 7, 2026 · Claude Platform Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

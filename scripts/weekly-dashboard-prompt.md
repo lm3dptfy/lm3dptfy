@@ -6,7 +6,7 @@ Then, additionally, produce a **weekly digest**:
 
 ## Weekly digest
 
-1. Run `git log --oneline --since="7 days ago" -- public/dashboard.html` to see this week's daily commits.
+1. Run `git log --oneline --since="7 days ago" -- public/dashboard.html public/security-history.html public/news-archive.html` to see this week's daily commits across all three files.
 2. For each, `git show <hash> --stat` (and the full diff if needed) to see what actually changed that day.
 3. Write a concise digest — 5-10 bullet points covering the week's most significant changes: new tool versions released, security advisories that appeared or resolved, and major news items. Skip routine "no change" days.
 4. Find the panel with `id="weekly-digest-body"` in `public/dashboard.html`. If it doesn't exist yet, create a new panel following the exact same HTML/CSS structure as the other panels (copy the pattern from an existing `<div class="panel">` block), titled "This Week" with an appropriate icon, placed near the top of the dashboard (right after the versions panel), with `<div id="weekly-digest-body">` as its content container.
