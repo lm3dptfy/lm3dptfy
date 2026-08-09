@@ -156,6 +156,51 @@
       font-size: .85rem;
       margin-right: 4px;
     }
+
+    /* Carousel nav */
+    .mc-carousel-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 18px 0 4px;
+    }
+    .mc-carousel-arrow {
+      background: var(--teal-dim);
+      border: 1px solid var(--line2);
+      color: var(--teal-light);
+      border-radius: var(--r-pill);
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .15s;
+    }
+    .mc-carousel-arrow:hover { border-color: var(--teal); }
+    .mc-carousel-label {
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink);
+      min-width: 200px;
+      text-align: center;
+    }
+    .mc-carousel-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      padding-bottom: 8px;
+    }
+    .mc-carousel-dots span {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--line2);
+    }
+    .mc-carousel-dots span.active { background: var(--teal-light); }
   </style>
 </head>
 <body class="admin-page">
@@ -187,10 +232,19 @@
     <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 9 2026, 1:48 PM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
+  <div class="mc-carousel-nav">
+    <button class="mc-carousel-arrow" id="mcPrev" aria-label="Previous">&#8249;</button>
+    <span class="mc-carousel-label" id="mcSlideLabel">Windows Updates</span>
+    <button class="mc-carousel-arrow" id="mcNext" aria-label="Next">&#8250;</button>
+  </div>
+  <div class="mc-carousel-dots" id="mcDots">
+    <span class="active"></span><span></span><span></span>
+  </div>
+
   <div class="dash-grid">
 
     <!-- VERSION STATUS -->
-    <div class="panel" id="versions-panel">
+    <div class="panel" id="versions-panel" data-slide="0">
       <div class="panel-label"><span class="section-icon">⚡</span> Version Status</div>
       <div class="panel-desc">Installed vs. latest available.</div>
       <div id="versions-body">
@@ -217,8 +271,85 @@
       </div>
     </div>
 
+    <!-- WINDOWS UPDATE COMMANDS -->
+    <div class="panel full-width" id="windows-commands-panel" data-slide="0">
+      <div class="panel-label"><span class="section-icon">🪟</span> Windows Update Commands</div>
+      <div class="panel-desc">Click any block to copy to clipboard. PowerShell, this machine's actual paths.</div>
+
+      <div class="cmd-block">
+        <div class="cmd-label">Update Claude Code</div>
+        <span class="copy-hint">click to copy</span>
+        <code>claude update</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check Claude Code version</div>
+        <span class="copy-hint">click to copy</span>
+        <code>claude --version</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check Claude Code latest on npm</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm info @anthropic-ai/claude-code dist-tags.latest</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">List Claude Code global npm packages (Happy, OpenClaw, etc.)</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm list -g --depth=0</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check for outdated global npm packages</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm outdated -g</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Update Happy</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm install -g happy</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Update OpenClaw</div>
+        <span class="copy-hint">click to copy</span>
+        <code>npm install -g openclaw</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Update MemPalace (uv tool)</div>
+        <span class="copy-hint">click to copy</span>
+        <code>uv tool upgrade mempalace</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check MemPalace version</div>
+        <span class="copy-hint">click to copy</span>
+        <code>mempalace --version</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check installed vs. available Windows Updates</div>
+        <span class="copy-hint">click to copy</span>
+        <code>Get-WUList -MicrosoftUpdate</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Install available Windows Updates (no forced reboot)</div>
+        <span class="copy-hint">click to copy</span>
+        <code>Install-WindowsUpdate -MicrosoftUpdate -AcceptAll -IgnoreReboot</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check winget-managed app upgrades</div>
+        <span class="copy-hint">click to copy</span>
+        <code>winget upgrade</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Install all winget-managed app upgrades (silent)</div>
+        <span class="copy-hint">click to copy</span>
+        <code>winget upgrade --all --silent --accept-source-agreements --accept-package-agreements</code>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label">Check GitHub security advisories for Claude Code</div>
+        <span class="copy-hint">click to copy</span>
+        <code>gh api repos/anthropics/claude-code/security-advisories --jq '.[0:5] | .[] | {cve_id, summary, severity, published_at}'</code>
+      </div>
+    </div>
+
     <!-- WEEKLY DIGEST -->
-    <div class="panel" id="weekly-digest-panel">
+    <div class="panel" id="weekly-digest-panel" data-slide="2">
       <div class="panel-label"><span class="section-icon">🗓️</span> This Week</div>
       <div class="panel-desc">Week of Aug 3-9, 2026 — most significant changes.</div>
       <div id="weekly-digest-body">
@@ -236,10 +367,11 @@
       </div>
     </div>
 
-    <!-- UPDATE COMMANDS -->
-    <div class="panel full-width" id="commands-panel">
-      <div class="panel-label"><span class="section-icon">💻</span> Update Commands</div>
-      <div class="panel-desc">Click any block to copy to clipboard.</div>
+    <!-- MAC UPDATE COMMANDS -->
+    <div class="panel full-width" id="commands-panel" data-slide="1">
+      <div class="panel-label"><span class="section-icon">🍎</span> Mac Update Commands</div>
+      <div class="panel-desc">Click any block to copy to clipboard. Homebrew paths — for macOS.</div>
+      <div style="font-size:.78rem;color:var(--ink3);margin-bottom:10px;">Note: the daily/weekly automation runs from a Windows machine — installed-version numbers shown elsewhere on this dashboard reflect that machine, not a Mac. These commands still work for updating/checking tools on macOS.</div>
 
       <div class="cmd-block">
         <div class="cmd-label">Update Claude Code</div>
@@ -319,7 +451,7 @@
     </div>
 
     <!-- SECURITY ALERTS -->
-    <div class="panel full-width" id="security-panel">
+    <div class="panel full-width" id="security-panel" data-slide="2">
       <div class="panel-label"><span class="section-icon">🚨</span> Security Alerts</div>
       <div class="panel-desc">Active and resolved CVEs, supply chain incidents, and advisories.</div>
       <div id="security-body">
@@ -575,7 +707,7 @@
     </div>
 
     <!-- AI NEWS -->
-    <div class="panel full-width" id="news-panel">
+    <div class="panel full-width" id="news-panel" data-slide="2">
       <div class="panel-label"><span class="section-icon">📡</span> AI Headlines</div>
       <div class="panel-desc">Latest from Anthropic, Claude, and the AI space.</div>
       <div id="news-body">
@@ -613,7 +745,7 @@
       </div>
 
     <!-- OPENCLAW NEWS -->
-    <div class="panel" id="openclaw-panel">
+    <div class="panel" id="openclaw-panel" data-slide="0">
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
@@ -867,7 +999,7 @@
     </div>
 
     <!-- HAPPY UPDATES -->
-    <div class="panel" id="happy-panel">
+    <div class="panel" id="happy-panel" data-slide="0">
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
@@ -916,7 +1048,7 @@
     </div>
 
     <!-- MEMPALACE UPDATES -->
-    <div class="panel" id="mempalace-panel">
+    <div class="panel" id="mempalace-panel" data-slide="0">
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
@@ -1005,7 +1137,7 @@
     </div>
 
     <!-- PLUGINS & SKILLS -->
-    <div class="panel" id="plugins-panel">
+    <div class="panel" id="plugins-panel" data-slide="0">
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
@@ -1164,7 +1296,7 @@
     </div>
 
     <!-- LEARNING RESOURCES -->
-    <div class="panel" id="learning-panel">
+    <div class="panel" id="learning-panel" data-slide="2">
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
@@ -1209,6 +1341,39 @@
 </div><!-- /admin-wrap -->
 
 <script>
+  // Carousel: cycles the dashboard panels between Windows Updates / Mac Updates / AI News.
+  // Panels aren't moved in the DOM — each carries data-slide="0|1|2" and we just toggle display.
+  (function () {
+    var labels = ['Windows Updates', 'Mac Updates', 'AI News'];
+    var panels = Array.prototype.slice.call(document.querySelectorAll('.dash-grid .panel[data-slide]'));
+    var prevBtn = document.getElementById('mcPrev');
+    var nextBtn = document.getElementById('mcNext');
+    var labelEl = document.getElementById('mcSlideLabel');
+    var dots = document.querySelectorAll('#mcDots span');
+    var current = parseInt(localStorage.getItem('mc-slide') || '0', 10);
+    if (isNaN(current) || current < 0 || current > 2) current = 0;
+
+    function render() {
+      panels.forEach(function (p) {
+        p.style.display = (p.getAttribute('data-slide') === String(current)) ? '' : 'none';
+      });
+      labelEl.textContent = labels[current];
+      dots.forEach(function (d, i) { d.classList.toggle('active', i === current); });
+      localStorage.setItem('mc-slide', String(current));
+    }
+
+    prevBtn.addEventListener('click', function () {
+      current = (current + 2) % 3;
+      render();
+    });
+    nextBtn.addEventListener('click', function () {
+      current = (current + 1) % 3;
+      render();
+    });
+
+    render();
+  })();
+
   // Dark mode toggle (mirrors admin.html behavior)
   const toggle = document.getElementById('themeToggle');
   const html = document.documentElement;
