@@ -610,6 +610,7 @@ return res.status(400).json({ error: `source must be one of: ${KNOWN_SOURCES.joi
 machines[source] = {
 lastSeen: Date.now(),
 versions: (req.body && req.body.versions && typeof req.body.versions === 'object') ? req.body.versions : {},
+os: (req.body && req.body.os && typeof req.body.os === 'object') ? req.body.os : null,
 };
 res.json({ ok: true });
 });
@@ -625,6 +626,7 @@ online: lastSeen !== null && (now - lastSeen) < HEARTBEAT_STALE_MS,
 lastSeen,
 secondsAgo: lastSeen ? Math.floor((now - lastSeen) / 1000) : null,
 versions: m ? m.versions : {},
+os: m ? m.os : null,
 };
 }
 res.json(result);
