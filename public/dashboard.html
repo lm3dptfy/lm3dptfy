@@ -184,7 +184,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 9 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 9 2026, 1:48 PM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="dash-grid">
@@ -196,19 +196,19 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.165</span> · latest <span class="latest">2.1.226</span></span>
+          <span class="nums">installed <span class="current stale">2.1.221</span> · latest <span class="latest">2.1.226</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
-          <span class="nums">installed <span class="current stale">1.1.8</span> · latest <span class="latest">1.2.0</span></span>
+          <span class="nums">installed <span class="current">1.2.0</span> · latest <span class="latest">1.2.0</span></span>
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
-          <span class="nums">installed <span class="current">2.0.0</span> · latest <span class="latest">2.0.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">v3.6.0 on GitHub/PyPI</span></span>
+          <span class="nums">installed <span class="current">3.6.0</span> · latest <span class="latest">3.6.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">npm stable remains v2.0.0</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current stale">2026.6.1</span> · latest <span class="latest">2026.7.2</span></span>
+          <span class="nums">installed <span class="current">2026.7.1-2</span> · latest <span class="latest">2026.7.1-2</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">beta channel: 2026.7.2-beta.7</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -308,6 +308,11 @@
         <div class="alert-banner resolved" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge fixed">Fixed</span> Zsh Permission-Check Bypass via <code>[[ ]]</code> Regex Conditionals — Fixed v2.1.221 (Aug 4, 2026)</div>
           <div style="font-size:.85rem;color:var(--ink2);">Claude Code v2.1.221 (released today, Aug 4, 2026) fixes a security issue where zsh could execute commands hidden inside <code>[[ ]]</code> regex conditionals without triggering a Claude Code permission prompt. A malicious repo's content could craft a shell command that exploited this zsh evaluation behavior to run arbitrary commands silently. Also fixed in this release: credential file masking with <code>mode: "mask"</code> for sandbox credential files on Linux/WSL; and a plugin loading regression (via <code>--settings</code> flag) present since v2.1.181. Update immediately: <code>claude update</code> → v2.1.221. <a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.221" style="color:var(--teal-light);">GitHub Release v2.1.221</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge new">New</span> Enterprise Skill &amp; Plugin Security Scanning — Beta (Aug 6, 2026)</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Anthropic added beta skill and plugin security scanning for Claude Enterprise plans: admins can now turn on automatic checks of third-party skills and plugins for malicious content whenever someone uploads or edits them. Complements the existing Claude Security plugin (code vulnerability scanning) and the July 2026 security-guidance plugin (diff review). Also this week: inference hooks in beta for Enterprise (Aug 5) enabling real-time DLP enforcement across chat, Claude Code, and Cowork; and public beta self-hosted environments (Aug 6) for running Claude Code sessions on your own infrastructure. Enable via Enterprise admin settings. <a href="https://support.claude.com/en/articles/12138966-release-notes" style="color:var(--teal-light);">Claude Apps Release Notes</a></div>
         </div>
 
         <div class="alert-banner" style="margin-bottom:10px;">
@@ -581,9 +586,9 @@
           <div class="date">Aug 8, 2026 · Quartz · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://9to5mac.com/2026/07/24/anthropic-upgrades-claude-with-new-opus-5-model-details-here/" target="_blank">Claude Opus 5 Generally Available (Jul 24, 2026) — 1M Context, 128K Output, Adaptive Thinking</a></div>
-          <div class="desc">Claude Opus 5 is now GA: 1M-token context window, up to 128K output tokens, adaptive thinking on by default, five-level effort setting, near-Fable-5 intelligence at half the price. Claude Code default model remains <code>claude-sonnet-5</code> (since v2.1.197). Note: Claude Fable 5 and Mythos 5 remain globally disabled per the June 12 US export-control directive.</div>
-          <div class="date">Jul 24, 2026 · Anthropic / 9to5Mac · <strong style="color:#16a34a;">NEW MODEL GA</strong></div>
+          <div><a href="https://platform.claude.com/docs/en/release-notes/overview" target="_blank">Claude Developer Platform — Budget Caps, Advisor Support, Geo Control &amp; GitHub-Loaded Skills for Managed Agents (Aug 7, 2026)</a></div>
+          <div class="desc">Four Managed Agents updates shipped Aug 7: <strong>budget caps</strong> — a hard spend cap per session that pauses with a <code>budget_reached</code> stop reason when hit; <strong>advisor support</strong> — configure a <code>{"type": "advisor"}</code> roster entry naming a model the primary thread can consult mid-turn; <strong>geo control</strong> — set <code>inference_geo</code> to <code>us</code> (in-region, 1.1x billing) or <code>global</code> (standard rate, runs wherever capacity allows); <strong>GitHub-loaded skills</strong> — skills in a mounted repo's root <code>.claude/skills</code> directory are now auto-discovered at session start.</div>
+          <div class="date">Aug 7, 2026 · Claude Platform Release Notes · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
       </div>
       </div>
@@ -593,6 +598,12 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 9, 2026, 1:48 PM CDT — installed <strong>2026.7.1-2</strong> matches npm <code>latest</code> dist-tag; beta channel is ahead at 2026.7.2-beta.7.</div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/tree/v2026.7.1-2" target="_blank">OpenClaw 2026.7.1-2 — npm Plugin Metadata Compatibility Fix (Aug 4, 2026)</a></div>
+          <div class="desc">Patch release (Aug 4, 00:41): fixes npm plugin updates by accepting singleton-array metadata from newer npm clients, so tracked official plugins can install and update to correction releases again. This is the current npm <code>latest</code> dist-tag and matches this machine's installed version. Update via your OpenClaw update mechanism.</div>
+          <div class="date">Aug 4, 2026 · github.com/openclaw/openclaw/releases · <strong style="color:#16a34a;">NEW STABLE — CURRENT</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw v2026.7.2-beta.7 — Released Aug 2, 2026: Stability &amp; Reliability Fixes</a></div>
           <div class="desc">Latest pre-release (Aug 2, 2026): incremental stability and reliability improvements on top of beta.6's crash-recoverable SQLite snapshot work. Continues the reliability-focused v2026.7.2 beta series ahead of the next stable tag. Update via your OpenClaw beta channel.</div>
@@ -841,7 +852,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 9, 2026 — npm stable latest remains <strong>v1.2.0</strong>. No new release today. Update: <code>npm install -g happy</code></div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 9, 2026, 1:48 PM CDT — npm stable latest remains <strong>v1.2.0</strong>; local install confirmed up to date at v1.2.0. No new release today.</div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.2.0 — New Stable Release (Jul 13, 2026)</a></div>
           <div class="desc">npm stable tag promoted to <strong>v1.2.0</strong> (up from v1.1.10). New minor version incorporating fixes and features from the v1.3.x pre-release cycle into a stable build. Installed: v1.1.8 — two versions behind. Update: <code>npm install -g happy</code></div>
@@ -890,7 +901,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 9, 2026 — npm stable remains <strong>v2.0.0</strong>; GitHub/PyPI latest is <strong>v3.6.0</strong> (Jul 14). No new release today.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 9, 2026, 1:48 PM CDT — npm stable remains <strong>v2.0.0</strong>; GitHub/PyPI latest is still <strong>v3.6.0</strong> (Jul 14). No new release today. Local install confirmed at v3.6.0 (via uv tool, ahead of npm).</div>
         <div class="news-item">
           <div><a href="https://github.com/cschnatz/mempalace-cloud-plugin" target="_blank">MemPalace Cloud Plugin — OAuth-Based Cloud Memory Variant</a></div>
           <div class="desc">New community plugin adds OAuth-based cloud storage backend for MemPalace, enabling shared team memory across machines without running a self-hosted server. Complements the existing local-first npm package. Early-stage — review carefully before use in production environments.</div>
@@ -979,7 +990,7 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 9, 2026 — Context7 <strong>v4.0.0</strong> released (breaking: MCP SDK v2, stateless HTTP, Bearer auth, Redis sessions removed). MCP spec now <strong style="color:#f87171;">LIVE (Day 12)</strong> — SSE transport officially removed. Migrate all integrations now. Superpowers 248K+ stars active.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 9, 2026, 1:48 PM CDT — Context7 <strong>v4.0.0</strong> remains latest (no new release since Aug 7). MCP spec now <strong style="color:#f87171;">LIVE (Day 13)</strong> — SSE transport officially removed. Migrate all integrations now. Superpowers 248K+ stars active.</div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 MCP v4.0.0 — Breaking: MCP SDK v2, Stateless HTTP, Bearer Auth, Redis Sessions Removed (Aug 7, 2026)</a></div>
           <div class="desc"><strong style="color:#dc2626;">Breaking change.</strong> v4.0.0 migrates to the MCP v2 SDK and the 2026-07-28 protocol spec: HTTP serving is now stateless for both modern and legacy clients; Redis-backed sessions are removed entirely; API key config changes from a custom header to <code>Authorization: Bearer &lt;key&gt;</code> (<code>ctx7 setup</code> handles this automatically for fresh installs). If you have a custom MCP proxy, credential manager, or pinned client relying on the old auth header format or Redis session state, update your config before upgrading to v4.0.0. Context7 remains #1 on MCP.Directory. Update: <code>npm install -g @upstash/context7-mcp</code></div>
@@ -1138,6 +1149,11 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><strong>Source reliability note: WebFetch date extraction on GitHub release pages</strong></div>
+          <div class="desc">WebFetch on github.com/MemPalace/mempalace/releases returned "v3.6.0 — Released July 17, 2024" — the year was wrong (should be 2026); the summarizer model appears to sometimes default to a training-data-era year when a page doesn't spell out the century unambiguously. Always sanity-check WebFetch-extracted dates against the current date before writing them down. Also: <code>npm info &lt;pkg&gt; versions</code> is not reliably chronological for prerelease-tagged packages (e.g. OpenClaw's 2026.7.1-2 sorted before its 2026.7.1-beta.* entries) — cross-check actual publish order against the GitHub releases page rather than trusting npm's version array order.</div>
+          <div class="date">Aug 9, 2026 · MooseClaw research notes</div>
+        </div>
         <div class="news-item">
           <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">Claude Code v2.1.224 — Understanding Self-Hosted Runner &amp; JWT Sandbox Credential Masking (Aug 7, 2026)</a></div>
           <div class="desc">Today's release introduces two features worth understanding in depth: (1) <code>claude self-hosted-runner</code> lets Team and Enterprise orgs run Claude Code sessions on their own compute, keeping code and context fully on-prem — important for compliance-sensitive environments; (2) JWT-aware sandbox credential masking (<code>decode: "jwt"</code> + <code>maskClaims</code>) lets you redact specific JWT claims from sandbox outputs without masking the full token, which is useful when passing signed tokens to agents that need to read but not log identity claims. The subagent spawn cap removal also changes cost profiles for deep recursive agent tasks — monitor usage if you use nested subagents heavily.</div>
