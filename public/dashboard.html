@@ -202,20 +202,33 @@
     }
     .mc-carousel-dots span.active { background: var(--teal-light); }
 
-    /* Live status bar */
-    .mc-status-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 10px 18px;
+    /* Live machine status cards (PC / Mac) */
+    .mc-machine-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
       margin: 20px 0 0;
+    }
+    @media (max-width: 700px) { .mc-machine-grid { grid-template-columns: 1fr; } }
+    .mc-machine-card {
       background: var(--teal-dim);
       border: 1px solid var(--line2);
-      border-radius: var(--r-pill);
-      font-size: .82rem;
-      font-weight: 600;
-      color: var(--ink);
+      border-radius: var(--r);
+      padding: 14px 16px;
+    }
+    .mc-machine-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .88rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .mc-machine-sub {
+      font-size: .76rem;
+      color: var(--ink3);
+      margin-bottom: 10px;
+      margin-left: 18px;
     }
     .mc-status-dot {
       width: 10px;
@@ -228,6 +241,18 @@
     }
     .mc-status-dot.online  { background: #16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,.2); }
     .mc-status-dot.offline { background: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,.2); }
+    .mc-machine-ver-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: .78rem;
+    }
+    .mc-machine-ver-row .mc-tool-name { color: var(--ink2); }
+    .mc-machine-ver-row .mc-tool-ver { font-weight: 600; }
+    .mc-machine-ver-row .mc-tool-ver.ok { color: var(--teal-light); }
+    .mc-machine-ver-row .mc-tool-ver.stale { color: #d97706; }
+    .mc-machine-empty { font-size: .78rem; color: var(--ink3); font-style: italic; }
   </style>
 </head>
 <body class="admin-page">
@@ -259,9 +284,17 @@
     <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 9 2026, 1:48 PM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
-  <div class="mc-status-bar">
-    <span class="mc-status-dot" id="mcStatusDot"></span>
-    <span id="mcStatusText">Checking status&hellip;</span>
+  <div class="mc-machine-grid">
+    <div class="mc-machine-card">
+      <div class="mc-machine-head"><span class="mc-status-dot" id="mcPcDot"></span> 🖥️ PC</div>
+      <div class="mc-machine-sub" id="mcPcSub">Checking status&hellip;</div>
+      <div id="mcPcVersions"></div>
+    </div>
+    <div class="mc-machine-card">
+      <div class="mc-machine-head"><span class="mc-status-dot" id="mcMacDot"></span> 🍎 Mac</div>
+      <div class="mc-machine-sub" id="mcMacSub">Checking status&hellip;</div>
+      <div id="mcMacVersions"></div>
+    </div>
   </div>
 
   <div class="mc-carousel-nav">
@@ -1133,11 +1166,17 @@
 </div><!-- /admin-wrap -->
 
 <script>
-  // Live status bar: polls /api/heartbeat-backed /api/status to show whether
-  // the monitored PC has checked in recently.
+  // Live machine status cards: polls heartbeat-backed /api/status for PC and
+  // Mac, and cross-references each machine's reported "installed" versions
+  // against the "latest" numbers already in the Version Status panel (that
+  // panel is researched by the daily bot; this just reuses those numbers).
   (function () {
-    var dot = document.getElementById('mcStatusDot');
-    var text = document.getElementById('mcStatusText');
+    var TOOL_LABELS = {
+      claudeCode: 'Claude Code',
+      happy: 'Happy',
+      memPalace: 'MemPalace',
+      openClaw: 'OpenClaw',
+    };
 
     function fmtAgo(sec) {
       if (sec === null || sec === undefined) return 'never';
@@ -1146,13 +1185,49 @@
       return Math.floor(sec / 3600) + 'h ago';
     }
 
+    function getLatestVersions() {
+      var latest = {};
+      document.querySelectorAll('#versions-body .ver-row').forEach(function (row) {
+        var name = row.querySelector('.name');
+        var latestEl = row.querySelector('.latest');
+        if (name && latestEl) latest[name.textContent.trim()] = latestEl.textContent.trim();
+      });
+      return latest;
+    }
+
+    function renderMachine(prefix, data, latestVersions) {
+      var dot = document.getElementById('mc' + prefix + 'Dot');
+      var sub = document.getElementById('mc' + prefix + 'Sub');
+      var versionsEl = document.getElementById('mc' + prefix + 'Versions');
+
+      dot.className = 'mc-status-dot ' + (data.online ? 'online' : 'offline');
+      sub.textContent = (data.online ? 'Online' : 'Offline') + ' — last seen ' + fmtAgo(data.secondsAgo);
+
+      var keys = Object.keys(data.versions || {});
+      if (keys.length === 0) {
+        versionsEl.innerHTML = '<div class="mc-machine-empty">No version data reported yet</div>';
+        return;
+      }
+      versionsEl.innerHTML = keys.map(function (key) {
+        var label = TOOL_LABELS[key] || key;
+        var installed = data.versions[key] || '—';
+        var latest = latestVersions[label];
+        var isStale = latest && installed !== '—' && installed !== latest;
+        return '<div class="mc-machine-ver-row"><span class="mc-tool-name">' + label + '</span>' +
+          '<span class="mc-tool-ver ' + (isStale ? 'stale' : 'ok') + '">' + installed + '</span></div>';
+      }).join('');
+    }
+
     function refresh() {
       fetch('/api/status').then(function (r) { return r.json(); }).then(function (d) {
-        dot.className = 'mc-status-dot ' + (d.online ? 'online' : 'offline');
-        text.textContent = (d.online ? 'PC Online' : 'PC Offline') + ' — last seen ' + fmtAgo(d.secondsAgo);
+        var latestVersions = getLatestVersions();
+        renderMachine('Pc', d.pc || { online: false, versions: {} }, latestVersions);
+        renderMachine('Mac', d.mac || { online: false, versions: {} }, latestVersions);
       }).catch(function () {
-        dot.className = 'mc-status-dot offline';
-        text.textContent = 'Status unavailable';
+        ['Pc', 'Mac'].forEach(function (prefix) {
+          document.getElementById('mc' + prefix + 'Dot').className = 'mc-status-dot offline';
+          document.getElementById('mc' + prefix + 'Sub').textContent = 'Status unavailable';
+        });
       });
     }
 
