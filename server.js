@@ -588,11 +588,13 @@ const sites = (settings.supportedSites || []).filter((s) => s.enabled).map((s) =
 res.json({ ok: true, sites });
 });
 
-// MooseClaw dashboard live-status heartbeat. The monitored PC calls this
-// endpoint every few minutes (outbound-only, no inbound access to the PC
-// needed). /api/status reports whether a heartbeat has been seen recently.
+// MooseClaw dashboard live-status heartbeat. Each monitored machine (pc, mac)
+// calls this endpoint every few minutes (outbound-only, no inbound access to
+// the machine needed) with its own installed tool versions. /api/status
+// reports per-machine online/offline + last-known versions.
 // In-memory only: resets on redeploy, repopulates within one heartbeat interval.
-let lastHeartbeat = null;
+const KNOWN_SOURCES = ['pc', 'mac'];
+const machines = { pc: null, mac: null }; // { lastSeen, versions } per source
 const HEARTBEAT_STALE_MS = 10 * 60 * 1000; // 10 minutes
 
 app.post('/api/heartbeat', heartbeatLimiter, (req, res) => {
@@ -601,18 +603,31 @@ const expected = `Bearer ${process.env.HEARTBEAT_SECRET || ''}`;
 if (!process.env.HEARTBEAT_SECRET || auth !== expected) {
 return res.status(401).json({ error: 'unauthorized' });
 }
-lastHeartbeat = Date.now();
+const source = req.body && req.body.source;
+if (!KNOWN_SOURCES.includes(source)) {
+return res.status(400).json({ error: `source must be one of: ${KNOWN_SOURCES.join(', ')}` });
+}
+machines[source] = {
+lastSeen: Date.now(),
+versions: (req.body && req.body.versions && typeof req.body.versions === 'object') ? req.body.versions : {},
+};
 res.json({ ok: true });
 });
 
 app.get('/api/status', (req, res) => {
 const now = Date.now();
-const online = lastHeartbeat !== null && (now - lastHeartbeat) < HEARTBEAT_STALE_MS;
-res.json({
-online,
-lastHeartbeat,
-secondsAgo: lastHeartbeat ? Math.floor((now - lastHeartbeat) / 1000) : null,
-});
+const result = {};
+for (const source of KNOWN_SOURCES) {
+const m = machines[source];
+const lastSeen = m ? m.lastSeen : null;
+result[source] = {
+online: lastSeen !== null && (now - lastSeen) < HEARTBEAT_STALE_MS,
+lastSeen,
+secondsAgo: lastSeen ? Math.floor((now - lastSeen) / 1000) : null,
+versions: m ? m.versions : {},
+};
+}
+res.json(result);
 });
 
 app.get('/api/gallery', async (req, res) => {
