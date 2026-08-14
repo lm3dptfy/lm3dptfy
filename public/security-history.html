@@ -77,12 +77,7 @@
 
   <div class="dash-grid">
     <div id="security-body">
-      <h2 style="font-size:.95rem;font-weight:700;color:var(--ink);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">🔴 Active — Needs Attention (18)</h2>
-
-<div class="alert-banner" style="margin-bottom:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> Claude Code Auto Mode Becomes Default for Pro/Max/Team — Aug 14, 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">Starting <strong>August 14, 2026</strong>, Claude Code's auto mode — where a safety classifier approves routine actions and only pauses for actions deemed irreversible, destructive, or aimed outside your environment — becomes the <strong>default permission model</strong> for Pro, Max, and Team plans, replacing manual per-action approval. Anthropic cites a 1,053-tester study showing the classifier caught 89% of harmful actions vs. 13.6% for human review, and is dropping the extra token charge for classifier overhead on these plans. If the classifier blocks 3 consecutive or 20 total actions in a session, Claude Code reverts to manual approval. Enterprise, API, and cloud-platform (AWS/GCP/Azure) users keep it opt-in for now, with default rollout expected there "within the coming month." If you rely on per-command approval as a control, review your plan's new default before Aug 14 and adjust <code>permissions</code> settings if you want to keep manual mode. <a href="https://claude.com/blog/auto-mode-default-in-claude-code" style="color:var(--teal-light);">Anthropic Blog</a> · <a href="https://www.theregister.com/ai-and-ml/2026/08/10/claude-code-puts-auto-mode-in-the-drivers-seat/5285326" style="color:var(--teal-light);">The Register</a></div>
-      </div>
+      <h2 style="font-size:.95rem;font-weight:700;color:var(--ink);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">🔴 Active — Needs Attention (17)</h2>
 
 <div class="alert-banner" style="margin-bottom:10px;">
         <div class="alert-title"><span class="badge new">New</span> Enterprise Skill &amp; Plugin Security Scanning — Beta (Aug 6, 2026)</div>
@@ -100,8 +95,8 @@
       </div>
 
 <div class="alert-banner" style="margin-bottom:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Prompt Tools API &amp; Workbench Retiring August 17, 2026 — 4 Days</div>
-        <div style="font-size:.85rem;color:var(--ink2);">Anthropic is retiring the <strong>experimental prompt tools API</strong> (generate, improve, templatize prompts) and the associated <strong>Workbench</strong> feature effective <strong>August 17, 2026</strong> (4 days). After that date, any API calls targeting these endpoints will return errors. Review your integrations and Claude Code workflows that rely on prompt generation or improvement endpoints — migrate off before the deadline. <strong>Claude Opus 4.1 retired August 5, 2026</strong> — calls to <code>claude-opus-4-1-20250805</code> now return errors; migrate to <code>claude-opus-4-8</code> immediately. Check all integrations at <a href="https://console.anthropic.com" style="color:var(--teal-light);">console.anthropic.com</a>. <a href="https://releasebot.io/updates/anthropic/claude" style="color:var(--teal-light);">Anthropic Release Notes</a></div>
+        <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Prompt Tools API &amp; Workbench Retiring August 17, 2026 — 3 Days</div>
+        <div style="font-size:.85rem;color:var(--ink2);">Anthropic is retiring the <strong>experimental prompt tools API</strong> (generate, improve, templatize prompts) and the associated <strong>Workbench</strong> feature effective <strong>August 17, 2026</strong> (3 days). After that date, any API calls targeting these endpoints will return errors. Review your integrations and Claude Code workflows that rely on prompt generation or improvement endpoints — migrate off before the deadline. <strong>Claude Opus 4.1 retired August 5, 2026</strong> — calls to <code>claude-opus-4-1-20250805</code> now return errors; migrate to <code>claude-opus-4-8</code> immediately. Check all integrations at <a href="https://console.anthropic.com" style="color:var(--teal-light);">console.anthropic.com</a>. <a href="https://releasebot.io/updates/anthropic/claude" style="color:var(--teal-light);">Anthropic Release Notes</a></div>
       </div>
 
 <div class="alert-banner" style="margin-bottom:10px;">
@@ -169,7 +164,12 @@
         <div style="font-size:.85rem;color:var(--ink2);">A critical vulnerability emerged days after the v2.1.88 source map leak, enabling remote code execution. Patch available in v2.1.92+. <strong style="color:#f87171;">Update immediately if on v2.1.88–2.1.91.</strong> <a href="https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/" style="color:var(--teal-light);">SecurityWeek</a></div>
       </div>
 
-      <h2 style="font-size:.95rem;font-weight:700;color:var(--teal-light);margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">✅ Resolved / Fixed (32)</h2>
+      <h2 style="font-size:.95rem;font-weight:700;color:var(--teal-light);margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">✅ Resolved / Fixed (33)</h2>
+
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Now in Effect</span> Claude Code Auto Mode Is Now Default for Pro/Max/Team — Live Aug 14, 2026</div>
+        <div style="font-size:.85rem;color:var(--ink2);">As of <strong>August 14, 2026</strong>, Claude Code's auto mode — a safety classifier that approves routine actions and only pauses for actions deemed irreversible, destructive, or aimed outside your environment — is now the <strong>default permission model</strong> for Pro, Max, and Team plans, replacing manual per-action approval. Anthropic cites a 1,053-tester study showing the classifier caught 89% of harmful actions vs. 13.6% for human review, and has dropped the extra token charge for classifier overhead on these plans. If the classifier blocks 3 consecutive or 20 total actions in a session, Claude Code reverts to manual approval for that session. Enterprise, API, and cloud-platform (AWS/GCP/Azure) users remain opt-in for now, with default rollout expected there "within the coming month." If you rely on per-command approval as a control and haven't already, check your plan's <code>permissions</code> settings now to keep manual mode. <a href="https://claude.com/blog/auto-mode-default-in-claude-code" style="color:var(--teal-light);">Anthropic Blog</a> · <a href="https://www.theregister.com/ai-and-ml/2026/08/10/claude-code-puts-auto-mode-in-the-drivers-seat/5285326" style="color:var(--teal-light);">The Register</a></div>
+      </div>
 
 <div class="alert-banner resolved" style="margin-bottom:10px;">
         <div class="alert-title"><span class="badge fixed">Fixed</span> Claude.ai-Synced Skills Could Shadow Local Commands/MCP Prompts &amp; Run Hidden Directives — Fixed v2.1.228 (Aug 11, 2026)</div>
