@@ -77,7 +77,12 @@
 
   <div class="dash-grid">
     <div id="security-body">
-      <h2 style="font-size:.95rem;font-weight:700;color:var(--ink);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">🔴 Active — Needs Attention (17)</h2>
+      <h2 style="font-size:.95rem;font-weight:700;color:var(--ink);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">🔴 Active — Needs Attention (18)</h2>
+
+<div class="alert-banner" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge new">New</span> Compliance API Coverage Extended to Cowork &amp; Claude Code — Beta (Aug 11, 2026)</div>
+        <div style="font-size:.85rem;color:var(--ink2);">Anthropic extended its Compliance API to cover Claude Cowork (desktop, web, mobile) and Claude Code (CLI, desktop app) for Claude Enterprise customers, in beta. The new session endpoints return a consolidated, server-hosted transcript per session — prompts, responses, and tool activity together — through the same Compliance API interface and Compliance Access Key already used for Claude chats, so no separate integration is needed. Not yet covered: Claude Code on the web, Claude Code via the Claude Platform, or sessions run on Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry. Relevant for security/compliance teams that need audit or eDiscovery visibility into agentic coding sessions. <a href="https://claude.com/blog/compliance-api-cowork-and-claude-code" style="color:var(--teal-light);">Anthropic Blog</a></div>
+      </div>
 
 <div class="alert-banner" style="margin-bottom:10px;">
         <div class="alert-title"><span class="badge new">New</span> Enterprise Skill &amp; Plugin Security Scanning — Beta (Aug 6, 2026)</div>
@@ -95,8 +100,8 @@
       </div>
 
 <div class="alert-banner" style="margin-bottom:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Prompt Tools API &amp; Workbench Retiring August 17, 2026 — 3 Days</div>
-        <div style="font-size:.85rem;color:var(--ink2);">Anthropic is retiring the <strong>experimental prompt tools API</strong> (generate, improve, templatize prompts) and the associated <strong>Workbench</strong> feature effective <strong>August 17, 2026</strong> (3 days). After that date, any API calls targeting these endpoints will return errors. Review your integrations and Claude Code workflows that rely on prompt generation or improvement endpoints — migrate off before the deadline. <strong>Claude Opus 4.1 retired August 5, 2026</strong> — calls to <code>claude-opus-4-1-20250805</code> now return errors; migrate to <code>claude-opus-4-8</code> immediately. Check all integrations at <a href="https://console.anthropic.com" style="color:var(--teal-light);">console.anthropic.com</a>. <a href="https://releasebot.io/updates/anthropic/claude" style="color:var(--teal-light);">Anthropic Release Notes</a></div>
+        <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Prompt Tools API &amp; Workbench Retiring August 17, 2026 — 2 Days</div>
+        <div style="font-size:.85rem;color:var(--ink2);">Anthropic is retiring the <strong>experimental prompt tools API</strong> (generate, improve, templatize prompts) and the associated <strong>Workbench</strong> feature effective <strong>August 17, 2026</strong> (2 days). After that date, any API calls targeting these endpoints will return errors. Review your integrations and Claude Code workflows that rely on prompt generation or improvement endpoints — migrate off before the deadline. <strong>Claude Opus 4.1 retired August 5, 2026</strong> — calls to <code>claude-opus-4-1-20250805</code> now return errors; migrate to <code>claude-opus-4-8</code> immediately. Check all integrations at <a href="https://console.anthropic.com" style="color:var(--teal-light);">console.anthropic.com</a>. <a href="https://releasebot.io/updates/anthropic/claude" style="color:var(--teal-light);">Anthropic Release Notes</a></div>
       </div>
 
 <div class="alert-banner" style="margin-bottom:10px;">

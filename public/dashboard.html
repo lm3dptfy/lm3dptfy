@@ -329,7 +329,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 14 2026, 8:21 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 15 2026, 2:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="mc-machine-grid">
@@ -375,7 +375,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current">2.1.232</span> · latest <span class="latest">2.1.232</span></span>
+          <span class="nums">installed <span class="current stale">2.1.232</span> · latest <span class="latest">2.1.233</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -383,11 +383,11 @@
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
-          <span class="nums">installed <span class="current stale">3.6.0</span> · latest <span class="latest">3.7.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">npm stable remains v2.0.0</span></span>
+          <span class="nums">installed <span class="current">3.7.1</span> · latest <span class="latest">3.7.1</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">npm stable remains v2.0.0</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current">2026.7.1-2</span> · latest <span class="latest">2026.7.1-2</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">beta channel: 2026.8.1-beta.1</span></span>
+          <span class="nums">installed <span class="current">2026.7.1-2</span> · latest <span class="latest">2026.7.1-2</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">beta channel: 2026.8.1-beta.2</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -476,16 +476,18 @@
     <!-- WEEKLY DIGEST -->
     <div class="panel full-width" id="weekly-digest-panel" data-slide="2">
       <div class="panel-label"><span class="section-icon">🗓️</span> This Week</div>
-      <div class="panel-desc">Week of Aug 10-13, 2026 — most significant changes.</div>
+      <div class="panel-desc">Week of Aug 10-14, 2026 — most significant changes.</div>
       <div id="weekly-digest-body">
         <ul style="margin:0;padding-left:18px;font-size:.85rem;color:var(--ink2);line-height:1.7;">
-          <li><strong style="color:var(--ink);">Claude Code shipped 5 releases</strong> — v2.1.227 (Aug 10) through v2.1.231 (Aug 13), moving latest from 2.1.226 to 2.1.231. Note: v2.1.230 was skipped (internal build, never published).</li>
+          <li><strong style="color:var(--ink);">Claude Code shipped 6 releases</strong> — v2.1.227 (Aug 10) through v2.1.233 (Aug 14), moving latest from 2.1.226 to 2.1.233. Note: v2.1.230 was skipped (internal build, never published).</li>
           <li><strong style="color:var(--ink);">v2.1.228 (Aug 11)</strong> hardened synced skills from claude.ai — skills can no longer shadow local commands, MCP prompts, or run hidden <code>!</code>/<code>@</code> directives; also fixed Windows git detection and cross-session inbox bugs.</li>
           <li><strong style="color:var(--ink);">v2.1.229 (Aug 12)</strong> — SSE keepalive pings for Vertex/Bedrock idle timeouts; server-supplied hook support for self-hosted runners; <code>remote-control --continue</code>; <code>ListAgents</code> marks disconnected sessions offline; <code>/commit-push-pr</code> now blocks <code>--force</code>/<code>--amend</code>/<code>--no-verify</code> flags.</li>
           <li><strong style="color:var(--ink);">v2.1.231 &amp; v2.1.232 (Aug 13)</strong> — v2.1.231 was a single MCP OAuth redirect-URI hotfix; v2.1.232 turned on subagent forking by default and added cross-session <code>@</code>-mention + <code>SendMessage</code>, GitLab marketplace support, and several permission-bypass fixes.</li>
-          <li><strong style="color:var(--ink);">Auto Mode is now the default</strong> for Pro/Max/Team as of today, Aug 14 — classifier-driven approval has replaced per-action manual prompts. Check your settings if you want to keep manual mode.</li>
-          <li><strong style="color:var(--ink);">MemPalace v3.7.0</strong> (Aug 11) — agent logstream coordination for multi-machine fleet work; OpenAI-compatible embeddings endpoint; temporal search filters. Update: <code>uv tool upgrade mempalace</code>.</li>
-          <li><strong style="color:var(--ink);">Deadline:</strong> Prompt Tools API &amp; Workbench retire Aug 17 (3 days out). Also: Claude in Chrome Side Panel (Aug 12) now saves to history and resumes across devices for Max/Team.</li>
+          <li><strong style="color:var(--ink);">v2.1.233 (Aug 14)</strong> — GitLab merge-request support in <code>--worktree</code>/<code>claude agents</code>; opt-in memory cgroup limits for Bash on Linux; fixed an NTLM credential-leak vector via Windows <code>\??\</code> device-prefix paths bypassing UNC validation; reverted a 2.1.232 regression that made auto mode stop for manual approval on ordinary <code>cd &amp;&amp;</code> commands on Windows. Run <code>claude update</code>.</li>
+          <li><strong style="color:var(--ink);">Auto Mode became the default</strong> for Pro/Max/Team on Aug 14 — classifier-driven approval has replaced per-action manual prompts. Check your settings if you want to keep manual mode.</li>
+          <li><strong style="color:var(--ink);">MemPalace v3.7.1</strong> (Aug 14) — integrity patch fixing ingest hangs on named pipes/FIFOs, incomplete re-mines being silently treated as complete, a stale ChromaDB cache after peer reconnects, and the MCP writer lease not releasing on SIGTERM/SIGHUP. This machine is now up to date. Update: <code>uv tool upgrade mempalace</code>.</li>
+          <li><strong style="color:var(--ink);">Anthropic confirmed Claude Sonnet 5's $2/$10-per-MTok pricing is now permanent</strong> — the previously scheduled Sep 1 increase to $3/$15 will not happen. Also: Compliance API coverage extended to Cowork and Claude Code (beta, Enterprise) on Aug 11.</li>
+          <li><strong style="color:var(--ink);">Deadline:</strong> Prompt Tools API &amp; Workbench retire Aug 17 (2 days out).</li>
         </ul>
       </div>
     </div>
@@ -580,13 +582,13 @@
       <div id="security-body">
 
         <div class="alert-banner" style="margin-bottom:10px;">
-          <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Prompt Tools API &amp; Workbench Retiring August 17, 2026 — 3 Days</div>
+          <div class="alert-title"><span class="badge warn">Advisory</span> Anthropic Prompt Tools API &amp; Workbench Retiring August 17, 2026 — 2 Days</div>
           <div style="font-size:.85rem;color:var(--ink2);">Retiring Aug 17: experimental prompt tools API + Workbench. Also: Claude Opus 4.1 already retired Aug 5 — migrate to <code>claude-opus-4-8</code>. <a href="https://console.anthropic.com" style="color:var(--teal-light);">console.anthropic.com</a></div>
         </div>
 
         <div class="alert-banner" style="margin-bottom:10px;">
-          <div class="alert-title"><span class="badge new">New</span> Enterprise Skill &amp; Plugin Security Scanning — Beta (Aug 6, 2026)</div>
-          <div style="font-size:.85rem;color:var(--ink2);">Enterprise admins can now enable automatic malicious-content scanning of third-party skills/plugins on upload or edit. <a href="/security-history.html" style="color:var(--teal-light);">Full details &rarr;</a></div>
+          <div class="alert-title"><span class="badge new">New</span> Compliance API Coverage Extended to Cowork &amp; Claude Code — Beta (Aug 11, 2026)</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Enterprise compliance/security teams can now pull consolidated session transcripts and metadata for Cowork and Claude Code sessions through the existing Compliance API. <a href="/security-history.html" style="color:var(--teal-light);">Full details &rarr;</a></div>
         </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
@@ -607,34 +609,19 @@
       <div class="panel-desc">Highlights — <a href="/news-archive.html" style="color:var(--teal-light);">full archive &rarr;</a></div>
       <div id="news-body">
         <div class="news-item">
+          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.233" target="_blank">Claude Code v2.1.233 Released (Aug 14, 2026)</a></div>
+          <div class="desc">Fixes an NTLM credential-leak vector via Windows device-prefix paths, adds GitLab merge-request support, and reverts a 2.1.232 auto-mode regression. Run <code>claude update</code>.</div>
+          <div class="date">Aug 14, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW — RUN claude update</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://claude.com/blog/auto-mode-default-in-claude-code" target="_blank">Claude Code Auto Mode Is Now Default for Pro/Max/Team — Live Today (Aug 14, 2026)</a></div>
-          <div class="desc">Classifier-driven auto mode has replaced manual per-action approval for all Pro/Max/Team users as of today. Check <code>permissions.defaultMode</code> in settings.json if you want to keep manual control — run <code>claude config</code> to inspect.</div>
-          <div class="date">Aug 14, 2026 · claude.com/blog · <strong style="color:#dc2626;">DEFAULT CHANGE — LIVE NOW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.232" target="_blank">Claude Code v2.1.232 — Subagent Forking On, Cross-Session Messaging &amp; GitLab Marketplace (Aug 13, 2026)</a></div>
-          <div class="desc">Subagent forking is now on by default; <code>@</code>-mention + <code>SendMessage</code> enable cross-session coordination; GitLab marketplace added; MCP OAuth redirect-URI hotfixed; several permission-bypass issues closed. Also: v2.1.231 (MCP OAuth hotfix) and v2.1.229 (SSE keepalive, server hooks, remote-control continue). Run <code>claude update</code>.</div>
-          <div class="date">Aug 13, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">CURRENT — RUN claude update</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://console.anthropic.com" target="_blank">⚠ Prompt Tools API &amp; Workbench Retiring in 3 Days — Aug 17, 2026</a></div>
-          <div class="desc">The experimental Prompt Tools API and Anthropic Workbench retire August 17 — 3 days from now. Any integrations calling these endpoints will start returning hard errors after that date. Migrate before the deadline. Also: Claude Opus 4.1 already retired Aug 5 — move to <code>claude-opus-4-8</code>.</div>
-          <div class="date">Aug 14, 2026 · Anthropic · <strong style="color:#dc2626;">URGENT — 3 DAYS LEFT</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.7.0" target="_blank">MemPalace v3.7.0 — Agent Logstream Coordination &amp; OpenAI-Compatible Embeddings (Aug 11, 2026)</a></div>
-          <div class="desc">Multi-machine fleet coordination via append-only local-first event layer; opt-in OpenAI-compatible <code>/v1/embeddings</code> backend; <code>since</code>/<code>before</code> date-window search filters. Update: <code>uv tool upgrade mempalace</code>.</div>
-          <div class="date">Aug 11, 2026 · github.com/MemPalace/mempalace · <strong style="color:#f87171;">UPDATE AVAILABLE (3.6.0 → 3.7.0)</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/upstash/context7/releases/tag/%40upstash%2Fcontext7-mcp%404.0.2" target="_blank">Context7 MCP v4.0.2 — Emergency Fix for mcp.context7.com Outage (Aug 11, 2026)</a></div>
-          <div class="desc">v4.0.0's SSE-forced mode leaked connections, spiking upstream concurrent connections from ~10 to 5,000+, causing 503 gateway overflows. v4.0.1 reverted <code>responseMode</code> to "auto"; v4.0.2 adds 60s API timeout and disables SSE keepalive heartbeats. If you're on v4.0.0, update immediately: <code>npm install -g @upstash/context7-mcp</code>.</div>
-          <div class="date">Aug 11, 2026 · github.com/upstash/context7 · <strong style="color:#dc2626;">HOTFIX — UPDATE FROM v4.0.0 NOW</strong></div>
+          <div class="desc">Classifier-driven auto mode has replaced manual per-action approval by default; check <code>permissions</code> settings if you want to keep manual mode.</div>
+          <div class="date">Aug 14, 2026 · claude.com/blog · <strong style="color:#dc2626;">DEFAULT CHANGE — NOW LIVE</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://claude.com/solutions/government" target="_blank">Claude for Government Beta — Now Available (Aug 14, 2026)</a></div>
-          <div class="desc">Anthropic launched the Claude for Government Beta today, offering Claude to US government agencies with Anthropic as the contracted/billing party. Agencies can request access at claude.com/solutions/government. Builds on Anthropic's existing Federal Risk and Authorization Management Program (FedRAMP) trajectory.</div>
-          <div class="date">Aug 14, 2026 · Anthropic · <strong style="color:#16a34a;">NEW TODAY</strong></div>
+          <div class="desc">Anthropic launched a beta offering Claude to US government agencies through FedRAMP High/IL5-authorized deployments, with Anthropic as the contracted/billing party.</div>
+          <div class="date">Aug 14, 2026 · claude.com/solutions/government · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div style="text-align:center;padding:12px 0 4px;">
           <a href="/news-archive.html" style="color:var(--teal-light);font-size:.82rem;font-weight:600;">View full AI news archive &rarr;</a>
@@ -647,7 +634,12 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 14, 2026, 8:21 AM CDT — installed <strong>2026.7.1-2</strong> still matches npm <code>latest</code> dist-tag; no change since morning check. Beta channel unchanged at <strong>2026.8.1-beta.1</strong> (GitHub release notes still pending). Extended-stable remains 2026.6.34 (Aug 8).</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 15, 2026, 2:00 AM CDT — installed <strong>2026.7.1-2</strong> still matches npm <code>latest</code> dist-tag; no change on stable. Beta channel advanced to <strong>2026.8.1-beta.2</strong> (Aug 15, 05:36 UTC) with full 2026.8.1 release notes now published. Extended-stable remains 2026.6.34 (Aug 8).</div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.8.1-beta.2" target="_blank">OpenClaw v2026.8.1-beta.2 — Secret Egress Host Binding, GPT-5.6 Ultra Runtime Switching &amp; SQLite Backup Command (Aug 15, 2026)</a></div>
+          <div class="desc">Headline: <strong>secret egress host binding</strong> — each shared-store secret is now bound to exact HTTPS destination hosts across CLI, Gateway RPC, and Control UI, so unbound sentinel substitution fails closed before plaintext egress (a real hardening against secret leakage to unintended hosts). Also: GPT-5.6 Ultra (Sol/Terra/Luna) runtime switching across OpenClaw and Codex engines; new <code>openclaw backup sqlite create|list|verify|restore</code> command for verified database snapshots; macOS app profile isolation; plugin install provenance now requires explicit <code>--force</code> for untrusted executable sources. Update via your OpenClaw beta channel.</div>
+          <div class="date">Aug 15, 2026 · github.com/openclaw/openclaw/releases · <strong style="color:#d97706;">NEW BETA — SECURITY HARDENING</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://www.npmjs.com/package/openclaw?activeTab=versions" target="_blank">OpenClaw v2026.8.1-beta.1 — New Beta Published to npm (Aug 10, 2026)</a></div>
           <div class="desc">First beta of the 2026.8.1 series, published to npm Aug 10. No GitHub release notes are up yet, so changelog details aren't confirmed — do not install ahead of a written changelog. Update via your OpenClaw beta channel once notes are posted.</div>
@@ -911,7 +903,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 14, 2026, 8:21 AM CDT — npm stable latest confirmed <strong>v1.2.0</strong> (no new release since Jul 13). Local install up to date at v1.2.0.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 15, 2026, 2:00 AM CDT — npm stable latest remains <strong>v1.2.0</strong>; local install confirmed up to date at v1.2.0 (<code>happy --version</code>). No new release since Jul 13.</div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.2.0 — New Stable Release (Jul 13, 2026)</a></div>
           <div class="desc">npm stable tag promoted to <strong>v1.2.0</strong> (up from v1.1.10). New minor version incorporating fixes and features from the v1.3.x pre-release cycle into a stable build. Installed: v1.1.8 — two versions behind. Update: <code>npm install -g happy</code></div>
@@ -960,7 +952,12 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 14, 2026, 8:21 AM CDT — npm stable confirmed <strong>v2.0.0</strong>; GitHub/PyPI latest confirmed still <strong>v3.7.0</strong> (Aug 11, no new release). Local install at v3.6.0 — update available: <code>uv tool upgrade mempalace</code>.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 15, 2026, 2:00 AM CDT — npm stable remains <strong>v2.0.0</strong>; GitHub/PyPI latest now <strong>v3.7.1</strong> (Aug 14, integrity patch). Local install confirmed at v3.7.1 (via <code>mempalace --version</code> and <code>uv tool list</code>) — up to date.</div>
+        <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.7.1" target="_blank">MemPalace v3.7.1 — Mine Completeness, Reconnect Integrity &amp; Clean Shutdown (Aug 14, 2026)</a></div>
+          <div class="desc">Post-3.7.0 integrity patch: ingest no longer hangs when a named pipe/FIFO is discovered during a mine walk; incomplete/interrupted re-mines are now retried instead of being permanently treated as complete (via per-drawer <code>chunk_total</code> stamping); a stale in-memory ChromaDB System client cache after a peer rebuild no longer causes the local index to regress; and MCP now releases the palace writer lease on SIGTERM/SIGHUP (SSH disconnect, container/systemd stop), not just normal exit. Install: <code>pip install -U mempalace==3.7.1</code> or <code>uv tool upgrade mempalace</code>.</div>
+          <div class="date">Aug 14, 2026 · github.com/MemPalace/mempalace/releases · <strong style="color:#16a34a;">NEW — INTEGRITY PATCH</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.7.0" target="_blank">MemPalace v3.7.0 — Agent Logstream Coordination, OpenAI-Compatible Embeddings &amp; Search Date Windows (Aug 11, 2026)</a></div>
           <div class="desc">Headline feature: <strong>agent logstream coordination</strong> (RFC 003) — append-only, local-first event layer for multi-machine agent fleets to delegate work, wait/ack handoffs, and exchange patches through the MemPalace MCP hub without a human relay. Also: opt-in OpenAI-compatible <code>/v1/embeddings</code> backend (LM Studio, Ollama, vLLM), <code>since</code>/<code>before</code> date-window search filters, single-writer ownership enforcement, and MCP refuses writes when the served library drifts after an upgrade without restart. npm stable remains v2.0.0 — install via <code>pip install -U mempalace==3.7.0</code> or <code>uv tool upgrade mempalace</code>.</div>
@@ -1054,7 +1051,7 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 14, 2026, 8:21 AM CDT — Context7 npm <code>latest</code> confirmed <strong>v4.0.2</strong> (emergency fix for Aug 11 mcp.context7.com outage). No new plugin/skill releases since this morning's earlier check. Update: <code>npm install -g @upstash/context7-mcp</code>.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 15, 2026, 2:00 AM CDT — Context7 npm <code>latest</code> remains <strong>v4.0.2</strong>, unchanged since Aug 11. No new GitHub security advisories found for Context7. No other plugin/skill changes today.</div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases/tag/%40upstash%2Fcontext7-mcp%404.0.2" target="_blank">Context7 MCP v4.0.1 &amp; v4.0.2 — Emergency Fix for Aug 11 mcp.context7.com Outage</a></div>
           <div class="desc">v4.0.0 forced every HTTP response onto an SSE stream instead of the SDK's default <code>"auto"</code> mode; those streams were never released, so concurrent upstream connections went from ~10 to over 5,000, exhausting the gateway connection pool and causing 503 <code>reset reason: overflow</code> errors — not a load spike. v4.0.1 (Aug 11, 09:22 CDT) reverted to <code>responseMode: "auto"</code>. v4.0.2 (Aug 11, 11:30 CDT) additionally disabled SSE keepalive heartbeats and added a 60s timeout to API calls, closing off a related connection-leak path (a 2025-era JSON-RPC batch requesting its own cancellation could hang a stream indefinitely). If you're on v4.0.0, update immediately: <code>npm install -g @upstash/context7-mcp</code>.</div>
@@ -1223,6 +1220,11 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><strong><code>npm list -g --depth=0</code> fails outright on this machine's Git Bash — use per-package <code>npm info &lt;pkg&gt; dist-tags.latest</code>/<code>--version</code> checks instead</strong></div>
+          <div class="desc">Today's run hit a Cygwin <code>child_copy</code> error (<code>cygheap read copy failed</code>) the instant <code>npm list -g --depth=0</code> was invoked via Bash — no package list returned at all. Per-tool checks (<code>claude --version</code>, <code>mempalace --version</code>, <code>uv tool list</code>, <code>happy --version</code>, and <code>npm info &lt;pkg&gt; dist-tags.latest</code> per package) all worked fine and are what actually surfaced today's real changes — MemPalace 3.7.1 already installed locally (ahead of yesterday's tracked "latest" of 3.7.0) and Claude Code 2.1.232 installed vs. 2.1.233 latest. Don't rely on the bulk <code>npm list -g</code> command on this machine; it's silently a dead end.</div>
+          <div class="date">Aug 15, 2026 · MooseClaw research notes</div>
+        </div>
         <div class="news-item">
           <div><strong>Yesterday's "no new Context7 release" was wrong — v4.0.1/v4.0.2 had already shipped to fix a real outage</strong></div>
           <div class="desc">Aug 13's update said "Context7 v4.0.0 remains latest (no new release since Aug 7)." That was stale: v4.0.1 and v4.0.2 had already published to npm on Aug 11, fixing a production outage on mcp.context7.com that v4.0.0 itself caused (SSE stream leak exhausting the gateway's connection pool). <code>npm info @upstash/context7-mcp dist-tags.latest</code> run fresh today immediately returned 4.0.2 — the check itself is reliable, it just wasn't re-run carefully enough yesterday. Lesson: don't assume "no change since last check" without actually re-running the npm/gh lookup for every tracked package, even ones that don't usually move often.</div>
