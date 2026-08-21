@@ -68,6 +68,31 @@
   <div class="dash-grid">
     <div id="news-body">
       <div class="news-item">
+        <div><a href="https://claude.com/blog/anthropics-approach-to-teaching-and-learning-ai" target="_blank">Anthropic's Approach to Teaching and Learning AI (Aug 20, 2026)</a></div>
+        <div class="desc">Anthropic lays out its strategy for expanding free AI education resources — building on Anthropic Academy's free, certificate-bearing courses (Claude 101 through API/Claude Code deep dives) with a broader push to lower the friction between curiosity about AI and actually knowing how to use it well.</div>
+        <div class="date">Aug 20, 2026 · claude.com/blog · <strong style="color:#16a34a;">NEW</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://claude.com/blog/computer-use-skills-api-files-api" target="_blank">Build Production Agents with Computer Use, the Skills API &amp; the Files API (Aug 20, 2026)</a></div>
+        <div class="desc">Anthropic walks through combining computer use, the Agent Skills API, and the Files API to build production-grade agents — patterns for giving an agent durable, reusable capability packages alongside desktop/browser control and persistent file handling.</div>
+        <div class="date">Aug 20, 2026 · claude.com/blog · <strong style="color:#16a34a;">NEW</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://claude.com/blog/ai-ci-cd-on-call" target="_blank">Claude on Call: How Claude Tag Serves as Anthropic's First Responder for CI/CD Failures (Aug 18, 2026)</a></div>
+        <div class="desc">Anthropic describes using Claude Tag internally as an automatic first responder for CI/CD failures — triaging broken builds and flagging likely causes before a human engineer is paged in. Builds on the Aug 13 "Claude Tag reads more of the room" proactive-reply update.</div>
+        <div class="date">Aug 18, 2026 · claude.com/blog · <strong style="color:#16a34a;">NEW</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.238" target="_blank">Claude Code v2.1.234–v2.1.238 Released (Aug 17-20, 2026)</a></div>
+        <div class="desc">Five releases this week. <strong>v2.1.234 (Aug 17)</strong>: hardens remote file reads, session restore, CLAUDE.md includes, workflow scripts, and file uploads against Windows NT-namespace (<code>\??\</code>) paths — closing the remaining pre-approval angle of the NTLM credential-leak vector; adds a GitLab MR badge to the footer/statusline and automatic session continuation on usage-limit reset. <strong>v2.1.235 (Aug 18)</strong>: optional <code>spellcheck</code> setting (aspell/hunspell/ispell); fixed prompt-cache invalidation on language-server reconnect. <strong>v2.1.236 (Aug 19)</strong>: <code>ANTHROPIC_DEFAULT_MODEL</code> env var; opt-in cross-session idle notifications (<code>notify_when_idle</code> in <code>SendMessage</code>); macOS sandbox wildcard read-deny rules (e.g. <code>**/.env</code>) now can't be bypassed by renaming the denied file. <strong>v2.1.237 (Aug 20)</strong>: built-in "Concise" output style; fixed prompt caching for LLM-gateway/custom-base-URL sessions. <strong>v2.1.238 (Aug 20)</strong>: plugin-marketplace <code>headersHelper</code> for minting short-lived auth headers on install/update; new <code>self-hosted-runner --defer-shutdown-max-min</code> and <code>--proxy-authorization-command</code>/<code>--proxy-authorization-file</code> flags; fixed unbounded memory growth in long interactive sessions from retained subagent tool results. Run <code>claude update</code>.</div>
+        <div class="date">Aug 17-20, 2026 · github.com/anthropics/claude-code/releases · <strong style="color:#16a34a;">NEW — RUN claude update</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-confirms-claude-is-down-in-major-outage-affecting-multiple-services/" target="_blank">Brief Claude Outage Disrupts Claude.ai, Claude Code &amp; Cowork (Aug 16, 2026)</a></div>
+        <div class="desc">An authentication-related outage began around 21:58 UTC, causing login failures and incomplete requests across Claude.ai, Claude Code, and Claude Cowork; Claude Console and the API remained operational throughout. Anthropic confirmed all services restored by 22:40 UTC (~42 minutes total) and said it was continuing to investigate the cause; no root cause has been disclosed.</div>
+        <div class="date">Aug 16, 2026 · bleepingcomputer.com · <strong style="color:#d97706;">RESOLVED</strong></div>
+      </div>
+      <div class="news-item">
         <div><a href="https://www.anthropic.com/news/claude-text-watermark" target="_blank">How Claude's Text Watermark Works (Aug 14, 2026)</a></div>
         <div class="desc">Claude will embed an invisible watermark in generated text to indicate AI involvement, complying with EU AI Act requirements. The watermark works by subtly altering the randomness source when choosing between equally valid word options, leaving a detectable pattern that doesn't affect output quality or readability. No performance impact, no additional costs, and outputs remain indistinguishable from unwatermarked text — the watermark only enables later verification of Claude's involvement through a detection API Anthropic plans to release.</div>
         <div class="date">Aug 14, 2026 · anthropic.com/news · <strong style="color:#16a34a;">NEW</strong></div>
