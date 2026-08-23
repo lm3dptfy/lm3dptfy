@@ -68,6 +68,11 @@
   <div class="dash-grid">
     <div id="news-body">
       <div class="news-item">
+        <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.241" target="_blank">Claude Code v2.1.240 &amp; v2.1.241 Released — Bug Fixes &amp; Reliability Improvements (Aug 22-23, 2026)</a></div>
+        <div class="desc">Two incremental patch releases with no detailed per-item changelog published (release notes read "Bug fixes and reliability improvements" for both). v2.1.241 (Aug 23, 00:52 UTC) is the current npm <code>latest</code> dist-tag. Run <code>claude update</code>.</div>
+        <div class="date">Aug 22-23, 2026 · github.com/anthropics/claude-code/releases · <strong style="color:#16a34a;">NEW — RUN claude update</strong></div>
+      </div>
+      <div class="news-item">
         <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.239" target="_blank">Claude Code v2.1.239 Released — Bedrock Double-Billing Fix &amp; Windows Cross-Session Messaging (Aug 21, 2026)</a></div>
         <div class="desc">Broad reliability release (published 19:54 UTC): fixes Bedrock streaming behind proxies that strip the response Content-Type header, which had been silently doubling billed API calls by re-running every turn non-streaming; fixes Claude Code hanging at startup behind an HTTPS proxy on Bedrock with SSO/<code>awsAuthRefresh</code>; Windows now supports cross-session messaging (<code>SendMessage</code>/<code>ListAgents</code> across machines), matching macOS/Linux. Also adds <code>/claude-api upgrade</code> to migrate Python projects from <code>anthropic</code> 0.x to 1.x, cost estimates now include the 1.1× US-only-inference premium for data-residency workspaces, and dozens of terminal/UI/hook fixes (MCP elicitation forms, `/resume` picker, fullscreen renderer, vim mode, OpenTelemetry trace fragmentation). Run <code>claude update</code>.</div>
         <div class="date">Aug 21, 2026 · github.com/anthropics/claude-code/releases · <strong style="color:#16a34a;">NEW — RUN claude update</strong></div>
