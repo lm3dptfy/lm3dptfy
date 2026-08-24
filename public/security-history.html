@@ -159,7 +159,12 @@
         <div style="font-size:.85rem;color:var(--ink2);">A critical vulnerability emerged days after the v2.1.88 source map leak, enabling remote code execution. Patch available in v2.1.92+. <strong style="color:#f87171;">Update immediately if on v2.1.88–2.1.91.</strong> <a href="https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/" style="color:var(--teal-light);">SecurityWeek</a></div>
       </div>
 
-      <h2 style="font-size:.95rem;font-weight:700;color:var(--teal-light);margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">✅ Resolved / Fixed (37)</h2>
+      <h2 style="font-size:.95rem;font-weight:700;color:var(--teal-light);margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">✅ Resolved / Fixed (38)</h2>
+
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-40068 / GHSA-q5hj-mxqh-vv77 — Trust Dialog Bypass via Git Worktree Spoofing — Fixed v2.1.84 (Disclosed Apr 24, 2026)</div>
+        <div style="font-size:.85rem;color:var(--ink2);">High severity (CVSS 7.7). Claude Code's folder-trust check read a git worktree's <code>commondir</code> file without validating its contents. A malicious repository could ship a <code>commondir</code> pointing at a directory path the victim had already trusted, letting Claude Code skip the trust-confirmation dialog entirely and execute hooks defined in <code>.claude/settings.json</code> — arbitrary code execution on the developer's machine, with high impact to confidentiality, integrity, and availability. Affected versions 2.1.63–2.1.83; fixed in <strong>2.1.84</strong>. Exploitation required the victim to clone the attacker's repo and open it in Claude Code, plus the attacker guessing/knowing an already-trusted path. Newly surfaced during today's advisory sweep — this had not previously been logged here despite being fixed for months. <a href="https://github.com/advisories/GHSA-q5hj-mxqh-vv77" style="color:var(--teal-light);">GitHub Advisory</a></div>
+      </div>
 
 <div class="alert-banner resolved" style="margin-bottom:10px;">
         <div class="alert-title"><span class="badge fixed">Resolved</span> Claude Fable 5 &amp; Mythos 5 Export Controls Lifted — Access Restored (Jun 30-Jul 1, 2026)</div>
