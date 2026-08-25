@@ -68,9 +68,19 @@
   <div class="dash-grid">
     <div id="news-body">
       <div class="news-item">
-        <div><a href="https://status.claude.com/" target="_blank">Ongoing: Elevated Errors on Multiple Models (Opus 5, Fable 5, Mythos 5, Opus 4.8) — Unresolved (Aug 24, 2026)</a></div>
-        <div class="desc">Anthropic's status page reported an incident starting 05:06 UTC on Aug 24, 2026, with elevated error rates affecting requests to Claude Mythos 5, Claude Fable 5, Claude Opus 5, and Claude Opus 4.8. As of the 06:42 UTC update the incident remained in progress ("continuing to work to resolve issues causing elevated requests on multiple models"). Check status.claude.com for current state before assuming it's resolved.</div>
-        <div class="date">Aug 24, 2026 · status.claude.com · <strong style="color:#d97706;">UNRESOLVED — CHECK STATUS PAGE</strong></div>
+        <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.245" target="_blank">Claude Code v2.1.242–v2.1.245 Released (Aug 24-25, 2026)</a></div>
+        <div class="desc">v2.1.242 and v2.1.243 published to npm with no accompanying GitHub release notes (undocumented patches) — v2.1.243 is this machine's installed version. v2.1.244 never made it to npm at all (skipped/pulled). v2.1.245 (Aug 25) fixes a startup crash on Linux distributions shipping glibc 2.44, including Arch Linux, CachyOS, and Fedora Rawhide. Run <code>claude update</code>.</div>
+        <div class="date">Aug 24-25, 2026 · github.com/anthropics/claude-code/releases · <strong style="color:#16a34a;">NEW — RUN claude update</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.8.0" target="_blank">MemPalace v3.8.0 — Fast Large Palaces, Lean MCP Proxies &amp; Wakeable Agents (Aug 23, 2026)</a></div>
+        <div class="desc">Major performance release. Chroma metadata reads (<code>list_drawers</code>) now query SQLite metadata directly instead of cold-loading the HNSW vector index — 2.31s/1148MB peak RSS fell to 0.01s/86MB on a 1.7GB/165k-drawer palace. <code>sqlite_exact</code> common reads (status, search) stop walking the whole palace: <code>mempalace_status</code> fell from ~7s to ~1s and warm search from ~6.4s to 0.2-1.6s on a 167k-drawer palace, via batched/cached vector ranking, SQL-side filter pagination, and indexed generated columns for wing/room/hall. Long-running Chroma servers no longer rebuild their client on their own writes (RSS growth of 951MB&rarr;3522MB per eight searches reduced to 940MB&rarr;965MB). Proxied stdio MCP sessions shrink from ~80MB to ~24MB import weight, saving roughly 3.9GB across a 50-agent fleet. New <code>mempalace logstream watch</code> primitive lets agent coordination wake a harness instead of polling every five minutes. Also fixes a <code>sync --apply</code> bug where an unreadable/unmounted source path could cause every drawer from that project to be deleted instead of flagged. Install: <code>pip install -U mempalace==3.8.0</code> or <code>uv tool upgrade mempalace</code>.</div>
+        <div class="date">Aug 23, 2026 · github.com/MemPalace/mempalace/releases · <strong style="color:#16a34a;">NEW — MAJOR PERFORMANCE RELEASE</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://status.claude.com/" target="_blank">Elevated Errors on Multiple Models (Opus 5, Fable 5, Mythos 5, Opus 4.8) — Resolved (Aug 24, 2026)</a></div>
+        <div class="desc">Anthropic's status page reported an incident starting 05:06 UTC (9:50 PM PT Aug 23) on Aug 24, 2026, with elevated error rates affecting requests to Claude Mythos 5, Claude Fable 5, Claude Opus 5, and Claude Opus 4.8. Resolved by 08:30 UTC the same day (~2h40m total), running until 12:36 AM PT. Two further brief Claude.ai login incidents that day (9:02-9:08 AM PT and 1:00-1:08 PM PT) were also resolved, by 20:26 UTC. All Claude services showed "All Systems Operational" as of this check.</div>
+        <div class="date">Aug 24, 2026 · status.claude.com · <strong style="color:#16a34a;">RESOLVED</strong></div>
       </div>
       <div class="news-item">
         <div><a href="https://fortune.com/2026/07/24/anthropic-debuts-claude-opus-5-with-feature-that-lets-users-toggle-between-cost-and-capability/" target="_blank">Claude Opus 5 Released — 1M Context, 128K Output, Thinking On by Default (Jul 24, 2026)</a></div>

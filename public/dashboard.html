@@ -329,7 +329,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 24 2026, 2:03 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 25 2026, 2:04 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="mc-machine-grid">
@@ -375,7 +375,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current">2.1.241</span> · latest <span class="latest">2.1.241</span></span>
+          <span class="nums">installed <span class="current stale">2.1.243</span> · latest <span class="latest">2.1.245</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">run: claude update</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -383,7 +383,7 @@
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
-          <span class="nums">installed <span class="current">3.7.1</span> · latest <span class="latest">3.7.1</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">npm stable remains v2.0.0</span></span>
+          <span class="nums">installed <span class="current">3.8.0</span> · latest <span class="latest">3.8.0</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">npm stable remains v2.0.0</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
@@ -591,8 +591,8 @@
         </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
-          <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-40068 — Trust Dialog Bypass via Git Worktree Spoofing — Fixed v2.1.84</div>
-          <div style="font-size:.85rem;color:var(--ink2);">High-severity flaw let a malicious repo spoof a trusted path via a spoofed git worktree <code>commondir</code> file, skipping the trust dialog and running hooks. Fixed since v2.1.84 — newly logged today. <a href="/security-history.html" style="color:var(--teal-light);">Full details &rarr;</a></div>
+          <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-44470 — Claude Desktop LPE via CoworkVMService Directory Junction — Fixed v1.3834.0</div>
+          <div style="font-size:.85rem;color:var(--ink2);">High-severity (CVSS 8.5) flaw let a local user redirect the SYSTEM-run Cowork VM service into writing files via an NTFS directory junction. Confirmed fixed and newly moved from Active to Resolved today. <a href="/security-history.html" style="color:var(--teal-light);">Full details &rarr;</a></div>
         </div>
 
         <div style="text-align:center;padding:12px 0 4px;">
@@ -608,19 +608,19 @@
       <div class="panel-desc">Highlights — <a href="/news-archive.html" style="color:var(--teal-light);">full archive &rarr;</a></div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.241" target="_blank">Claude Code v2.1.234–v2.1.241 Released (Aug 17-23, 2026)</a></div>
-          <div class="desc">v2.1.234 hardens against the NTLM credential-leak vector; v2.1.239 fixes a Bedrock proxy bug that silently doubled billed API calls and adds Windows cross-session messaging; v2.1.240-241 are bug-fix/reliability patches. Run <code>claude update</code>.</div>
-          <div class="date">Aug 17-23, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW — RUN claude update</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.245" target="_blank">Claude Code v2.1.242–v2.1.245 Released (Aug 24-25, 2026)</a></div>
+          <div class="desc">v2.1.245 fixes a startup crash on Linux distros shipping glibc 2.44 (Arch, CachyOS, Fedora Rawhide); v2.1.242-243 are undocumented patches; v2.1.244 was pulled from npm. Run <code>claude update</code>.</div>
+          <div class="date">Aug 24-25, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">NEW — RUN claude update</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.8.0" target="_blank">MemPalace v3.8.0 — Major Performance Overhaul for Large Palaces (Aug 23, 2026)</a></div>
+          <div class="desc">Chroma/sqlite_exact reads skip full-palace scans (list_drawers: 2.31s → 0.01s on a 165k-drawer palace); proxied MCP sessions no longer load the full storage stack; new <code>logstream watch</code> lets agents wake instead of polling.</div>
+          <div class="date">Aug 23, 2026 · github.com/MemPalace/mempalace · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://blog.modelcontextprotocol.io/posts/mcp-roadmap/" target="_blank">MCP Publishes Updated Roadmap — Next Spec Release &amp; Beyond (Aug 22, 2026)</a></div>
           <div class="desc">Five priorities for the next cycle: agentic messaging primitives, HTTP-native transport unification, agent identity/enterprise security (DPoP, token exchange), improved tool-discovery primitives, and SDK developer experience.</div>
           <div class="date">Aug 22, 2026 · blog.modelcontextprotocol.io · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://forkast.news/the-model-context-protocol-reaches-a-security-inflection-point/" target="_blank">MCP Reaches a "Security Inflection Point" — OWASP MCP Top 10 Formalized at Seoul Summit (Aug 11-14, 2026)</a></div>
-          <div class="desc">21,000+ exposed MCP servers found, ~92% missing OAuth; protocol governance moves to the Linux Foundation as designers and researchers clash over hardening.</div>
-          <div class="date">Aug 11-14, 2026 · forkast.news · <strong style="color:#d97706;">NEW</strong></div>
         </div>
         <div style="text-align:center;padding:12px 0 4px;">
           <a href="/news-archive.html" style="color:var(--teal-light);font-size:.82rem;font-weight:600;">View full AI news archive &rarr;</a>
@@ -633,7 +633,7 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 24, 2026, 2:03 AM CDT — via <code>npm info openclaw dist-tags</code>: stable <strong>2026.7.1-2</strong> and extended-stable <strong>2026.6.34</strong> unchanged; beta advanced from <strong>2026.8.1-beta.2</strong> to <strong>2026.8.1-beta.3</strong> (Aug 24).</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 25, 2026, 2:04 AM CDT — via <code>npm info openclaw dist-tags</code>: stable <strong>2026.7.1-2</strong>, extended-stable <strong>2026.6.34</strong>, and beta <strong>2026.8.1-beta.3</strong> all unchanged since yesterday.</div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.8.1-beta.3" target="_blank">OpenClaw v2026.8.1-beta.3 — GPT-5.6 Ultra Reasoning, CDP Relay &amp; Gateway Supervision (Aug 24, 2026)</a></div>
           <div class="desc">GPT-5.6 Sol/Terra/Luna/Ultra reasoning-level support across OpenClaw and the Codex runtime; Control UI model setup streamlined through Custodian with optional channel configuration; Puppeteer-compatible CDP relay for paired Chrome sessions; external Gateway lifecycle supervision with verified restart handoff; SQLite backup/restore commands with integrity verification; shared durable-ingress monitors for channel plugins. 207 commits ahead on main already — expect further betas before this promotes to stable. Update via your OpenClaw beta channel.</div>
@@ -907,7 +907,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 24, 2026, 2:03 AM CDT — npm stable latest remains <strong>v1.2.0</strong>; <code>npm list -g</code> confirms local install still v1.2.0, unchanged since Jul 13. Note: <code>happy --version</code> hangs on an interactive auth prompt in unattended shells; prefer <code>npm info happy dist-tags.latest</code>.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 25, 2026, 2:04 AM CDT — <code>npm info happy dist-tags.latest</code> confirms stable remains <strong>v1.2.0</strong>, unchanged since Jul 13. Note: <code>happy --version</code> hangs on an interactive auth prompt in unattended shells; prefer the npm check.</div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases" target="_blank">Happy v1.2.0 — New Stable Release (Jul 13, 2026)</a></div>
           <div class="desc">npm stable tag promoted to <strong>v1.2.0</strong> (up from v1.1.10). New minor version incorporating fixes and features from the v1.3.x pre-release cycle into a stable build. Installed: v1.1.8 — two versions behind. Update: <code>npm install -g happy</code></div>
@@ -956,7 +956,12 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 24, 2026, 2:03 AM CDT — re-confirmed: npm stable remains <strong>v2.0.0</strong>, GitHub/PyPI latest remains <strong>v3.7.1</strong>, unchanged. Local install re-confirmed at v3.7.1 via <code>mempalace --version</code> — up to date.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 25, 2026, 2:04 AM CDT — <strong>MemPalace v3.8.0 shipped Aug 23</strong> (up from v3.7.1) and is already installed locally per <code>uv tool list</code> (<code>mempalace --version</code> itself isn't runnable via this machine's Bash — not on PATH there). npm stable remains v2.0.0, unchanged.</div>
+        <div class="news-item">
+          <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.8.0" target="_blank">MemPalace v3.8.0 — Fast Large Palaces, Lean MCP Proxies &amp; Wakeable Agents (Aug 23, 2026)</a></div>
+          <div class="desc">Major performance release: Chroma metadata reads (<code>list_drawers</code>) skip the vector index entirely — 2.31s/1148MB &rarr; 0.01s/86MB on a 165k-drawer palace; <code>sqlite_exact</code> status/search on a 167k-drawer palace drop from ~7s/6.4s to ~1s/0.2-1.6s; long-running Chroma servers stop rebuilding their client on their own writes; proxied stdio MCP sessions shrink from ~80MB to ~24MB import weight (~3.9GB saved across a 50-agent fleet). New <code>mempalace logstream watch</code> gives agents a durable wake-up primitive instead of repeated polling. Also fixes a <code>sync --apply</code> bug that could delete every drawer from a project if its source volume was briefly unmounted. Install: <code>pip install -U mempalace==3.8.0</code> or <code>uv tool upgrade mempalace</code>.</div>
+          <div class="date">Aug 23, 2026 · github.com/MemPalace/mempalace/releases · <strong style="color:#16a34a;">NEW — INSTALLED LOCALLY</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.7.1" target="_blank">MemPalace v3.7.1 — Mine Completeness, Reconnect Integrity &amp; Clean Shutdown (Aug 14, 2026)</a></div>
           <div class="desc">Post-3.7.0 integrity patch: ingest no longer hangs when a named pipe/FIFO is discovered during a mine walk; incomplete/interrupted re-mines are now retried instead of being permanently treated as complete (via per-drawer <code>chunk_total</code> stamping); a stale in-memory ChromaDB System client cache after a peer rebuild no longer causes the local index to regress; and MCP now releases the palace writer lease on SIGTERM/SIGHUP (SSH disconnect, container/systemd stop), not just normal exit. Install: <code>pip install -U mempalace==3.7.1</code> or <code>uv tool upgrade mempalace</code>.</div>
@@ -1055,7 +1060,7 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 24, 2026, 2:03 AM CDT — re-confirmed: Context7 npm <code>latest</code> remains <strong>v4.0.3</strong>; Superpowers remains <strong>v6.3.0</strong> (verified against the marketplace.json source directly after a third-party aggregator reported a stale, incorrect lower version — see Learning below). Still no new Claude Code GitHub security advisories since Jun 25 (30 total via API), but a broader web sweep surfaced CVE-2026-40068 (Apr 2026, fixed v2.1.84), previously unlogged here — added directly to Resolved. See security history.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 25, 2026, 2:04 AM CDT — re-confirmed: Context7 npm <code>latest</code> remains <strong>v4.0.3</strong>; Superpowers remains <strong>v6.3.0</strong> (github.com/obra/superpowers releases). Still no new Claude Code GitHub security advisories since Jun 25 (30 total via API). A cross-check of GitHub's own <code>patched_versions</code> field found two Active entries (CoworkVMService directory-junction LPE and SSH host-key MITM) were already fixed months ago — moved to Resolved. See security history.</div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases/tag/%40upstash%2Fcontext7-mcp%404.0.3" target="_blank">Context7 MCP v4.0.3 — Clerk OAuth Authorization Server Fix (Aug 21, 2026)</a></div>
           <div class="desc">Small patch: advertises Clerk as the OAuth authorization server so clients validate authorization responses against the issuer Clerk actually returns, rather than a mismatched issuer — fixes OAuth client validation edge cases introduced by the v4.0.0 SDK v2 migration. Update: <code>npm install -g @upstash/context7-mcp</code></div>
@@ -1234,6 +1239,16 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><strong>GitHub Security Advisories carry a <code>patched_versions</code> field per vulnerability — querying it directly is a faster, more reliable staleness check than re-reading each Active entry's prose</strong></div>
+          <div class="desc"><code>gh api repos/anthropics/claude-code/security-advisories --jq '.[] | select(.cve_id=="CVE-2026-44470") | .vulnerabilities[] | .patched_versions'</code> returned <code>1.3834.0</code> in one call — confirming (and a follow-up WebSearch corroborating) that the CoworkVMService directory-junction LPE was fixed months ago, despite the Active entry's own text saying "monitor GitHub advisory for patch confirmation." Same pattern caught CVE-2026-44467 (SSH host-key MITM, fixed v1.4304.0). Both were Claude <em>Desktop</em> version numbers, not CLI ones — worth remembering these two products version independently. Both moved to Resolved today.</div>
+          <div class="date">Aug 25, 2026 · MooseClaw research notes</div>
+        </div>
+        <div class="news-item">
+          <div><strong>A single WebFetch pass on a security article can conflate two distinct vulnerabilities described in the same piece — a targeted second WebFetch on just the one detail resolved it</strong></div>
+          <div class="desc">First WebFetch on the Aug 7 Hacker News piece about Claude Code/Gemini CLI CI flaws summarized "Claude Code (2.1.163+) are patched," which would have wrongly implied the already-logged, still-open <code>git push --receive-pack</code> validator bypass was fixed. A second WebFetch asking specifically about that one bypass (quoting the exact mechanism) got the correct answer: only the unrelated CVE-2026-54316 HuggingFace-exfil chain was fixed in 2.1.163; the validator bypass itself remains unpatched with no CVE. When a summary's "patched" claim covers multiple findings in one article, re-fetch with a narrower, mechanism-specific prompt before trusting it.</div>
+          <div class="date">Aug 25, 2026 · MooseClaw research notes</div>
+        </div>
         <div class="news-item">
           <div><strong>The standard "top 5 GitHub advisories" API check only surfaces recent CVEs — a broader web search today turned up CVE-2026-40068, an April 2026 finding never logged here despite being fixed for months</strong></div>
           <div class="desc">CVE-2026-40068 (Trust Dialog Bypass via Git Worktree Spoofing, fixed v2.1.84) doesn't appear in <code>gh api repos/anthropics/claude-code/security-advisories</code>'s first 5 results because five newer advisories (55607, 54316, 46406, 44470, 44467) rank above it — it was simply never reached by the top-5 check. Worth periodically pulling a larger page of the advisories API (or a general CVE web search) rather than trusting the top-5 slice is exhaustive.</div>

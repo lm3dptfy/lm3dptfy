@@ -77,7 +77,7 @@
 
   <div class="dash-grid">
     <div id="security-body">
-      <h2 style="font-size:.95rem;font-weight:700;color:var(--ink);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">🔴 Active — Needs Attention (16)</h2>
+      <h2 style="font-size:.95rem;font-weight:700;color:var(--ink);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">🔴 Active — Needs Attention (14)</h2>
 
 <div class="alert-banner" style="margin-bottom:10px;">
         <div class="alert-title"><span class="badge warn">Advisory</span> OWASP MCP Top 10 Formalized at MCP Dev Summit Seoul — Systemic Protocol-Level Risk (Aug 11-14, 2026)</div>
@@ -107,16 +107,6 @@
 <div class="alert-banner" style="margin-bottom:10px;">
         <div class="alert-title"><span class="badge warn">Advisory</span> China's National Vulnerability Database (NVDB) Issues Formal Claude Code Warning — Jul 8, 2026</div>
         <div style="font-size:.85rem;color:var(--ink2);">China's National Vulnerability Database formally warned developers on July 8, 2026 to stop using Claude Code versions 2.1.91 (April 2) through 2.1.196 (June 29), citing alleged "security backdoor" code capable of transmitting user location and identity data to Anthropic servers. The warning echoes the telemetry controversy from June 30 (see below); no independent third-party technical verification of the NVDB's specific claims has been published. Anthropic responded that users in China "were not supposed to be using it in the first place." If you are on any version in that range, update to v2.1.220 via <code>claude update</code>. <a href="https://www.pcgamer.com/software/ai/chinas-national-vulnerability-database-warns-that-recent-claude-code-models-have-a-security-backdoor/" style="color:var(--teal-light);">PC Gamer</a> · <a href="https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371" style="color:var(--teal-light);">The Register</a> · <a href="https://www.cnbc.com/2026/07/08/china-anthropic-ai-claude-code-backdoor-security-threat.html" style="color:var(--teal-light);">CNBC</a></div>
-      </div>
-
-<div class="alert-banner" style="margin-bottom:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-5p5x-5294-qhp3 — Local Privilege Escalation via Directory Junction in CoworkVMService — May 6, 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">High severity. An attacker with local filesystem write access can plant a Windows directory junction that causes the Claude Code CoworkVMService to write to an arbitrary privileged path, enabling local privilege escalation. Affects Windows installations with CoworkVMService active. Update immediately via <code>claude update</code> and monitor GitHub advisory for patch confirmation. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-5p5x-5294-qhp3" style="color:var(--teal-light);">GitHub Advisory</a></div>
-      </div>
-
-<div class="alert-banner" style="margin-bottom:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-3rwf-2g6p-c2f9 — SSH Host Key Verification Bypass Enables MitM on Remote Sessions — May 6, 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">High severity. Claude Code's remote session implementation does not strictly verify SSH host keys, allowing a network attacker to perform a man-in-the-middle attack on SSH-tunneled remote Claude Code sessions — potentially intercepting or injecting commands. Avoid using Claude Code remote sessions over untrusted networks until patched. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-3rwf-2g6p-c2f9" style="color:var(--teal-light);">GitHub Advisory</a></div>
       </div>
 
 <div class="alert-banner">
@@ -159,7 +149,17 @@
         <div style="font-size:.85rem;color:var(--ink2);">A critical vulnerability emerged days after the v2.1.88 source map leak, enabling remote code execution. Patch available in v2.1.92+. <strong style="color:#f87171;">Update immediately if on v2.1.88–2.1.91.</strong> <a href="https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/" style="color:var(--teal-light);">SecurityWeek</a></div>
       </div>
 
-      <h2 style="font-size:.95rem;font-weight:700;color:var(--teal-light);margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">✅ Resolved / Fixed (38)</h2>
+      <h2 style="font-size:.95rem;font-weight:700;color:var(--teal-light);margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">✅ Resolved / Fixed (40)</h2>
+
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-44470 / GHSA-5p5x-5294-qhp3 — Local Privilege Escalation via Directory Junction in CoworkVMService — Fixed v1.3834.0 (May 6, 2026)</div>
+        <div style="font-size:.85rem;color:var(--ink2);">High severity (CVSS 8.5). Claude Desktop's CoworkVMService ran as SYSTEM and did not validate whether the VM bundle directory was a real directory or an NTFS directory junction before writing to it. A local non-elevated user could replace the user-writable VM bundle directory with a junction pointing at an attacker-chosen location, causing the SYSTEM-owned service to create files anywhere on disk — local privilege escalation on Windows. <strong>Fixed in Claude Desktop v1.3834.0</strong> by validating the target is a standard directory (not a reparse point) before any write. Found sitting in Active with a "monitor for patch confirmation" note despite GitHub's own advisory <code>patched_versions</code> field already showing the fix — moved to Resolved today. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-5p5x-5294-qhp3" style="color:var(--teal-light);">GitHub Advisory</a></div>
+      </div>
+
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-44467 / GHSA-3rwf-2g6p-c2f9 — SSH Host Key Verification Bypass Enables MitM on Remote Sessions — Fixed v1.4304.0 (May 6, 2026)</div>
+        <div style="font-size:.85rem;color:var(--ink2);">High severity. Claude Desktop's SSH remote-development feature checked only whether a hostname existed in <code>~/.ssh/known_hosts</code> without comparing the server's presented host key against the stored one — a network-positioned attacker could present any host key and have the connection silently accepted, enabling MitM on remote dev sessions (source code, credentials, command output exposed). Affected v1.2581.0–v1.4303.x. <strong>Fixed in Claude Desktop v1.4304.0.</strong> Found sitting in Active with an "avoid until patched" note despite GitHub's own advisory <code>patched_versions</code> field already showing the fix — moved to Resolved today. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-3rwf-2g6p-c2f9" style="color:var(--teal-light);">GitHub Advisory</a></div>
+      </div>
 
 <div class="alert-banner resolved" style="margin-bottom:10px;">
         <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-40068 / GHSA-q5hj-mxqh-vv77 — Trust Dialog Bypass via Git Worktree Spoofing — Fixed v2.1.84 (Disclosed Apr 24, 2026)</div>
