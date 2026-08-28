@@ -77,7 +77,7 @@
 
   <div class="dash-grid">
     <div id="security-body">
-      <h2 style="font-size:.95rem;font-weight:700;color:var(--ink);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">🔴 Active — Needs Attention (14)</h2>
+      <h2 style="font-size:.95rem;font-weight:700;color:var(--ink);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">🔴 Active — Needs Attention (6)</h2>
 
 <div class="alert-banner" style="margin-bottom:10px;">
         <div class="alert-title"><span class="badge warn">Advisory</span> OWASP MCP Top 10 Formalized at MCP Dev Summit Seoul — Systemic Protocol-Level Risk (Aug 11-14, 2026)</div>
@@ -109,47 +109,37 @@
         <div style="font-size:.85rem;color:var(--ink2);">China's National Vulnerability Database formally warned developers on July 8, 2026 to stop using Claude Code versions 2.1.91 (April 2) through 2.1.196 (June 29), citing alleged "security backdoor" code capable of transmitting user location and identity data to Anthropic servers. The warning echoes the telemetry controversy from June 30 (see below); no independent third-party technical verification of the NVDB's specific claims has been published. Anthropic responded that users in China "were not supposed to be using it in the first place." If you are on any version in that range, update to v2.1.220 via <code>claude update</code>. <a href="https://www.pcgamer.com/software/ai/chinas-national-vulnerability-database-warns-that-recent-claude-code-models-have-a-security-backdoor/" style="color:var(--teal-light);">PC Gamer</a> · <a href="https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371" style="color:var(--teal-light);">The Register</a> · <a href="https://www.cnbc.com/2026/07/08/china-anthropic-ai-claude-code-backdoor-security-threat.html" style="color:var(--teal-light);">CNBC</a></div>
       </div>
 
-<div class="alert-banner">
-        <div class="alert-title"><span class="badge critical">Critical</span> GHSA-2jjv-qf24-vfm4 — Arbitrary Code Execution via Plugin Autoloading with Specific Yarn Versions — Apr 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">Claude Code is vulnerable to arbitrary code execution when plugin autoloading runs under specific versions of Yarn. A malicious plugin or repository-committed plugin config can exploit Yarn's module resolution to load untrusted code at startup without a user confirmation prompt. Update Claude Code immediately via <code>claude update</code> and audit your plugin directory. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-2jjv-qf24-vfm4" style="color:var(--teal-light);">GitHub Advisory</a></div>
+      <h2 style="font-size:.95rem;font-weight:700;color:var(--teal-light);margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">✅ Resolved / Fixed (46)</h2>
+
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2025-59536 / CVE-2026-21852 / GHSA-4fgq-fpq9-mr3g / GHSA-jh7p-qr78-84p7 — RCE &amp; API Token Exfiltration via Project Files — Fixed v1.0.111 / v2.0.65</div>
+        <div style="font-size:.85rem;color:var(--ink2);">Check Point Research found attackers could achieve remote code execution and steal API credentials through malicious Claude Code project configurations — exploiting Hooks, MCP servers, and environment variables. CVE-2025-59536 (published Oct 3, 2025) was fixed in <strong>v1.0.111</strong>; CVE-2026-21852 (published Jan 21, 2026) was fixed in <strong>v2.0.65</strong> — both confirmed via GitHub's own advisory <code>patched_versions</code> field. Still worth reviewing untrusted CLAUDE.md files and MCP configs as general hygiene, but the specific disclosed flaws are patched. Found sitting in Active with no patched-version note despite both underlying CVEs being resolved for months — moved to Resolved during today's advisory cross-check. <a href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/" style="color:var(--teal-light);">Check Point Research</a></div>
       </div>
 
-<div class="alert-banner" style="margin-top:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2026-24052 — Domain Validation Bypass Allows Requests to Attacker-Controlled Domains — Apr 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">Claude Code contained insufficient URL validation in its trusted domain verification mechanism for WebFetch requests, allowing an attacker to craft URLs that bypassed the allowlist check and caused Claude Code to automatically issue requests to attacker-controlled domains — potentially leaking session context or API credentials. Patch available in a recent release; update immediately via <code>claude update</code>. <a href="https://advisories.gitlab.com/npm/@anthropic-ai/claude-code/CVE-2026-24052/" style="color:var(--teal-light);">GitLab Advisory</a></div>
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-35020 / 35021 / 35022 — CLI Command Injection Chain → Credential Exfiltration — Patched v2.1.92+</div>
+        <div style="font-size:.85rem;color:var(--ink2);">Three CWE-78 command injection flaws in the Claude Code CLI, disclosed by Phoenix Security, could be chained to exfiltrate Anthropic API keys. Patched in v2.1.92+ per the disclosure itself (not tracked as an official GitHub Security Advisory). Found sitting in Active despite its own text already stating the fix version, with the currently installed release (2.1.248) more than 150 versions past the patch — moved to Resolved. <a href="https://phoenix.security/claude-code-leak-to-vulnerability-three-cves-in-claude-code-cli-and-the-chain-that-connects-them/" style="color:var(--teal-light);">Phoenix Security</a></div>
       </div>
 
-<div class="alert-banner" style="margin-top:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-q5hj-mxqh-vv77 — Trust Dialog Bypass via Git Worktree Spoofing — Apr 24, 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">High severity. An attacker can craft a git worktree that spoofs workspace trust context, bypassing the trust dialog and allowing arbitrary code execution without user confirmation. Check auto-update status — run <code>claude update</code>. Avoid opening unfamiliar git worktrees. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-q5hj-mxqh-vv77" style="color:var(--teal-light);">GitHub Advisory</a></div>
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Fixed</span> Claude Code Post-Leak RCE Vulnerability — Patched v2.1.92+ (Apr 5, 2026)</div>
+        <div style="font-size:.85rem;color:var(--ink2);">A critical remote code execution vulnerability emerged days after the v2.1.88 source map leak, affecting v2.1.88–2.1.91. Patch shipped in v2.1.92+. Found sitting in Active despite its own text already stating the fix version — moved to Resolved. <a href="https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/" style="color:var(--teal-light);">SecurityWeek</a></div>
       </div>
 
-<div class="alert-banner" style="margin-top:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2026-35603 — Windows Local Privilege Escalation via Insecure ProgramData Config — Apr 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">On Windows, Claude Code loaded system-wide default configuration from <code>C:\ProgramData\ClaudeCode\managed-settings.json</code> without validating directory ownership or permissions. Because ProgramData is writable by non-admin users and the ClaudeCode subdirectory was not pre-created or access-restricted, a low-privileged local user could plant a malicious config file that executes for any user launching Claude Code on the same machine. CVSS 4.0 base score 5.4 (Moderate). Patched in v2.1.75 — update immediately on any shared Windows system. <a href="https://advisories.gitlab.com/npm/@anthropic-ai/claude-code/CVE-2026-35603/" style="color:var(--teal-light);">GitLab Advisory</a></div>
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-33068 / GHSA-mmgp-wc2j-qcv7 — Workspace Trust Dialog Bypass via Repo-Controlled Settings File — Fixed v2.1.53 (Mar 18, 2026)</div>
+        <div style="font-size:.85rem;color:var(--ink2);">High severity. A malicious repository could include a <code>.claude/settings.json</code> that bypassed the workspace trust dialog, letting the repo execute code with elevated trust before user approval. <strong>Fixed in v2.1.53</strong>, confirmed via GitHub's own advisory <code>patched_versions</code> field. Found sitting in Active with no CVE reference and only generic "always inspect settings.json" advice despite being resolved for months — moved to Resolved. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-mmgp-wc2j-qcv7" style="color:var(--teal-light);">GitHub Advisory</a></div>
       </div>
 
-<div class="alert-banner" style="margin-top:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> GHSA-mmgp-wc2j-qcv7 — Workspace Trust Dialog Bypass via Repo-Controlled Settings File — Mar 18, 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">High-severity: a malicious repository can include a <code>.claude/settings.json</code> that bypasses the workspace trust dialog, allowing the repo to execute code with elevated trust before user approval. Patched in recent releases. Always inspect <code>.claude/settings.json</code> in cloned repos before opening. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-mmgp-wc2j-qcv7" style="color:var(--teal-light);">GitHub Advisory</a></div>
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-35603 / GHSA-5cwg-9f6j-9jvx — Windows Local Privilege Escalation via Insecure ProgramData Config — Fixed v2.1.75 (Apr 17, 2026)</div>
+        <div style="font-size:.85rem;color:var(--ink2);">Moderate severity. On Windows, Claude Code loaded system-wide default configuration from <code>C:\ProgramData\ClaudeCode\managed-settings.json</code> without validating directory ownership or permissions — a low-privileged local user could plant a malicious config file that executes for any user launching Claude Code on the same machine. <strong>Fixed in v2.1.75</strong>, confirmed via GitHub's own advisory <code>patched_versions</code> field. Found sitting in Active mislabeled "Apr 2026" (actual disclosure Apr 17) with its own text already noting the patch — moved to Resolved. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-5cwg-9f6j-9jvx" style="color:var(--teal-light);">GitHub Advisory</a></div>
       </div>
 
-<div class="alert-banner" style="margin-top:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2025-59536 / CVE-2026-21852 — RCE &amp; API Token Exfiltration via Project Files</div>
-        <div style="font-size:.85rem;color:var(--ink2);">Check Point Research found attackers can achieve remote code execution and steal API credentials through malicious Claude Code project configurations — exploiting Hooks, MCP servers, and environment variables. CVE-2025-59536 published Oct 3 2025; CVE-2026-21852 published Jan 21 2026. Review untrusted CLAUDE.md files and MCP configs before use. <a href="https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/" style="color:var(--teal-light);">Check Point Research</a></div>
+<div class="alert-banner resolved" style="margin-bottom:10px;">
+        <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2025-59828 / GHSA-2jjv-qf24-vfm4 — Arbitrary Code Execution via Plugin Autoloading with Specific Yarn Versions — Fixed v1.0.39 (Disclosed Sep 24, 2025)</div>
+        <div style="font-size:.85rem;color:var(--ink2);">High severity. Claude Code was vulnerable to arbitrary code execution when plugin autoloading ran under specific versions of Yarn — a malicious plugin or repository-committed plugin config could exploit Yarn's module resolution to load untrusted code at startup without a confirmation prompt. <strong>Fixed in v1.0.39.</strong> Found sitting in Active labeled "Critical" and dated "Apr 2026" — the actual GitHub advisory shows it disclosed Sep 24, 2025 and patched in v1.0.39 over a year ago — moved to Resolved and re-dated correctly. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-2jjv-qf24-vfm4" style="color:var(--teal-light);">GitHub Advisory</a></div>
       </div>
-
-<div class="alert-banner" style="margin-top:10px;">
-        <div class="alert-title"><span class="badge warn">Advisory</span> CVE-2026-35020 / 35021 / 35022 — CLI Command Injection Chain → Credential Exfiltration</div>
-        <div style="font-size:.85rem;color:var(--ink2);">Three newly disclosed CWE-78 command injection flaws in the Claude Code CLI can be chained to exfiltrate Anthropic API keys. Patch to v2.1.92+. <a href="https://phoenix.security/claude-code-leak-to-vulnerability-three-cves-in-claude-code-cli-and-the-chain-that-connects-them/" style="color:var(--teal-light);">Phoenix Security</a></div>
-      </div>
-
-<div class="alert-banner" style="margin-top:10px;">
-        <div class="alert-title"><span class="badge critical">Critical</span> Claude Code Post-Leak RCE Vulnerability — Apr 5, 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">A critical vulnerability emerged days after the v2.1.88 source map leak, enabling remote code execution. Patch available in v2.1.92+. <strong style="color:#f87171;">Update immediately if on v2.1.88–2.1.91.</strong> <a href="https://www.securityweek.com/critical-vulnerability-in-claude-code-emerges-days-after-source-leak/" style="color:var(--teal-light);">SecurityWeek</a></div>
-      </div>
-
-      <h2 style="font-size:.95rem;font-weight:700;color:var(--teal-light);margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line2);">✅ Resolved / Fixed (40)</h2>
 
 <div class="alert-banner resolved" style="margin-bottom:10px;">
         <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-44470 / GHSA-5p5x-5294-qhp3 — Local Privilege Escalation via Directory Junction in CoworkVMService — Fixed v1.3834.0 (May 6, 2026)</div>
@@ -297,8 +287,8 @@
       </div>
 
 <div class="alert-banner resolved" style="margin-top:10px;">
-        <div class="alert-title"><span class="badge fixed">Resolved</span> GHSA-vhw5-3g5m-8ggf — Subdomain Spoofing Bypasses Trusted Domain Allowlist — 2026</div>
-        <div style="font-size:.85rem;color:var(--ink2);">Attacker-controlled subdomains like <code>modelcontextprotocol.io.attacker.com</code> bypassed Claude Code's trusted-domain verification, causing Claude Code to silently issue requests to attacker-controlled servers — potentially leaking session context or credentials. Related to CVE-2026-24052. Patched in current auto-updated versions. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-vhw5-3g5m-8ggf" style="color:var(--teal-light);">GitHub Advisory</a></div>
+        <div class="alert-title"><span class="badge fixed">Resolved</span> CVE-2026-24052 / GHSA-vhw5-3g5m-8ggf — Domain Validation Bypass / Subdomain Spoofing Bypasses Trusted Domain Allowlist — Fixed v1.0.111</div>
+        <div style="font-size:.85rem;color:var(--ink2);">Attacker-controlled subdomains like <code>modelcontextprotocol.io.attacker.com</code> bypassed Claude Code's trusted-domain verification for WebFetch, causing Claude Code to silently issue requests to attacker-controlled servers — potentially leaking session context or credentials. <strong>Fixed in v1.0.111.</strong> CVE-2026-24052 is this same GHSA (not a separate advisory as a stale duplicate card in Active implied) — the GitHub API confirms one advisory, one CVE, one <code>patched_versions</code> entry. Removed the duplicate Active card during today's cross-check. <a href="https://github.com/anthropics/claude-code/security/advisories/GHSA-vhw5-3g5m-8ggf" style="color:var(--teal-light);">GitHub Advisory</a></div>
       </div>
 
 <div class="alert-banner resolved" style="margin-top:10px;">

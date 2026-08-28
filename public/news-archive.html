@@ -68,6 +68,26 @@
   <div class="dash-grid">
     <div id="news-body">
       <div class="news-item">
+        <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.250" target="_blank">Claude Code v2.1.250 Released — Bug Fixes &amp; Reliability (Aug 28, 2026)</a></div>
+        <div class="desc">Published 00:49 UTC. Bug fixes and reliability improvements; no detailed changelog beyond that summary line. Now the current npm <code>latest</code> and <code>next</code> dist-tag, one release ahead of this machine's installed v2.1.248. Run <code>claude update</code>.</div>
+        <div class="date">Aug 28, 2026 · github.com/anthropics/claude-code/releases · <strong style="color:#d97706;">NEW — RUN claude update</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.248" target="_blank">Claude Code v2.1.248 Released — Cross-Session Messaging, --restricted Flag, Prompt-Cache Fix (Aug 27, 2026)</a></div>
+        <div class="desc">Large release (published 22:12 UTC). Adds a <code>--restricted</code> flag to remove built-in tools that run commands/code and WebFetch; <code>experimental.cacheTtl</code> in agent frontmatter for per-agent prompt cache TTL; <code>claude self-hosted-runner --client-label</code> to override runner registration labels; server-managed settings diagnostics with startup warnings; <code>/usage-credits</code> for Enterprise orgs on AWS Marketplace; and cross-session <code>SendMessage</code>/<code>ListAgents</code> between sessions. Fixes: a prompt-cache miss roughly once per hour in long sessions caused by OAuth token refresh; Claude Desktop sessions disappearing after 30 days; <code>/mcp</code> listing and MCP server OAuth discovery issues; various UI bugs (agents list keyboard response, workspace trust prompt). Also shrinks the Workflow tool's prompt footprint from ~5.7k to ~1k tokens. Installed on this machine. Run <code>claude update</code> to reach v2.1.250.</div>
+        <div class="date">Aug 27, 2026 · github.com/anthropics/claude-code/releases · <strong style="color:#16a34a;">NEW — INSTALLED</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://www.anthropic.com/news/model-hardware-standard-research-preview" target="_blank">Anthropic Previews Model Hardware Standard (MHS) — AI Agents Operating Physical Lab &amp; Manufacturing Equipment (Aug 27, 2026)</a></div>
+        <div class="desc">Anthropic opened a research preview of the Model Hardware Standard: a shared specification letting AI agents like Claude safely operate physical devices — microscopes, liquid handlers, robotic arms — for tasks spanning drug discovery to quantum-computer calibration, available first to scientific research labs and advanced manufacturers. Anthropic says MHS cuts device-integration time from weeks/months to hours/minutes, and plans to eventually open-source the standard as a model-agnostic spec any device manufacturer can adopt. Companion post the same day: "Expanding our support for scientists."</div>
+        <div class="date">Aug 27, 2026 · anthropic.com/news · <strong style="color:#16a34a;">NEW</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://github.com/slopus/happy/releases/tag/cli-1.2.2" target="_blank">Happy cli-1.2.2 Released (Aug 27, 2026)</a></div>
+        <div class="desc">New patch release (commit 88d8ee9) promoted from the cli-1.2.1-beta.2 pre-release tag. No detailed changelog text has been published on the GitHub release yet — only "Full Changelog: cli-1.2.1...cli-1.2.2". Installed on this machine remains cli-1.2.1. Update: <code>npm install -g happy</code></div>
+        <div class="date">Aug 27, 2026 · github.com/slopus/happy/releases · <strong style="color:#f87171;">NEW — UPDATE AVAILABLE</strong></div>
+      </div>
+      <div class="news-item">
         <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.247" target="_blank">Claude Code v2.1.247 Released — SendFeedback Tool, Auto Mode Bash Tip (Aug 26, 2026)</a></div>
         <div class="desc">Published 23:06 UTC. Adds the <code>SendFeedback</code> tool: when a session hits trouble, Claude can draft a feedback report for you to review and send via <code>/feedback</code> (toggle off with the <code>feedbackDrafts</code> setting); adds a Bash-permission-prompt tip pointing to auto mode with a one-keystroke "switch to auto mode" option; adds <code>/claude-api cost-optimize</code> for profiling API spend and Admin API coverage in the <code>/claude-api</code> skill. Also fixes sub-agents dying on a first-call model 404 (now uses the session's fallback model chain), a hook/background-agent output flood that could wedge a session on "Prompt is too long," and a Bash sandbox cleanup bug that could delete a dotfile-managed <code>~/.claude/settings.json</code> symlink (nix/home-manager, stow). Now the current npm <code>latest</code> and <code>next</code> dist-tag — installed on this machine. Run <code>claude update</code>.</div>
         <div class="date">Aug 26, 2026 · github.com/anthropics/claude-code/releases · <strong style="color:#16a34a;">NEW — INSTALLED</strong></div>
