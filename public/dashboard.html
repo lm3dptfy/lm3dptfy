@@ -329,7 +329,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 28 2026, 2:05 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 29 2026, 2:03 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="mc-machine-grid">
@@ -375,11 +375,11 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.248</span> · latest <span class="latest">2.1.250</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">run claude update</span></span>
+          <span class="nums">installed <span class="current stale">2.1.250</span> · latest <span class="latest">2.1.251</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">run claude update</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
-          <span class="nums">installed <span class="current stale">1.2.1</span> · latest <span class="latest">1.2.2</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">npm install -g happy</span></span>
+          <span class="nums">installed <span class="current">1.2.2</span> · latest <span class="latest">1.2.2</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">up to date</span></span>
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
@@ -387,7 +387,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current">2026.7.1-2</span> · latest <span class="latest">2026.7.1-2</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">beta channel: 2026.8.1-beta.3</span></span>
+          <span class="nums">installed <span class="current">2026.7.1-2</span> · latest <span class="latest">2026.7.1-2</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">beta channel: 2026.9.1-beta.1</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -591,8 +591,8 @@
         </div>
 
         <div class="alert-banner resolved" style="margin-bottom:10px;">
-          <div class="alert-title"><span class="badge fixed">Fixed</span> 8 Stale Active Entries Cleaned Up — Active Count 14 &rarr; 6 (Aug 28, 2026)</div>
-          <div style="font-size:.85rem;color:var(--ink2);">A full pull of GitHub's advisories API (with the <code>patched_versions</code> field) found 8 items sitting in Active that were already fixed — some for over a year (e.g. the Yarn plugin-autoload RCE, patched v1.0.39) — plus one exact duplicate. All moved to Resolved or removed. <a href="/security-history.html" style="color:var(--teal-light);">Full details &rarr;</a></div>
+          <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-47751 / GHSA-8q5r-mmjf-575q — Claude Code Action MCP Config RCE — Fixed v1.0.74 (Aug 29, 2026)</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Newly logged: a malicious <code>.mcp.json</code> in a PR could reach RCE and secret exfiltration on the CI runner via <code>claude-code-action</code>'s <code>enableAllProjectMcpServers</code> default — fixed for months in v1.0.74, surfaced today because it lives under the <code>claude-code-action</code> repo's own advisories, not <code>claude-code</code>'s. <a href="/security-history.html" style="color:var(--teal-light);">Full details &rarr;</a></div>
         </div>
 
         <div style="text-align:center;padding:12px 0 4px;">
@@ -608,19 +608,19 @@
       <div class="panel-desc">Highlights — <a href="/news-archive.html" style="color:var(--teal-light);">full archive &rarr;</a></div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/news/model-hardware-standard-research-preview" target="_blank">Anthropic Previews Model Hardware Standard — AI Agents Operating Lab &amp; Manufacturing Equipment (Aug 27, 2026)</a></div>
-          <div class="desc">New research-preview spec lets agents like Claude safely operate physical devices — microscopes, liquid handlers, robotic arms — for scientific/manufacturing labs; eventually open-source and model-agnostic.</div>
+          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.251" target="_blank">Claude Code v2.1.251 — PreModelSwitch/PostModelSwitch Hooks, Streamed Subagent Output, Symlink &amp; Path-Traversal Fixes (Aug 28, 2026)</a></div>
+          <div class="desc">Large release: new model-switch hook events and live streaming of foreground subagent tool calls, plus fixes for a file-tool symlink-swap escape and a plugin-marketplace path-traversal bug. This is now the current npm <code>latest</code>, one ahead of this machine's installed 2.1.250 — run <code>claude update</code>.</div>
+          <div class="date">Aug 28, 2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">NEW — RUN claude update</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://claude.com/blog/claude-for-teachers-now-available-for-schools-and-districts" target="_blank">Claude for Teachers Now Available for Schools &amp; Districts (Aug 28, 2026)</a></div>
+          <div class="desc">Free Enterprise offering extends July's individual-educator program to whole U.S. K-12 schools/districts under centrally managed, FERPA-aligned terms — a full free year for orgs that sign up by Jun 30, 2027.</div>
+          <div class="date">Aug 28, 2026 · claude.com/blog · <strong style="color:#16a34a;">NEW</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.anthropic.com/news/expanding-support-for-scientists" target="_blank">Anthropic Expands Support for Scientists — 10,000 Free/Discounted Seats &amp; More AI for Science Credits (Aug 27, 2026)</a></div>
+          <div class="desc">New Claude team plan opens 10,000 free-or-discounted ($15/mo premium) seats for academic/nonprofit researchers, plus AI for Science credits (up to $50k/project) extended beyond biology to more fields.</div>
           <div class="date">Aug 27, 2026 · anthropic.com/news · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.248" target="_blank">Claude Code v2.1.248 — Cross-Session Messaging, <code>--restricted</code> Flag, Prompt-Cache Fix (Aug 27, 2026)</a></div>
-          <div class="desc">Major release: new <code>--restricted</code> flag and cross-session <code>SendMessage</code>/<code>ListAgents</code>; fixes an hourly prompt-cache miss and Desktop sessions vanishing after 30 days. Installed and current — <code>latest</code> has since moved to 2.1.250.</div>
-          <div class="date">Aug 27, 2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">NEW — RUN claude update</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://github.com/slopus/happy/releases/tag/cli-1.2.2" target="_blank">Happy cli-1.2.2 Released (Aug 27, 2026)</a></div>
-          <div class="desc">New patch release, no detailed changelog published yet. Installed version (1.2.1) is now one behind — <code>npm install -g happy</code>.</div>
-          <div class="date">Aug 27, 2026 · github.com/slopus/happy · <strong style="color:#d97706;">NEW — UPDATE AVAILABLE</strong></div>
         </div>
         <div style="text-align:center;padding:12px 0 4px;">
           <a href="/news-archive.html" style="color:var(--teal-light);font-size:.82rem;font-weight:600;">View full AI news archive &rarr;</a>
@@ -633,7 +633,12 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 28, 2026, 2:05 AM CDT — via <code>npm info openclaw dist-tags</code>: latest <strong>2026.7.1-2</strong>, extended-stable <strong>2026.6.34</strong>, beta <strong>2026.8.1-beta.3</strong>, and alpha <strong>2026.5.19-alpha.1</strong> all unchanged since yesterday. Installed version confirmed via <code>npm list -g</code> matches latest.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 29, 2026, 2:03 AM CDT — via <code>npm info openclaw dist-tags</code>: <strong>beta jumped to 2026.9.1-beta.1</strong> (published Aug 28, up from 2026.8.1-beta.3), a new monthly series. Stable <strong>latest 2026.7.1-2</strong>, <strong>extended-stable 2026.6.34</strong>, and <strong>alpha 2026.5.19-alpha.1</strong> all unchanged. Installed version confirmed via <code>npm list -g</code> matches latest stable.</div>
+        <div class="news-item">
+          <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.9.1-beta.1" target="_blank">OpenClaw v2026.9.1-beta.1 — Gateway Restart Recovery, Codex 0.150.1 Runtime &amp; Linux Node 24 LTS Provisioning (Aug 28, 2026)</a></div>
+          <div class="desc">First beta of the 2026.9.1 series. Preserves admitted turns across repeated Gateway restarts so restart-safe runs complete; keeps pending config writes intact through watcher handoff; bundled Codex runtime updated to 0.150.1; Linux installer now provisions stable Node 24 LTS and constrains RPM installs to the configured NodeSource repo so setup can't select an incompatible prerelease. Also: worker admission-deadline recovery, per-profile Control UI appearance settings, configurable model-selection scopes. Update via your OpenClaw beta channel.</div>
+          <div class="date">Aug 28, 2026 · github.com/openclaw/openclaw/releases · <strong style="color:#d97706;">NEW BETA</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.8.1-beta.3" target="_blank">OpenClaw v2026.8.1-beta.3 — GPT-5.6 Ultra Reasoning, CDP Relay &amp; Gateway Supervision (Aug 24, 2026)</a></div>
           <div class="desc">GPT-5.6 Sol/Terra/Luna/Ultra reasoning-level support across OpenClaw and the Codex runtime; Control UI model setup streamlined through Custodian with optional channel configuration; Puppeteer-compatible CDP relay for paired Chrome sessions; external Gateway lifecycle supervision with verified restart handoff; SQLite backup/restore commands with integrity verification; shared durable-ingress monitors for channel plugins. 207 commits ahead on main already — expect further betas before this promotes to stable. Update via your OpenClaw beta channel.</div>
@@ -907,7 +912,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 28, 2026, 2:05 AM CDT — installed version fell behind again: <code>npm list -g</code> shows <strong>happy@1.2.1</strong>, but <code>npm info happy dist-tags</code> now shows <strong>latest 1.2.2</strong> (published Aug 27), promoted from the <strong>1.2.1-beta.2</strong> beta tag seen yesterday. GitHub's release page carries no changelog text for cli-1.2.2 yet. Note: <code>happy --version</code> hangs on an interactive auth prompt in unattended shells; prefer the npm check.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 29, 2026, 2:03 AM CDT — caught up: <code>npm list -g</code> now shows <strong>happy@1.2.2</strong>, matching <code>npm info happy dist-tags.latest</code> (still 1.2.2, beta tag unchanged at 1.2.1-beta.2). No longer stale. Note: <code>happy --version</code> prints the version line correctly before dropping into an interactive auth prompt that has no stdin in this unattended shell — the printed version is trustworthy, but prefer <code>npm list -g</code>/<code>npm info</code> to avoid the noisy prompt.</div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases/tag/cli-1.2.2" target="_blank">Happy cli-1.2.2 Released (Aug 27, 2026)</a></div>
           <div class="desc">New patch release published Aug 27 (commit 88d8ee9). No detailed changelog text published on the GitHub release yet. Update: <code>npm install -g happy</code></div>
@@ -966,7 +971,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 28, 2026, 2:05 AM CDT — re-confirmed via <code>mempalace --version</code> and GitHub releases: latest remains <strong>v3.8.0</strong> (Aug 23), already installed locally, unchanged since yesterday. npm stable remains v2.0.0.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 29, 2026, 2:03 AM CDT — re-confirmed via <code>mempalace --version</code>, <code>uv tool list</code>, and GitHub releases: latest remains <strong>v3.8.0</strong> (Aug 23), already installed locally, unchanged since yesterday. npm stable remains v2.0.0.</div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.8.0" target="_blank">MemPalace v3.8.0 — Fast Large Palaces, Lean MCP Proxies &amp; Wakeable Agents (Aug 23, 2026)</a></div>
           <div class="desc">Major performance release: Chroma metadata reads (<code>list_drawers</code>) skip the vector index entirely — 2.31s/1148MB &rarr; 0.01s/86MB on a 165k-drawer palace; <code>sqlite_exact</code> status/search on a 167k-drawer palace drop from ~7s/6.4s to ~1s/0.2-1.6s; long-running Chroma servers stop rebuilding their client on their own writes; proxied stdio MCP sessions shrink from ~80MB to ~24MB import weight (~3.9GB saved across a 50-agent fleet). New <code>mempalace logstream watch</code> gives agents a durable wake-up primitive instead of repeated polling. Also fixes a <code>sync --apply</code> bug that could delete every drawer from a project if its source volume was briefly unmounted. Install: <code>pip install -U mempalace==3.8.0</code> or <code>uv tool upgrade mempalace</code>.</div>
@@ -1070,7 +1075,12 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 28, 2026, 2:05 AM CDT — re-confirmed: Context7 npm <code>latest</code> remains <strong>v4.0.3</strong>; Superpowers remains <strong>v6.3.0</strong> (github.com/obra/superpowers releases, unchanged since Aug 12). Still 30 total Claude Code GitHub security advisories via API, no new ones since Jun 25 — but a full pull of every advisory's <code>patched_versions</code> field (not just the top-5 slice) found 8 Active security-history entries were already fixed, some over a year stale; cleaned up today (Active 14 &rarr; 6). The still-open Claude Code Action <code>git push --receive-pack</code> validator bypass remains unpatched with no CVE assigned. See security history.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 29, 2026, 2:03 AM CDT — Context7 npm <code>latest</code> bumped to <strong>v4.0.4</strong> (published Aug 28, up from v4.0.3); Superpowers remains <strong>v6.3.0</strong> (github.com/obra/superpowers releases, unchanged since Aug 12). Still 30 total Claude Code GitHub security advisories via API (repo <code>anthropics/claude-code</code>), no new ones since Jun 25. Separately found <strong>CVE-2026-47751</strong>, a <code>claude-code-action</code>-repo-scoped advisory (already fixed v1.0.74) invisible to the usual <code>claude-code</code> advisory query — logged to Resolved today. The still-open Claude Code Action <code>git push --receive-pack</code> validator bypass remains unpatched with no CVE assigned. See security history.</div>
+        <div class="news-item">
+          <div><a href="https://github.com/upstash/context7/releases/tag/%40upstash%2Fcontext7-mcp%404.0.4" target="_blank">Context7 MCP v4.0.4 — Hosted MCP Client-IP Auth Hardening &amp; API Key Header Fix (Aug 28, 2026)</a></div>
+          <div class="desc">Small security-relevant patch: honors the advertised <code>X-Context7-API-Key</code> header in HTTP MCP requests, and authenticates hosted MCP client-IP forwarding with short-lived AES-GCM assertions instead of a trusted-by-default header. Update: <code>npm install -g @upstash/context7-mcp</code></div>
+          <div class="date">Aug 28, 2026 · github.com/upstash/context7 · <strong style="color:#16a34a;">NEW — SECURITY HARDENING</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases/tag/%40upstash%2Fcontext7-mcp%404.0.3" target="_blank">Context7 MCP v4.0.3 — Clerk OAuth Authorization Server Fix (Aug 21, 2026)</a></div>
           <div class="desc">Small patch: advertises Clerk as the OAuth authorization server so clients validate authorization responses against the issuer Clerk actually returns, rather than a mismatched issuer — fixes OAuth client validation edge cases introduced by the v4.0.0 SDK v2 migration. Update: <code>npm install -g @upstash/context7-mcp</code></div>
@@ -1249,6 +1259,11 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><strong>GitHub security advisories can be scoped to a sub-repo (<code>claude-code-action</code>) that the usual <code>anthropics/claude-code</code> advisories query never touches</strong></div>
+          <div class="desc">The standard daily check (<code>gh api repos/anthropics/claude-code/security-advisories</code>) confirmed "no new advisories since Jun 25" — technically true, but incomplete. A web search surfaced CVE-2026-47751 (malicious <code>.mcp.json</code> in a PR reaching RCE via <code>enableAllProjectMcpServers</code>), which turned out to live entirely under <code>repos/anthropics/claude-code-action/security-advisories</code> — a different repo in the same org, with its own independent advisory list. It was already fixed (v1.0.74) and posed no live risk, but it sat completely outside the standard query's blast radius. Worth periodically also pulling <code>claude-code-action</code>'s own advisories, not just the main CLI repo's.</div>
+          <div class="date">Aug 29, 2026 · MooseClaw research notes</div>
+        </div>
         <div class="news-item">
           <div><strong>Pulling every advisory's <code>patched_versions</code> field in one <code>--paginate</code> call (instead of re-reading each Active entry's prose or spot-checking one CVE at a time) surfaced 8 stale Active entries at once, some patched over a year ago</strong></div>
           <div class="desc"><code>gh api repos/anthropics/claude-code/security-advisories --paginate --jq '.[] | {ghsa, cve, patched: [.vulnerabilities[].patched_versions]}'</code> returned all 30 advisories with their fix versions in one call. Cross-referencing against the current installed version (2.1.248) showed the Yarn plugin-autoload RCE (GHSA-2jjv-qf24-vfm4) was fixed in v1.0.39 — over a year and 200+ releases ago — despite sitting in Active labeled "Critical" with a wrong "Apr 2026" date (actual disclosure: Sep 2025). Also caught: CVE-2026-24052 was an exact duplicate of an already-resolved GHSA under a different framing, and GHSA-q5hj-mxqh-vv77 was a duplicate of a correctly-resolved CVE-2026-40068 card. Net: Active went from 14 to 6 in one pass. Previous days caught individual stale entries reactively (a suspicious title, a contradicted WebSearch); pulling the full advisory list with patched-version data proactively is a much higher-yield check and worth doing periodically rather than only when something looks wrong.</div>

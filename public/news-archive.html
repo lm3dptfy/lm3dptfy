@@ -68,6 +68,31 @@
   <div class="dash-grid">
     <div id="news-body">
       <div class="news-item">
+        <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.251" target="_blank">Claude Code v2.1.251 Released — Model-Switch Hooks, Streamed Subagent Output, Symlink &amp; Path-Traversal Fixes (Aug 28, 2026)</a></div>
+        <div class="desc">Published 18:19 UTC. Adds <code>PreModelSwitch</code>/<code>PostModelSwitch</code> hook events; live streaming of a foreground subagent's tool calls/results to Remote Control clients; a spend-limit bar in <code>/usage</code>; per-session prompt-cache stats in <code>/cost</code>; and <code>attach</code>/<code>logs</code>/<code>stop</code>/<code>respawn</code>/<code>rm</code> in <code>claude --help</code>. Security fixes: file tools (Read/Write/Edit) following a symlink swapped in after the permission check; plugin marketplace commands pointing outside the plugin directory; project settings enabling detailed beta tracing or raw API body logging past a pinned OTLP collector; the Workflow tool reading a <code>scriptPath</code> outside the session's read scope before the permission check ran; Grep/Glob not applying <code>Read()</code> deny rules through a symlinked search path. Also fixes stuck "text content blocks must be non-empty" errors, agent-team final answers not reaching the lead, and much more. Now the current npm <code>latest</code>, one ahead of this machine's installed v2.1.250. Run <code>claude update</code>.</div>
+        <div class="date">Aug 28, 2026 · github.com/anthropics/claude-code/releases · <strong style="color:#d97706;">NEW — RUN claude update</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://claude.com/blog/claude-for-teachers-now-available-for-schools-and-districts" target="_blank">Claude for Teachers Now Available for Schools &amp; Districts (Aug 28, 2026)</a></div>
+        <div class="desc">Extends the individual-educator "Claude for Teachers" program (launched Jul 14 for verified U.S. K-12 educators) into a free Enterprise offering for whole schools and districts: one centrally managed organization, K-12 teaching skills grounded in learning science and mapped to all-50-state academic standards, and a K-12 Data Processing Agreement aligned with FERPA (data not used for model training). Qualifying organizations that sign up by June 30, 2027 get a full free year.</div>
+        <div class="date">Aug 28, 2026 · claude.com/blog · <strong style="color:#16a34a;">NEW</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://www.anthropic.com/news/expanding-support-for-scientists" target="_blank">Anthropic: Expanding Our Support for Scientists (Aug 27, 2026)</a></div>
+        <div class="desc">Companion post to the same-day Model Hardware Standard preview. Opens a new Claude team plan with 10,000 free-or-discounted ($15/month premium) subscriptions for researchers at academic and nonprofit institutions in its initial launch phase, with plans to scale beyond this group. Also expands the AI for Science program — up to $50,000 in credits per project — to additional scientific fields beyond biology.</div>
+        <div class="date">Aug 27, 2026 · anthropic.com/news · <strong style="color:#16a34a;">NEW</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.9.1-beta.1" target="_blank">OpenClaw v2026.9.1-beta.1 — Gateway Restart Recovery, Codex 0.150.1 Runtime &amp; Linux Node 24 LTS Provisioning (Aug 28, 2026)</a></div>
+        <div class="desc">First beta of a new monthly series (jumping from 2026.8.1-beta.3). Preserves admitted turns across repeated Gateway restarts so restart-safe runs continue through each checkpoint; keeps committed config writes pending through watcher handoff so same-write reloads settle correctly; updates the bundled Codex managed runtime to 0.150.1 across Linux/macOS/Windows; Linux installs now provision the stable Node 24 LTS stream and constrain RPM installs to the configured NodeSource repo so setup can't select an incompatible prerelease. Also: worker admission-deadline re-arming and dead-worker turn cleanup, Control UI file-save safety during overlapping reads, per-user-profile Control UI appearance settings, and configurable model-selection scopes. Update via your OpenClaw beta channel.</div>
+        <div class="date">Aug 28, 2026 · github.com/openclaw/openclaw/releases · <strong style="color:#d97706;">NEW BETA</strong></div>
+      </div>
+      <div class="news-item">
+        <div><a href="https://github.com/upstash/context7/releases/tag/%40upstash%2Fcontext7-mcp%404.0.4" target="_blank">Context7 MCP v4.0.4 — Hosted MCP Client-IP Auth Hardening &amp; API Key Header Fix (Aug 28, 2026)</a></div>
+        <div class="desc">Small security-relevant patch: honors the advertised <code>X-Context7-API-Key</code> header in HTTP MCP requests, and authenticates hosted MCP client-IP forwarding with short-lived AES-GCM assertions rather than trusting a forwarded header outright. Update: <code>npm install -g @upstash/context7-mcp</code></div>
+        <div class="date">Aug 28, 2026 · github.com/upstash/context7/releases · <strong style="color:#16a34a;">NEW — SECURITY HARDENING</strong></div>
+      </div>
+      <div class="news-item">
         <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.250" target="_blank">Claude Code v2.1.250 Released — Bug Fixes &amp; Reliability (Aug 28, 2026)</a></div>
         <div class="desc">Published 00:49 UTC. Bug fixes and reliability improvements; no detailed changelog beyond that summary line. Now the current npm <code>latest</code> and <code>next</code> dist-tag, one release ahead of this machine's installed v2.1.248. Run <code>claude update</code>.</div>
         <div class="date">Aug 28, 2026 · github.com/anthropics/claude-code/releases · <strong style="color:#d97706;">NEW — RUN claude update</strong></div>
