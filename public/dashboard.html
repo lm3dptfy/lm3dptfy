@@ -329,7 +329,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 30 2026, 2:03 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 31 2026, 7:03 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="mc-machine-grid">
@@ -387,7 +387,7 @@
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
-          <span class="nums">installed <span class="current">2026.7.1-2</span> · latest <span class="latest">2026.7.1-2</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">beta channel: 2026.9.1-beta.1</span></span>
+          <span class="nums">installed <span class="current">2026.7.1-2</span> · latest <span class="latest stale">2026.8.1</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — "OpenClaw 2.0" · beta channel: 2026.9.1-beta.1</span></span>
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
@@ -634,7 +634,12 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 30, 2026, 2:03 AM CDT — re-confirmed via <code>npm info openclaw dist-tags</code> and GitHub releases API: all channels unchanged since the 1:02 AM check — stable <strong>latest 2026.7.1-2</strong>, beta <strong>2026.9.1-beta.1</strong>, extended-stable <strong>2026.6.34</strong>, alpha <strong>2026.5.19-alpha.1</strong>. Installed version confirmed via <code>npm list -g</code> matches latest stable.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 7:03 AM CDT — <strong style="color:#d97706;">stable channel moved</strong>: <code>npm info openclaw dist-tags</code> and GitHub releases now show <strong>latest 2026.8.1</strong> ("OpenClaw 2.0", promoted from the beta.3 line, published Aug 31 03:30 UTC) — this machine is still on the prior stable, <strong>2026.7.1-2</strong> — update available. Beta <strong>2026.9.1-beta.1</strong> and alpha <strong>2026.5.19-alpha.1</strong> unchanged; extended-stable <strong>2026.6.34</strong> unchanged.</div>
+        <div class="news-item">
+          <div><a href="https://docs.openclaw.ai/releases/2026.8.1" target="_blank">OpenClaw 2026.8.1 — "OpenClaw 2.0": Conversation Search, Cloud Worker Sessions, Shared Credential Store &amp; New Web UI (Aug 31, 2026)</a></div>
+          <div class="desc">Major version promoted to stable today from the 2026.8.1-beta.x line — branded "OpenClaw 2.0". Headline features: full-text search over past conversation text with surrounding-message reopen; cloud-worker/paired-device session hosting with portable workspaces; team-scoped <strong>shared credential store</strong> (SQLite-backed secrets/env, operator roles, masked private credential requests, optional 1Password broker); rebuilt web UI with guided Custodian onboarding, local llama.cpp model setup, and new themes (Tide, Beacon, Phosphor); interactive dashboard-pinnable chat widgets; conversation branching (rewind/fork from any persisted message). Security: rejects edits to non-UTF-8 files before silent corruption, hardens egress/proxy connection lifecycle, prevents SQLite WAL split-brain corruption on shared filesystems, and requires <code>--force</code> to install plugins from arbitrary executable sources. <strong>Breaking changes</strong>: bundled OpenProse plugin removed (run <code>openclaw doctor --fix</code> and follow the upstream Agent Skill migration); <code>codex/*</code>/<code>openai-codex/*</code> model refs need <code>openclaw doctor --fix</code>; plugin SDK import paths deprecated ahead of a Sep 1, 2026 cutover. Update: <code>npm install -g openclaw</code>, then <code>openclaw doctor --fix</code>.</div>
+          <div class="date">Aug 31, 2026 · docs.openclaw.ai/releases/2026.8.1 · <strong style="color:#d97706;">NEW STABLE — UPDATE AVAILABLE, BREAKING CHANGES</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.9.1-beta.1" target="_blank">OpenClaw v2026.9.1-beta.1 — Gateway Restart Recovery, Codex 0.150.1 Runtime &amp; Linux Node 24 LTS Provisioning (Aug 28, 2026)</a></div>
           <div class="desc">First beta of the 2026.9.1 series. Preserves admitted turns across repeated Gateway restarts so restart-safe runs complete; keeps pending config writes intact through watcher handoff; bundled Codex runtime updated to 0.150.1; Linux installer now provisions stable Node 24 LTS and constrains RPM installs to the configured NodeSource repo so setup can't select an incompatible prerelease. Also: worker admission-deadline recovery, per-profile Control UI appearance settings, configurable model-selection scopes. Update via your OpenClaw beta channel.</div>
@@ -913,7 +918,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 30, 2026, 2:03 AM CDT — re-confirmed via <code>npm list -g</code> and GitHub releases API: still <strong>happy@1.2.2</strong>, matching <code>npm info happy dist-tags.latest</code>. Unchanged since the 1:02 AM check.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 7:03 AM CDT — re-confirmed via <code>npm list -g</code>, <code>happy --version</code>, and GitHub releases API: still <strong>happy@1.2.2</strong>, matching <code>npm info happy dist-tags.latest</code>. Unchanged since yesterday's check.</div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases/tag/cli-1.2.2" target="_blank">Happy cli-1.2.2 Released (Aug 27, 2026)</a></div>
           <div class="desc">New patch release published Aug 27 (commit 88d8ee9). No detailed changelog text published on the GitHub release yet. Update: <code>npm install -g happy</code></div>
@@ -972,7 +977,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 30, 2026, 2:03 AM CDT — re-confirmed via <code>mempalace --version</code> and GitHub releases API: latest remains <strong>v3.8.0</strong> (Aug 23), already installed locally, unchanged since the 1:02 AM check. npm stable remains v2.0.0.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 7:03 AM CDT — re-confirmed via <code>mempalace --version</code> and GitHub releases API: latest remains <strong>v3.8.0</strong> (Aug 23), already installed locally, unchanged since yesterday's check. npm stable remains v2.0.0.</div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.8.0" target="_blank">MemPalace v3.8.0 — Fast Large Palaces, Lean MCP Proxies &amp; Wakeable Agents (Aug 23, 2026)</a></div>
           <div class="desc">Major performance release: Chroma metadata reads (<code>list_drawers</code>) skip the vector index entirely — 2.31s/1148MB &rarr; 0.01s/86MB on a 165k-drawer palace; <code>sqlite_exact</code> status/search on a 167k-drawer palace drop from ~7s/6.4s to ~1s/0.2-1.6s; long-running Chroma servers stop rebuilding their client on their own writes; proxied stdio MCP sessions shrink from ~80MB to ~24MB import weight (~3.9GB saved across a 50-agent fleet). New <code>mempalace logstream watch</code> gives agents a durable wake-up primitive instead of repeated polling. Also fixes a <code>sync --apply</code> bug that could delete every drawer from a project if its source volume was briefly unmounted. Install: <code>pip install -U mempalace==3.8.0</code> or <code>uv tool upgrade mempalace</code>.</div>
@@ -1076,7 +1081,7 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 30, 2026, 2:03 AM CDT — Context7 npm <code>latest</code> unchanged at <strong>v4.0.4</strong>; Superpowers unchanged at <strong>v6.3.0</strong> (github.com/obra/superpowers releases, since Aug 12). Re-ran advisory queries against both <code>anthropics/claude-code</code> and <code>anthropics/claude-code-action</code> filtered to published-after-Aug-27: zero results from either — no new advisories since the 1:02 AM check. The still-open Claude Code Action <code>git push --receive-pack</code> validator bypass remains unpatched with no CVE assigned. See security history.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 7:03 AM CDT — Context7 npm <code>latest</code> unchanged at <strong>v4.0.4</strong>; Superpowers unchanged at <strong>v6.3.0</strong> (github.com/obra/superpowers releases, since Aug 12). Re-ran advisory queries against both <code>anthropics/claude-code</code> and <code>anthropics/claude-code-action</code>: no new advisories since yesterday. A full re-cross-check of every historical <code>anthropics/claude-code</code> advisory against this dashboard's security-history archive found 3 genuinely never-logged (but long-since-fixed) CVEs — added to the Resolved archive today. The still-open Claude Code Action <code>git push --receive-pack</code> validator bypass remains unpatched with no CVE assigned (re-confirmed via follow-up read of the original disclosure). See security history.</div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases/tag/%40upstash%2Fcontext7-mcp%404.0.4" target="_blank">Context7 MCP v4.0.4 — Hosted MCP Client-IP Auth Hardening &amp; API Key Header Fix (Aug 28, 2026)</a></div>
           <div class="desc">Small security-relevant patch: honors the advertised <code>X-Context7-API-Key</code> header in HTTP MCP requests, and authenticates hosted MCP client-IP forwarding with short-lived AES-GCM assertions instead of a trusted-by-default header. Update: <code>npm install -g @upstash/context7-mcp</code></div>
@@ -1260,6 +1265,11 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><strong>A one-by-one CVE cross-check (not just "any new advisories since last check") surfaced 3 real gaps in a security archive that already had 48 entries</strong></div>
+          <div class="desc">Today's sweep pulled every CVE ever published against <code>anthropics/claude-code</code> (30 total) and diffed it line-by-line against this dashboard's security-history archive, rather than just asking "anything new since yesterday." Found 3 that had never been logged despite being fixed for months to over a year: CVE-2025-65099 (Yarn config trust-dialog bypass), CVE-2025-59829 (a symlink deny-bypass distinct from the already-logged Feb 2026 one — same bug class, different GHSA, different fix version), and CVE-2025-52882 (IDE extension websocket flaw, the only entry that isn't CLI-specific). All added to Resolved. Worth repeating this full-list diff periodically rather than assuming an archive with dozens of entries is already complete.</div>
+          <div class="date">Aug 31, 2026 · MooseClaw research notes</div>
+        </div>
         <div class="news-item">
           <div><strong>The daily news sweep's queries skew toward Claude Code/Anthropic-security phrasing and can miss same-week Anthropic product/partnership news that doesn't mention "Claude Code" at all</strong></div>
           <div class="desc">Today's run found two Aug 26 stories — Cowork's built-in browser and the Salesforce "Claudeforce" partnership — that had never been logged here despite being four days old and widely covered (TechCrunch, CNBC, VentureBeat, Anthropic's own blog). Both were surfaced only by a generic "anthropic announcement this week" search; the standard Claude Code-focused queries used on the days they broke didn't turn them up. Worth periodically running one broader "anthropic.com/news OR claude.com/blog this week" sweep in addition to the targeted release/security queries, the same way the security side now periodically pulls full advisory lists instead of only targeted CVE searches.</div>
