@@ -329,7 +329,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 31 2026, 7:03 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Aug 31 2026, 8:09 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="mc-machine-grid">
@@ -609,19 +609,34 @@
       <div class="panel-desc">Highlights — <a href="/news-archive.html" style="color:var(--teal-light);">full archive &rarr;</a></div>
       <div id="news-body">
         <div class="news-item">
+          <div><a href="https://docs.openclaw.ai/releases/2026.8.1" target="_blank">OpenClaw 2.0 (2026.8.1) Promoted to Stable — Conversation Search, Cloud Workers, Shared Credential Store (Aug 31, 2026)</a></div>
+          <div class="desc">OpenClaw 2026.8.1 is now the stable channel release ("OpenClaw 2.0"). Major additions: full-text conversation search, cloud-worker session hosting, team-scoped shared credential store, rebuilt web UI with guided onboarding. Breaking changes: bundled OpenProse plugin removed, <code>codex/*</code> model refs need <code>openclaw doctor --fix</code>. Update: <code>npm install -g openclaw</code> then <code>openclaw doctor --fix</code>.</div>
+          <div class="date">Aug 31, 2026 · docs.openclaw.ai · <strong style="color:#d97706;">NEW STABLE TODAY — UPDATE AVAILABLE, BREAKING CHANGES</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.251" target="_blank">Claude Code v2.1.251 — Model-Switch Hooks, Streamed Subagent Output, Symlink &amp; Path-Traversal Security Fixes (Aug 28, 2026)</a></div>
+          <div class="desc">Large release: new PreModelSwitch/PostModelSwitch hook events, live streaming of foreground subagent tool calls to Remote Control clients, Spend limit bar in /usage. Security: file-tool symlink-swap escape and plugin-marketplace path-traversal bug both fixed. Installed — up to date.</div>
+          <div class="date">Aug 28, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">INSTALLED — UP TO DATE</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://explainx.ai/blog/claude-gmail-drive-workspace-connectors-august-2026" target="_blank">Google Workspace MCP Connectors Get Write Actions — Gmail Send/Reply, Drive Share/Move/Trash (Aug 18, 2026)</a></div>
+          <div class="desc">Claude's first-party Gmail and Google Drive connectors now support write and destructive operations: Gmail can send, reply to, and forward emails; Google Drive can share, move, and trash files. Both require approval by default; Team/Enterprise owners can opt out. Resolves the long-standing known limitation logged in the Plugins panel.</div>
+          <div class="date">Aug 18, 2026 · Anthropic / Google · <strong style="color:#16a34a;">NEW — WRITE ACTIONS ENABLED</strong></div>
+        </div>
+        <div class="news-item">
           <div><a href="https://claude.com/blog/cowork-built-in-browser" target="_blank">Claude Cowork Gets a Built-In Browser — No Chrome Extension Needed (Aug 26, 2026)</a></div>
           <div class="desc">A browser now runs directly inside Cowork's side panel for web tasks (navigate, click, fill forms); live on Enterprise now, rolling out to Pro/Max/Team desktop this week.</div>
-          <div class="date">Aug 26, 2026 · claude.com/blog · <strong style="color:#16a34a;">NEW</strong></div>
+          <div class="date">Aug 26, 2026 · claude.com/blog</div>
         </div>
         <div class="news-item">
           <div><a href="https://www.salesforce.com/news/press-releases/2026/08/26/salesforce-and-anthropic-announce-claudeforce/" target="_blank">Salesforce &amp; Anthropic Announce "Claudeforce" Partnership (Aug 26, 2026)</a></div>
           <div class="desc">Expanded strategic tie-up puts Claude as the reasoning model across Agentforce and ships a Salesforce-in-Claude plugin with 37 prebuilt sales skills (pilot now, open beta Sep 2026).</div>
-          <div class="date">Aug 26, 2026 · salesforce.com · <strong style="color:#16a34a;">NEW</strong></div>
+          <div class="date">Aug 26, 2026 · salesforce.com</div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.251" target="_blank">Claude Code v2.1.251 — Model-Switch Hooks, Streamed Subagent Output, Symlink &amp; Path-Traversal Fixes (Aug 28, 2026)</a></div>
-          <div class="desc">Large release: new model-switch hook events and live streaming of foreground subagent tool calls, plus fixes for a file-tool symlink-swap escape and a plugin-marketplace path-traversal bug. Now installed on this machine and matches npm <code>latest</code>.</div>
-          <div class="date">Aug 28, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">INSTALLED — UP TO DATE</strong></div>
+          <div><a href="https://www.anthropic.com/news/model-hardware-standard" target="_blank">Anthropic Launches Model Hardware Standard + 10,000 Free Research Seats (Aug 27, 2026)</a></div>
+          <div class="desc">Research preview for AI-operated lab and manufacturing equipment, with an expanded scientist support program — 10,000 free or discounted API seats for qualifying researchers.</div>
+          <div class="date">Aug 27, 2026 · Anthropic</div>
         </div>
         <div style="text-align:center;padding:12px 0 4px;">
           <a href="/news-archive.html" style="color:var(--teal-light);font-size:.82rem;font-weight:600;">View full AI news archive &rarr;</a>
@@ -634,7 +649,7 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 7:03 AM CDT — <strong style="color:#d97706;">stable channel moved</strong>: <code>npm info openclaw dist-tags</code> and GitHub releases now show <strong>latest 2026.8.1</strong> ("OpenClaw 2.0", promoted from the beta.3 line, published Aug 31 03:30 UTC) — this machine is still on the prior stable, <strong>2026.7.1-2</strong> — update available. Beta <strong>2026.9.1-beta.1</strong> and alpha <strong>2026.5.19-alpha.1</strong> unchanged; extended-stable <strong>2026.6.34</strong> unchanged.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 8:09 AM CDT — <strong style="color:#d97706;">stable channel moved</strong>: <code>npm info openclaw dist-tags</code> and GitHub releases now show <strong>latest 2026.8.1</strong> ("OpenClaw 2.0", promoted from the beta.3 line, published Aug 31 03:30 UTC) — this machine is still on the prior stable, <strong>2026.7.1-2</strong> — update available. Beta <strong>2026.9.1-beta.1</strong> and alpha <strong>2026.5.19-alpha.1</strong> unchanged; extended-stable <strong>2026.6.34</strong> unchanged.</div>
         <div class="news-item">
           <div><a href="https://docs.openclaw.ai/releases/2026.8.1" target="_blank">OpenClaw 2026.8.1 — "OpenClaw 2.0": Conversation Search, Cloud Worker Sessions, Shared Credential Store &amp; New Web UI (Aug 31, 2026)</a></div>
           <div class="desc">Major version promoted to stable today from the 2026.8.1-beta.x line — branded "OpenClaw 2.0". Headline features: full-text search over past conversation text with surrounding-message reopen; cloud-worker/paired-device session hosting with portable workspaces; team-scoped <strong>shared credential store</strong> (SQLite-backed secrets/env, operator roles, masked private credential requests, optional 1Password broker); rebuilt web UI with guided Custodian onboarding, local llama.cpp model setup, and new themes (Tide, Beacon, Phosphor); interactive dashboard-pinnable chat widgets; conversation branching (rewind/fork from any persisted message). Security: rejects edits to non-UTF-8 files before silent corruption, hardens egress/proxy connection lifecycle, prevents SQLite WAL split-brain corruption on shared filesystems, and requires <code>--force</code> to install plugins from arbitrary executable sources. <strong>Breaking changes</strong>: bundled OpenProse plugin removed (run <code>openclaw doctor --fix</code> and follow the upstream Agent Skill migration); <code>codex/*</code>/<code>openai-codex/*</code> model refs need <code>openclaw doctor --fix</code>; plugin SDK import paths deprecated ahead of a Sep 1, 2026 cutover. Update: <code>npm install -g openclaw</code>, then <code>openclaw doctor --fix</code>.</div>
@@ -918,7 +933,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 7:03 AM CDT — re-confirmed via <code>npm list -g</code>, <code>happy --version</code>, and GitHub releases API: still <strong>happy@1.2.2</strong>, matching <code>npm info happy dist-tags.latest</code>. Unchanged since yesterday's check.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 8:09 AM CDT — re-confirmed via <code>npm list -g</code>, <code>happy --version</code>, and GitHub releases API: still <strong>happy@1.2.2</strong>, matching <code>npm info happy dist-tags.latest</code>. Unchanged since yesterday's check.</div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases/tag/cli-1.2.2" target="_blank">Happy cli-1.2.2 Released (Aug 27, 2026)</a></div>
           <div class="desc">New patch release published Aug 27 (commit 88d8ee9). No detailed changelog text published on the GitHub release yet. Update: <code>npm install -g happy</code></div>
@@ -977,7 +992,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 7:03 AM CDT — re-confirmed via <code>mempalace --version</code> and GitHub releases API: latest remains <strong>v3.8.0</strong> (Aug 23), already installed locally, unchanged since yesterday's check. npm stable remains v2.0.0.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 8:09 AM CDT — re-confirmed via <code>mempalace --version</code> and GitHub releases API: latest remains <strong>v3.8.0</strong> (Aug 23), already installed locally, unchanged since yesterday's check. npm stable remains v2.0.0.</div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.8.0" target="_blank">MemPalace v3.8.0 — Fast Large Palaces, Lean MCP Proxies &amp; Wakeable Agents (Aug 23, 2026)</a></div>
           <div class="desc">Major performance release: Chroma metadata reads (<code>list_drawers</code>) skip the vector index entirely — 2.31s/1148MB &rarr; 0.01s/86MB on a 165k-drawer palace; <code>sqlite_exact</code> status/search on a 167k-drawer palace drop from ~7s/6.4s to ~1s/0.2-1.6s; long-running Chroma servers stop rebuilding their client on their own writes; proxied stdio MCP sessions shrink from ~80MB to ~24MB import weight (~3.9GB saved across a 50-agent fleet). New <code>mempalace logstream watch</code> gives agents a durable wake-up primitive instead of repeated polling. Also fixes a <code>sync --apply</code> bug that could delete every drawer from a project if its source volume was briefly unmounted. Install: <code>pip install -U mempalace==3.8.0</code> or <code>uv tool upgrade mempalace</code>.</div>
@@ -1081,7 +1096,12 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 7:03 AM CDT — Context7 npm <code>latest</code> unchanged at <strong>v4.0.4</strong>; Superpowers unchanged at <strong>v6.3.0</strong> (github.com/obra/superpowers releases, since Aug 12). Re-ran advisory queries against both <code>anthropics/claude-code</code> and <code>anthropics/claude-code-action</code>: no new advisories since yesterday. A full re-cross-check of every historical <code>anthropics/claude-code</code> advisory against this dashboard's security-history archive found 3 genuinely never-logged (but long-since-fixed) CVEs — added to the Resolved archive today. The still-open Claude Code Action <code>git push --receive-pack</code> validator bypass remains unpatched with no CVE assigned (re-confirmed via follow-up read of the original disclosure). See security history.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Aug 31, 2026, 8:09 AM CDT — Context7 npm <code>latest</code> unchanged at <strong>v4.0.4</strong>; Superpowers unchanged at <strong>v6.3.0</strong> (github.com/obra/superpowers releases, since Aug 12). Re-ran advisory queries against both <code>anthropics/claude-code</code> and <code>anthropics/claude-code-action</code>: no new advisories since yesterday. New this run: Google Workspace MCP write actions (Gmail send/reply/forward, Drive share/move/trash) confirmed enabled Aug 18, 2026 — the long-standing "known limitation" is resolved. See item below.</div>
+        <div class="news-item">
+          <div><a href="https://explainx.ai/blog/claude-gmail-drive-workspace-connectors-august-2026" target="_blank">Google Workspace MCP Write Actions Now Live — Gmail Send/Reply, Drive Share/Move/Trash (Aug 18, 2026)</a></div>
+          <div class="desc">Claude's first-party Gmail connector now supports sending, replying to, and forwarding emails; Google Drive now supports share, move, and trash. Both require user approval by default; Team/Enterprise owners can disable per-tool approval. Resolves the long-standing known limitation (GitHub issue #51040). Requires Claude Pro/Max/Team/Enterprise with the Gmail or Drive connector enabled.</div>
+          <div class="date">Aug 18, 2026 · Anthropic / Google · <strong style="color:#16a34a;">NEW — WRITE ACTIONS ENABLED, KNOWN LIMITATION RESOLVED</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases/tag/%40upstash%2Fcontext7-mcp%404.0.4" target="_blank">Context7 MCP v4.0.4 — Hosted MCP Client-IP Auth Hardening &amp; API Key Header Fix (Aug 28, 2026)</a></div>
           <div class="desc">Small security-relevant patch: honors the advertised <code>X-Context7-API-Key</code> header in HTTP MCP requests, and authenticates hosted MCP client-IP forwarding with short-lived AES-GCM assertions instead of a trusted-by-default header. Update: <code>npm install -g @upstash/context7-mcp</code></div>
@@ -1158,9 +1178,9 @@
           <div class="date">Jun 6, 2026 · VS Code Marketplace · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/issues/51040" target="_blank">⚠ Google Workspace MCP (Gmail/Drive/Calendar) — Write &amp; Modify Operations Missing (Open Issue)</a></div>
-          <div class="desc">Open GitHub issue: Claude.ai's first-party connectors for Gmail, Drive, and Calendar expose only read and create tools. Move, rename, delete/trash operations are missing, making them effectively read-only for modification workflows. Third-party MCP server alternatives available for full CRUD access. Monitor the issue for updates.</div>
-          <div class="date">2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">KNOWN LIMITATION</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/issues/51040" target="_blank">✅ Google Workspace MCP (Gmail/Drive) Write Operations — Resolved Aug 18, 2026</a></div>
+          <div class="desc">Previously: first-party Gmail/Drive connectors were read-only for modification workflows. As of Aug 18, 2026: Gmail supports send/reply/forward; Drive supports share/move/trash. Calendar CRUD still limited — third-party MCP alternatives available for full Calendar write access.</div>
+          <div class="date">Resolved Aug 18, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">RESOLVED — write actions now enabled</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases" target="_blank">ctx7 CLI v0.4.4 — Machine-Readable Skills List with --json Flag (May 22)</a></div>
@@ -1265,6 +1285,11 @@
       <div class="panel-label"><span class="section-icon">📚</span> Recommended Learning</div>
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
+        <div class="news-item">
+          <div><strong>A "known limitation" logged months ago as an open GitHub issue resolved itself without any explicit notification — the only way to catch it was a targeted research query</strong></div>
+          <div class="desc">The Google Workspace MCP "write &amp; modify operations missing" item (issue #51040) had been sitting in the Plugins panel as a known limitation since it was first logged. Today's research surfaced that Gmail send/reply/forward and Drive share/move/trash were quietly enabled on Aug 18, 2026 — 13 days ago — with no separate advisory or changelog entry that the standard Claude Code release queries would have caught. It only surfaced via a targeted "Google Workspace MCP Claude update 2026" search. Lesson: open "known limitation" items in the Plugins panel are worth a dedicated re-check query once a week, not just when something triggers a fresh look.</div>
+          <div class="date">Aug 31, 2026 · MooseClaw research notes</div>
+        </div>
         <div class="news-item">
           <div><strong>A one-by-one CVE cross-check (not just "any new advisories since last check") surfaced 3 real gaps in a security archive that already had 48 entries</strong></div>
           <div class="desc">Today's sweep pulled every CVE ever published against <code>anthropics/claude-code</code> (30 total) and diffed it line-by-line against this dashboard's security-history archive, rather than just asking "anything new since yesterday." Found 3 that had never been logged despite being fixed for months to over a year: CVE-2025-65099 (Yarn config trust-dialog bypass), CVE-2025-59829 (a symlink deny-bypass distinct from the already-logged Feb 2026 one — same bug class, different GHSA, different fix version), and CVE-2025-52882 (IDE extension websocket flaw, the only entry that isn't CLI-specific). All added to Resolved. Worth repeating this full-list diff periodically rather than assuming an archive with dozens of entries is already complete.</div>
