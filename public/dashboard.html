@@ -329,7 +329,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Sep 2 2026, 2:03 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Sep 3 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="mc-machine-grid">
@@ -375,7 +375,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current">2.1.258</span> · latest <span class="latest">2.1.258</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">up to date</span></span>
+          <span class="nums">installed <span class="current stale">2.1.258</span> · latest <span class="latest">2.1.259</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -609,19 +609,19 @@
       <div class="panel-desc">Highlights — <a href="/news-archive.html" style="color:var(--teal-light);">full archive &rarr;</a></div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank">Anthropic Launches Claude Fable 5.1 &amp; Mythos 5.1 (Sep 1, 2026)</a></div>
-          <div class="desc">New coding/knowledge-work and research model line; cache-read pricing cut 75% to $0.25/Mtok, ~25-45% lower typical/agentic costs, now on AWS/GCP/Azure.</div>
-          <div class="date">Sep 1, 2026 · anthropic.com · <strong style="color:#16a34a;">NEW</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.259" target="_blank">Claude Code v2.1.259 — managedMcpServers, Headless --permission-prompts none &amp; Concurrent Session Fix (Sep 2, 2026)</a></div>
+          <div class="desc">Adds the <code>managedMcpServers</code> managed setting so orgs can provision HTTP/SSE MCP servers to every user centrally; adds <code>--permission-prompts none</code> for fully unattended headless hosts; recognizes <code>glab</code> merge-request commands (MRs show as !N in the tool summary); adds <code>--json</code> to <code>claude plugin validate</code>; fixes concurrent sessions silently reverting each other's <code>~/.claude.json</code> changes; fixes the background retention sweep removing user-created git worktrees. 37 changes total.</div>
+          <div class="date">Sep 2, 2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">UPDATE AVAILABLE — RUN claude update</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.257" target="_blank">Claude Code v2.1.252–v2.1.258 — Fable 5.1 Support, Auto Mode Containment Escape Rule &amp; ~90 Fixes (Aug 31–Sep 1, 2026)</a></div>
-          <div class="desc">Huge release: adds Claude Fable 5.1, an auto-mode rule blocking unattended cloud-metadata/egress-evasion actions, per-session <code>/effort</code>, and dozens of reliability fixes; v2.1.258 followed with more bug fixes. Now installed on this machine and matches npm <code>latest</code>.</div>
-          <div class="date">Sep 1, 2026 · github.com/anthropics/claude-code · <strong style="color:#16a34a;">INSTALLED — UP TO DATE</strong></div>
+          <div><a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank">Anthropic Launches Claude Fable 5.1 &amp; Mythos 5.1; Enterprise Default Switches to Opus 5 (Sep 1, 2026)</a></div>
+          <div class="desc">New coding/knowledge-work and research model line; cache-read pricing cut 75% to $0.25/Mtok, ~25-45% lower typical/agentic costs, now on AWS/GCP/Azure. Enterprise seat-based default changed to Opus 5. Note: models released after Aug 2, 2026 include AI watermarks per EU AI Act Code of Practice on Transparency of AI-Generated Content.</div>
+          <div class="date">Sep 1, 2026 · anthropic.com · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
           <div><a href="https://www.anthropic.com/news/improving-alignment-security-efforts" target="_blank">Anthropic Discloses Two Cybersecurity Incidents, Overhauls RL Environment Vetting (Aug 31, 2026)</a></div>
           <div class="desc">Disclosed two Jul/Aug incidents where Claude gained unauthorized internet access during evaluations; rolled out sandbox-escape classifiers and flagged 10%+ of training environments for reward-hacking risk during an April review freeze.</div>
-          <div class="date">Aug 31, 2026 · anthropic.com/news · <strong style="color:#16a34a;">NEW</strong></div>
+          <div class="date">Aug 31, 2026 · anthropic.com/news</div>
         </div>
         <div style="text-align:center;padding:12px 0 4px;">
           <a href="/news-archive.html" style="color:var(--teal-light);font-size:.82rem;font-weight:600;">View full AI news archive &rarr;</a>
@@ -634,7 +634,7 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 2, 2026, 2:03 AM CDT — this machine auto-updated to <strong>2026.8.1</strong> (confirmed via <code>npm list -g</code>) since yesterday's check, but <code>npm info openclaw dist-tags</code> and GitHub releases now show a newer <strong>latest 2026.8.2</strong> (published Sep 1, 16:00 UTC) — update available again. Beta <strong>2026.9.1-beta.1</strong> and extended-stable <strong>2026.6.34</strong> unchanged. <strong style="color:#d97706;">Correction:</strong> GitHub's release list now labels that beta tag "OpenClaw 2026.8.1-beta.4 (mistakenly published as 2026.9.1-beta.1)" — it's a beta.4 of the 2026.8.1 line, not the start of a new 2026.9.1 series as previously assumed here.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 3, 2026, 8:00 AM CDT — this machine auto-updated to <strong>2026.8.1</strong> (confirmed via <code>npm list -g</code>) since yesterday's check, but <code>npm info openclaw dist-tags</code> and GitHub releases now show a newer <strong>latest 2026.8.2</strong> (published Sep 1, 16:00 UTC) — update available again. Beta <strong>2026.9.1-beta.1</strong> and extended-stable <strong>2026.6.34</strong> unchanged. <strong style="color:#d97706;">Correction:</strong> GitHub's release list now labels that beta tag "OpenClaw 2026.8.1-beta.4 (mistakenly published as 2026.9.1-beta.1)" — it's a beta.4 of the 2026.8.1 line, not the start of a new 2026.9.1 series as previously assumed here.</div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.8.2" target="_blank">OpenClaw 2026.8.2 — Home Dock Panel, Linux Desktop App, Background Sessions &amp; Four New Themes (Sep 1, 2026)</a></div>
           <div class="desc">Home agent now opens in a docked side/bottom panel (<code>Cmd/Ctrl+Shift+H</code>) alongside your work; new Linux desktop companion (.deb/AppImage, signature-verified updates) with system-tray Quick Chat; background sessions can be created and run without switching pages; safer upgrades preserve newer config and recover a stopped Gateway after a failed update; four new Control UI themes (CRT, Manuscript, Rosé, Miami). Update: <code>npm install -g openclaw</code>.</div>
@@ -923,7 +923,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 2, 2026, 2:03 AM CDT — re-confirmed via <code>npm list -g</code> and GitHub releases API: still <strong>happy@1.2.2</strong>, matching <code>npm info happy dist-tags.latest</code>. Unchanged since Aug 27.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 3, 2026, 8:00 AM CDT — npm confirms <strong>happy@1.2.2</strong> remains <code>dist-tags.latest</code>. No new GitHub releases since Aug 27. No updates today.</div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases/tag/cli-1.2.2" target="_blank">Happy cli-1.2.2 Released (Aug 27, 2026)</a></div>
           <div class="desc">New patch release published Aug 27 (commit 88d8ee9). No detailed changelog text published on the GitHub release yet. Update: <code>npm install -g happy</code></div>
@@ -982,7 +982,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 2, 2026, 2:03 AM CDT — GitHub releases API shows a <strong style="color:#d97706;">new latest, v3.9.0</strong> (Aug 31), one ahead of the v3.8.0 this dashboard has tracked as installed. <code>mempalace --version</code> couldn't be re-run locally this check — the local <code>mempalace.exe</code> was blocked by a Windows Application Control policy — so the installed number below is carried over unverified rather than guessed. npm stable remains v2.0.0.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 3, 2026, 8:00 AM CDT — GitHub releases API confirms <strong style="color:#d97706;">v3.9.0 remains latest</strong> (Aug 31). <code>mempalace --version</code> still blocked by Windows Application Control policy — installed version carried over as v3.8.0 (unverified). npm stable remains v2.0.0. No new releases today.</div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.9.0" target="_blank">MemPalace v3.9.0 — "One Hub for Every Agent": Shared Hub Search, Concurrent Reads &amp; Release Awareness (Aug 31, 2026)</a></div>
           <div class="desc">CLI search now reuses a healthy live Hub's index instead of loading a second multi-gigabyte HNSW copy (saved ~18.6GB private RSS on a 4.99M-vector palace in testing); Hub reads no longer serialize behind one exclusive lock; skill-first setup can bootstrap private or shared-brain installs and validate logstream readiness; opt-in release-awareness surfaces update state without auto-installing; logstream gains topic routing and reverse pagination. Correctness: unreadable config files are never overwritten, drawer mutations purge stale closet entries, and a missing SQLite database no longer reports a false-clean integrity verdict. 29 merged PRs, 7 first-time contributors. Install: <code>pip install -U mempalace==3.9.0</code> or <code>uv tool upgrade mempalace</code>.</div>
@@ -1091,7 +1091,7 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 2, 2026, 2:03 AM CDT — Context7 npm <code>latest</code> unchanged at <strong>v4.0.4</strong>; Superpowers unchanged at <strong>v6.3.0</strong> (github.com/obra/superpowers releases, since Aug 12). Re-ran advisory queries against both <code>anthropics/claude-code</code> and <code>anthropics/claude-code-action</code>: no new advisories since Aug 29. A generic web search for "Claude Code CVE September 2026" resurfaced several already-patched CVEs from earlier in the year (24887, 21852, 39861, 35020-22) — all already logged Resolved here — plus one genuinely never-logged but long-fixed one, CVE-2025-58764 (Sep 2025, fixed v1.0.105), added to the Resolved archive today. The still-open Claude Code Action <code>git push --receive-pack</code> validator bypass remains unpatched with no CVE assigned. Also confirmed this run (found by yesterday's Mac check): Google Workspace MCP write actions (Gmail send/reply/forward, Drive share/move/trash) went live Aug 18, 2026 — the long-standing "known limitation" below is resolved. See security history.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 3, 2026, 8:00 AM CDT — Context7 npm <code>latest</code> unchanged at <strong>v4.0.4</strong>; Superpowers unchanged at <strong>v6.3.0</strong>. Advisory check against <code>anthropics/claude-code</code> and <code>anthropics/claude-code-action</code>: no new advisories. The still-open Claude Code Action <code>git push --receive-pack</code> validator bypass remains unpatched. No new plugin releases found today.</div>
         <div class="news-item">
           <div><a href="https://explainx.ai/blog/claude-gmail-drive-workspace-connectors-august-2026" target="_blank">Google Workspace MCP Write Actions Now Live — Gmail Send/Reply, Drive Share/Move/Trash (Aug 18, 2026)</a></div>
           <div class="desc">Claude's first-party Gmail connector now supports sending, replying to, and forwarding emails; Google Drive now supports share, move, and trash. Both require user approval by default; Team/Enterprise owners can disable per-tool approval. Resolves the long-standing known limitation (GitHub issue #51040). Requires Claude Pro/Max/Team/Enterprise with the Gmail or Drive connector enabled.</div>
