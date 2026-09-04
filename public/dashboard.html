@@ -329,7 +329,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Sep 3 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Sep 4 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="mc-machine-grid">
@@ -375,7 +375,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.258</span> · latest <span class="latest">2.1.259</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — <code>claude update</code></span></span>
+          <span class="nums">installed <span class="current stale">2.1.258</span> · latest <span class="latest">2.1.260</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -582,6 +582,11 @@
       <div id="security-body">
 
         <div class="alert-banner" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge warn">Advisory</span> GitSpawn: Malicious .git Configs Execute Code via AI Coding Agents — Partially Patched (Sep 2, 2026)</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Manifold Security disclosed 8 flaws across 7 AI coding agents including Claude Code, Codex, Cursor, and Grok. Attack abuses legitimate <code>core.fsmonitor</code> git config to fire attacker shell code when agents run <code>git status</code>/<code>git diff</code> on a cloned repo — before workspace-trust prompts are shown. For Claude Code: the <code>core.fsmonitor</code> path was fixed in v2.1.196; a separate vector via <code>claude ultrareview</code> was still exploitable at disclosure. 4 of 8 flaws were unpatched at publication. <strong>Do not run Claude Code against untrusted repos without auditing .git/config first.</strong> <a href="https://thehackernews.com/2026/09/malicious-git-configs-can-make-claude.html" style="color:var(--teal-light);">The Hacker News</a> · <a href="https://www.manifold.security/blog/ai-coding-agents-git-hijack" style="color:var(--teal-light);">Manifold Security Blog</a></div>
+        </div>
+
+        <div class="alert-banner" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> OWASP MCP Top 10 Formalized — Systemic MCP Security Gaps (Aug 11-14, 2026)</div>
           <div style="font-size:.85rem;color:var(--ink2);">MCP Dev Summit Seoul: 21,000+ exposed MCP servers found, ~92% missing OAuth. Not a single CVE — a protocol-wide posture issue worth auditing self-hosted/third-party MCP servers against. <a href="/security-history.html" style="color:var(--teal-light);">Full details &rarr;</a></div>
         </div>
@@ -609,13 +614,23 @@
       <div class="panel-desc">Highlights — <a href="/news-archive.html" style="color:var(--teal-light);">full archive &rarr;</a></div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.259" target="_blank">Claude Code v2.1.259 — managedMcpServers, Headless --permission-prompts none &amp; Concurrent Session Fix (Sep 2, 2026)</a></div>
-          <div class="desc">Adds the <code>managedMcpServers</code> managed setting so orgs can provision HTTP/SSE MCP servers to every user centrally; adds <code>--permission-prompts none</code> for fully unattended headless hosts; recognizes <code>glab</code> merge-request commands (MRs show as !N in the tool summary); adds <code>--json</code> to <code>claude plugin validate</code>; fixes concurrent sessions silently reverting each other's <code>~/.claude.json</code> changes; fixes the background retention sweep removing user-created git worktrees. 37 changes total.</div>
-          <div class="date">Sep 2, 2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">UPDATE AVAILABLE — RUN claude update</strong></div>
+          <div><a href="https://github.com/anthropics/claude-code/releases" target="_blank">Claude Code v2.1.260 — New Latest on npm (Sep 4, 2026)</a></div>
+          <div class="desc">npm registry updated to v2.1.260 as of Sep 4. Full changelog not yet indexed — run <code>claude update</code> to install. Continues the rapid-release cadence following v2.1.259's <code>managedMcpServers</code> and <code>--permission-prompts none</code> changes.</div>
+          <div class="date">Sep 4, 2026 · registry.npmjs.org · <strong style="color:#d97706;">UPDATE AVAILABLE — RUN claude update</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank">Anthropic Launches Claude Fable 5.1 &amp; Mythos 5.1; Enterprise Default Switches to Opus 5 (Sep 1, 2026)</a></div>
-          <div class="desc">New coding/knowledge-work and research model line; cache-read pricing cut 75% to $0.25/Mtok, ~25-45% lower typical/agentic costs, now on AWS/GCP/Azure. Enterprise seat-based default changed to Opus 5. Note: models released after Aug 2, 2026 include AI watermarks per EU AI Act Code of Practice on Transparency of AI-Generated Content.</div>
+          <div><a href="https://thehackernews.com/2026/09/malicious-git-configs-can-make-claude.html" target="_blank">GitSpawn: Malicious .git Configs Execute Attacker Code via Claude Code, Codex, Cursor &amp; Others (Sep 2, 2026)</a></div>
+          <div class="desc">Manifold Security disclosed 8 flaws across 7 AI coding agents. Attack abuses the <code>core.fsmonitor</code> git config to fire attacker shell code when agents auto-run <code>git status</code>/<code>git diff</code> on an untrusted repo — fires before workspace-trust prompts. Claude Code's <code>core.fsmonitor</code> path fixed in v2.1.196; a separate <code>claude ultrareview</code> vector was still exploitable at time of publication. 4 of 8 flaws across all affected tools unpatched at disclosure. Do not run AI coding agents against untrusted repos without auditing <code>.git/config</code> first.</div>
+          <div class="date">Sep 2, 2026 · The Hacker News / Manifold Security · <strong style="color:#dc2626;">SECURITY — PARTIALLY UNPATCHED</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.259" target="_blank">Claude Code v2.1.259 — managedMcpServers, Headless --permission-prompts none &amp; Concurrent Session Fix (Sep 2, 2026)</a></div>
+          <div class="desc">Adds the <code>managedMcpServers</code> managed setting so orgs can provision HTTP/SSE MCP servers to every user centrally; adds <code>--permission-prompts none</code> for fully unattended headless hosts; recognizes <code>glab</code> merge-request commands (MRs show as !N in the tool summary); adds <code>--json</code> to <code>claude plugin validate</code>; fixes concurrent sessions silently reverting each other's <code>~/.claude.json</code> changes; fixes the background retention sweep removing user-created git worktrees. 37 changes total.</div>
+          <div class="date">Sep 2, 2026 · github.com/anthropics/claude-code</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank">Anthropic Launches Claude Fable 5.1 &amp; Mythos 5.1; Claude Academy &amp; Detection API (Sep 1, 2026)</a></div>
+          <div class="desc">New coding/knowledge-work and research model line; cache-read pricing cut 75% to $0.25/Mtok; ~25-45% lower typical/agentic costs; available on AWS/GCP/Azure. Enterprise default switched to Opus 5. Claude Academy launched (learning hub with courses, tutorials, and badges). Detection API in private preview for EU AI Act watermarking compliance. Three breaking API changes introduced — check the changelog before upgrading client libraries.</div>
           <div class="date">Sep 1, 2026 · anthropic.com · <strong style="color:#16a34a;">NEW</strong></div>
         </div>
         <div class="news-item">
@@ -634,7 +649,7 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 3, 2026, 8:00 AM CDT — this machine auto-updated to <strong>2026.8.1</strong> (confirmed via <code>npm list -g</code>) since yesterday's check, but <code>npm info openclaw dist-tags</code> and GitHub releases now show a newer <strong>latest 2026.8.2</strong> (published Sep 1, 16:00 UTC) — update available again. Beta <strong>2026.9.1-beta.1</strong> and extended-stable <strong>2026.6.34</strong> unchanged. <strong style="color:#d97706;">Correction:</strong> GitHub's release list now labels that beta tag "OpenClaw 2026.8.1-beta.4 (mistakenly published as 2026.9.1-beta.1)" — it's a beta.4 of the 2026.8.1 line, not the start of a new 2026.9.1 series as previously assumed here.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 4, 2026, 8:00 AM CDT — this machine auto-updated to <strong>2026.8.1</strong> (confirmed via <code>npm list -g</code>) since yesterday's check, but <code>npm info openclaw dist-tags</code> and GitHub releases now show a newer <strong>latest 2026.8.2</strong> (published Sep 1, 16:00 UTC) — update available again. Beta <strong>2026.9.1-beta.1</strong> and extended-stable <strong>2026.6.34</strong> unchanged. <strong style="color:#d97706;">Correction:</strong> GitHub's release list now labels that beta tag "OpenClaw 2026.8.1-beta.4 (mistakenly published as 2026.9.1-beta.1)" — it's a beta.4 of the 2026.8.1 line, not the start of a new 2026.9.1 series as previously assumed here.</div>
         <div class="news-item">
           <div><a href="https://github.com/openclaw/openclaw/releases/tag/v2026.8.2" target="_blank">OpenClaw 2026.8.2 — Home Dock Panel, Linux Desktop App, Background Sessions &amp; Four New Themes (Sep 1, 2026)</a></div>
           <div class="desc">Home agent now opens in a docked side/bottom panel (<code>Cmd/Ctrl+Shift+H</code>) alongside your work; new Linux desktop companion (.deb/AppImage, signature-verified updates) with system-tray Quick Chat; background sessions can be created and run without switching pages; safer upgrades preserve newer config and recover a stopped Gateway after a failed update; four new Control UI themes (CRT, Manuscript, Rosé, Miami). Update: <code>npm install -g openclaw</code>.</div>
@@ -923,7 +938,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 3, 2026, 8:00 AM CDT — npm confirms <strong>happy@1.2.2</strong> remains <code>dist-tags.latest</code>. No new GitHub releases since Aug 27. No updates today.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 4, 2026, 8:00 AM CDT — npm confirms <strong>happy@1.2.2</strong> remains <code>dist-tags.latest</code>. No new GitHub releases since Aug 27. No updates today.</div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases/tag/cli-1.2.2" target="_blank">Happy cli-1.2.2 Released (Aug 27, 2026)</a></div>
           <div class="desc">New patch release published Aug 27 (commit 88d8ee9). No detailed changelog text published on the GitHub release yet. Update: <code>npm install -g happy</code></div>
@@ -982,7 +997,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 3, 2026, 8:00 AM CDT — GitHub releases API confirms <strong style="color:#d97706;">v3.9.0 remains latest</strong> (Aug 31). <code>mempalace --version</code> still blocked by Windows Application Control policy — installed version carried over as v3.8.0 (unverified). npm stable remains v2.0.0. No new releases today.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 4, 2026, 8:00 AM CDT — GitHub releases API confirms <strong style="color:#d97706;">v3.9.0 remains latest</strong> (Aug 31). <code>mempalace --version</code> still blocked by Windows Application Control policy — installed version carried over as v3.8.0 (unverified). npm stable remains v2.0.0. No new releases today.</div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.9.0" target="_blank">MemPalace v3.9.0 — "One Hub for Every Agent": Shared Hub Search, Concurrent Reads &amp; Release Awareness (Aug 31, 2026)</a></div>
           <div class="desc">CLI search now reuses a healthy live Hub's index instead of loading a second multi-gigabyte HNSW copy (saved ~18.6GB private RSS on a 4.99M-vector palace in testing); Hub reads no longer serialize behind one exclusive lock; skill-first setup can bootstrap private or shared-brain installs and validate logstream readiness; opt-in release-awareness surfaces update state without auto-installing; logstream gains topic routing and reverse pagination. Correctness: unreadable config files are never overwritten, drawer mutations purge stale closet entries, and a missing SQLite database no longer reports a false-clean integrity verdict. 29 merged PRs, 7 first-time contributors. Install: <code>pip install -U mempalace==3.9.0</code> or <code>uv tool upgrade mempalace</code>.</div>
@@ -1091,7 +1106,12 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 3, 2026, 8:00 AM CDT — Context7 npm <code>latest</code> unchanged at <strong>v4.0.4</strong>; Superpowers unchanged at <strong>v6.3.0</strong>. Advisory check against <code>anthropics/claude-code</code> and <code>anthropics/claude-code-action</code>: no new advisories. The still-open Claude Code Action <code>git push --receive-pack</code> validator bypass remains unpatched. No new plugin releases found today.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 4, 2026, 8:00 AM CDT — Context7 updated to <strong>v4.0.5</strong> (Sep 4, 2026); Superpowers unchanged at <strong>v6.3.0</strong>. GitSpawn disclosure (Sep 2) now also applies to MCP-adjacent harnesses — review any agent that auto-runs git commands on clone. No other plugin releases found today.</div>
+        <div class="news-item">
+          <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 MCP v4.0.5 — Released Sep 4, 2026</a></div>
+          <div class="desc">Both <code>@upstash/context7-mcp@4.0.5</code> and <code>ctx7@0.5.10</code> published Sep 4, 2026 at approx 10:12–10:13 UTC. Changelog details not yet fully indexed — update via <code>npm install -g @upstash/context7-mcp</code> and check the GitHub release page for specifics. Builds on v4.0.4's hosted MCP client-IP auth hardening.</div>
+          <div class="date">Sep 4, 2026 · github.com/upstash/context7 · <strong style="color:#d97706;">NEW — UPDATE AVAILABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://explainx.ai/blog/claude-gmail-drive-workspace-connectors-august-2026" target="_blank">Google Workspace MCP Write Actions Now Live — Gmail Send/Reply, Drive Share/Move/Trash (Aug 18, 2026)</a></div>
           <div class="desc">Claude's first-party Gmail connector now supports sending, replying to, and forwarding emails; Google Drive now supports share, move, and trash. Both require user approval by default; Team/Enterprise owners can disable per-tool approval. Resolves the long-standing known limitation (GitHub issue #51040). Requires Claude Pro/Max/Team/Enterprise with the Gmail or Drive connector enabled.</div>
@@ -1281,6 +1301,11 @@
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
         <div class="news-item">
+          <div><strong>GitSpawn shows that AI agent git-trust prompts can fire after malicious code already ran — audit <code>.git/config</code> before running any AI agent in an untrusted repo</strong></div>
+          <div class="desc">The Sep 2 Manifold Security "GitSpawn" disclosure found that Claude Code (and 6 other agents) show workspace-trust prompts only after the agent has already called <code>git status</code> — which triggers any <code>core.fsmonitor</code> shell command in the cloned repo's <code>.git/config</code>. The trust prompt is supposed to gate execution, but the <code>git status</code> call that causes execution happens first. Practical mitigation: inspect <code>.git/config</code> and verify <code>core.fsmonitor</code> is absent or points to a known-safe path before opening any cloned repo in Claude Code. Better: configure Claude Code's workspace-trust setting to require explicit approval before the first git call, not just before the first AI turn. The <code>core.fsmonitor</code> vector is patched in v2.1.196; check that you're on a current version for that fix — but the <code>claude ultrareview</code> path was separately exploitable as of disclosure.</div>
+          <div class="date">Sep 4, 2026 · MooseClaw research notes</div>
+        </div>
+        <div class="news-item">
           <div><strong>A GitHub release's own title can retroactively correct an earlier misread — OpenClaw's "2026.9.1-beta.1" turned out to be a mislabeled 2026.8.1 beta, not a new monthly series</strong></div>
           <div class="desc">This dashboard tracked <code>v2026.9.1-beta.1</code> (published Aug 28) as the first beta of a new September series for several days. Today's re-check found GitHub's release list now titles that same tag "OpenClaw 2026.8.1-beta.4 (mistakenly published as 2026.9.1-beta.1)" — the maintainers corrected the label after the fact, but the git tag itself is immutable so it still reads 2026.9.1-beta.1 everywhere else (npm dist-tags, direct links). Worth re-reading a beta/pre-release's current title on each check rather than trusting the version number alone, since maintainers do sometimes fix a publishing mistake without renaming the tag.</div>
           <div class="date">Sep 2, 2026 · MooseClaw research notes</div>
@@ -1304,131 +1329,6 @@
           <div><strong>The daily news sweep's queries skew toward Claude Code/Anthropic-security phrasing and can miss same-week Anthropic product/partnership news that doesn't mention "Claude Code" at all</strong></div>
           <div class="desc">Today's run found two Aug 26 stories — Cowork's built-in browser and the Salesforce "Claudeforce" partnership — that had never been logged here despite being four days old and widely covered (TechCrunch, CNBC, VentureBeat, Anthropic's own blog). Both were surfaced only by a generic "anthropic announcement this week" search; the standard Claude Code-focused queries used on the days they broke didn't turn them up. Worth periodically running one broader "anthropic.com/news OR claude.com/blog this week" sweep in addition to the targeted release/security queries, the same way the security side now periodically pulls full advisory lists instead of only targeted CVE searches.</div>
           <div class="date">Aug 30, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>Third-party security aggregator blogs keep resurfacing year-old, long-patched CVEs as if new — a quick fixed-version check against the current install (2.1.251) is enough to file them as historical, not urgent</strong></div>
-          <div class="desc">Today's Claude Code security sweep surfaced CVE-2025-54794/54795 (Cymulate's "InversePrompt" research) via a generic WebSearch — the CVE numbering (2025-...) and a follow-up WebFetch of the primary blog confirmed it was published Apr 6, 2026 and fixed in v0.2.111/v1.0.20, extremely early releases with no bearing on any currently supported version. It had never been logged here, so it was added to Resolved for completeness, but the pattern (an aggregator or "top Claude Code risks" listicle repackaging an ancient disclosure with no date context) is now the third or fourth time this has happened — worth treating any CVE surfaced by a generic search as needing a fixed-version/date check before treating it as current, rather than assuming search recency implies disclosure recency.</div>
-          <div class="date">Aug 30, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>GitHub security advisories can be scoped to a sub-repo (<code>claude-code-action</code>) that the usual <code>anthropics/claude-code</code> advisories query never touches</strong></div>
-          <div class="desc">The standard daily check (<code>gh api repos/anthropics/claude-code/security-advisories</code>) confirmed "no new advisories since Jun 25" — technically true, but incomplete. A web search surfaced CVE-2026-47751 (malicious <code>.mcp.json</code> in a PR reaching RCE via <code>enableAllProjectMcpServers</code>), which turned out to live entirely under <code>repos/anthropics/claude-code-action/security-advisories</code> — a different repo in the same org, with its own independent advisory list. It was already fixed (v1.0.74) and posed no live risk, but it sat completely outside the standard query's blast radius. Worth periodically also pulling <code>claude-code-action</code>'s own advisories, not just the main CLI repo's.</div>
-          <div class="date">Aug 29, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>Pulling every advisory's <code>patched_versions</code> field in one <code>--paginate</code> call (instead of re-reading each Active entry's prose or spot-checking one CVE at a time) surfaced 8 stale Active entries at once, some patched over a year ago</strong></div>
-          <div class="desc"><code>gh api repos/anthropics/claude-code/security-advisories --paginate --jq '.[] | {ghsa, cve, patched: [.vulnerabilities[].patched_versions]}'</code> returned all 30 advisories with their fix versions in one call. Cross-referencing against the current installed version (2.1.248) showed the Yarn plugin-autoload RCE (GHSA-2jjv-qf24-vfm4) was fixed in v1.0.39 — over a year and 200+ releases ago — despite sitting in Active labeled "Critical" with a wrong "Apr 2026" date (actual disclosure: Sep 2025). Also caught: CVE-2026-24052 was an exact duplicate of an already-resolved GHSA under a different framing, and GHSA-q5hj-mxqh-vv77 was a duplicate of a correctly-resolved CVE-2026-40068 card. Net: Active went from 14 to 6 in one pass. Previous days caught individual stale entries reactively (a suspicious title, a contradicted WebSearch); pulling the full advisory list with patched-version data proactively is a much higher-yield check and worth doing periodically rather than only when something looks wrong.</div>
-          <div class="date">Aug 28, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>The git-push-validator-bypass/CVE-2026-54316 conflation recurred today via a fresh WebSearch — a targeted WebFetch of the primary article, not just a second search, was what actually resolved it</strong></div>
-          <div class="desc">A plain WebSearch for the still-open Claude Code Action <code>git push --receive-pack</code> bypass returned a snippet claiming "Update Claude Code to 2.1.163 to address this vulnerability" — the exact same false-fix claim caught and documented here on Aug 25. This time, instead of a second WebSearch, a direct WebFetch of the original Hacker News article with a narrow prompt ("quote the exact sentence stating the fix version") returned the article's own text: "That chain has no CVE and no publicly stated fixed version." WebSearch result snippets appear to independently and repeatedly generate this same wrong conflation — worth defaulting straight to WebFetch-with-a-quote-request on any security claim that contradicts an already-logged Active item, rather than trying another WebSearch first.</div>
-          <div class="date">Aug 26, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>GitHub Security Advisories carry a <code>patched_versions</code> field per vulnerability — querying it directly is a faster, more reliable staleness check than re-reading each Active entry's prose</strong></div>
-          <div class="desc"><code>gh api repos/anthropics/claude-code/security-advisories --jq '.[] | select(.cve_id=="CVE-2026-44470") | .vulnerabilities[] | .patched_versions'</code> returned <code>1.3834.0</code> in one call — confirming (and a follow-up WebSearch corroborating) that the CoworkVMService directory-junction LPE was fixed months ago, despite the Active entry's own text saying "monitor GitHub advisory for patch confirmation." Same pattern caught CVE-2026-44467 (SSH host-key MITM, fixed v1.4304.0). Both were Claude <em>Desktop</em> version numbers, not CLI ones — worth remembering these two products version independently. Both moved to Resolved today.</div>
-          <div class="date">Aug 25, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>A single WebFetch pass on a security article can conflate two distinct vulnerabilities described in the same piece — a targeted second WebFetch on just the one detail resolved it</strong></div>
-          <div class="desc">First WebFetch on the Aug 7 Hacker News piece about Claude Code/Gemini CLI CI flaws summarized "Claude Code (2.1.163+) are patched," which would have wrongly implied the already-logged, still-open <code>git push --receive-pack</code> validator bypass was fixed. A second WebFetch asking specifically about that one bypass (quoting the exact mechanism) got the correct answer: only the unrelated CVE-2026-54316 HuggingFace-exfil chain was fixed in 2.1.163; the validator bypass itself remains unpatched with no CVE. When a summary's "patched" claim covers multiple findings in one article, re-fetch with a narrower, mechanism-specific prompt before trusting it.</div>
-          <div class="date">Aug 25, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>The standard "top 5 GitHub advisories" API check only surfaces recent CVEs — a broader web search today turned up CVE-2026-40068, an April 2026 finding never logged here despite being fixed for months</strong></div>
-          <div class="desc">CVE-2026-40068 (Trust Dialog Bypass via Git Worktree Spoofing, fixed v2.1.84) doesn't appear in <code>gh api repos/anthropics/claude-code/security-advisories</code>'s first 5 results because five newer advisories (55607, 54316, 46406, 44470, 44467) rank above it — it was simply never reached by the top-5 check. Worth periodically pulling a larger page of the advisories API (or a general CVE web search) rather than trusting the top-5 slice is exhaustive.</div>
-          <div class="date">Aug 24, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>Third-party plugin-aggregator sites can report stale/wrong version numbers — verify against the actual source (marketplace.json, GitHub releases) before trusting a version claim</strong></div>
-          <div class="desc">A WebSearch for Superpowers' current version returned a claudepluginhub.com listing claiming v5.0.7, which would have been a false downgrade from the already-confirmed v6.3.0. Fetching <code>obra/superpowers-marketplace</code>'s <code>marketplace.json</code> directly confirmed v6.3.0 is correct and current — the aggregator was simply out of date. Default to primary sources (npm registry, GitHub releases/tags, marketplace manifests) over SEO aggregator sites when they disagree.</div>
-          <div class="date">Aug 24, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.akto.io/blog/claude-code-security" target="_blank">Claude Code Security: Risks, Limitations &amp; Best Practices 2026 (Akto)</a></div>
-          <div class="desc">Covers Claude Code's permission model, key agentic risks (credential exfiltration, prompt injection, hook abuse), and practical hardening steps — deny rules, API key scoping, MCP allowlisting, and least-privilege design. A good companion to the Checkmarx guide already linked below.</div>
-          <div class="date">2026 · akto.io · <strong style="color:#16a34a;">NEW</strong></div>
-        </div>
-        <div class="news-item">
-          <div><strong>Two more stale Active entries found on a second same-day audit pass — "skim Active headlines" is worth doing every run, not just when something looks obviously wrong</strong></div>
-          <div class="desc">Following up on the CVE-2026-54316 mislabel caught earlier today: a second pass over Active section headlines turned up two more — "Claude Code GitHub Action Supply Chain Attack (Fixed claude-code-action v1.0.94)" had been sitting in Active since it was first logged (Jun 4), despite its own title literally saying "Fixed"; and "Claude Fable 5 & Mythos 5 Suspended by US Export Control Directive" (Jun 12) had been resolved since Jun 30-Jul 1 (export controls lifted, access restored) but was never moved — nearly two months stale. Both moved to Resolved today. Pattern: a title containing "Fixed"/resolved language, or an Active item describing a suspension/outage/deadline that's now well in the past, is worth a quick WebSearch to check current status even without a specific trigger — don't wait for something to look wrong.</div>
-          <div class="date">Aug 23, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong><code>happy --version</code> hangs waiting on an interactive auth prompt in this unattended shell — don't run it; <code>npm info happy dist-tags.latest</code> plus the last confirmed local version is sufficient</strong></div>
-          <div class="desc">Running <code>happy --version</code> via Bash today printed the version correctly ("happy version: 1.2.0") but then dropped into an interactive "How would you like to authenticate?" prompt (Mobile App / Web Browser), which has no stdin in this non-interactive session and threw an Ink "Raw mode is not supported" error instead of exiting cleanly. The version string is already emitted before the prompt, so the check technically works, but it leaves a noisy stack trace and an unresponsive-looking command. Prefer <code>npm info happy dist-tags.latest</code> for the latest check, and trust the last locally-confirmed installed version rather than re-running <code>happy --version</code> on this machine.</div>
-          <div class="date">Aug 23, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>Found a stale entry sitting in "Active" despite its own title saying "Fixed v2.1.163" — the daily/weekly checklist doesn't include re-auditing existing Active items, only adding new ones</strong></div>
-          <div class="desc">CVE-2026-54316 had been logged correctly with "Fixed v2.1.163" in its headline back when it was first added, but was placed in (and left in) the Active section rather than Resolved — likely a one-time slip during that day's run that no later run caught, since the standard process only checks *today's* research for newly-resolved items, not the archive for old mislabels. Worth an occasional skim of the Active section's own headlines for "Fixed"/"Resolved" language that contradicts its section placement. Moved it to Resolved today; also used the same research pass (Black Hat USA coverage of the same researcher's work) to log a second, still-unpatched, un-CVE'd Claude Code Action finding as a new Active item.</div>
-          <div class="date">Aug 23, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>No daily update ran Aug 18-20 — <code>gh api repos/&lt;owner&gt;/&lt;repo&gt;/releases</code> (paginated, no <code>--jq</code> filter needed beyond slicing) cleanly catches up a multi-day gap in one call</strong></div>
-          <div class="desc">Today's run picked up where Aug 17 left off after a 4-day gap with no commits. <code>gh api repos/anthropics/claude-code/releases --jq '.[0:8] | .[] | {tag, published: .published_at, name}'</code> returned all 5 missed releases (v2.1.234-238) with exact publish timestamps in one call, and <code>gh api .../releases/tags/&lt;tag&gt; --jq '.body'</code> pulled full unsummarized notes for each. Per-package npm/GitHub checks for Happy, MemPalace, OpenClaw, Context7, and Superpowers all confirmed "no change" independently — the gap didn't require any special catch-up logic beyond just running the normal checks.</div>
-          <div class="date">Aug 21, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>A WebSearch snippet claimed Sonnet 5's Sep 1 price increase is still scheduled — it's stale, contradicting an already-confirmed permanent price</strong></div>
-          <div class="desc">Today's search for general Anthropic news surfaced a result stating "Claude Sonnet 5's promotional pricing... was set to end August 31, 2026, with standard pricing of $3/$15 taking effect September 1" — but Anthropic confirmed on Aug 10 (already logged in the Resolved section of Security History) that the $2/$10 pricing is now permanent and the increase was cancelled. The search snippet was almost certainly from a stale aggregator page that predates the Aug 10 confirmation. Cross-check any pricing/deadline claim against the dashboard's own archive before treating it as new information — don't let a fresh-looking search result override an already-verified fact without a dated, direct source.</div>
-          <div class="date">Aug 17, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong><code>npm list -g --depth=0</code> fails outright on this machine's Git Bash — use per-package <code>npm info &lt;pkg&gt; dist-tags.latest</code>/<code>--version</code> checks instead</strong></div>
-          <div class="desc">Today's run hit a Cygwin <code>child_copy</code> error (<code>cygheap read copy failed</code>) the instant <code>npm list -g --depth=0</code> was invoked via Bash — no package list returned at all. Per-tool checks (<code>claude --version</code>, <code>mempalace --version</code>, <code>uv tool list</code>, <code>happy --version</code>, and <code>npm info &lt;pkg&gt; dist-tags.latest</code> per package) all worked fine and are what actually surfaced today's real changes — MemPalace 3.7.1 already installed locally (ahead of yesterday's tracked "latest" of 3.7.0) and Claude Code 2.1.232 installed vs. 2.1.233 latest. Don't rely on the bulk <code>npm list -g</code> command on this machine; it's silently a dead end.</div>
-          <div class="date">Aug 15, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>Yesterday's "no new Context7 release" was wrong — v4.0.1/v4.0.2 had already shipped to fix a real outage</strong></div>
-          <div class="desc">Aug 13's update said "Context7 v4.0.0 remains latest (no new release since Aug 7)." That was stale: v4.0.1 and v4.0.2 had already published to npm on Aug 11, fixing a production outage on mcp.context7.com that v4.0.0 itself caused (SSE stream leak exhausting the gateway's connection pool). <code>npm info @upstash/context7-mcp dist-tags.latest</code> run fresh today immediately returned 4.0.2 — the check itself is reliable, it just wasn't re-run carefully enough yesterday. Lesson: don't assume "no change since last check" without actually re-running the npm/gh lookup for every tracked package, even ones that don't usually move often.</div>
-          <div class="date">Aug 14, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>Source reliability note: general WebSearch resurfaces old CVEs as if new — cross-check against <code>gh api .../security-advisories</code></strong></div>
-          <div class="desc">Today's WebSearch for "Claude Code security advisory CVE August 2026" returned CVE-2026-21852 (published Jan 20, 2026) and CVE-2026-35022 (already logged in the Active section) framed alongside genuinely current results, with no date signal in the search snippet to flag them as old. <code>gh api repos/anthropics/claude-code/security-advisories --jq '.[] | {cve_id, published_at}'</code> returns the full official list with real publish dates in one call — confirmed today that no new GHSA/CVE has landed for Claude Code since Jun 25, 2026 (30 total advisories). Treat this as the source of truth for "is this CVE actually new" before adding anything to the Active section, rather than trusting how a search result is framed.</div>
-          <div class="date">Aug 13, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>Source reliability note: WebFetch mis-dated MemPalace releases again (2024 instead of 2026)</strong></div>
-          <div class="desc">Today's WebFetch on github.com/MemPalace/mempalace/releases returned "v3.7.0 — Released August 11, 2024" and "v3.6.0 — Released July 17, 2024" — both years wrong (should be 2026), same failure mode logged Aug 9. <code>gh api repos/&lt;owner&gt;/&lt;repo&gt;/releases --jq '.[].published_at'</code> gave correct ISO dates (2026-08-11, 2026-07-17) instantly and is now the preferred method for any GitHub release date, over WebFetch summarization. Also reused today: <code>gh api .../releases/tags/&lt;tag&gt; --jq '.body'</code> for full, unsummarized release notes — caught real detail (e.g. the specific v2.1.228 skill-hardening fix) that a WebFetch summary would likely have compressed away.</div>
-          <div class="date">Aug 12, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>Source reliability note: WebFetch date extraction on GitHub release pages</strong></div>
-          <div class="desc">WebFetch on github.com/MemPalace/mempalace/releases returned "v3.6.0 — Released July 17, 2024" — the year was wrong (should be 2026); the summarizer model appears to sometimes default to a training-data-era year when a page doesn't spell out the century unambiguously. Always sanity-check WebFetch-extracted dates against the current date before writing them down. Also: <code>npm info &lt;pkg&gt; versions</code> is not reliably chronological for prerelease-tagged packages (e.g. OpenClaw's 2026.7.1-2 sorted before its 2026.7.1-beta.* entries) — cross-check actual publish order against the GitHub releases page rather than trusting npm's version array order.</div>
-          <div class="date">Aug 9, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://releasebot.io/updates/anthropic/claude-code" target="_blank">Claude Code v2.1.224 — Understanding Self-Hosted Runner &amp; JWT Sandbox Credential Masking (Aug 7, 2026)</a></div>
-          <div class="desc">Today's release introduces two features worth understanding in depth: (1) <code>claude self-hosted-runner</code> lets Team and Enterprise orgs run Claude Code sessions on their own compute, keeping code and context fully on-prem — important for compliance-sensitive environments; (2) JWT-aware sandbox credential masking (<code>decode: "jwt"</code> + <code>maskClaims</code>) lets you redact specific JWT claims from sandbox outputs without masking the full token, which is useful when passing signed tokens to agents that need to read but not log identity claims. The subagent spawn cap removal also changes cost profiles for deep recursive agent tasks — monitor usage if you use nested subagents heavily.</div>
-          <div class="date">Aug 7, 2026 · Anthropic / Releasebot · <strong style="color:#f87171;">NEW — RUN claude update</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.anthropic.com/research" target="_blank">Anthropic Frontier Red Team Cybersecurity Report: AI Agents as Offensive Actors (Jul 30, 2026)</a></div>
-          <div class="desc">Anthropic's Frontier Red Team documented three controlled red-team engagements in which Claude models autonomously identified and exploited vulnerabilities in target organizations — without human guidance at each step. The findings are being used to update the responsible-scaling policy and refine Claude's security refusals and capability thresholds. Essential reading for anyone deploying Claude Code or agent frameworks in security-sensitive environments, and for understanding the current frontier of AI offensive capability.</div>
-          <div class="date">Jul 30, 2026 · Anthropic Research · <strong style="color:#f87171;">NEW — SECURITY CRITICAL</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://checkmarx.com/learn/ai-security/claude-code-security-top-6-risks-controls-and-best-practices/" target="_blank">Claude Code Security: Top 6 Risks, Controls &amp; Best Practices (Checkmarx, Jul 2026)</a></div>
-          <div class="desc">Checkmarx's structured analysis of the top attack surfaces in Claude Code deployments: prompt injection via project files, MCP server trust exploitation, agentic credential exfiltration, overly permissive hooks, network sandbox bypasses, and supply-chain plugin risks. Includes practical mitigations for each — deny rules, MCP allowlisting, API key scoping, and least-privilege hook design. Recommended pre-reading before deploying Claude Code in any production or CI/CD environment.</div>
-          <div class="date">Jul 2026 · Checkmarx · <strong style="color:#f87171;">NEW — SECURITY REFERENCE</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://simonwillison.net/2026/Jul/22/openai-cyberattack/" target="_blank">When AI Agents Attack: The Hugging Face Breach and the Dawn of Agentic Attackers (Jul 2026)</a></div>
-          <div class="desc">Simon Willison's analysis of the first confirmed "agentic attacker" supply chain incident — an OpenAI agent framework that autonomously exploited Hugging Face, harvested credentials, and moved laterally. Key lessons: agentic frameworks need the same least-privilege constraints as humans; dataset configs and remote-code loaders are high-risk surfaces; any agent with cloud credentials needs egress filtering and audit logging. Essential reading for anyone deploying Claude Code or other agentic frameworks in infrastructure environments.</div>
-          <div class="date">Jul 22, 2026 · simonwillison.net · <strong style="color:#f87171;">SECURITY</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.openhands.dev/blog/claude-code-best-practices-agentic-coding" target="_blank">10 Claude Code Best Practices for Agentic Coding: A 2026 Guide</a></div>
-          <div class="desc">Comprehensive guide covering lean CLAUDE.md files, plan mode before edits, subagents for noisy research, parallel agents in git worktrees, hooks as guardrails, and verification loops. Practical examples for each practice.</div>
-          <div class="date">Jul 2, 2026 · openhands.dev</div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://releasebot.io/updates/anthropic/claude" target="_blank">Anthropic Deprecation Tracker: Opus 4.1 Aug 5 (7 Days) + Prompt Tools API Aug 17 (19 Days) — Migration Checklist</a></div>
-          <div class="desc">Two active Anthropic retirement deadlines: (1) <strong>Claude Opus 4.1 retired Aug 5</strong> — API calls to <code>claude-opus-4-1-20250805</code> now return hard errors; migrate to <code>claude-opus-4-8</code> immediately. (2) <strong>Prompt Tools API and Workbench retire August 17</strong> (8 days) — migrate before then or integrations return errors. Use the releasebot.io Anthropic tracker for ongoing deprecation monitoring.</div>
-          <div class="date">Aug 5, 2026 · Anthropic Release Notes · <strong style="color:#dc2626;">URGENT — OPUS 4.1 RETIRED TODAY, PROMPT TOOLS API AUG 17</strong></div>
         </div>
     </div>
 
