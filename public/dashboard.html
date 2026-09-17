@@ -329,7 +329,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Sep 11 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Sep 17 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="mc-machine-grid">
@@ -375,15 +375,15 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.258</span> · latest <span class="latest">2.1.268</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — <code>claude update</code></span></span>
+          <span class="nums">installed <span class="current stale">2.1.258</span> · latest <span class="latest">2.1.274</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
-          <span class="nums">installed <span class="current stale">1.2.2</span> · latest <span class="latest">1.2.3</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — <code>npm install -g happy</code></span></span>
+          <span class="nums">installed <span class="current stale">1.2.2</span> · latest <span class="latest">1.2.4</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — <code>npm install -g happy</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">MemPalace</span>
-          <span class="nums">installed <span class="current">3.8.0*</span> · latest <span class="latest stale">3.9.0</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — "one hub for every agent" · npm stable remains v2.0.0 · *installed not re-verifiable this run (mempalace.exe blocked by local Application Control policy)</span></span>
+          <span class="nums">installed <span class="current">3.8.0*</span> · latest <span class="latest stale">3.9.0</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — npm stable remains v2.0.0 · *installed not re-verifiable this run (mempalace.exe blocked by local Application Control policy)</span></span>
         </div>
         <div class="ver-row">
           <span class="name">OpenClaw</span>
@@ -391,7 +391,7 @@
         </div>
         <div class="ver-row">
           <span class="name">Claude Model</span>
-          <span class="nums"><span class="current">claude-sonnet-5</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">new default since v2.1.197</span></span>
+          <span class="nums"><span class="current">claude-sonnet-5</span> <span style="color:var(--teal-light);font-size:.75rem;margin-left:6px;">new default since v2.1.197; Fable 5.1 is new frontier (Sep 1)</span></span>
         </div>
       </div>
     </div>
@@ -614,14 +614,24 @@
       <div class="panel-desc">Highlights — <a href="/news-archive.html" style="color:var(--teal-light);">full archive &rarr;</a></div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://freedom.tech/posts/2026-09-10-claude-code-2-1-268/" target="_blank">Claude Code v2.1.268 — Third-Party Endpoint Fix, WebFetch Timeout &amp; MCP OAuth Port Fix (Sep 10, 2026)</a></div>
-          <div class="desc">Latest on npm as of Sep 11. Key fixes: HTTP 400 on every turn for third-party <code>ANTHROPIC_BASE_URL</code> endpoints (broken since v2.1.265); WebFetch now times out after 300s instead of hanging forever on an open response stream; sustained high CPU in long-running idle sessions fixed; MCP server OAuth sign-in now succeeds when all default ports are in use. Run <code>claude update</code> to install.</div>
-          <div class="date">Sep 10, 2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">UPDATE AVAILABLE — RUN claude update</strong></div>
+          <div><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code v2.1.274 — Memory Warning, MCP Startup Wait, OTel Effort Attribute &amp; Leaner /code-review (Sep 17, 2026)</a></div>
+          <div class="desc">Today's release (2.1.274): visible warning when memory usage is critical with steps to free memory or restart safely; new <code>CLAUDE_CODE_MCP_STARTUP_WAIT_MS</code> env var to bound how long the first non-interactive turn waits for MCP servers (0 = don't wait); <code>effort</code> attribute added to <code>claude_code.llm_request</code> OTel trace spans; <code>claude_code.managed_settings_resolved</code> OTel event added; Bedrock/Vertex/Foundry and telemetry-disabled installs now use v2 MCP client and MCP 2026-07-28 negotiation by default; <code>/code-review</code> uses leaner inline prompts instead of spawning many review subagents for models without tuned settings.</div>
+          <div class="date">Sep 17, 2026 · github.com/anthropics/claude-code · <strong style="color:#d97706;">NEW TODAY</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://www.claudeupdates.dev/version/2.1.267" target="_blank">Claude Code v2.1.267 — maxEffortLevel Setting &amp; 10+ Prompt-Cache Stability Fixes (Sep 9, 2026)</a></div>
-          <div class="desc">New <code>maxEffortLevel</code> setting caps model effort across Bedrock/Vertex/Foundry regardless of per-call requests. Huge stability pass: 10+ prompt-cache break scenarios fixed (subagents, large session resume &gt;5MB, sessions started with <code>--system-prompt</code>). Expired AWS/GCP credentials now surface a clear re-authenticate error on first failure instead of retrying 10 times with a generic "request failed."</div>
-          <div class="date">Sep 9, 2026 · github.com/anthropics/claude-code</div>
+          <div><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code v2.1.271-2.1.273 — Fast Mode for Remote, Gateway Headers, MCP Disconnect Notification &amp; Session Forking (Sep 14–15, 2026)</a></div>
+          <div class="desc">v2.1.271 (Sep 14): fast mode enabled in Remote sessions (cloud and self-hosted runners); mouse support in <code>/config</code> panel fullscreen mode; <code>claude self-hosted-runner --drain-marker-file</code>; per-command <code>allowed_domains</code> for Bash/PowerShell/Monitor in auto mode with sandboxing. v2.1.272 (Sep 15): bug fixes. v2.1.273 (Sep 15): gateway hint headers (<code>x-claude-code-request-class</code>, <code>x-claude-code-agent-type</code>, etc., opt in with <code>CLAUDE_CODE_GATEWAY_HINT_HEADERS=1</code>); MCP server disconnect notification with reconnect failure alert; session forking for sessions started with <code>claude --remote-control</code> or <code>/remote-control</code>.</div>
+          <div class="date">Sep 14–15, 2026 · github.com/anthropics/claude-code</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code Usage Limits: 50% Boost Ended Sep 14 — Permanent 25% Raise Now in Effect</a></div>
+          <div class="desc">The temporary 50% weekly usage-limit boost ended September 14, 2026. As of today it is replaced by a permanent 25% raise over each plan's baseline — a net reduction of ~17% from the temporary boost, but still a permanent increase over original limits. High-volume workflows dependent on the temporary quota should recalibrate now.</div>
+          <div class="date">Sep 14, 2026 · Anthropic · <strong style="color:#f87171;">ACTION: QUOTA CHANGED TODAY</strong></div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code v2.1.270 — Read-Only Git Permission Regression Fix (Sep 12, 2026)</a></div>
+          <div class="desc">Single fix: a regression where read-only git commands in Bash could quietly start asking for permission again after a session had been running for a while (effectively re-prompting on already-approved git status/diff/log calls in long sessions).</div>
+          <div class="date">Sep 12, 2026 · github.com/anthropics/claude-code</div>
         </div>
         <div class="news-item">
           <div><a href="https://www.anthropic.com/claude-fable-and-mythos-5-1" target="_blank">Anthropic Launches Claude Fable 5.1 &amp; Mythos 5.1 — 75% Cache Read Cost Reduction (Sep 1, 2026)</a></div>
@@ -630,18 +640,8 @@
         </div>
         <div class="news-item">
           <div><a href="https://docs.openclaw.ai/releases/2026.9.2" target="_blank">OpenClaw 2026.9.2 — GPT-6 Astra Support, Swarm On by Default &amp; Reliability Improvements (Sep 5, 2026)</a></div>
-          <div class="desc">OpenAI GPT-6 Astra added (<code>openai/gpt-6-astra</code>, text + image input, Responses tool calls, async function tools over cached WebSockets). Swarm sub-agent orchestration enabled by default — concurrent sub-agents with structured results and live progress, no flag needed. Settings now apply through running owners without a restart. Update reports survive reconnects; eligible interrupted tasks resume after restart. 1,247 PRs in range. Update: <code>npm install -g openclaw</code></div>
-          <div class="date">Sep 5, 2026 · docs.openclaw.ai/releases/2026.9.2 · <strong style="color:#d97706;">NEW STABLE — UPDATE AVAILABLE</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://explainx.ai/blog/anthropic-claude-code-limits-17-percent-cut-september-2026-august-2026" target="_blank">Claude Code Usage Limits: 50% Boost Ends Sep 14 — Replaced by Permanent 25% Raise (Sep 2026)</a></div>
-          <div class="desc">Anthropic confirmed the temporary 50% weekly usage-limit boost ends September 14, 2026. The same day, it is replaced by a permanent 25% raise over each plan's baseline — a net reduction of ~17% from the temporary boost, but a permanent increase over the original limits. Plan ahead if your workflows rely on the higher temporary quota.</div>
-          <div class="date">Sep 2026 · Anthropic / @ClaudeDevs · <strong style="color:#d97706;">ACTION: SEP 14 CHANGE IN 3 DAYS</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://thehackernews.com/2026/09/malicious-git-configs-can-make-claude.html" target="_blank">GitSpawn: Malicious .git Configs Execute Attacker Code via Claude Code, Codex &amp; Cursor (Sep 2, 2026)</a></div>
-          <div class="desc">Manifold Security disclosed 8 flaws across 7 AI coding agents. <code>core.fsmonitor</code> git config fires attacker shell code when agents auto-run <code>git status</code>/<code>git diff</code> on an untrusted repo — before workspace-trust prompts. Claude Code's <code>core.fsmonitor</code> path fixed in v2.1.196; <code>claude ultrareview</code> vector separately exploitable at disclosure. 4 of 8 flaws unpatched. Do not run AI agents against untrusted repos without auditing <code>.git/config</code>.</div>
-          <div class="date">Sep 2, 2026 · The Hacker News / Manifold Security · <strong style="color:#dc2626;">SECURITY — PARTIALLY UNPATCHED</strong></div>
+          <div class="desc">GPT-6 Astra added (<code>openai/gpt-6-astra</code>). Swarm sub-agent orchestration enabled by default. Settings now apply through running owners without a restart. Eligible interrupted tasks resume after restart. Update: <code>npm install -g openclaw</code></div>
+          <div class="date">Sep 5, 2026 · docs.openclaw.ai · <strong style="color:#d97706;">NEW STABLE — UPDATE AVAILABLE</strong></div>
         </div>
         <div style="text-align:center;padding:12px 0 4px;">
           <a href="/news-archive.html" style="color:var(--teal-light);font-size:.82rem;font-weight:600;">View full AI news archive &rarr;</a>
@@ -654,7 +654,7 @@
       <div class="panel-label"><span class="section-icon">🦀</span> OpenClaw Updates</div>
       <div class="panel-desc">Platform releases and changes.</div>
       <div id="openclaw-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 11, 2026, 8:00 AM CDT — npm and GitHub show <strong style="color:#d97706;">latest 2026.9.2</strong> (Sep 5, 2026) as the current stable. Installed 2026.8.1 is two+ stable releases behind. Extended-stable <strong>2026.6.34</strong> unchanged.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 17, 2026, 8:00 AM CDT — npm and GitHub show <strong style="color:#d97706;">latest 2026.9.2</strong> (Sep 5, 2026) as the current stable. Installed 2026.8.1 is two+ stable releases behind. Extended-stable <strong>2026.6.34</strong> unchanged.</div>
         <div class="news-item">
           <div><a href="https://docs.openclaw.ai/releases/2026.9.2" target="_blank">OpenClaw 2026.9.2 — GPT-6 Astra Support, Swarm On by Default, Live Settings Apply &amp; Reliability Improvements (Sep 5, 2026)</a></div>
           <div class="desc">New stable release (1,247 PRs). GPT-6 Astra added as <code>openai/gpt-6-astra</code> with text/image input, Responses tool calls, async direct function tools, and active-response steering over cached WebSockets. Swarm sub-agent orchestration now enabled by default — no flag required. Agent, model, tool, channel, browser, node, access and terminal settings now apply through running owners without a Gateway restart. Update reports survive reconnects; eligible interrupted tasks resume after a restart. Completed answers remain available through saving failures. Plugin icons packaged at <code>assets/icon.png</code> — no network request, missing icons no longer block load. Update: <code>npm install -g openclaw</code></div>
@@ -953,7 +953,12 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 11, 2026, 8:00 AM CDT — npm confirms <strong>happy@1.2.3</strong> remains <code>dist-tags.latest</code>. Installed 1.2.2 is behind — update: <code>npm install -g happy</code>. No new release found today.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 17, 2026, 8:00 AM CDT — npm confirms <strong>happy@1.2.4</strong> as <code>dist-tags.latest</code> (up from 1.2.3). Installed 1.2.2 is behind — update: <code>npm install -g happy</code>.</div>
+        <div class="news-item">
+          <div><a href="https://www.npmjs.com/package/happy" target="_blank">Happy 1.2.4 — Now Latest on npm (Sep 2026)</a></div>
+          <div class="desc">npm <code>dist-tags.latest</code> updated to <strong>1.2.4</strong> as of today's check (up from 1.2.3). Specific changelog not yet indexed — update: <code>npm install -g happy</code>. Builds on 1.2.3's fixes and 1.2.1's Fable 5, Antigravity, and Gemini 3.6 backend additions.</div>
+          <div class="date">Sep 2026 · registry.npmjs.org / github.com/slopus/happy · <strong style="color:#d97706;">NEW LATEST — UPDATE AVAILABLE</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://www.npmjs.com/package/happy" target="_blank">Happy 1.2.3 — Now Latest on npm (Sep 2026)</a></div>
           <div class="desc">npm <code>dist-tags.latest</code> updated to <strong>1.2.3</strong> as of this check. Changelog details not yet indexed on the GitHub release page — update: <code>npm install -g happy</code>. Builds on 1.2.2's reliability patch (Aug 27) and 1.2.1's Fable 5, Antigravity, and Gemini 3.6 backend additions.</div>
@@ -1017,7 +1022,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 11, 2026, 8:00 AM CDT — <strong>v3.9.0 remains latest</strong> on GitHub (Aug 31). <code>mempalace --version</code> still blocked by Windows Application Control policy — installed version carried over as v3.8.0 (unverified). npm stable remains v2.0.0. No new releases found today.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 17, 2026, 8:00 AM CDT — <strong>v3.9.0 remains latest</strong> on GitHub (Aug 31). <code>mempalace --version</code> still blocked by Windows Application Control policy — installed version carried over as v3.8.0 (unverified). npm stable remains v2.0.0. No new releases found today.</div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases/tag/v3.9.0" target="_blank">MemPalace v3.9.0 — "One Hub for Every Agent": Shared Hub Search, Concurrent Reads &amp; Release Awareness (Aug 31, 2026)</a></div>
           <div class="desc">CLI search now reuses a healthy live Hub's index instead of loading a second multi-gigabyte HNSW copy (saved ~18.6GB private RSS on a 4.99M-vector palace in testing); Hub reads no longer serialize behind one exclusive lock; skill-first setup can bootstrap private or shared-brain installs and validate logstream readiness; opt-in release-awareness surfaces update state without auto-installing; logstream gains topic routing and reverse pagination. Correctness: unreadable config files are never overwritten, drawer mutations purge stale closet entries, and a missing SQLite database no longer reports a false-clean integrity verdict. 29 merged PRs, 7 first-time contributors. Install: <code>pip install -U mempalace==3.9.0</code> or <code>uv tool upgrade mempalace</code>.</div>
@@ -1126,7 +1131,7 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 11, 2026, 8:00 AM CDT — Context7 remains at <strong>v4.0.5</strong> (Sep 4, 2026); Superpowers unchanged at <strong>v6.3.0</strong>. No new plugin releases found today. GitSpawn disclosure (Sep 2) continues to apply to MCP-adjacent harnesses — review any agent that auto-runs git commands on clone.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Sep 17, 2026, 8:00 AM CDT — Context7 remains at <strong>v4.0.5</strong> (Sep 4, 2026); Superpowers unchanged at <strong>v6.3.0</strong>. No new plugin releases found today. GitSpawn disclosure (Sep 2) continues to apply to MCP-adjacent harnesses — review any agent that auto-runs git commands on clone.</div>
         <div class="news-item">
           <div><a href="https://github.com/upstash/context7/releases" target="_blank">Context7 MCP v4.0.5 — Released Sep 4, 2026</a></div>
           <div class="desc">Both <code>@upstash/context7-mcp@4.0.5</code> and <code>ctx7@0.5.10</code> published Sep 4, 2026 at approx 10:12–10:13 UTC. Changelog details not yet fully indexed — update via <code>npm install -g @upstash/context7-mcp</code> and check the GitHub release page for specifics. Builds on v4.0.4's hosted MCP client-IP auth hardening.</div>
