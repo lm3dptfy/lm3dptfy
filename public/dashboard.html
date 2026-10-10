@@ -329,7 +329,7 @@
       <h1>🦌 MooseClaw Dashboard</h1>
       <p style="color:var(--ink2);margin-top:4px;font-size:.88rem;">AI monitoring — Claude Code · OpenClaw · Security · News</p>
     </div>
-    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Oct 5 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
+    <span class="updated-tag">Updated: <!-- LAST_UPDATED -->Oct 10 2026, 8:00 AM CDT<!-- /LAST_UPDATED --></span>
   </div>
 
   <div class="mc-machine-grid">
@@ -375,7 +375,7 @@
       <div id="versions-body">
         <div class="ver-row">
           <span class="name">Claude Code</span>
-          <span class="nums">installed <span class="current stale">2.1.258</span> · latest <span class="latest">2.1.289</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — <code>claude update</code></span></span>
+          <span class="nums">installed <span class="current stale">2.1.258</span> · latest <span class="latest">2.1.296</span> <span style="color:#d97706;font-size:.75rem;margin-left:6px;">update available — <code>claude update</code></span></span>
         </div>
         <div class="ver-row">
           <span class="name">Happy</span>
@@ -581,6 +581,16 @@
       <div class="panel-desc">Highlights — <a href="/security-history.html" style="color:var(--teal-light);">full history &amp; archive &rarr;</a></div>
       <div id="security-body">
 
+        <div class="alert-banner resolved" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-40068 (GHSA-q5hj-mxqh-vv77) — Hook Trust-Check Bypass, Allows Hooks Without Trust Dialog — Fixed v2.1.84</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Trust-check flaw in versions 2.1.63–2.1.83 allowed a malicious repository to run hooks without the trust dialog being shown to the user. Any auto-update user on v2.1.84+ (released months ago) is protected. Current installs (v2.1.258+) are not affected. <a href="https://www.sentinelone.com/vulnerability-database/cve-2026-40068/" style="color:var(--teal-light);">SentinelOne DB</a></div>
+        </div>
+
+        <div class="alert-banner resolved" style="margin-bottom:10px;">
+          <div class="alert-title"><span class="badge fixed">Fixed</span> CVE-2026-39861 (CVSS 10.0) — Sandbox Escape via Workspace Symlinks — Fixed v2.1.64</div>
+          <div style="font-size:.85rem;color:var(--ink2);">Prior to v2.1.64, Claude Code's sandbox failed to prevent sandboxed processes from creating symlinks pointing outside the workspace directory, enabling full sandbox escape with CVSS score 10.0. Fixed in v2.1.64 — all current installs are protected. <a href="https://www.sentinelone.com/vulnerability-database/cve-2026-39861/" style="color:var(--teal-light);">SentinelOne DB</a></div>
+        </div>
+
         <div class="alert-banner" style="margin-bottom:10px;">
           <div class="alert-title"><span class="badge warn">Advisory</span> Cowork Folder Malicious File → Host Command Execution — Sep 25, 2026</div>
           <div style="font-size:.85rem;color:var(--ink2);">GitHub advisory published Sep 25, 2026: opening certain malicious files from Cowork/shared folders in Claude Code could trigger commands to run on the host machine without explicit user approval. Review files from untrusted Cowork sources before opening in a Claude Code session. Check your Claude Code version is current. <a href="https://github.com/anthropics/claude-code/security/advisories" style="color:var(--teal-light);">GitHub Advisories</a></div>
@@ -629,34 +639,29 @@
       <div class="panel-desc">Highlights — <a href="/news-archive.html" style="color:var(--teal-light);">full archive &rarr;</a></div>
       <div id="news-body">
         <div class="news-item">
-          <div><a href="https://code.claude.com/docs/en/changelog" target="_blank">Claude Code v2.1.287–2.1.289 — Claude Mods, agent.spawn, 27 CLI Changes (Oct 1–3, 2026)</a></div>
-          <div class="desc"><strong>v2.1.287 (Oct 1)</strong>: Claude Mods launched — a new extension layer where plugins can modify deeper Claude Code behavior (distinct from hooks, skills, and MCP servers). <strong>v2.1.288 (Oct 2)</strong>: smarter resume and recovery flows, stronger plugin and MCP handling, improved permission and auto mode behavior, fixed <code>claude remote-control --debug</code> failing, fixed <code>/feedback</code> and <code>/bug</code> saving files after cancellation on Bedrock/Vertex. <strong>v2.1.289 (Oct 3)</strong>: 27 CLI changes — teammates can spawn shared agents via <code>agent.spawn</code>; agent IDs unified and idle/waiting states clarified; fixed user plugins rewriting org-managed MCP server sign-in descriptions; fixed read deny rules not applying to symlinked @-mentioned files; fixed terminal freezing on short code blocks. Latest npm: <strong>2.1.289</strong>. Update: <code>claude update</code></div>
-          <div class="date">Oct 1–3, 2026 · github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE AVAILABLE — NOW AT 2.1.289</strong></div>
+          <div><a href="https://www.claudeupdates.dev/" target="_blank">Claude Code v2.1.295–2.1.296 — Hooks Fail Closed, Haiku 5.5 Default, 1M-Context Retry Fix (Oct 7–8, 2026)</a></div>
+          <div class="desc"><strong>v2.1.293 (Oct 7)</strong>: Claude Haiku 5.5 becomes the default Haiku model. <strong>v2.1.295 (Oct 8)</strong>: hooks now fail closed — if a hook errors, the action is blocked rather than silently allowed (important security hardening for hook-based workflows); a bug with 1M-context session retries has been fixed. <strong>v2.1.296</strong> is the current npm latest as of Oct 10. Update: <code>claude update</code></div>
+          <div class="date">Oct 7–8, 2026 · claudeupdates.dev / github.com/anthropics/claude-code · <strong style="color:#f87171;">UPDATE AVAILABLE — 2.1.258 → 2.1.296</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/openclaw/openclaw/releases" target="_blank">OpenClaw 2026.9.8 — Reliability &amp; Recovery Hotfix (Oct 3, 2026)</a></div>
-          <div class="desc">Hotfix release: preserves local-plugin configuration through Gateway recovery; refuses unsafe Windows 2026.9.4 schema transitions; fixes Codex session discovery exhausting Gateway memory on large agent fleets; fixes stuck Anthropic background-command turns; fixes duplicate container Gateways; fixes Windows cron setup under case-insensitive environment proxies; fixes stale queued Telegram previews. Also released: extended-stable <strong>2026.8.34</strong> (Oct 2) with normalized proxy auth errors and model validation improvements. Update: <code>npm install -g openclaw</code></div>
-          <div class="date">Oct 3, 2026 · github.com/openclaw/openclaw · <strong style="color:#f87171;">NEW STABLE — UPDATE AVAILABLE</strong></div>
+          <div><a href="https://composio.dev/toolkits/canva/framework/claude-code" target="_blank">Canva MCP — Brand Template ID Migration Required (Oct 7, 2026)</a></div>
+          <div class="desc">Canva MCP connector update flagged Oct 7: brand template IDs will change; integrations using Canva's MCP connector must migrate within 6 months. If you use the Canva MCP for template-based design workflows in Claude Code, check whether your automation references template IDs directly and plan a migration. Official connector at <code>mcp.canva.com/mcp</code>.</div>
+          <div class="date">Oct 7, 2026 · composio.dev / Canva · <strong style="color:#d97706;">ACTION REQUIRED — TEMPLATE ID MIGRATION</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://pasqualepillitteri.it/en/news/19871/claude-code-mods-plugins" target="_blank">Claude Mods — Plugins That Rewrite the Agent from Inside (Oct 1, 2026)</a></div>
-          <div class="desc">Claude Code v2.1.287 ships Claude Mods, a new extension layer (distinct from hooks, skills, and MCP servers) where a plugin can modify deeper Claude Code behavior from within the process. Unlike a hook (runs outside the process in settings) or a skill (an instruction file), a Mod co-locates with the agent runtime. Announced by Anthropic's Boris Cherny. Community plugin ecosystem response is early-stage — review any Mod carefully before installing.</div>
-          <div class="date">Oct 1, 2026 · Anthropic / pasqualepillitteri.it · <strong style="color:#16a34a;">NEW FEATURE</strong></div>
+          <div><a href="https://releasebot.io/updates/anthropic" target="_blank">Anthropic API — Claude Sonnet 4.5 Deprecated Nov 30, Admin API in SDK, Managed Agent Memory Stores</a></div>
+          <div class="desc"><strong>Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) retires Nov 30, 2026</strong> — migrate to Sonnet 5.5. <strong>Admin API now in SDK</strong> — <code>client.beta.organization</code> in Python/TypeScript/Go/Java SDKs for programmatic org management. <strong>Managed Agent memory stores</strong> — sandbox workers can attach and sync memory stores. Claude Sonnet 5.5 is the current default (1M context, $2/$10 per MTok).</div>
+          <div class="date">Oct 2026 · platform.claude.com · <strong style="color:#f87171;">DEPRECATION — migrate Sonnet 4.5 by Nov 30</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://releasebot.io/updates/anthropic" target="_blank">Anthropic API October 2026 — Sonnet 4.5 Deprecated (Nov 30), Admin API &amp; Managed Agent Memory Stores</a></div>
-          <div class="desc"><strong>Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) deprecated</strong> — API retirement Nov 30, 2026; migrate to Sonnet 5.5. <strong>Admin API now in SDK</strong> — <code>client.beta.organization</code> in Python/TypeScript/C#/Go/Java/PHP/Ruby SDKs gives programmatic access to org info, members, invites, workspaces, API keys, rate limits, service accounts, workload identity federation, and CMEK. <strong>Managed Agent memory stores</strong> — self-hosted sandbox workers can now attach and sync memory stores. Claude Sonnet 5.5 now the default Sonnet model (1M context, $2/$10 per MTok, $0.20/M cache reads).</div>
-          <div class="date">Oct 2026 · platform.claude.com · <strong style="color:#f87171;">DEPRECATION + API CHANGES</strong></div>
+          <div><a href="https://npmx.dev/package/@upstash/context7-mcp" target="_blank">Context7 MCP v4.1.1 — Idle SSE Stream Fix (Sep 14, 2026)</a></div>
+          <div class="desc">Disables unused MCP notification subscriptions so clients do not hold open SSE streams for static tool, prompt, and resource collections — reduces idle connection overhead significantly for users with many concurrent MCP server connections. Update: <code>npm install -g @upstash/context7-mcp</code></div>
+          <div class="date">Sep 14, 2026 · github.com/upstash/context7 · <strong style="color:#16a34a;">UPDATE AVAILABLE</strong></div>
         </div>
         <div class="news-item">
-          <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.11.0 — Palace Audit, Security Fixes (GHSA-mrj5, GHSA-8h77) &amp; Concurrency Hardening (Sep 29, 2026)</a></div>
-          <div class="desc">Guided palace audit and repair with organization score, per-project wing split, and tunnel/predicate cleanup; conversation mining no longer discards text; status/search/wake-up stays responsive on large palaces; <strong>EntityRegistry.research() and confirm_research() removed</strong> (GHSA-mrj5 — could make outbound requests to attacker-controlled hosts); <strong>anonymized telemetry opt-out now reliably respected</strong> (GHSA-8h77 — setting was not propagated on import). Update: <code>uv tool upgrade mempalace</code></div>
-          <div class="date">Sep 29, 2026 · github.com/MemPalace/mempalace · <strong style="color:#f87171;">NEW — SECURITY FIXES</strong></div>
-        </div>
-        <div class="news-item">
-          <div><a href="https://www.harmonic.security/resources/security-lessons-from-claude-codes-first-year" target="_blank">Security Lessons from Claude Code's First Year — 28 CVEs, Patterns, and Mitigations</a></div>
-          <div class="desc">Harmonic Security analysis of all 28 Claude Code CVEs published in its first year: patterns include symlink escapes, command injection via shell builtins, trust-dialog bypasses, and supply-chain risks via plugin autoloading. Recommended controls: keep Claude Code updated, audit <code>.git/config</code> before running in any cloned repo, review MCP server permissions, and restrict <code>--dangerously-skip-permissions</code> to isolated containers only.</div>
-          <div class="date">2026 · harmonic.security · <strong style="color:#16a34a;">READING</strong></div>
+          <div><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/" target="_blank">MCP Spec 2026-07-28: Stateless Core, Multi Round-Trip Requests, Tasks Extension &amp; MCP Apps</a></div>
+          <div class="desc">The current MCP spec revision (implemented in Claude Code's MCP runtime via TypeScript SDK 2.0) adds a stateless transport core (SSE removed), Multi Round-Trip Requests, a Tasks extension for long-running operations, and the MCP Apps concept. Relevant for anyone building or maintaining MCP servers — verify your transport mode and auth header format are compatible.</div>
+          <div class="date">Jul 28, 2026 · modelcontextprotocol.io · <strong style="color:#16a34a;">READING</strong></div>
         </div>
         <div style="text-align:center;padding:12px 0 4px;">
           <a href="/news-archive.html" style="color:var(--teal-light);font-size:.82rem;font-weight:600;">View full AI news archive &rarr;</a>
@@ -993,7 +998,7 @@
       <div class="panel-label"><span class="section-icon">🐰</span> Happy Updates</div>
       <div class="panel-desc">Releases and changes to the Happy Claude Code plugin (happy.engineering).</div>
       <div id="happy-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Oct 5, 2026, 8:00 AM CDT — npm confirms <strong>happy@1.2.5</strong> as <code>dist-tags.latest</code> (unchanged since Sep 22). Installed 1.2.2 is still behind — update: <code>npm install -g happy</code>. No new release this week.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Oct 10, 2026, 8:00 AM CDT — npm confirms <strong>happy@1.2.5</strong> as <code>dist-tags.latest</code> (unchanged since Sep 22). Installed 1.2.2 is still behind — update: <code>npm install -g happy</code>. No new release this week; happy.engineering not indexed by search.</div>
         <div class="news-item">
           <div><a href="https://github.com/slopus/happy/releases/tag/cli-1.2.5" target="_blank">Happy v1.2.5 — Session Recovery, Plugin Directory Forwarding &amp; Codex Turn Fix (Sep 22, 2026)</a></div>
           <div class="desc">Released today. Preserves and recovers resumable sessions after daemon state is lost; prevents duplicate owners during concurrent or cancelled resumes; recovers transcripts that appear late or after watcher restart; keeps closed sessions closed; removes the Codex turn timeout and preserves valid turn IDs for continued output and diffs; improves expired Claude login diagnostics; forwards configured Claude plugin directories; avoids reconnecting during dark wake while retaining compatibility fallbacks; includes message acceptance, queue metadata, and synchronized composer draft support. Update: <code>npm install -g happy</code></div>
@@ -1067,7 +1072,7 @@
       <div class="panel-label"><span class="section-icon">🏛️</span> MemPalace Updates</div>
       <div class="panel-desc">Releases and changes to the MemPalace memory plugin.</div>
       <div id="mempalace-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Oct 5, 2026, 8:00 AM CDT — <strong style="color:#f87171;">v3.11.0 released Sep 29</strong> with two security fixes (GHSA-mrj5, GHSA-8h77). Installed v3.8.0 is behind (unverified — <code>mempalace.exe</code> still blocked by Windows AppControl). npm stable remains v2.0.0; install/update via <code>uv tool upgrade mempalace</code>.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Oct 10, 2026, 8:00 AM CDT — v3.11.0 remains latest (Sep 29). npm stable v2.0.0 unchanged. Installed v3.8.0 still unverified (<code>mempalace.exe</code> blocked by Windows AppControl). Update via <code>uv tool upgrade mempalace</code>. No new releases found this check.</div>
         <div class="news-item">
           <div><a href="https://github.com/MemPalace/mempalace/releases" target="_blank">MemPalace v3.11.0 — Palace Audit, Security Fixes (GHSA-mrj5, GHSA-8h77) &amp; Concurrency Hardening (Sep 29, 2026)</a></div>
           <div class="desc">Guided palace audit and repair with organization score, closed room sets, per-project wing split, and cleanup of noisy tunnels and one-off predicates. Conversation mining no longer discards text; status/search/wake-up/hub mines stay responsive on large palaces. Concurrency: in-process SQLite reads keep Chroma's locks; listing events no longer hides another agent's request due to caller identity collision. <strong>Security — GHSA-mrj5</strong>: <code>EntityRegistry.research()</code> and <code>confirm_research()</code> removed (could make outbound HTTP requests to attacker-controlled hosts in certain palace configs). <strong>Security — GHSA-8h77</strong>: <code>Settings(anonymized_telemetry=False)</code> and <code>setdefault</code> on import now reliably propagate the opt-out (was previously ignored on import, sending telemetry even when disabled). Update: <code>uv tool upgrade mempalace</code> or <code>pip install -U mempalace==3.11.0</code></div>
@@ -1186,7 +1191,12 @@
       <div class="panel-label"><span class="section-icon">🔌</span> Plugins &amp; Skills</div>
       <div class="panel-desc">Updates to Superpowers skills, Context7, Canva MCP, Google MCPs, Three.js MCP, and Stripe skills.</div>
       <div id="plugins-body">
-        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Oct 5, 2026, 8:00 AM CDT — Context7 at <strong>v4.1.1</strong> (Sep 14, 2026); Superpowers unchanged at <strong>v6.3.0</strong>. Claude Mods (v2.1.287, Oct 1) is a new plugin extension layer — review any Mods before installing. GitSpawn (Sep 2) remains an active advisory for MCP/git harnesses.</div>
+        <div style="font-size:.82rem;color:var(--ink2);margin-bottom:10px;">Checked Oct 10, 2026, 8:00 AM CDT — Context7 at <strong>v4.1.1</strong> (Sep 14, 2026); Superpowers unchanged at <strong>v6.3.0</strong>. Canva MCP brand template ID migration required within 6 months. Claude Mods (v2.1.287, Oct 1) is a new plugin extension layer — review any Mods before installing. GitSpawn (Sep 2) remains an active advisory for MCP/git harnesses.</div>
+        <div class="news-item">
+          <div><a href="https://composio.dev/toolkits/canva/framework/claude-code" target="_blank">Canva MCP — Brand Template ID Migration Required Within 6 Months (Oct 7, 2026)</a></div>
+          <div class="desc">Canva MCP connector update (flagged Oct 7): brand template IDs will change; all integrations referencing template IDs via the Canva MCP must migrate within 6 months. Official connector at <code>mcp.canva.com/mcp</code> — supports design search, generation from brief, text/image editing, resize, and export via OAuth. If you use template-based Canva workflows in Claude Code, audit your automation for hardcoded template IDs now.</div>
+          <div class="date">Oct 7, 2026 · composio.dev / Canva · <strong style="color:#d97706;">ACTION REQUIRED — TEMPLATE ID MIGRATION</strong></div>
+        </div>
         <div class="news-item">
           <div><a href="https://pasqualepillitteri.it/en/news/19871/claude-code-mods-plugins" target="_blank">Claude Mods — New Plugin Extension Layer in v2.1.287 (Oct 1, 2026)</a></div>
           <div class="desc">Claude Code v2.1.287 (Oct 1) introduces Claude Mods, a new extension type that runs inside the Claude Code process and can modify deeper agent behavior. Differs from hooks (run in settings, outside the process), skills (instruction files), and MCP servers (separate process). Announced by Boris Cherny at Anthropic. Ecosystem still early — review any Mod's source carefully before installing via <code>/plugin install</code>. Security note: Mods have deeper process access than external hooks.</div>
@@ -1391,6 +1401,16 @@
       <div class="panel-desc">Articles, videos, and docs to keep you sharp.</div>
       <div id="learning-body">
         <div class="news-item">
+          <div><a href="https://www.akto.io/blog/claude-code-security" target="_blank"><strong>Claude Code Security: Risks, Limitations and Best Practices 2026 (Akto)</strong></a></div>
+          <div class="desc">Comprehensive guide covering least-privilege configuration, prompt injection risks, API key protection (including ANTHROPIC_BASE_URL override CVE), memory hygiene, and external audit tooling. Covers the Check Point Feb 2026 CVE findings and the full set of known attack surfaces in 2026 Claude Code deployments.</div>
+          <div class="date">2026 · akto.io</div>
+        </div>
+        <div class="news-item">
+          <div><a href="https://www.claudedirectory.org/blog/claude-code-hooks-guide" target="_blank"><strong>Claude Code Hooks Guide: All 25 Event Types, Configuration Patterns, and Automation Best Practices 2026</strong></a></div>
+          <div class="desc">Full reference for Claude Code hooks (PreToolUse, PostToolUse, SessionStart, PermissionRequest, SubagentStart, Notification, Stop — 25 total), with configuration patterns in <code>.claude/settings.json</code> and performance guidance for synchronous hooks. The v2.1.295 "fail closed" change makes hook error handling more important than ever — understanding these event types is now a security concern, not just a productivity one.</div>
+          <div class="date">2026 · claudedirectory.org</div>
+        </div>
+        <div class="news-item">
           <div><strong>Fable 5.1's 75% cache-read price drop reshapes agentic cost math — repeated-context runs are now effectively ~4× cheaper per cached token than Fable 5</strong></div>
           <div class="desc">Fable 5.1 (Sep 1) cut cache-read pricing from $1/M to $0.25/M tokens — a 75% reduction. For agentic workflows that keep a large system prompt or codebase context in the cache across many turns, this is the single biggest cost lever in the release: Anthropic's own estimate is ~25% savings for typical workloads and up to ~45% for complex coding tasks. If you're running high-volume Claude Code workflows or multi-agent loops billed against Fable 5, re-check your cost model now — the numbers are different enough to change which architecture choices make sense. Output pricing ($50/M) and input pricing ($10/M) are unchanged.</div>
           <div class="date">Sep 1, 2026 · Anthropic / VentureBeat</div>
@@ -1409,16 +1429,6 @@
           <div><strong><code>mempalace --version</code> stopped working on this machine — blocked by a Windows Application Control policy, not a normal permission error</strong></div>
           <div class="desc">Both a direct Bash invocation and a PowerShell call to <code>C:\Users\rcamo\.local\bin\mempalace.exe</code> failed today — Bash reported a generic "Permission denied" but PowerShell surfaced the real cause: "An Application Control policy has blocked this file." This is a Windows-level allowlisting block, not a stale/corrupt install, so the fix is on the Windows/AppLocker or WDAC side, not by reinstalling. Until resolved, this dashboard's MemPalace "installed" version can't be re-verified locally and is carried over from the last known-good check rather than guessed.</div>
           <div class="date">Sep 2, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>A "known limitation" logged months ago as an open GitHub issue resolved itself without any explicit notification — the only way to catch it was a targeted research query</strong></div>
-          <div class="desc">The Google Workspace MCP "write &amp; modify operations missing" item (issue #51040) had been sitting in the Plugins panel as a known limitation since it was first logged. Research on Aug 31 surfaced that Gmail send/reply/forward and Drive share/move/trash were quietly enabled on Aug 18, 2026 — 13 days after the fact — with no separate advisory or changelog entry that the standard Claude Code release queries would have caught. It only surfaced via a targeted "Google Workspace MCP Claude update 2026" search. Lesson: open "known limitation" items in the Plugins panel are worth a dedicated re-check query once a week, not just when something triggers a fresh look.</div>
-          <div class="date">Aug 31, 2026 · MooseClaw research notes</div>
-        </div>
-        <div class="news-item">
-          <div><strong>A one-by-one CVE cross-check (not just "any new advisories since last check") surfaced 3 real gaps in a security archive that already had 48 entries</strong></div>
-          <div class="desc">Today's sweep pulled every CVE ever published against <code>anthropics/claude-code</code> (30 total) and diffed it line-by-line against this dashboard's security-history archive, rather than just asking "anything new since yesterday." Found 3 that had never been logged despite being fixed for months to over a year: CVE-2025-65099 (Yarn config trust-dialog bypass), CVE-2025-59829 (a symlink deny-bypass distinct from the already-logged Feb 2026 one — same bug class, different GHSA, different fix version), and CVE-2025-52882 (IDE extension websocket flaw, the only entry that isn't CLI-specific). All added to Resolved. Worth repeating this full-list diff periodically rather than assuming an archive with dozens of entries is already complete.</div>
-          <div class="date">Aug 31, 2026 · MooseClaw research notes</div>
         </div>
     </div>
 
